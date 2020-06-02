@@ -1,5 +1,6 @@
 *.class
 *.log
+logs/**
 
 # maven
 *.versionsBackup
