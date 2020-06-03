@@ -12,13 +12,13 @@ object Constraint {
   import ScalaReflection.universe
   import universe.TypeTag
 
-  case class OfElementType[Data <: HList, Element: TypeTag]() {
+  case class ElementOfType[Data <: HList, Element: TypeTag]() {
 
     val ttg: TypeTag[Element] = universe.typeTag[Element]
 
   }
 
-  object OfElementType {
+  object ElementOfType {
 
     // TODO: remove, not efficient
 
@@ -32,8 +32,8 @@ object Constraint {
 
     implicit def observe[Data <: HList, Element: TypeTag](
         implicit assuming: hlist.ToArray[Data, Element]
-    ): OfElementType[Data, Element] =
-      OfElementType[Data, Element]()
+    ): ElementOfType[Data, Element] =
+      ElementOfType[Data, Element]()
   }
 
 }

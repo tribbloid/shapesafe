@@ -8,28 +8,28 @@ class ConstraintSpec extends BaseSpec {
   describe("prove") {
 
     it("base") {
-      val proof = implicitly[Constraint.OfElementType[HNil, Int]]
+      val proof = implicitly[Constraint.ElementOfType[HNil, Int]]
 
       assert(proof.ttg.tpe.toString == "Int")
     }
 
     it("1 element") {
 
-      val proof = implicitly[Constraint.OfElementType[Int :: HNil, Int]]
+      val proof = implicitly[Constraint.ElementOfType[Int :: HNil, Int]]
 
       assert(proof.ttg.tpe.toString == "Int")
     }
 
     it("2 elements") {
 
-      val proof = implicitly[Constraint.OfElementType[Int :: Int :: HNil, Int]]
+      val proof = implicitly[Constraint.ElementOfType[Int :: Int :: HNil, Int]]
 
       assert(proof.ttg.tpe.toString == "Int")
     }
 
     it("5 elements") {
 
-      val proof = implicitly[Constraint.OfElementType[Int :: Int :: Int :: Int :: Int :: HNil, Int]]
+      val proof = implicitly[Constraint.ElementOfType[Int :: Int :: Int :: Int :: Int :: HNil, Int]]
 
       assert(proof.ttg.tpe.toString == "Int")
     }
@@ -40,7 +40,7 @@ class ConstraintSpec extends BaseSpec {
 
       val proof =
         implicitly[
-          Constraint.OfElementType[lang.Integer :: lang.Double :: lang.Float :: lang.Long :: HNil, lang.Number]]
+          Constraint.ElementOfType[lang.Integer :: lang.Double :: lang.Float :: lang.Long :: HNil, lang.Number]]
 
       assert(proof.ttg.tpe.toString == "Number")
     }
