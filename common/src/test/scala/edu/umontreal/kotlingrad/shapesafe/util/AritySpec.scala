@@ -1,10 +1,12 @@
-package edu.umontreal.kotlingrad.shapesafe
+package edu.umontreal.kotlingrad.shapesafe.util
 
-import edu.umontreal.kotlingrad.shapesafe.Arity.{OfInt, OfSize}
-import shapeless.{::, HNil, Nat}
+import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import shapeless.{::, HNil, Nat, Witness}
 import singleton.ops.{==, Require}
 
 class AritySpec extends BaseSpec {
+
+  import Arity._
 
   it("OfSize") {
 

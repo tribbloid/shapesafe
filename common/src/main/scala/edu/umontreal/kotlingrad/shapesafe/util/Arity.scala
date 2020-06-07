@@ -1,8 +1,8 @@
-package edu.umontreal.kotlingrad.shapesafe
+package edu.umontreal.kotlingrad.shapesafe.util
 
 import shapeless.ops.hlist
 import shapeless.ops.nat.ToInt
-import shapeless.{HList, Nat}
+import shapeless.{HList, Nat, Witness}
 import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
@@ -27,6 +27,8 @@ object Arity {
 
     @transient protected[shapesafe] object internal {
 
+      def proveSame[N2](implicit self: N =:= N2): Unit = {}
+
       // 'prove' means happening only in compile-time
       def proveEqual[N2](implicit self: Require[Number == N2]): Unit = {
 
@@ -42,9 +44,13 @@ object Arity {
     }
   }
 
-  trait OfSizeLike[N <: Nat] extends Constant[N]
+  trait Unsafe extends Arity
 
-  case class OfSize[Data <: HList, N <: Nat](number: Int) extends OfSizeLike[N] {}
+  // Constant & Unsafe are mutually exclusive
+
+  trait OfSizeLike
+
+  case class OfSize[Data <: HList, N <: Nat](number: Int) extends Constant[N] with OfSizeLike {}
 
   object OfSize {
 
@@ -70,13 +76,11 @@ object Arity {
 //    implicit def safe(w: Lt[Int]): OfInt[w.T] = OfInt.safe(w)
 //  }
 
-  case class OfInt_Unsafe(number: Int) extends OfIntLike
+  case class OfInt_Unsafe(number: Int) extends OfIntLike with Unsafe
 
-  case class OfInt[Lit](w: Lt[Int]) extends Constant[Lit] with OfIntLike {
-    override def number: Int = w.value
-  }
+  case class OfInt[Lit](number: Int) extends Constant[Lit] with OfIntLike
   object OfInt {
 
-    def safe(w: Lt[Int]): OfInt[w.T] = OfInt[w.T](w)
+    def safe(w: Lt[Int]): OfInt[w.T] = OfInt[w.T](w.value)
   }
 }

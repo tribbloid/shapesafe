@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe
+package edu.umontreal.kotlingrad.shapesafe.util
 
 trait ScalaReflection extends Serializable {
 

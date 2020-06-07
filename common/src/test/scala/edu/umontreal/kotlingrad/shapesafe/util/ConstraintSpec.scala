@@ -1,7 +1,7 @@
-package edu.umontreal.kotlingrad.shapesafe
+package edu.umontreal.kotlingrad.shapesafe.util
 
-import shapeless.HNil
-import shapeless.::
+import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import shapeless.{::, HNil}
 
 class ConstraintSpec extends BaseSpec {
 
@@ -49,10 +49,8 @@ class ConstraintSpec extends BaseSpec {
   describe("CANNOT prove") {
     it("if a member is not a subtype") {
 
-      assertDoesNotCompile(
-        """
-          |val proof = implicitly[Constraint.ElementOfType[Int :: Int :: Int :: Double :: Int :: HNil, Int]]
-          |""".stripMargin
+      shouldNotCompile(
+        "val proof = implicitly[Constraint.ElementOfType[Int :: Int :: Int :: Double :: Int :: HNil, Int]]"
       )
     }
   }

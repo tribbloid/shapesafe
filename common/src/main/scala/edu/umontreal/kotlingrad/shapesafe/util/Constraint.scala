@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe
+package edu.umontreal.kotlingrad.shapesafe.util
 
 import shapeless.HList
 import shapeless.ops.hlist
@@ -10,7 +10,6 @@ trait Constraint {}
 object Constraint {
 
   import ScalaReflection.universe
-  import universe.TypeTag
 
   case class ElementOfType[Data <: HList, Element: TypeTag]() {
 
