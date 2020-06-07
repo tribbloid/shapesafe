@@ -1,17 +1,17 @@
 package edu.umontreal.kotlingrad.shapesafe
 
-import Arity.{FromLiteral, OfSize}
+import edu.umontreal.kotlingrad.shapesafe.Arity.{OfInt, OfInt_Unsafe, OfSize}
 import edu.umontreal.kotlingrad.shapesafe.Constraint.ElementOfType
-import shapeless.{HList, Nat}
+import shapeless.{HList, Nat, ProductArgs}
 
-case class DoubleVector[A <: Arity](
-    arity: A,
-    data: List[Double]
-) {}
+class DoubleVector[A <: Arity](
+    val arity: A,
+    val data: List[Double]
+) extends Serializable {}
 
-object DoubleVector {
+object DoubleVector extends ProductArgs {
 
-  def fromHList[D <: HList, N <: Nat](data: D)(
+  def applyProduct[D <: HList, N <: Nat](data: D)(
       implicit proofOfSize: D OfSize N,
       proofOfType: D ElementOfType Double
   ): DoubleVector[OfSize[D, N]] = {
@@ -20,15 +20,27 @@ object DoubleVector {
       v.asInstanceOf[Double]
     }
 
-    DoubleVector(proofOfSize, list)
+    new DoubleVector(proofOfSize, list)
   }
 
-  //TODO:
-  // def fromTuple ...
-  // support for tuple larger than 22 is broken, need better solutions, codegen / macro / meta ?
+  @transient object from {
 
-  def zeros[Lit](w: W.Lt[Int]): DoubleVector[FromLiteral[w.T]] = {
+    def hList[D <: HList, N <: Nat](data: D)(
+        implicit proofOfSize: D OfSize N,
+        proofOfType: D ElementOfType Double
+    ): DoubleVector[OfSize[D, N]] = applyProduct(data)(proofOfSize, proofOfType)
+  }
 
-    DoubleVector(FromLiteral.make(w), List.fill(w.value)(0.0))
+  def zeros[Lit](w: Witness.Lt[Int]): DoubleVector[OfInt[w.T]] = {
+
+    new DoubleVector(OfInt.safe(w), List.fill(w.value)(0.0))
+  }
+
+  @transient object unsafe {
+
+    def zeros(number: Int): DoubleVector[OfInt_Unsafe] = {
+
+      new DoubleVector(OfInt_Unsafe(number), List.fill(number)(0.0))
+    }
   }
 }

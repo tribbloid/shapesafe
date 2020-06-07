@@ -46,10 +46,15 @@ class ConstraintSpec extends BaseSpec {
     }
   }
 
-  it("can NOT prove if a member is not a subtype") {
+  describe("CANNOT prove") {
+    it("if a member is not a subtype") {
 
-    // doesn't compile
-    // TODO: use shapeless to assert that
-    //    val proof = implicitly[Constraint.OfElementType[Int :: Int :: Int :: Double :: Int :: HNil, Int]]
+      assertDoesNotCompile(
+        """
+          |val proof = implicitly[Constraint.ElementOfType[Int :: Int :: Int :: Double :: Int :: HNil, Int]]
+          |""".stripMargin
+      )
+    }
   }
+
 }

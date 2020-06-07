@@ -5,22 +5,46 @@ import shapeless.ops.nat.ToInt
 import shapeless.{HList, Nat}
 import singleton.ops.{==, Require}
 
-trait Arity extends Product with Serializable {}
+import scala.language.implicitConversions
+
+trait Arity extends Serializable {
+
+  def number: Int // run-time
+
+  override def toString: String = {
+
+    this.getClass.getSimpleName + ": " + number
+  }
+}
 
 object Arity {
 
-  case object ?? extends Arity
+  import shapeless.Witness._
 
-  trait Fixed[N] extends Arity {
-    type Number = N
-    def number: Int
+  trait Constant[N] extends Arity {
 
-    def proveEqual_internal[N2](implicit self: Require[Number == N2]): Unit = {}
+    type Number = N // compile-type
+
+    @transient protected[shapesafe] object internal {
+
+      // 'prove' means happening only in compile-time
+      def proveEqual[N2](implicit self: Require[Number == N2]): Unit = {
+
+        //TODO: need run-time proof
+      }
+
+      def requireEqual(w: Witness.Lt[Int])(implicit self: Require[Number == w.T]): Unit = {
+
+        proveEqual[w.T]
+
+        require(w.value == number)
+      }
+    }
   }
 
-  trait FromNat[N <: Nat] extends Fixed[N]
+  trait OfSizeLike[N <: Nat] extends Constant[N]
 
-  case class OfSize[Data <: HList, N <: Nat](number: Int) extends FromNat[N] {}
+  case class OfSize[Data <: HList, N <: Nat](number: Int) extends OfSizeLike[N] {}
 
   object OfSize {
 
@@ -28,23 +52,31 @@ object Arity {
         implicit
         getSize: hlist.Length.Aux[Data, T],
         toInt: ToInt[T]
-    ): OfSize[Data, T] = OfSize[Data, T](Nat.toInt[T])
+    ): OfSize[Data, T] =
+      new OfSize[Data, T](Nat.toInt[T])
   }
 
-  case class FromLiteral[Lit](w: W.Lt[Int]) extends Fixed[Lit] {
+  trait OfIntLike extends Arity
+
+  // TODO: these doesn't work
+  //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly
+//  trait OfIntLike_Implicit0 { // of lower priority in resolving
+//
+//    implicit def unsafe(number: Int): OfInt_Unsafe = OfInt_Unsafe(number)
+//  }
+//
+//  object OfIntLike extends OfIntLike_Implicit0 {
+//
+//    implicit def safe(w: Lt[Int]): OfInt[w.T] = OfInt.safe(w)
+//  }
+
+  case class OfInt_Unsafe(number: Int) extends OfIntLike
+
+  case class OfInt[Lit](w: Lt[Int]) extends Constant[Lit] with OfIntLike {
     override def number: Int = w.value
   }
+  object OfInt {
 
-  object FromLiteral {
-
-    def make(w: W.Lt[Int]): FromLiteral[w.T] = FromLiteral[w.T](w)
-
-    // TODO: remove, Witness already has implicit conversion
-    def makeWImplicit(number: Int)(
-        implicit w: W.Lt[Int] = W(number)
-    ): FromLiteral[w.T] = {
-
-      make(w)
-    }
+    def safe(w: Lt[Int]): OfInt[w.T] = OfInt[w.T](w)
   }
 }
