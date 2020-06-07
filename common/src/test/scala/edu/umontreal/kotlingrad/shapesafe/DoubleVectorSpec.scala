@@ -1,6 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe
 
-import shapeless.HNil
+import shapeless.{HNil, ProductArgs}
 
 class DoubleVectorSpec extends BaseSpec {
 
@@ -22,6 +22,15 @@ class DoubleVectorSpec extends BaseSpec {
     ) // scalafmt in IDEA failed here
 
     v.arity.internal.requireEqual(50)
+  }
+
+  it(s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
+
+    assertDoesNotCompile(
+      """
+        |DoubleVector.dummy(1.0)
+        |""".stripMargin
+    )
   }
 
   describe("from") {
