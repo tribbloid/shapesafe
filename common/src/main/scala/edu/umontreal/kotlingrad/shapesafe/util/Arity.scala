@@ -32,7 +32,7 @@ object Arity {
       // 'prove' means happening only in compile-time
       def proveEqual[N2](implicit self: Require[Number == N2]): Unit = {
 
-        //TODO: need run-time proof
+        //TODO: need run-time proof?
       }
 
       def requireEqual(w: Witness.Lt[Int])(implicit self: Require[Number == w.T]): Unit = {

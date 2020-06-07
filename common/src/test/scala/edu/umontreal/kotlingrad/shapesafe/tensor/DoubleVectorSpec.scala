@@ -111,7 +111,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)
-      val v3: DoubleVector[A4]  = DoubleVector.zeros(4)
+      val v3: DoubleVector[A5]  = DoubleVector.zeros(4)
 
       assert((v1 dot_* v2) == 0.0)
 
