@@ -11,9 +11,9 @@ object ArityOpsImpl {
 
     case object Sum extends CanSum[A1, A2] {
 
-      final type Yield = Arity.OfInt_Unsafe
+      final type Yield = Arity.FromInt_Unsafe
       override def yieldRT(a1: A1, a2: A2): Yield =
-        Arity.OfInt_Unsafe(a1.number + a2.number)
+        Arity.FromInt_Unsafe(a1.number + a2.number)
     }
   }
 
@@ -59,7 +59,7 @@ object ArityOpsImpl {
     case class Sum() extends CanSum[A1, A2] {
 
       type Yield = Arity.Constant[N1 + N2]
-      override def yieldRT(a1: A1, a2: A2): Yield = Arity.OfInt[N1 + N2](a1.number + a2.number)
+      override def yieldRT(a1: A1, a2: A2): Yield = Arity.FromInt[N1 + N2](a1.number + a2.number)
     }
   }
 

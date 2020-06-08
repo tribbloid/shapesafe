@@ -1,8 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.tensor
 
-import edu.umontreal.kotlingrad.shapesafe.util.{Arity, ScalaReflection}
-import edu.umontreal.kotlingrad.shapesafe.util.Arity.{OfInt, OfInt_Unsafe, OfSize}
-import edu.umontreal.kotlingrad.shapesafe.util.ArityOps.{CanSum, MayEqual}
+import edu.umontreal.kotlingrad.shapesafe.util.Arity
+import edu.umontreal.kotlingrad.shapesafe.util.Arity.{FromInt, FromInt_Unsafe, FromSize}
+import edu.umontreal.kotlingrad.shapesafe.util.ArityOps.{CanSum, MayEqual, OfSize}
 import edu.umontreal.kotlingrad.shapesafe.util.Constraint.ElementOfType
 import shapeless.{HList, Nat, ProductArgs, Witness}
 
@@ -53,13 +53,13 @@ object DoubleVector extends ProductArgs {
   def applyProduct[D <: HList, N <: Nat](data: D)(
       implicit proofOfSize: D OfSize N,
       proofOfType: D ElementOfType Double
-  ): DoubleVector[OfSize[D, N]] = {
+  ): DoubleVector[FromSize[proofOfSize._N]] = {
 
     val list = data.runtimeList.map { v =>
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize, list)
+    new DoubleVector(proofOfSize.yieldRT, list)
   }
 
   @transient object from {
@@ -67,28 +67,27 @@ object DoubleVector extends ProductArgs {
     def hList[D <: HList, N <: Nat](data: D)(
         implicit proofOfSize: D OfSize N,
         proofOfType: D ElementOfType Double
-    ): DoubleVector[OfSize[D, N]] = applyProduct(data)(proofOfSize, proofOfType)
-
+    ): DoubleVector[FromSize[proofOfSize._N]] = applyProduct(data)(proofOfSize, proofOfType)
   }
 
-  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[OfInt[lit.T]] = {
+  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
 
-    new DoubleVector(OfInt.safe(lit), List.fill(lit.value)(0.0))
+    new DoubleVector(FromInt.safe(lit), List.fill(lit.value)(0.0))
   }
 
-  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[OfInt[lit.T]] = {
-    val list = List.fill(lit.value)(0.0).map{
-      _ => Random.nextDouble()
+  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
+    val list = List.fill(lit.value)(0.0).map { _ =>
+      Random.nextDouble()
     }
 
-    new DoubleVector(OfInt.safe(lit), list)
+    new DoubleVector(FromInt.safe(lit), list)
   }
 
   @transient object unsafe {
 
-    def zeros(number: Int): DoubleVector[OfInt_Unsafe] = {
+    def zeros(number: Int): DoubleVector[FromInt_Unsafe] = {
 
-      new DoubleVector(OfInt_Unsafe(number), List.fill(number)(0.0))
+      new DoubleVector(FromInt_Unsafe(number), List.fill(number)(0.0))
     }
   }
 }

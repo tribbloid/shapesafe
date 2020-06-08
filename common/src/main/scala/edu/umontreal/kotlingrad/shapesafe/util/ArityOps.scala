@@ -1,9 +1,34 @@
 package edu.umontreal.kotlingrad.shapesafe.util
 
 import edu.umontreal.kotlingrad.shapesafe.util.ArityOpsImpl.??
+import shapeless.ops.hlist
+import shapeless.ops.nat.ToInt
+import shapeless.{HList, Nat}
 import singleton.ops.{==, Require}
 
 object ArityOps {
+
+  // TODO: technically this is not an ops, but a proof
+  case class OfSize[Data <: HList, N <: Nat](number: Int) {
+
+    type _N = singleton.ops.ToInt[N] // getting rid of church encoding
+
+    type Yield = Arity.FromSize[_N]
+
+    lazy val yieldRT: Yield = Arity.FromSize[_N](number)
+  }
+
+  object OfSize {
+
+    implicit def observe[Data <: HList, T <: Nat](
+        implicit
+        getSize: hlist.Length.Aux[Data, T],
+        toInt: ToInt[T]
+    ): OfSize[Data, T] = {
+
+      new OfSize[Data, T](Nat.toInt[T])
+    }
+  }
 
   trait MayEqual[-A1 <: Arity, -A2 <: Arity] {
 

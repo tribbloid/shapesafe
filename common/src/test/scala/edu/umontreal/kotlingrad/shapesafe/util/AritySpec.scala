@@ -1,6 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.util
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import edu.umontreal.kotlingrad.shapesafe.util.ArityOps.OfSize
 import shapeless.{::, HNil, Nat, Witness}
 import singleton.ops.{==, Require}
 
@@ -12,14 +13,16 @@ class AritySpec extends BaseSpec {
 
     implicitly[Require[Nat._3 == Witness.`3`.T]] // just a sanity check
 
-    val v = implicitly[OfSize[Int :: Int :: Int :: HNil, Nat._3]]
+    val op = implicitly[OfSize[Int :: Int :: Int :: HNil, Nat._3]]
+
+    val v = op.yieldRT
 
     v.internal.requireEqual(3)
   }
 
   it("OfInt") {
 
-    val v1 = OfInt.safe(3)
+    val v1 = FromInt.safe(3)
     v1.internal.requireEqual(3)
   }
 

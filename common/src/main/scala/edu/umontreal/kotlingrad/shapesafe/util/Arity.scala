@@ -1,8 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe.util
 
-import shapeless.ops.hlist
-import shapeless.ops.nat.ToInt
-import shapeless.{HList, Nat, Witness}
+import shapeless.{Nat, Witness}
 import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
@@ -48,39 +46,29 @@ object Arity {
 
   // Constant & Unsafe are mutually exclusive
 
-  trait OfSizeLike
+  trait FromSizeLike
 
-  case class OfSize[Data <: HList, N <: Nat](number: Int) extends Constant[N] with OfSizeLike {}
+  case class FromSize[N](number: Int) extends Constant[N] with FromSizeLike {}
 
-  object OfSize {
+  trait FromNumber extends Arity
 
-    implicit def observe[Data <: HList, T <: Nat](
-        implicit
-        getSize: hlist.Length.Aux[Data, T],
-        toInt: ToInt[T]
-    ): OfSize[Data, T] =
-      new OfSize[Data, T](Nat.toInt[T])
+  case class FromInt_Unsafe(number: Int) extends Unsafe with FromNumber
+
+  case class FromInt[Lit](number: Int) extends Constant[Lit] with FromNumber
+  object FromInt {
+
+    def safe(w: Lt[Int]): FromInt[w.T] = FromInt[w.T](w.value)
   }
-
-  trait OfIntLike extends Arity
 
   // TODO: these doesn't work
   //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly
-//  trait OfIntLike_Implicit0 { // of lower priority in resolving
-//
-//    implicit def unsafe(number: Int): OfInt_Unsafe = OfInt_Unsafe(number)
-//  }
-//
-//  object OfIntLike extends OfIntLike_Implicit0 {
-//
-//    implicit def safe(w: Lt[Int]): OfInt[w.T] = OfInt.safe(w)
-//  }
-
-  case class OfInt_Unsafe(number: Int) extends OfIntLike with Unsafe
-
-  case class OfInt[Lit](number: Int) extends Constant[Lit] with OfIntLike
-  object OfInt {
-
-    def safe(w: Lt[Int]): OfInt[w.T] = OfInt[w.T](w.value)
-  }
+  //  trait OfIntLike_Implicit0 { // of lower priority in resolving
+  //
+  //    implicit def unsafe(number: Int): OfInt_Unsafe = OfInt_Unsafe(number)
+  //  }
+  //
+  //  object OfIntLike extends OfIntLike_Implicit0 {
+  //
+  //    implicit def safe(w: Lt[Int]): OfInt[w.T] = OfInt.safe(w)
+  //  }
 }
