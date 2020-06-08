@@ -6,6 +6,8 @@ import edu.umontreal.kotlingrad.shapesafe.util.ArityOps.{CanSum, MayEqual}
 import edu.umontreal.kotlingrad.shapesafe.util.Constraint.ElementOfType
 import shapeless.{HList, Nat, ProductArgs, Witness}
 
+import scala.util.Random
+
 class DoubleVector[A <: Arity](
     val arity: A,
     val data: Seq[Double] // should support sparse/lazy vector
@@ -69,9 +71,17 @@ object DoubleVector extends ProductArgs {
 
   }
 
-  def zeros[Lit](w: Witness.Lt[Int]): DoubleVector[OfInt[w.T]] = {
+  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[OfInt[lit.T]] = {
 
-    new DoubleVector(OfInt.safe(w), List.fill(w.value)(0.0))
+    new DoubleVector(OfInt.safe(lit), List.fill(lit.value)(0.0))
+  }
+
+  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[OfInt[lit.T]] = {
+    val list = List.fill(lit.value)(0.0).map{
+      _ => Random.nextDouble()
+    }
+
+    new DoubleVector(OfInt.safe(lit), list)
   }
 
   @transient object unsafe {

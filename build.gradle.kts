@@ -2,13 +2,15 @@ plugins {
     idea
     base
     kotlin("jvm") version "1.3.70"
-    id("com.github.maiflai.scalatest").version("0.26")
+//    id("com.github.maiflai.scalatest").version("0.26")
 }
 
 allprojects {
 
     apply(plugin = "java")
     apply(plugin = "scala")
+    apply(plugin = "java-library")
+
 
     apply(plugin = "idea")
 

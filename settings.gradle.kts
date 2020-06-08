@@ -2,7 +2,8 @@
 
 
 include(
-        "common"
+        "common",
+        "demo"
 )
 
 
