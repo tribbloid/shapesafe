@@ -1,7 +1,7 @@
 plugins {
     idea
     base
-    kotlin("jvm") version "1.3.70"
+    kotlin("jvm") version "1.3.72"
 //    id("com.github.maiflai.scalatest").version("0.26")
 }
 
@@ -9,6 +9,7 @@ allprojects {
 
     apply(plugin = "java")
     apply(plugin = "scala")
+    apply(plugin = "kotlin")
     apply(plugin = "java-library")
 
 
@@ -39,6 +40,9 @@ allprojects {
         implementation("org.scala-lang:scala-compiler:${vs.scalaV}")
         implementation("org.scala-lang:scala-library:${vs.scalaV}")
         implementation("org.scala-lang:scala-reflect:${vs.scalaV}")
+
+        implementation(kotlin("stdlib"))
+        implementation(kotlin("stdlib-jdk8"))
 
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
@@ -85,3 +89,4 @@ allprojects {
     }
 
 }
+
