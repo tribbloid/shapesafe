@@ -1,8 +1,9 @@
 package edu.umontreal.kotlingrad.shapesafe.tensor
 
-import edu.umontreal.kotlingrad.shapesafe.util.Arity
-import edu.umontreal.kotlingrad.shapesafe.util.Arity.{FromInt, FromInt_Unsafe, FromSize}
-import edu.umontreal.kotlingrad.shapesafe.util.ArityOps.{CanSum, MayEqual, OfSize}
+import edu.umontreal.kotlingrad.shapesafe.arity.Arity
+import edu.umontreal.kotlingrad.shapesafe.arity.Arity.{FromInt, FromInt_Unsafe, FromSize}
+import edu.umontreal.kotlingrad.shapesafe.arity.ops.BinaryOps
+import edu.umontreal.kotlingrad.shapesafe.arity.proof.{MayEqual, OfSize}
 import edu.umontreal.kotlingrad.shapesafe.util.Constraint.ElementOfType
 import shapeless.{HList, Nat, ProductArgs, Witness}
 
@@ -24,7 +25,7 @@ class DoubleVector[A <: Arity](
 
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(implicit proof: A MayEqual A2): Double = {
 
-    proof.yieldRT(this.arity, that.arity) // run-time check
+    proof.out(this.arity, that.arity) // run-time check
 
     val result: Double = this.data
       .zip(that.data)
@@ -37,15 +38,14 @@ class DoubleVector[A <: Arity](
     result
   }
 
-  def concat[A2 <: Arity](that: DoubleVector[A2])(implicit op: A CanSum A2): DoubleVector[op.Yield] = {
+  def concat[A2 <: Arity](that: DoubleVector[A2])(implicit ops: A BinaryOps A2): DoubleVector[ops.Plus.Out] = {
 
-    val arity = op.yieldRT(this.arity, that.arity)
+    val arity = ops.Plus.out(this.arity, that.arity)
 
     val data = this.data ++ that.data
 
-    new DoubleVector[op.Yield](arity, data)
+    new DoubleVector[ops.Plus.Out](arity, data)
   }
-
 }
 
 object DoubleVector extends ProductArgs {
@@ -59,7 +59,7 @@ object DoubleVector extends ProductArgs {
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize.yieldRT, list)
+    new DoubleVector(proofOfSize.out, list)
   }
 
   @transient object from {
@@ -72,7 +72,12 @@ object DoubleVector extends ProductArgs {
 
   def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
 
-    new DoubleVector(FromInt.safe(lit), List.fill(lit.value)(0.0))
+    new DoubleVector(FromInt.create(lit), List.fill(lit.value)(0.0))
+  }
+
+  def ones[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
+
+    new DoubleVector(FromInt.create(lit), List.fill(lit.value)(1.0))
   }
 
   def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
@@ -80,7 +85,7 @@ object DoubleVector extends ProductArgs {
       Random.nextDouble()
     }
 
-    new DoubleVector(FromInt.safe(lit), list)
+    new DoubleVector(FromInt.create(lit), list)
   }
 
   @transient object unsafe {

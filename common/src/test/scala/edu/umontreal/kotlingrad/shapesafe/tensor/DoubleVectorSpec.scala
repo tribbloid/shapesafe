@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.tensor
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.util.Arity
+import edu.umontreal.kotlingrad.shapesafe.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -146,6 +146,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0 concat v1
       assert(result.data == Seq(1.0, 2.0, 0.0, 0.0, 0.0))
+
       result.arity.internal.requireEqual(5)
 
       val v2 = DoubleVector.zeros(5)

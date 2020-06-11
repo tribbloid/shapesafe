@@ -26,6 +26,7 @@ allprojects {
         maven("https://dl.bintray.com/kotlin/kotlin-dev")
     }
 
+
     // resolving jar hells
     configurations.all {
         resolutionStrategy.dependencySubstitution {
@@ -54,6 +55,10 @@ allprojects {
 
     }
 
+    kotlin.target {
+
+    }
+
     idea.module {
         // apache spark
         excludeDirs.add(file("warehouse"))
@@ -76,8 +81,20 @@ allprojects {
     }
 
     tasks {
+        val jvmTarget = JavaVersion.VERSION_1_8.toString()
+
+        compileKotlin {
+            kotlinOptions.jvmTarget = jvmTarget
+//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+        }
+        compileTestKotlin {
+            kotlinOptions.jvmTarget = jvmTarget
+        }
 
         test {
+
+            minHeapSize = "1024m"
+            maxHeapSize = "4096m"
 
             useJUnitPlatform {
                 includeEngines("scalatest")
@@ -85,6 +102,15 @@ allprojects {
                     events("passed", "skipped", "failed")
                 }
             }
+
+            testLogging {
+//                events = setOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT)
+//                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+            }
+
         }
     }
 

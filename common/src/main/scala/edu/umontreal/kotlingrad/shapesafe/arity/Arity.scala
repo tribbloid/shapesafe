@@ -1,10 +1,13 @@
-package edu.umontreal.kotlingrad.shapesafe.util
+package edu.umontreal.kotlingrad.shapesafe.arity
 
-import shapeless.{Nat, Witness}
+import shapeless.Witness
 import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
 
+// TODO: is 'Measure' a better name?
+
+// will not be validated at run-time
 trait Arity extends Serializable {
 
   def number: Int // run-time
@@ -18,6 +21,8 @@ trait Arity extends Serializable {
 object Arity {
 
   import shapeless.Witness._
+
+  trait Unsafe extends Arity
 
   trait Constant[N] extends Arity {
 
@@ -42,8 +47,6 @@ object Arity {
     }
   }
 
-  trait Unsafe extends Arity
-
   // Constant & Unsafe are mutually exclusive
 
   trait FromSizeLike
@@ -54,11 +57,20 @@ object Arity {
 
   case class FromInt_Unsafe(number: Int) extends Unsafe with FromNumber
 
-  case class FromInt[Lit](number: Int) extends Constant[Lit] with FromNumber
+  case class FromInt[Lit](number: Int) extends Constant[Lit] with FromNumber {
+
+    def this(w: Lt[Int]) = {
+      this(number = w.value)
+    }
+
+  }
   object FromInt {
 
-    def safe(w: Lt[Int]): FromInt[w.T] = FromInt[w.T](w.value)
+    // TODO: can be cached
+    def create(w: Lt[Int]): FromInt[w.T] = new FromInt(w)
   }
+
+  val _1 = FromInt.create(1)
 
   // TODO: these doesn't work
   //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly
