@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.tensor
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.util.Arity
+import edu.umontreal.kotlingrad.shapesafe.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -104,10 +104,10 @@ class DoubleVectorSpec extends BaseSpec {
 
     it("type manually defined") {
       val w3 =Witness(3)
-      type A3 = Arity.FromInt[w3.T]
+      type A3 = Arity.FromLiteral[w3.T]
 
       val w4 = Witness(4)
-      type A4 = Arity.FromInt[w4.T]
+      type A4 = Arity.FromLiteral[w4.T]
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)

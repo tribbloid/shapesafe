@@ -2,6 +2,7 @@
 
 
 include(
+        "spike", // should be skipped on CI, contains local experiments only
         "common",
         "demo"
 )
