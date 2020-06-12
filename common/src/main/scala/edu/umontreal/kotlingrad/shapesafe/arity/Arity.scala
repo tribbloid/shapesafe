@@ -17,8 +17,8 @@ trait Arity extends ArityLike {
     this.getClass.getSimpleName + ": " + valueStr
   }
 
-  type out = this.type
-  final val out = this
+  type Out = this.type
+  final val Out = this
 }
 
 object Arity {
@@ -84,7 +84,7 @@ object Arity {
 
     def create(w: Witness.Lt[Int]): FromLiteral[w.T] = {
 
-      summon[w.T](w)
+      summon[w.T](w) //TODO: IDEA inspection error
     }
   }
   // TODO: these doesn't work

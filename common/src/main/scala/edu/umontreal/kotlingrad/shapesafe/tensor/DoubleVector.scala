@@ -1,7 +1,9 @@
 package edu.umontreal.kotlingrad.shapesafe.tensor
 
 import edu.umontreal.kotlingrad.shapesafe.arity.Arity
-import edu.umontreal.kotlingrad.shapesafe.arity.ArityOps.{CanSum, OfSize, Proof_==}
+import edu.umontreal.kotlingrad.shapesafe.arity.binary.MayEqual
+import edu.umontreal.kotlingrad.shapesafe.arity.binary.Op2.+
+import edu.umontreal.kotlingrad.shapesafe.arity.nullary.OfSize
 import edu.umontreal.kotlingrad.shapesafe.util.Constraint.ElementOfType
 import shapeless.{HList, Nat, ProductArgs, Witness}
 
@@ -28,9 +30,9 @@ class DoubleVector[A <: Arity](
     s"${arity.valueStr} \u00d7 1: Double"
   }
 
-  def dot_*[A2 <: Arity](that: DoubleVector[A2])(implicit proof: A Proof_== A2): Double = {
-
-    proof.out(this.arity, that.arity) // run-time check
+  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
+      implicit proof: A MayEqual A2
+  ): Double = {
 
     val result: Double = this.data
       .zip(that.data)
@@ -43,9 +45,11 @@ class DoubleVector[A <: Arity](
     result
   }
 
-  def concat[A2 <: Arity](that: DoubleVector[A2])(implicit op: A CanSum A2): DoubleVector[op.Out] = {
+  def concat[A2 <: Arity](that: DoubleVector[A2])(
+      implicit op: A + A2
+  ): DoubleVector[op.Out] = {
 
-    val arity = op.out(this.arity, that.arity)
+    val arity = implicitly[op.Out]
 
     val data = this.data ++ that.data
 
@@ -56,16 +60,20 @@ class DoubleVector[A <: Arity](
 
 object DoubleVector extends ProductArgs {
 
+  import Arity._
+
   def applyProduct[D <: HList, N <: Nat](data: D)(
       implicit proofOfSize: D OfSize N,
       proofOfType: D ElementOfType Double
-  ): DoubleVector[FromSize[proofOfSize._N]] = {
+  ): DoubleVector[FromSize[proofOfSize.Out]] = {
 
     val list = data.runtimeList.map { v =>
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize.out, list)
+    val arity = implicitly[proofOfSize.Out]
+
+    new DoubleVector(arity, list)
   }
 
   @transient object from {
@@ -73,27 +81,30 @@ object DoubleVector extends ProductArgs {
     def hList[D <: HList, N <: Nat](data: D)(
         implicit proofOfSize: D OfSize N,
         proofOfType: D ElementOfType Double
-    ): DoubleVector[FromSize[proofOfSize._N]] = applyProduct(data)(proofOfSize, proofOfType)
+    ): DoubleVector[FromSize[proofOfSize.Out]] = {
+
+      applyProduct(data)(proofOfSize, proofOfType)
+    }
   }
 
-  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
+  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
 
-    new DoubleVector(FromInt.safe(lit), List.fill(lit.value)(0.0))
+    new DoubleVector(FromLiteral.create(lit), List.fill(lit.value)(0.0))
   }
 
-  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {
-    val list = List.fill(lit.value)(0.0).map { _ =>
+  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
+    val list = List.fill(lit.value) {
       Random.nextDouble()
     }
 
-    new DoubleVector(FromInt.safe(lit), list)
+    new DoubleVector(FromLiteral.create(lit), list)
   }
 
   @transient object unsafe {
 
-    def zeros(number: Int): DoubleVector[FromInt_Unsafe] = {
+    def zeros(number: Int): DoubleVector[Unknown.type] = {
 
-      new DoubleVector(FromInt_Unsafe(number), List.fill(number)(0.0))
+      new DoubleVector(Unknown, List.fill(number)(0.0))
     }
   }
 }
