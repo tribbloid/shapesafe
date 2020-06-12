@@ -4,6 +4,8 @@ import edu.umontreal.kotlingrad.shapesafe.arity.Arity
 import edu.umontreal.kotlingrad.shapesafe.arity.ops.BinaryOps.Facet
 import edu.umontreal.kotlingrad.shapesafe.arity.proof.MayEqual
 
+import scala.language.higherKinds
+
 trait BinaryUnsafe[A1 <: Arity, A2 <: Arity] extends BinaryOps[A1, A2] {
 
   class FacetImpl[ConstOp[_, _]] extends Facet {

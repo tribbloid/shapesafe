@@ -6,6 +6,8 @@ import edu.umontreal.kotlingrad.shapesafe.arity.ops.BinaryOps.Facet
 import edu.umontreal.kotlingrad.shapesafe.arity.proof.MayEqual
 import singleton.ops.{==, Require}
 
+import scala.language.higherKinds
+
 trait BinaryOps[-A1 <: Arity, -A2 <: Arity] {
 
   import singleton.ops._
