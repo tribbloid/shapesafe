@@ -2,8 +2,11 @@
 
 
 include(
-        "common",
-        "demo"
+//        "spike", // should be skipped on CI, contains local experiments only
+        ":macro:testcommon",
+        ":macro", // uses unstable & experimental scala features, should change very slowly
+        ":core", // uses common scala features
+        ":demo"
 )
 
 

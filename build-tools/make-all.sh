@@ -10,4 +10,4 @@ mkdir -p ${FWDIR}/logs
 
 ${FWDIR}/gradlew -q dependencyTree "${@}" >${FWDIR}/logs/dependencyTree_"$DATE".out
 
-${FWDIR}/gradlew clean build -x test "${@}"
+${FWDIR}/gradlew clean build "${@}"

@@ -1,7 +1,5 @@
 package edu.umontreal.kotlingrad.shapesafe.demo
 
-import edu.umontreal.kotlingrad.shapesafe.tensor.DoubleVector
-
 // TODO: remove, not compatible
 fun main() {
 

@@ -1,18 +1,19 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
-    idea
     base
+    java
+    scala
     kotlin("jvm") version "1.3.72"
-//    id("com.github.maiflai.scalatest").version("0.26")
+    idea
 }
 
 allprojects {
 
     apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "scala")
     apply(plugin = "kotlin")
-    apply(plugin = "java-library")
-
-
     apply(plugin = "idea")
 
     val vs = this.versions()
@@ -50,25 +51,7 @@ allprojects {
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
 
-//        testRuntimeOnly("org.pegdown:pegdown:1.4.2")
-
     }
-
-    idea.module {
-        // apache spark
-        excludeDirs.add(file("warehouse"))
-
-        excludeDirs.add(file("latex"))
-
-        // gradle log
-        excludeDirs.add(file("logs"))
-
-        excludeDirs.add(file("gradle"))
-
-        isDownloadJavadoc = true
-        isDownloadSources = true
-    }
-
 
     task("dependencyTree") {
 
@@ -76,8 +59,76 @@ allprojects {
     }
 
     tasks {
+        val jvmTarget = JavaVersion.VERSION_1_8.toString()
+
+//        scala {
+//            this.zincVersion
+//        }
+
+        withType<ScalaCompile> {
+
+            configureEach {
+
+                targetCompatibility = jvmTarget
+
+                scalaCompileOptions.apply {
+
+//                    isForce = true
+
+                    loggingLevel = "verbose"
+
+                    additionalParameters = listOf(
+                            "-encoding", "utf8",
+                            "-unchecked",
+                            "-deprecation",
+                            "-feature",
+//                            "-Xfatal-warnings",
+
+                            "-Xlint:poly-implicit-overload",
+                            "-Xlint:option-implicit",
+
+                            "-Xlog-implicits",
+                            "-Xlog-implicit-conversions"
+
+                            ,
+                            "-Yissue-debug"
+
+                            // the following only works on scala 2.13
+//                        ,
+//                        "-Xlint:implicit-not-found",
+//                        "-Xlint:implicit-recursion"
+                    )
+
+                    forkOptions.apply {
+
+                        memoryInitialSize = "1g"
+                        memoryMaximumSize = "4g"
+
+                        // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
+                        jvmArgs = listOf(
+                                "-Xss256m"
+                        )
+                    }
+                }
+            }
+        }
+
+//        kotlin {}
+
+        withType<KotlinCompile> {
+
+            configureEach {
+
+                kotlinOptions.jvmTarget = jvmTarget
+                kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+
+            }
+        }
 
         test {
+
+            minHeapSize = "1024m"
+            maxHeapSize = "4096m"
 
             useJUnitPlatform {
                 includeEngines("scalatest")
@@ -85,8 +136,36 @@ allprojects {
                     events("passed", "skipped", "failed")
                 }
             }
+
+            testLogging {
+//                events = setOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT)
+//                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+            }
         }
     }
 
+    idea {
+
+        targetVersion = "2020"
+
+
+        module {
+
+            // apache spark
+            excludeDirs.add(file("warehouse"))
+            excludeDirs.add(file("latex"))
+
+            // gradle log
+            excludeDirs.add(file("logs"))
+            excludeDirs.add(file("gradle"))
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
+        }
+    }
 }
+
 

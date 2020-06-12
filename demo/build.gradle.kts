@@ -2,5 +2,6 @@ val vv: Versions = versions()
 
 dependencies {
 
-    api(project(":common"))
+    implementation(project(":core"))
+    testApi(project(":macro:testcommon"))
 }

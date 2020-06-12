@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 FWDIR="$(
-  cd "$(dirname "$0")"/..
+  cd "$(dirname "$0")"/.. || exit
   pwd
 )"
 
