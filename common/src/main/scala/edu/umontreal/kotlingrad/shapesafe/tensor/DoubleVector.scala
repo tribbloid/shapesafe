@@ -50,10 +50,10 @@ class DoubleVector[A <: Arity](
 
 object DoubleVector extends ProductArgs {
 
-  def applyProduct[D <: HList, N <: Nat](data: D)(
+  def applyProduct[D <: HList, N](data: D)(
       implicit proofOfSize: D OfSize N,
       proofOfType: D ElementOfType Double
-  ): DoubleVector[FromSize[proofOfSize._N]] = {
+  ): DoubleVector[proofOfSize.Out] = {
 
     val list = data.runtimeList.map { v =>
       v.asInstanceOf[Double]
@@ -64,10 +64,10 @@ object DoubleVector extends ProductArgs {
 
   @transient object from {
 
-    def hList[D <: HList, N <: Nat](data: D)(
+    def hList[D <: HList, N](data: D)(
         implicit proofOfSize: D OfSize N,
         proofOfType: D ElementOfType Double
-    ): DoubleVector[FromSize[proofOfSize._N]] = applyProduct(data)(proofOfSize, proofOfType)
+    ): DoubleVector[proofOfSize.Out] = applyProduct(data)(proofOfSize, proofOfType)
   }
 
   def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromInt[lit.T]] = {

@@ -2,15 +2,13 @@ package edu.umontreal.kotlingrad.shapesafe.arity.proof
 
 import edu.umontreal.kotlingrad.shapesafe.arity.{Arity, ArityOp}
 import shapeless.ops.hlist
-import shapeless.ops.nat.ToInt
 import shapeless.{HList, Nat}
+import singleton.ops.ToInt
 
-case class OfSize[Data <: HList, N <: Nat](number: Int) extends ArityOp {
+case class OfSize[Data <: HList, N](number: Int) extends ArityOp {
 
-  type _N = singleton.ops.ToInt[N] // getting rid of church encoding
-
-  type Out = Arity.FromSize[_N]
-  lazy val out: Out = Arity.FromSize[_N](number)
+  type Out = Arity.FromSize[N]
+  lazy val out: Out = Arity.FromSize[N](number)
 }
 
 object OfSize {
@@ -19,8 +17,8 @@ object OfSize {
       implicit
       getSize: hlist.Length.Aux[Data, T],
       toInt: ToInt[T]
-  ): OfSize[Data, T] = {
+  ): OfSize[Data, ToInt[T]] = {
 
-    new OfSize[Data, T](Nat.toInt[T])
+    new OfSize[Data, ToInt[T]](toInt.value.asInstanceOf[Int])
   }
 }
