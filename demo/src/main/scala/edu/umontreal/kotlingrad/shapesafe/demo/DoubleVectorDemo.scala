@@ -1,10 +1,11 @@
 package edu.umontreal.kotlingrad.shapesafe.demo
 
-import edu.umontreal.kotlingrad.shapesafe.tensor.DoubleVector
+import edu.umontreal.kotlingrad.shapesafe.core.tensor.DoubleVector
 
 object DoubleVectorDemo {
 
   def main(args: Array[String]): Unit = {
+
 
     val x3 = DoubleVector(1.0, 2.0, 3.0)
     val x50 = DoubleVector(
