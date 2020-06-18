@@ -1,8 +1,9 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     idea
     base
     kotlin("jvm") version "1.3.72"
-//    id("com.github.maiflai.scalatest").version("0.26")
 }
 
 allprojects {
@@ -50,25 +51,7 @@ allprojects {
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
 
-//        testRuntimeOnly("org.pegdown:pegdown:1.4.2")
-
     }
-
-    idea.module {
-        // apache spark
-        excludeDirs.add(file("warehouse"))
-
-        excludeDirs.add(file("latex"))
-
-        // gradle log
-        excludeDirs.add(file("logs"))
-
-        excludeDirs.add(file("gradle"))
-
-        isDownloadJavadoc = true
-        isDownloadSources = true
-    }
-
 
     task("dependencyTree") {
 
@@ -76,8 +59,52 @@ allprojects {
     }
 
     tasks {
+        val jvmTarget = JavaVersion.VERSION_1_8.toString()
+
+        withType<ScalaCompile> {
+
+            options.compilerArgs = listOf(
+
+                    "-encoding", "utf8",
+                    "-unchecked",
+                    "-deprecation",
+                    "-feature",
+                    "-Xfatal-warnings",
+                    "-Xlog-implicits"
+            )
+
+
+            scalaCompileOptions.loggingLevel = "debug"
+
+            scalaCompileOptions.additionalParameters = listOf(
+                    "-encoding", "utf8",
+                    "-unchecked",
+                    "-deprecation",
+                    "-feature",
+                    "-Xfatal-warnings",
+                    "-Xlog-implicits"
+            )
+
+            println(this.name)
+            println(scalaCompileOptions.additionalParameters)
+        }
+
+        withType<KotlinCompile> {
+
+            kotlinOptions.jvmTarget = jvmTarget
+        }
+
+//        compileKotlin {
+////            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+//        }
+//        compileTestKotlin {
+//            kotlinOptions.jvmTarget = jvmTarget
+//        }
 
         test {
+
+            minHeapSize = "1024m"
+            maxHeapSize = "4096m"
 
             useJUnitPlatform {
                 includeEngines("scalatest")
@@ -85,8 +112,38 @@ allprojects {
                     events("passed", "skipped", "failed")
                 }
             }
+
+            testLogging {
+//                events = setOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT)
+//                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+            }
         }
     }
 
+    idea {
+
+        targetVersion = "2018"
+
+
+        module {
+
+            // apache spark
+            excludeDirs.add(file("warehouse"))
+
+            excludeDirs.add(file("latex"))
+
+            // gradle log
+            excludeDirs.add(file("logs"))
+
+            excludeDirs.add(file("gradle"))
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
+        }
+    }
 }
+
 
