@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.util
+package edu.umontreal.kotlingrad.shapesafe.m.util
 
 import shapeless.HList
 import shapeless.ops.hlist
@@ -30,8 +30,8 @@ object Constraint {
     //    implicit def observe0[Element: TypeTag]: OfElementType[HNil, Element] = OfElementType[HNil, Element]()
 
     implicit def observe[Data <: HList, Element: TypeTag](
-        implicit assuming: hlist.ToArray[Data, Element]
-    ): ElementOfType[Data, Element] =
+                                                           implicit assuming: hlist.ToArray[Data, Element]
+                                                         ): ElementOfType[Data, Element] =
       ElementOfType[Data, Element]()
   }
 

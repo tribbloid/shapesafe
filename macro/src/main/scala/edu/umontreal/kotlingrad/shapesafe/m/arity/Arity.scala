@@ -1,26 +1,24 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.arity
+package edu.umontreal.kotlingrad.shapesafe.m.arity
 
-import edu.umontreal.kotlingrad.shapesafe.`macro`.arity.Proof.Invar
-import edu.umontreal.kotlingrad.shapesafe.`macro`.arity.Utils.Op
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import shapeless.Witness
 import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
 
-trait Arity extends Proof {
+trait Arity extends Operand.Proven {
 
   def numberOpt: Option[Int] // run-time
 
   lazy val valueStr: String = numberOpt.map(_.toString).getOrElse(s"(${this.getClass.getSimpleName})")
 
-  type Out = this.type
-  final val out: Out = this
+  override type Out = this.type
+  final override val out: Out = this
 
   override def toString: String = {
 
     this.getClass.getSimpleName + ": " + valueStr
   }
-
 }
 
 object Arity {
@@ -32,9 +30,9 @@ object Arity {
     override def numberOpt: Option[Int] = None
   }
 
-  trait Const[S] extends Arity with Invar[S] {
+  trait Const[S] extends Arity with Proof.Invar {
 
-//    implicitly[Out <:< Exact[S]]
+    //    implicitly[Out <:< Exact[S]]
 
     type SS = S // compile-time singleton type, MUST be a valid operand of singleton_ops
     def number: Int
@@ -60,15 +58,16 @@ object Arity {
         require(w.value == number)
       }
     }
+
   }
 
   // DO NOT directly carry Nat type! (church encoding is slow) convert to Op type first
-//  class FromSize[S <: Op](val number: Int) extends Exact[S]
-//
-//  object FromSize {
-//
-//    implicit def summon[S <: Op](implicit s: S): FromSize[S] = new FromSize[S](s.value.asInstanceOf[Int])
-//  }
+  //  class FromSize[S <: Op](val number: Int) extends Exact[S]
+  //
+  //  object FromSize {
+  //
+  //    implicit def summon[S <: Op](implicit s: S): FromSize[S] = new FromSize[S](s.value.asInstanceOf[Int])
+  //  }
 
   class FromOp[S <: Op](val number: Int) extends Const[S]
 

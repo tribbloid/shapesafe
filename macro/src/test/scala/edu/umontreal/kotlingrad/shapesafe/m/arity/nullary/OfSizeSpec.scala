@@ -1,9 +1,8 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.arity.nullary
+package edu.umontreal.kotlingrad.shapesafe.m.arity.nullary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.`macro`.arity.binary.MayEqual
-import shapeless.{::, HNil, Nat, Witness}
-import singleton.ops.{==, Require, ToInt}
+import shapeless.{::, HNil, Nat}
+import singleton.ops.{==, Require}
 
 class OfSizeSpec extends BaseSpec {
 

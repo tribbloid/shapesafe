@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.util
+package edu.umontreal.kotlingrad.shapesafe.m.util
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import shapeless.{::, HNil}

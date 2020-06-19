@@ -1,7 +1,7 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.arity
+package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import singleton.ops.{SafeInt, ToInt}
+import singleton.ops.ToInt
 
 class AritySpec extends BaseSpec {
 
@@ -9,8 +9,8 @@ class AritySpec extends BaseSpec {
 
   it("FromOp") {
 
-//    val v1 = implicitly[FromSize[SafeInt[big.nat.N]]]
-//    v1.internal.requireEqual(100)
+    //    val v1 = implicitly[FromSize[SafeInt[big.nat.N]]]
+    //    v1.internal.requireEqual(100)
 
     val v2 = implicitly[FromOp[ToInt[big.nat.N]]]
     v2.internal.requireEqual(100)
@@ -29,10 +29,10 @@ class AritySpec extends BaseSpec {
   }
 
   // doesn't work at the moment
-//  it("OfIntLike") {
-//
-//    val v1: _ <: OfIntLike = 3
-//    println(v1)
-//  }
+  //  it("OfIntLike") {
+  //
+  //    val v1: _ <: OfIntLike = 3
+  //    println(v1)
+  //  }
 
 }

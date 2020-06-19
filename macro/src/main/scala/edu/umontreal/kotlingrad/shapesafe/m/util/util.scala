@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`
+package edu.umontreal.kotlingrad.shapesafe.m
 
 package object util {
 

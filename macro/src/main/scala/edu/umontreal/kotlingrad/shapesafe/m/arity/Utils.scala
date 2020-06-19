@@ -1,4 +1,4 @@
-package edu.umontreal.kotlingrad.shapesafe.`macro`.arity
+package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import shapeless.Nat
 import singleton.ops.ToInt
@@ -15,16 +15,16 @@ object Utils {
 
   type NatAsOp[N <: Nat] = ToInt[N]
 
-//  implicit def const[
-//      N1,
-//      N2,
-//      Fr[_, _]
-//  ](
-//      implicit
-//      major: Consts[N1, N2],
-//      minor: Fr[N1, N2] with Op
-//  ): Consts[N1, N2]#Op2Impl[Fr] = {
-//
-//    new major.Op2Impl[Fr]()
-//  }
+  //  implicit def const[
+  //      N1,
+  //      N2,
+  //      Fr[_, _]
+  //  ](
+  //      implicit
+  //      major: Consts[N1, N2],
+  //      minor: Fr[N1, N2] with Op
+  //  ): Consts[N1, N2]#Op2Impl[Fr] = {
+  //
+  //    new major.Op2Impl[Fr]()
+  //  }
 }
