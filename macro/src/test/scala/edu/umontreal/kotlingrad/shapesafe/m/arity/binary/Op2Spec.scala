@@ -58,15 +58,38 @@ class Op2Spec extends BaseSpec {
 
     it("a + b + c") {
 
-      val ab = a + b
-      val abc = ab + c
+      val op0 = a + b
+      val op = op0 + c
 
-//      val abc: Op2[Op2[a.type, b.type, +], c.type, +] = (a + b) + c
-
-      val proof: Proof = Op2.ProveInvar(abc)
+      val proof: Proof = Op2.ProveInvar(op)
 //
       println(proof.out)
     }
+
+    it("... simplfiied") {
+
+      val op = a + b + c
+
+//      implicit val proof0 = {
+//
+//        val op = a + b
+//
+//        op: Proof.Invar
+//      }
+
+      val proof: Proof = Op2.ProveInvar(op)
+
+      println(proof.out)
+    }
+
+//    it("a + b + c + d") {
+//
+//      val op = a + b + c + Arity._1
+//
+//      val proof: Proof = Op2.ProveInvar(op)
+//
+//      println(proof.out)
+//    }
 
 //    it("a + b + c") {
 //
