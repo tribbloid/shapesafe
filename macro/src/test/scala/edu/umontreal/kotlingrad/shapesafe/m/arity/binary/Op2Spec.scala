@@ -2,6 +2,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
+import shapeless.Witness.Lt
 import singleton.ops.{+, /}
 
 class Op2Spec extends BaseSpec {
@@ -24,7 +25,13 @@ class Op2Spec extends BaseSpec {
 
     it("self") {
 
-      val aa: Proof.Invar = a
+      val aa: Proof.Invar[a.SS] = a
+
+      val ttag = aa.out.internal.getTTag
+
+//      val supertypes = ttag.tpe
+
+      println(ttag.tpe)
     }
 
     it("a + b") {
@@ -32,7 +39,7 @@ class Op2Spec extends BaseSpec {
       val op = a + b
       val proof: Proof = op
 
-      println(proof.out)
+//      aa.out.internal.proveEqual(7)
     }
 
     it("b / a") {
@@ -40,47 +47,60 @@ class Op2Spec extends BaseSpec {
       val op = b / a
       val proof: Proof = op
 
-      println(proof.out)
+//      aa.out.internal.proveEqual(1)
     }
 
-    it("... NOT if b == 0") {
+    ignore("... NOT if b == 0") {
 
       val op = a / Arity._0
 
-      val proof: Proof = op
+      shouldNotCompile {
+        "val proof: Proof = Op2.ProveInvar(op)"
+      }
 
-      println(proof.out)
-
-//      shouldNotCompile {
-//        "implicit val r = implicitly[R]"
-//      }
+      shouldNotCompile {
+        "val proof: Proof = op"
+      }
     }
 
     it("a + b + c") {
 
-      val op0 = a + b
+      implicit val op0 = a + b
       val op = op0 + c
 
-      val proof: Proof = Op2.ProveInvar(op)
+      val proof0 = {
+
+        val op = a + b
+        val proof = Op2.ProveInvar(op)
+        proof
+      }
+
+      val proof: Proof = {
+
+        implicit val fn0 = proof0.Fn
+
+        Op2.ProveInvar(op)
+      }
+
 //
-      println(proof.out)
+//      aa.out.internal.proveEqual(12)
     }
 
-    it("... simplfiied") {
-
-      val op = a + b + c
-
-//      implicit val proof0 = {
+//    it("... simplfiied") {
 //
-//        val op = a + b
+//      val op = a + b + c
 //
-//        op: Proof.Invar
-//      }
-
-      val proof: Proof = Op2.ProveInvar(op)
-
-      println(proof.out)
-    }
+////      implicit val proof0 = {
+////
+////        val op = a + b
+////
+////        op: Proof.Invar
+////      }
+//
+//      val proof: Proof = Op2.ProveInvar(op)
+//
+//      println(proof.out)
+//    }
 
 //    it("a + b + c + d") {
 //

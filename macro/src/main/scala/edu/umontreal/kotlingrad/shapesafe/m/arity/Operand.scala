@@ -21,7 +21,8 @@ object Operand {
 
   trait Proven extends Operand with Proof {
 
-    final override def self: this.type = this
+    final type In = this.type
+    final override val in: In = this
   }
 
   abstract class ProvenToBe[O <: Arity]()(implicit override val out: O) extends Proven {

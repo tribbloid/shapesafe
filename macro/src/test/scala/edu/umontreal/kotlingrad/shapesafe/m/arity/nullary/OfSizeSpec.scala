@@ -9,11 +9,11 @@ class OfSizeSpec extends BaseSpec {
   it("small hlist") {
 
     val op0 = OfSize.observe[Int :: Int :: Int :: HNil, Nat._3]
-    op0.out.internal.requireEqual(3)
+    op0.out.internal.proveEqual(3)
 
     val hList = 0 :: 1 :: 2 :: HNil
     val op1 = OfSize.observe(hList)
-    op1.out.internal.requireEqual(3)
+    op1.out.internal.proveEqual(3)
   }
 
   it("big hlist") {
@@ -21,7 +21,7 @@ class OfSizeSpec extends BaseSpec {
     implicitly[Require[big.nat.N == big.w.T]] // just a sanity check
 
     val op1 = OfSize.observe(big.hList)
-    op1.out.internal.requireEqual(100)
+    op1.out.internal.proveEqual(100)
   }
 
 }

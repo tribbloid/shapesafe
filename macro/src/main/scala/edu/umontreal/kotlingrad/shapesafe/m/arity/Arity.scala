@@ -1,6 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
+import edu.umontreal.kotlingrad.shapesafe.m.util.TypeTag
 import shapeless.Witness
 import singleton.ops.{==, Require}
 
@@ -8,9 +9,9 @@ import scala.language.implicitConversions
 
 trait Arity extends Operand.Proven {
 
-  def numberOpt: Option[Int] // run-time
+//  def numberOpt: Option[Int] // run-time
 
-  lazy val valueStr: String = numberOpt.map(_.toString).getOrElse(s"(${this.getClass.getSimpleName})")
+  lazy val valueStr: String = ""
 
   override type Out = this.type
   final override val out: Out = this
@@ -27,19 +28,19 @@ object Arity {
 
   implicit object Unknown extends Arity {
 
-    override def numberOpt: Option[Int] = None
+//    override def numberOpt: Option[Int] = None
   }
 
-  trait Const[S] extends Arity with Proof.Invar {
+  abstract class Const[S] extends Arity with Proof.Invar[S] {
 
     //    implicitly[Out <:< Exact[S]]
 
-    type SS = S // compile-time singleton type, MUST be a valid operand of singleton_ops
-    def number: Int
-
-    final override def numberOpt: Option[Int] = Some(number)
+//    def number: Int
+//    final override def numberOpt: Option[Int] = Some(number)
 
     @transient protected[shapesafe] object internal {
+
+      def getTTag(implicit ttag: TypeTag[SS]): TypeTag[SS] = ttag
 
       def proveSame[N2](implicit self: SS =:= N2): Unit = {}
 
@@ -50,12 +51,11 @@ object Arity {
 
       }
 
-      // TODO: should be named proofEqual, require should do everything in runtime
-      def requireEqual(w: Lt[Int])(implicit self: Require[SS == w.T]): Unit = {
+      def proveEqual(w: Lt[Int])(implicit self: Require[SS == w.T]): Unit = {
 
         proveEqual[w.T]
 
-        require(w.value == number)
+//        require(w.value == number)
       }
     }
 
@@ -69,28 +69,30 @@ object Arity {
   //    implicit def summon[S <: Op](implicit s: S): FromSize[S] = new FromSize[S](s.value.asInstanceOf[Int])
   //  }
 
-  class FromOp[S <: Op](val number: Int) extends Const[S]
+  class FromOp[S <: Op]() extends Const[S]
 
   object FromOp {
 
-    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s.value.asInstanceOf[Int])
+    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S]()
   }
 
   // this makes it impossible to construct directly from Int type
-  class FromLiteral[S <: Int](val w: Witness.Lt[Int]) extends Const[S] {
+  class FromLiteral[S <: Int]() extends Const[S] {
 
-    override def number: Int = w.value
+//    override def number: Int = w.value
   }
 
   object FromLiteral {
 
     implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] =
-      new FromLiteral[S](w)
+      new FromLiteral[S]()
   }
 
   def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {
 
-    FromLiteral.summon[w.T](w) //TODO: IDEA inspection error
+    implicit val _w: Witness.Aux[w.T] = w
+
+    FromLiteral.summon[w.T] //TODO: IDEA inspection error
   }
 
   lazy val _0 = Arity(0)

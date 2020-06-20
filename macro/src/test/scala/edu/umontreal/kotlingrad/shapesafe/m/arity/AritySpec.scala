@@ -13,19 +13,19 @@ class AritySpec extends BaseSpec {
     //    v1.internal.requireEqual(100)
 
     val v2 = implicitly[FromOp[ToInt[big.nat.N]]]
-    v2.internal.requireEqual(100)
+    v2.internal.proveEqual(100)
 
     val v3 = implicitly[FromOp[ToInt[big.w.T]]]
-    v3.internal.requireEqual(100)
+    v3.internal.proveEqual(100)
   }
 
   it("FromLiteral") {
 
     val v1 = Arity(100)
-    v1.internal.requireEqual(100)
+    v1.internal.proveEqual(100)
 
     val v2 = implicitly[FromLiteral[big.w.T]]
-    v2.internal.requireEqual(100)
+    v2.internal.proveEqual(100)
   }
 
   // doesn't work at the moment

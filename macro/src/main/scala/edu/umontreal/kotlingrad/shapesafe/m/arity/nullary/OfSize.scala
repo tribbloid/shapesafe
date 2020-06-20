@@ -8,7 +8,7 @@ import shapeless.{HList, Nat}
 
 class OfSize[-Data <: HList, S <: NatAsOp[_]](
     val number: Int
-) extends Operand.ProvenToBe[FromOp[S]]()(new FromOp(number)) {}
+) extends Operand.ProvenToBe[FromOp[S]]()(new FromOp[S]()) {}
 
 object OfSize {
 
