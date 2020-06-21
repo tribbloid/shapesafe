@@ -27,6 +27,8 @@ class Op2Spec extends BaseSpec {
 
       val aa: Proof.Invar[a.SS] = a
 
+      aa.out.internal.proveEqual(3)
+
       val ttag = aa.out.internal.getTTag
 
 //      val supertypes = ttag.tpe
@@ -37,36 +39,22 @@ class Op2Spec extends BaseSpec {
     it("a + b") {
 
       val op = a + b
-      val proof: Proof = op
+      val proof: Proof = {
 
-//      aa.out.internal.proveEqual(7)
-    }
+        val alt: Op2.ProveInvar[a.type, b.type, a.SS, b.SS, +] = Op2.ProveInvar(op)
 
-    it("b / a") {
-
-      val op = b / a
-      val proof: Proof = op
-
-//      aa.out.internal.proveEqual(1)
-    }
-
-    ignore("... NOT if b == 0") {
-
-      val op = a / Arity._0
-
-      shouldNotCompile {
-        "val proof: Proof = Op2.ProveInvar(op)"
+        op
       }
 
-      shouldNotCompile {
-        "val proof: Proof = op"
-      }
+      val arity = Proof.convert(op)
+      arity.internal.proveEqual(7)
+
     }
 
     it("a + b + c") {
 
-      implicit val op0 = a + b
-      val op = op0 + c
+      val op0 = a + b
+      val op: Op2[op0.type, c.type, +] = op0 + c
 
       val proof0 = {
 
@@ -77,31 +65,62 @@ class Op2Spec extends BaseSpec {
 
       val proof: Proof = {
 
-        implicit val fn0 = proof0.Fn
+        //        implicit val fn0 = proof0.Fn
 
-        Op2.ProveInvar(op)
+        val alt: Op2.ProveInvar[op0.type, c.type, a.SS + b.SS, c.SS, +] = Op2.ProveInvar(op)
+
+        alt.out.internal.proveEqual(12)
+
+        op: Proof.Invar[a.SS + b.SS + c.SS]
       }
 
-//
-//      aa.out.internal.proveEqual(12)
     }
 
-//    it("... simplfiied") {
-//
-//      val op = a + b + c
-//
-////      implicit val proof0 = {
-////
-////        val op = a + b
-////
-////        op: Proof.Invar
-////      }
-//
-//      val proof: Proof = Op2.ProveInvar(op)
-//
-//      println(proof.out)
-//    }
+    it("... simplfiied") {
 
+      val op: Op2[Op2[a.type, b.type, +], c.type, +] = a + b + c
+
+      val proof: Proof = {
+
+        //        implicit val fn0 = proof0.Fn
+
+        val alt: Op2.ProveInvar[
+          Op2[a.type, b.type, +],
+          c.type,
+          a.SS + b.SS,
+          c.SS,
+          +
+        ] =
+          Op2.ProveInvar(op)
+
+        alt.out.internal.proveEqual(12)
+
+        op: Proof.Invar[a.SS + b.SS + c.SS]
+
+//        op: Proof
+      }
+    }
+
+    it("b / a") {
+
+      val op = b / a
+      val proof: Proof = op
+
+//      aa.out.internal.proveEqual(1)
+    }
+
+//    ignore("... NOT if b == 0") {
+//
+//      val op = a / Arity._0
+//
+//      shouldNotCompile {
+//        "val proof: Proof = Op2.ProveInvar(op)"
+//      }
+//
+//      shouldNotCompile {
+//        "val proof: Proof = op"
+//      }
+//    }
 //    it("a + b + c + d") {
 //
 //      val op = a + b + c + Arity._1

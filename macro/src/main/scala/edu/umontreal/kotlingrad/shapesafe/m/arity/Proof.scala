@@ -34,4 +34,11 @@ object Proof {
 
     type SS = S
   } // can't use type alias? really?
+
+  def convert[In <: Operand, Out <: Arity](in: In)(
+      implicit
+      prove: In => Proof.Aux[Out]
+  ): Out = {
+    prove(in).out
+  }
 }
