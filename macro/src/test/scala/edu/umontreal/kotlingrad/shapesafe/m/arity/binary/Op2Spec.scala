@@ -46,9 +46,10 @@ class Op2Spec extends BaseSpec {
         op
       }
 
-      val arity = Proof.convert(op)
-      arity.internal.proveEqual(7)
+//      val arity = Proof.Require[Proof.From[op.type]].convert(op)
 
+      val arity = Proof.Require[Proof.Invar[a.SS + b.SS]].convert(op)
+      arity.internal.proveEqual(7)
     }
 
     it("a + b + c") {

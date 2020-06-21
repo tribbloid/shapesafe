@@ -30,9 +30,8 @@ object Op2 {
       val prove1: A1 => Proof.Invar[S1],
       val prove2: A2 => Proof.Invar[S2],
       val ss: S1 Fr S2
-  ) extends Proof.Invar[S1 Fr S2] {
-
-    type In = Op2[A1, A2, Fr]
+  ) extends Proof.Invar[S1 Fr S2]
+      with Proof.From[Op2[A1, A2, Fr]] {
 
 //    val proof1: Proof.Invar[S1] = prove1(in.a1)
 //    val proof2: Proof.Invar[S2] = prove2(in.a2)

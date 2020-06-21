@@ -70,7 +70,8 @@ allprojects {
                     "-deprecation",
                     "-feature",
                     "-Xfatal-warnings",
-                    "-Xlog-implicits"
+                    "-Xlog-implicits",
+                    "-Vissue"
             )
 
 
@@ -83,6 +84,7 @@ allprojects {
                     "-feature",
                     "-Xfatal-warnings",
                     "-Xlog-implicits"
+//                    "-Vissue"
             )
 
             println(this.name)

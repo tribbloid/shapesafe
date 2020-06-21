@@ -18,8 +18,13 @@ trait Proof extends Serializable {
 
 object Proof {
 
-  type Aux[T] = Proof { type Out = T }
-  type Lt[T] = Proof { type Out <: T }
+  type Aux[O <: Arity] = Proof { type Out = O }
+  type Lt[O <: Arity] = Proof { type Out <: O }
+
+  trait From[I <: Operand] extends Proof {
+
+    final type In = I
+  }
 
   trait Unsafe extends Proof {
 
@@ -35,10 +40,14 @@ object Proof {
     type SS = S
   } // can't use type alias? really?
 
-  def convert[In <: Operand, Out <: Arity](in: In)(
-      implicit
-      prove: In => Proof.Aux[Out]
-  ): Out = {
-    prove(in).out
+  case class Require[P <: Proof]() {
+
+    def convert[_In <: Operand](in: _In)(
+        implicit
+        prove: _In => P
+    ) = {
+      prove(in).out
+    }
   }
+
 }
