@@ -63,18 +63,6 @@ allprojects {
 
         withType<ScalaCompile> {
 
-            options.compilerArgs = listOf(
-
-                    "-encoding", "utf8",
-                    "-unchecked",
-                    "-deprecation",
-                    "-feature",
-                    "-Xfatal-warnings",
-                    "-Xlog-implicits",
-                    "-Vissue"
-            )
-
-
             scalaCompileOptions.loggingLevel = "debug"
 
             scalaCompileOptions.additionalParameters = listOf(
@@ -83,8 +71,8 @@ allprojects {
                     "-deprecation",
                     "-feature",
                     "-Xfatal-warnings",
-                    "-Xlog-implicits"
-//                    "-Vissue"
+                    "-Xlog-implicits",
+                    "-Yissue-debug"
             )
 
             println(this.name)

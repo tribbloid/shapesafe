@@ -2,6 +2,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.util.ScalaReflection
 import shapeless.Witness.Lt
 import singleton.ops.{+, /}
 
@@ -38,7 +39,7 @@ class Op2Spec extends BaseSpec {
 
     it("a + b") {
 
-      val op = a + b
+      val op: Op2[a.type, b.type, +] = a + b
       val proof: Proof = {
 
         val alt: Op2.ProveInvar[a.type, b.type, a.SS, b.SS, +] = Op2.ProveInvar(op)
@@ -46,9 +47,16 @@ class Op2Spec extends BaseSpec {
         op
       }
 
-//      val arity = Proof.Require[Proof.From[op.type]].convert(op)
+      val arity = {
+        op: Proof.From[Op2[a.type, b.type, +]]
 
-      val arity = Proof.Require[Proof.Invar[a.SS + b.SS]].convert(op)
+        println(ScalaReflection.universe.reify { Proof.convert(op) }.tree)
+
+//        Proof.Require[Proof.From[Op2[a.type, b.type, +]]].convert(op)
+
+        Proof.Require[Proof.Invar[a.SS + b.SS]].convert(op)
+      }
+
       arity.internal.proveEqual(7)
     }
 
