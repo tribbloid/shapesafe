@@ -14,8 +14,8 @@ trait Proof extends Serializable {
 
 object Proof {
 
-  type Aux[T] = Proof { type Out = T }
-  type Lt[T] = Proof { type Out <: T }
+//  type Aux[T] = Proof { type Out = T }
+//  type Lt[T] = Proof { type Out <: T }
 
   trait Unsafe extends Proof {
 
@@ -23,9 +23,14 @@ object Proof {
     final def out: Out = Arity.Unknown
   }
 
+  trait Out_=[+O <: Arity] extends Proof {
+    type Out <: O
+  }
+
   // TODO: type Out should be a parameter instead of a dependent type
   //  otherwise inferring Out will require Lazy
-  trait Invar extends Proof {
-    type Out <: Arity.Const[_]
+  trait Invar[S] extends Out_=[Arity.Const[S]] {
+
+    type SS = S
   } // can't use type alias? really?
 }

@@ -32,7 +32,7 @@ class Op2Spec extends BaseSpec {
     it("a + b") {
 
       val op = a + b
-      val p = op.asProof
+      val p = op.asProof(Op2.ProveInvar)
       val r = p.out
 
       DebugUtils.eval(p.out).print()

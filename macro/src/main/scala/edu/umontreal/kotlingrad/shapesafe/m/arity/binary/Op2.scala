@@ -8,33 +8,33 @@ import scala.language.higherKinds
 case class Op2[
     +A1 <: Operand,
     +A2 <: Operand,
-    Fr[X1, X2] <: Op
+    ??[X1, X2] <: Op
 ](
     a1: A1,
-    a2: A2,
-    op: (Int, Int) => Int
+    a2: A2
 ) extends Operand {}
 
 object Op2 {
 
-  implicit class ProveInvar[A1 <: Operand, A2 <: Operand, Fr[X1, X2] <: Op](
-      val self: Op2[A1, A2, Fr]
+  implicit class ProveInvar[
+      S1,
+      S2,
+      A1 <: Operand,
+      A2 <: Operand,
+      ??[X1, X2] <: Op
+  ](
+      val self: Op2[A1, A2, ??]
   )(
       implicit
-      prove1: A1 => Proof.Invar,
-      prove2: A2 => Proof.Invar
-  ) extends Proof.Invar {
+      bound1: A1 => Proof.Invar[S1],
+      bound2: A2 => Proof.Invar[S2],
+      lemma: S1 ?? S2
+  ) extends Proof.Invar[S1 ?? S2] {
 
-    val proof1: Proof.Invar = prove1(self.a1)
-    val proof2: Proof.Invar = prove2(self.a2)
+    override type Out = Arity.FromOp[S1 ?? S2]
 
-    val out1: proof1.Out = proof1.out
-    val out2: proof2.Out = proof2.out
-
-    override type Out = Arity.FromOp[out1.SS Fr out2.SS]
-
-    override def out: Out = new Arity.FromOp[out1.SS Fr out2.SS](
-      self.op(out1.number, out2.number)
+    override def out: Out = new Arity.FromOp[S1 ?? S2](
+      lemma.value.asInstanceOf[Int]
     )
   }
 

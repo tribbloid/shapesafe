@@ -6,14 +6,20 @@ import singleton.ops.{+, /}
 // for "Expression"
 trait Operand {
 
-  def +[X >: this.type <: Operand, Y <: Operand](that: Y): Op2[X, Y, +] = {
+  def +[
+      X >: this.type <: Operand,
+      Y <: Operand
+  ](that: Y): Op2[X, Y, +] = {
 
-    Op2[X, Y, +](this, that, _ + _)
+    Op2[X, Y, +](this, that)
   }
 
-  def /[X >: this.type <: Operand, Y <: Operand](that: Y): Op2[X, Y, /] = {
+  def /[
+      X >: this.type <: Operand,
+      Y <: Operand
+  ](that: Y): Op2[X, Y, /] = {
 
-    Op2[X, Y, /](this, that, _ / _)
+    Op2[X, Y, /](this, that)
   }
 
   final def asProof[
