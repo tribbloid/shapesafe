@@ -30,11 +30,10 @@ object Arity {
     override def numberOpt: Option[Int] = None
   }
 
-  trait Const[S] extends Arity with Proof.Invar {
+  trait Const[S] extends Arity with Proof.Invar[S] {
 
     //    implicitly[Out <:< Exact[S]]
 
-    type SS = S // compile-time singleton type, MUST be a valid operand of singleton_ops
     def number: Int
 
     final override def numberOpt: Option[Int] = Some(number)
