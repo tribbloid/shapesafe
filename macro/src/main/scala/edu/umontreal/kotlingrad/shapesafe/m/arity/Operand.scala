@@ -16,7 +16,10 @@ trait Operand {
     Op2[X, Y, /](this, that, _ / _)
   }
 
-  final def asProof[T >: this.type <: Operand](implicit prove: T => Proof): Proof = prove(this)
+  final def asProof[
+      T >: this.type <: Operand,
+      R <: Proof
+  ](implicit prove: T => R): R = prove(this)
 }
 
 object Operand {

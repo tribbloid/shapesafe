@@ -2,6 +2,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import edu.umontreal.kotlingrad.shapesafe.m.util.debug.{DebugUtils, TypeView}
 
 class Op2Spec extends BaseSpec {
 
@@ -32,29 +33,12 @@ class Op2Spec extends BaseSpec {
 
       val op = a + b
       val p = op.asProof
+      val r = p.out
 
-      println(p.out)
-    }
+      DebugUtils.eval(p.out).print()
 
-    it("b / a") {
-
-      val op = b / a
-      val p = op.asProof
-
-      println(p.out)
-    }
-
-    it("... NOT if b == 0") {
-
-      val op = a / Arity._0
-
-      val p = op.asProof
-
-      println(p.out)
-
-//      shouldNotCompile {
-//        "implicit val r = implicitly[R]"
-//      }
+      TypeView[p.type].print()
+      TypeView[r.type].print()
     }
 
     it("a + b + c") {
@@ -63,24 +47,53 @@ class Op2Spec extends BaseSpec {
       val op = op0 + c
 
       val p = op.asProof
+      val r = p.out
 
-      println(p.out)
+      DebugUtils.eval(p.out).print()
+
+      TypeView[p.type].print()
+      TypeView[r.type].print()
     }
 
-    it("... simplfiied") {
-
-      val op = a + b + c
-
-//      implicit val proof0 = {
+//    it("... simplfiied") {
 //
-//        val op = a + b
+//      val op = a + b + c
 //
-//        op: Proof.Invar
-//      }
+////      implicit val proof0 = {
+////
+////        val op = a + b
+////
+////        op: Proof.Invar
+////      }
+//
+//      val p = op.asProof
+//
+//      println(p.out)
+//    }
+
+    it("b / a") {
+
+      val op = b / a
+      val p = op.asProof
+      val r = p.out
+
+      DebugUtils.eval(p.out).print()
+
+      TypeView[p.type].print()
+      TypeView[r.type].print()
+    }
+
+    it("... NOT if b == 0") {
+
+      val op = a / Arity._0
 
       val p = op.asProof
 
-      println(p.out)
+      //      println(p.out)
+
+      //      shouldNotCompile {
+      //        "implicit val r = implicitly[R]"
+      //      }
     }
 
 //    it("a + b + c + d") {
