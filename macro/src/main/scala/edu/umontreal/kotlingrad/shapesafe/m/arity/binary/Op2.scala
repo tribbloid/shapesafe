@@ -1,14 +1,13 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, Proof}
+import singleton.ops.+
 
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.implicitConversions
 
 case class Op2[
     +A1 <: Operand,
-    +A2 <: Operand,
-    Fr[X1, X2] <: Op
+    +A2 <: Operand
 ](
     a1: A1,
     a2: A2,
@@ -21,17 +20,16 @@ object Op2 {
       A1 <: Operand,
       A2 <: Operand,
       S1,
-      S2,
-      Fr[X1, X2] <: Op
+      S2
   ](
-      override val in: Op2[A1, A2, Fr]
+      override val in: Op2[A1, A2]
   )(
       implicit
       val prove1: A1 => Proof.Invar[S1],
       val prove2: A2 => Proof.Invar[S2],
-      val ss: S1 Fr S2
-  ) extends Proof.Invar[S1 Fr S2]
-      with Proof.From[Op2[A1, A2, Fr]] {
+      val ss: S1 + S2
+  ) extends Proof.Invar[S1 + S2]
+      with Proof.From[Op2[A1, A2]] {
 
 //    val proof1: Proof.Invar[S1] = prove1(in.a1)
 //    val proof2: Proof.Invar[S2] = prove2(in.a2)
@@ -39,9 +37,9 @@ object Op2 {
 //    val out1: proof1.Out = proof1.out
 //    val out2: proof2.Out = proof2.out
 
-    override type Out = Arity.FromOp[S1 Fr S2]
+    override type Out = Arity.FromOp[S1 + S2]
 
-    override val out: Out = new Arity.FromOp[S1 Fr S2]()
+    override val out: Out = new Arity.FromOp[S1 + S2]()
   }
 
 //  implicit def ProveInvar[

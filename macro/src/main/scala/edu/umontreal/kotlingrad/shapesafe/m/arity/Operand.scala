@@ -6,15 +6,15 @@ import singleton.ops.{+, /}
 // for "Expression"
 trait Operand {
 
-  def +(that: Operand): Op2[Operand.this.type, that.type, +] = {
+  def +(that: Operand): Op2[Operand.this.type, that.type] = {
 
-    Op2[this.type, that.type, +](this, that, _ + _)
+    Op2(this, that, _ + _)
   }
 
-  def /(that: Operand): Op2[Operand.this.type, that.type, /] = {
-
-    Op2[this.type, that.type, /](this, that, _ / _)
-  }
+//  def /(that: Operand): Op2[Operand.this.type, that.type, /] = {
+//
+//    Op2[this.type, that.type, /](this, that, _ / _)
+//  }
 }
 
 object Operand {
