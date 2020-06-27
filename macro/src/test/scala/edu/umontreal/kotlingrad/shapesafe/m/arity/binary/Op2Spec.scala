@@ -1,8 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
-import singleton.ops.{+, /}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 
 class Op2Spec extends BaseSpec {
 
@@ -24,32 +23,34 @@ class Op2Spec extends BaseSpec {
 
     it("self") {
 
-      val aa: Proof.Invar = a
+      val p = a.asProof
+
+      p.out
     }
 
     it("a + b") {
 
       val op = a + b
-      val proof: Proof = op
+      val p = op.asProof
 
-      println(proof.out)
+      println(p.out)
     }
 
     it("b / a") {
 
       val op = b / a
-      val proof: Proof = op
+      val p = op.asProof
 
-      println(proof.out)
+      println(p.out)
     }
 
     it("... NOT if b == 0") {
 
       val op = a / Arity._0
 
-      val proof: Proof = op
+      val p = op.asProof
 
-      println(proof.out)
+      println(p.out)
 
 //      shouldNotCompile {
 //        "implicit val r = implicitly[R]"
@@ -61,9 +62,9 @@ class Op2Spec extends BaseSpec {
       val op0 = a + b
       val op = op0 + c
 
-      val proof: Proof = Op2.ProveInvar(op)
-//
-      println(proof.out)
+      val p = op.asProof
+
+      println(p.out)
     }
 
     it("... simplfiied") {
@@ -77,9 +78,9 @@ class Op2Spec extends BaseSpec {
 //        op: Proof.Invar
 //      }
 
-      val proof: Proof = Op2.ProveInvar(op)
+      val p = op.asProof
 
-      println(proof.out)
+      println(p.out)
     }
 
 //    it("a + b + c + d") {
