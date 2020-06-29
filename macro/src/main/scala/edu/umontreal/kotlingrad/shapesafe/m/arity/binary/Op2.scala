@@ -17,10 +17,10 @@ case class Op2[
 object Op2 {
 
   implicit class ProveInvar[
-      S1,
-      S2,
       A1 <: Operand,
       A2 <: Operand,
+      S1,
+      S2,
       ??[X1, X2] <: Op
   ](
       val self: Op2[A1, A2, ??]

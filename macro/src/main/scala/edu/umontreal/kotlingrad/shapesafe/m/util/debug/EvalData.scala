@@ -19,13 +19,8 @@ case class EvalData[T](
          """.trim.stripMargin
   }
 
-  def printInferredType(): Unit = {
+  lazy val inferredType: TypeView = {
 
-    val s = s"""
-                 |${TypeView(inferredTTag.tpe)}
-                 |\tat ${invokeRef.showStr}
-         """.stripMargin
-
-    println(s)
+    TypeView(inferredTTag.tpe)
   }
 }

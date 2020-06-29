@@ -9,11 +9,9 @@ plugins {
 allprojects {
 
     apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "scala")
     apply(plugin = "kotlin")
-    apply(plugin = "java-library")
-
-
     apply(plugin = "idea")
 
     val vs = this.versions()
@@ -63,7 +61,9 @@ allprojects {
 
         withType<ScalaCompile> {
 
-            scalaCompileOptions.loggingLevel = "debug"
+            targetCompatibility = jvmTarget
+
+            scalaCompileOptions.loggingLevel = "info"
 
             scalaCompileOptions.additionalParameters = listOf(
                     "-encoding", "utf8",
@@ -71,12 +71,19 @@ allprojects {
                     "-deprecation",
                     "-feature",
                     "-Xfatal-warnings",
-                    "-Xlog-implicits",
-                    "-Yissue-debug"
-            )
 
-            println(this.name)
-            println(scalaCompileOptions.additionalParameters)
+                    "-Xlint:poly-implicit-overload",
+                    "-Xlint:option-implicit",
+
+                    "-Yissue-debug",
+
+                    // the following only works on scala 2.13
+
+                    "-Xlint:implicit-not-found",
+                    "-Xlint:implicit-recursion",
+                    "-Vimplicits",
+                    "-Vimplicit-conversions"
+            )
         }
 
         withType<KotlinCompile> {
@@ -122,12 +129,10 @@ allprojects {
 
             // apache spark
             excludeDirs.add(file("warehouse"))
-
             excludeDirs.add(file("latex"))
 
             // gradle log
             excludeDirs.add(file("logs"))
-
             excludeDirs.add(file("gradle"))
 
             isDownloadJavadoc = true
