@@ -3,6 +3,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, Proof}
 
+import scala.language.implicitConversions
 import scala.language.higherKinds
 
 case class Op2[

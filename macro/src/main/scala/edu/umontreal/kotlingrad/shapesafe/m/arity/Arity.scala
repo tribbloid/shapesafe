@@ -6,14 +6,11 @@ import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
 
-trait Arity extends Operand.Proven {
+trait Arity extends Operand {
 
   def numberOpt: Option[Int] // run-time
 
   lazy val valueStr: String = numberOpt.map(_.toString).getOrElse(s"(${this.getClass.getSimpleName})")
-
-  override type Out = this.type
-  final override val out: Out = this
 
   override def toString: String = {
 
@@ -25,12 +22,20 @@ object Arity {
 
   import Witness._
 
+//  implicit class Trivial[T <: Arity](val self: T) extends Proof {
+//    override type Out = T
+//
+//    override def out: Out = self
+//  }
+
   implicit object Unknown extends Arity {
 
     override def numberOpt: Option[Int] = None
   }
 
-  trait Const[S] extends Arity with Proof.Invar[S] {
+  trait Const[S] extends Arity {
+
+    type SS = S
 
     //    implicitly[Out <:< Exact[S]]
 
@@ -58,6 +63,15 @@ object Arity {
       }
     }
 
+  }
+
+  object Const {
+
+    implicit class Trivial[S](val self: Const[S]) extends Proof.Invar[S] {
+      override type Out = Const[S]
+
+      override def out = self
+    }
   }
 
   // DO NOT directly carry Nat type! (church encoding is slow) convert to Op type first
