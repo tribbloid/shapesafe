@@ -1,9 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    idea
     base
+    java
+    scala
     kotlin("jvm") version "1.3.72"
+    idea
 }
 
 allprojects {
@@ -59,44 +61,62 @@ allprojects {
     tasks {
         val jvmTarget = JavaVersion.VERSION_1_8.toString()
 
+//        scala {
+//            this.zincVersion
+//        }
+
         withType<ScalaCompile> {
 
-            targetCompatibility = jvmTarget
+            configureEach {
 
-            scalaCompileOptions.loggingLevel = "info"
+                targetCompatibility = jvmTarget
 
-            scalaCompileOptions.additionalParameters = listOf(
-                    "-encoding", "utf8",
-                    "-unchecked",
-                    "-deprecation",
-                    "-feature",
-                    "-Xfatal-warnings",
+                scalaCompileOptions.apply {
 
-                    "-Xlint:poly-implicit-overload",
-                    "-Xlint:option-implicit",
+//                    isForce = true
 
-                    "-Yissue-debug",
+//                    loggingLevel = "verbose"
 
-                    // the following only works on scala 2.13
+                    additionalParameters = listOf(
+                            "-encoding", "utf8",
+                            "-unchecked",
+                            "-deprecation",
+                            "-feature",
+                            "-Xfatal-warnings",
 
-                    "-Xlint:implicit-not-found",
-                    "-Xlint:implicit-recursion",
-                    "-Vimplicits",
-                    "-Vimplicit-conversions"
-            )
+                            "-Xlint:poly-implicit-overload",
+                            "-Xlint:option-implicit",
+
+                            "-Xlog-implicits",
+                            "-Xlog-implicit-conversions"
+
+//                            "-Yissue-debug"
+
+                            // the following only works on scala 2.13
+//                        ,
+//                        "-Xlint:implicit-not-found",
+//                        "-Xlint:implicit-recursion"
+                    )
+
+//                    forkOptions.apply {
+//
+//                        memoryMaximumSize = "2g"
+//                    }
+                }
+            }
         }
+
+//        kotlin {}
 
         withType<KotlinCompile> {
 
-            kotlinOptions.jvmTarget = jvmTarget
-        }
+            configureEach {
 
-//        compileKotlin {
-////            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-//        }
-//        compileTestKotlin {
-//            kotlinOptions.jvmTarget = jvmTarget
-//        }
+                kotlinOptions.jvmTarget = jvmTarget
+                kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+
+            }
+        }
 
         test {
 
