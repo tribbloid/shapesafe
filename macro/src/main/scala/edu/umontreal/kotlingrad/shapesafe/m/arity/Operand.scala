@@ -49,17 +49,4 @@ object Operand {
       override def out: Out = self.out
     }
   }
-
-//  object Proven {
-//
-//    // TODO: can this be simplified?
-//    class ProofImpl[T <: Proven]() extends Proof[T] {
-//
-//      override type Out = T#Out
-//
-//      override def simplify(op: T): Out = op.out
-//    }
-//
-//    implicit def prove[T <: Proven]: ProofImpl[T] = new ProofImpl[T]()
-//  }
 }

@@ -19,9 +19,6 @@ trait Proof extends Serializable {
 
 object Proof {
 
-//  type Aux[T] = Proof { type Out = T }
-//  type Lt[T] = Proof { type Out <: T }
-
   trait Unsafe extends Proof {
 
     final type Out = Arity.Unknown.type

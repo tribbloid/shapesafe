@@ -82,7 +82,7 @@ allprojects {
                             "-unchecked",
                             "-deprecation",
                             "-feature",
-                            "-Xfatal-warnings",
+//                            "-Xfatal-warnings",
 
                             "-Xlint:poly-implicit-overload",
                             "-Xlint:option-implicit",
