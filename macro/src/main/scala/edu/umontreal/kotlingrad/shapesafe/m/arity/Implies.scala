@@ -7,5 +7,5 @@ trait Implies[-T, +R] {
 
 object Implies {
 
-  implicit def implies[T, R](v: T)(implicit bound: T Implies R): R = bound.apply(v)
+  implicit def summon[T, R](v: T)(implicit bound: T Implies R): R = bound.apply(v)
 }

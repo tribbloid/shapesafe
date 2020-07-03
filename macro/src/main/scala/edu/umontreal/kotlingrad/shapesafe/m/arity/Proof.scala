@@ -26,11 +26,9 @@ object Proof {
     type Out <: O
   }
 
-  // TODO: type Out should be a parameter instead of a dependent type
-  //  otherwise inferring Out will require Lazy
   trait Invar[S] extends Out_=[Arity.Const[S]] {
 
     type SS = S
-  } // can't use type alias? really?
+  }
 
 }

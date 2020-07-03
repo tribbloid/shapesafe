@@ -6,7 +6,11 @@ import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
 
-trait Arity extends Operand {
+trait Arity extends Proven {
+
+  override type Out = this.type
+
+  override def out: Arity.this.type = this
 
   def numberOpt: Option[Int] // run-time
 
@@ -22,22 +26,12 @@ object Arity {
 
   import Witness._
 
-//  implicit class Trivial[T <: Arity](val self: T) extends Proof {
-//    override type Out = T
-//
-//    override def out: Out = self
-//  }
-
   implicit object Unknown extends Arity {
 
     override def numberOpt: Option[Int] = None
   }
 
-  trait Const[S] extends Arity {
-
-    type SS = S
-
-    //    implicitly[Out <:< Exact[S]]
+  trait Const[S] extends Arity with Proof.Invar[S] {
 
     def number: Int
 
@@ -67,13 +61,13 @@ object Arity {
 
   object Const {
 
-    case class Same[S](self: Const[S]) extends Proof.Invar[S] {
-      override type Out = Const[S]
-
-      override def out: Out = self
-    }
-
-    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
+//    case class Same[S](self: Const[S]) extends Proof.Invar[S] {
+//      override type Out = Const[S]
+//
+//      override def out: Out = self
+//    }
+//
+//    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
   }
 
   class FromOp[S <: Op](val number: Int) extends Const[S]

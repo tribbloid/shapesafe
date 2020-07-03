@@ -17,7 +17,7 @@ class Op2Spec extends BaseSpec {
     implicit val c = Arity(5)
     type C = c.type
 
-    it("arity") {
+    it("arity itself") {
 
       val p = a.asProof
       p.out.internal.requireEqual(3)

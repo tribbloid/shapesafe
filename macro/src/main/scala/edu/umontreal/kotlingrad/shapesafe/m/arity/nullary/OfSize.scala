@@ -1,14 +1,14 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.nullary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity.FromOp
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Proven.ProvenToBe
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Operand
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
 class OfSize[-Data <: HList, S <: NatAsOp[_]](
     val number: Int
-) extends Operand.ProvenToBe[FromOp[S]]()(new FromOp(number)) {}
+) extends ProvenToBe[FromOp[S]]()(new FromOp(number)) {}
 
 object OfSize {
 

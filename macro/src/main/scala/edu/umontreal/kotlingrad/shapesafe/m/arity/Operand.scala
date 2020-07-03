@@ -50,21 +50,4 @@ trait Operand {
   ): Proof = prove.apply(this)
 }
 
-object Operand {
-
-  abstract class ProvenToBe[O <: Arity]()(implicit val out: O) extends Operand {}
-
-  object ProvenToBe {
-
-    case class Trivial[O <: Arity](
-        self: ProvenToBe[O]
-    ) extends Proof {
-
-      override type Out = O
-
-      override def out: Out = self.out
-    }
-
-    implicit def trivial[O <: Arity]: ProvenToBe[O] Implies Trivial[O] = v => Trivial[O](v)
-  }
-}
+object Operand {}
