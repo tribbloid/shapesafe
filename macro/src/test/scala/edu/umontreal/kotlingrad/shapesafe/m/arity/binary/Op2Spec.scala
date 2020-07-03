@@ -1,11 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
-import edu.umontreal.kotlingrad.shapesafe.m.util.InferredTypeOf
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import edu.umontreal.kotlingrad.shapesafe.m.util.debug.{DebugUtils, TypeView}
-import shapeless.Witness
-import singleton.ops.+
 
 class Op2Spec extends BaseSpec {
 
@@ -20,12 +17,7 @@ class Op2Spec extends BaseSpec {
     implicit val c = Arity(5)
     type C = c.type
 
-    //    case class Wrapper[T <: Arity]()(implicit v: T) {
-    //
-    //
-    //    }
-
-    it("self") {
+    it("arity") {
 
       val p = a.asProof
 
@@ -36,32 +28,17 @@ class Op2Spec extends BaseSpec {
 
       val op = a + b
 
-      val aInfer = InferredTypeOf(a)
-      val bInfer = InferredTypeOf(b)
-
-      op: Proof
-
       DebugUtils.eval(op).inferredType.print()
 
-      val p = {
-
-        op.asGenericProof(v => Op2.ProveInvar(v))
-
-        op.asGenericProof
-      }
-
-//      val r = p.out
-//
-//      DebugUtils.eval(p.out).print()
-//
-//      TypeView[p.type].print()
-//      TypeView[r.type].print()
+      val p = op.asProof
     }
 
     it("a + b + c") {
 
       val op0 = a + b
       val op = op0 + c
+
+      val p = op.asProof
 
 //      val p = op.asProof
 //      val r = p.out
@@ -72,7 +49,7 @@ class Op2Spec extends BaseSpec {
 //      TypeView[r.type].print()
     }
 
-    it("... simplfiied") {
+    it("... in 1 line") {
 
       val op = a + b + c
       val p = op.asProof
@@ -84,39 +61,33 @@ class Op2Spec extends BaseSpec {
       TypeView[r.type].print()
     }
 
-//    it("b / a") {
-//
-//      val op = b / a
-//      val p = op.asProof
-//      val r = p.out
-//
-//      DebugUtils.eval(p.out).print()
-//
-//      TypeView[p.type].print()
-//      TypeView[r.type].print()
-//    }
-//
-//    it("... NOT if b == 0") {
-//
-//      val op = a / Arity._0
-//
-//      val p = op.asProof
-//
-//      //      println(p.out)
-//
-//      //      shouldNotCompile {
-//      //        "implicit val r = implicitly[R]"
-//      //      }
-//    }
+    it("a + b + c + d") {
 
-//    it("a + b + c + d") {
-//
-//      val op = a + b + c + Arity._1
-//
-//      val proof: Proof = Op2.ProveInvar(op)
-//
-//      println(proof.out)
-//    }
+      val op = a + b + c + Arity._1
+
+      val p = op.asProof
+    }
+
+    it("b / a") {
+
+      val op = b / a
+      val p = op.asProof
+      val r = p.out
+
+      DebugUtils.eval(p.out).print()
+
+      TypeView[p.type].print()
+      TypeView[r.type].print()
+    }
+
+    it("... NOT if b == 0") {
+
+      val op = a / Arity._0
+
+      shouldNotCompile {
+        "val p = op.asProof"
+      }
+    }
 
 //    it("a + b + c") {
 //

@@ -33,4 +33,6 @@ case class TypeView(tpe: universe.Type)(
 object TypeView {
 
   def apply[T](implicit ttag: TypeTag[T]): TypeView = TypeView(ttag.tpe)
+
+  def infer[T: TypeTag](v: T): TypeView = apply[T]
 }

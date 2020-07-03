@@ -67,11 +67,13 @@ object Arity {
 
   object Const {
 
-    implicit class Trivial[S](val self: Const[S]) extends Proof.Invar[S] {
+    class Same[S](val self: Const[S]) extends Proof.Invar[S] {
       override type Out = Const[S]
 
-      override def out = self
+      override def out: Out = self
     }
+
+    implicit def same[S]: Const[S] Implies Same[S] = v => new Same(v)
   }
 
   // DO NOT directly carry Nat type! (church encoding is slow) convert to Op type first

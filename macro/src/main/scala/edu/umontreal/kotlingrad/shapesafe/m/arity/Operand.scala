@@ -25,13 +25,13 @@ trait Operand {
   final def asProof[
       T >: this.type <: Operand,
       R <: Proof
-  ](implicit prove: T => R): R = prove(this)
+  ](implicit prove: T Implies R): R = prove.transform(this)
 
   final def asGenericProof[
-      T >: this.type
+      T >: this.type <: Operand
   ](
-      implicit prove: T => Proof
-  ): Proof = prove(this)
+      implicit prove: T Implies Proof
+  ): Proof = prove.transform(this)
 }
 
 object Operand {
@@ -40,13 +40,15 @@ object Operand {
 
   object ProvenToBe {
 
-    implicit class Trivial[O <: Arity, T <: ProvenToBe[O]](
-        val self: T
+    class Trivial[O <: Arity](
+        val self: ProvenToBe[O]
     ) extends Proof {
 
       override type Out = O
 
       override def out: Out = self.out
     }
+
+    implicit def trivial[O <: Arity]: ProvenToBe[O] Implies Trivial[O] = v => new Trivial[O](v)
   }
 }

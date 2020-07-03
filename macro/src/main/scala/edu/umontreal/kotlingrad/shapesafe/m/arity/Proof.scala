@@ -1,8 +1,5 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.Op2
-
 import scala.language.higherKinds
 
 /**

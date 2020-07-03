@@ -96,6 +96,7 @@ package object attempt2 {
       a1: A1,
       a2: A2
   ) extends Operand {}
+
   object Op2 {
     implicit def proveInvar[A1 <: Operand, A2 <: Operand, S1, S2](
         implicit
