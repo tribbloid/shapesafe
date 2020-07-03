@@ -20,17 +20,15 @@ class Op2Spec extends BaseSpec {
     it("arity") {
 
       val p = a.asProof
-
-      p.out
+      p.out.internal.requireEqual(3)
     }
 
     it("a + b") {
 
       val op = a + b
 
-      DebugUtils.eval(op).inferredType.print()
-
       val p = op.asProof
+      p.out.internal.requireEqual(7)
     }
 
     it("a + b + c") {
@@ -39,26 +37,15 @@ class Op2Spec extends BaseSpec {
       val op = op0 + c
 
       val p = op.asProof
-
-//      val p = op.asProof
-//      val r = p.out
-//
-//      DebugUtils.eval(p.out).print()
-//
-//      TypeView[p.type].print()
-//      TypeView[r.type].print()
+      p.out.internal.requireEqual(12)
     }
 
     it("... in 1 line") {
 
       val op = a + b + c
+
       val p = op.asProof
-      val r = p.out
-
-      DebugUtils.eval(p.out).print()
-
-      TypeView[p.type].print()
-      TypeView[r.type].print()
+      p.out.internal.requireEqual(12)
     }
 
     it("a + b + c + d") {
@@ -66,18 +53,15 @@ class Op2Spec extends BaseSpec {
       val op = a + b + c + Arity._1
 
       val p = op.asProof
+      p.out.internal.requireEqual(13)
     }
 
     it("b / a") {
 
       val op = b / a
+
       val p = op.asProof
-      val r = p.out
-
-      DebugUtils.eval(p.out).print()
-
-      TypeView[p.type].print()
-      TypeView[r.type].print()
+      p.out.internal.requireEqual(1)
     }
 
     it("... NOT if b == 0") {
@@ -89,86 +73,12 @@ class Op2Spec extends BaseSpec {
       }
     }
 
-//    it("a + b + c") {
-//
-//      val v1 = implicitly[A ^+ B]
-//
-//      implicit val r = {
-//
-//        val domain: IsInvar[a.SS, b.SS] = {
-//
-//          //          ProveConst.summon(a, b)
-//
-//          implicitly[IsInvar[a.SS, b.SS]]
-//        }
-//
-//        val op2: (A ^+ B) with Invar[a.SS + b.SS] = {
-//
-//          //          Op2.const(prove, implicitly[a.SS + b.SS])
-//
-//          //          Op2.const[a.SS, b.SS, +]
-//
-//          //          Op2.const
-//
-//          implicitly[(A ^+ B) with Invar[a.SS + b.SS]]
-//        }
-//
-//        //        type RC = (A ^+ B ^+ C) with Const[a.SS + b.SS + c.SS]
-//        //        implicit val rc = implicitly[RC]
-//
-//        val domain2: IsInvar[a.SS + b.SS, c.SS] = {
-//
-//          val c2 = implicitly[Invar[c.SS]]
-//
-//          //          val c3 = InvarDomain.summon[a.SS + b.SS, c.SS] //((c1), (c2))
-//
-//          val c3 = implicitly[IsInvar[a.SS + b.SS, c.SS]] //((c1), (c2))
-//          c3
-//        }
-//
-//        type R = (A ^+ B ^+ C)
-//
-//        val r: (Invar[a.SS + b.SS] ^+ Invar[c.SS]) with Invar[a.SS + b.SS + c.SS] =
-//          Op2Backup.invar(domain2, implicitly[(a.SS + b.SS) + c.SS])
-//
-//        //        implicit val r: R = {
-//        //
-//        //          val domain: ConstDomain[op2A.SS, c.SS] = implicitly
-//        //
-//        ////          Op2.const[op2A.SS, c.SS, +]
-//        //
-//        ////          implicitly[R]
-//        //
-//        //          ???
-//        //        }
-//      }
-//
-//      //      it("a + b - c") {
-//      //
-//      //        val op3: A ^+ B ^- C = {
-//      //
-//      //          implicitly
-//      //        }
-//      //
-//      ////        val op2X = implicitly[(A ^+ B) with Const[a.SS + b.SS]] //(op2)
-//      //
-//      ////        val r2a = implicitly[A ^]
-//      //
-//      ////        implicit val r2 = implicitly[(A ^+ B) with Const[a.SS + b.SS]](op2)
-//      ////        implicit val r3 = implicitly[C](c)
-//      ////
-//      ////        val consts: ProveConst[a.w.T + b.w.T, c.w.T] = ProveConst.summon(r2, r3)
-//      ////
-//      ////        Op2.const(consts, implicitly[a.Single + b.Single - c.Single])
-//      //      }
-//
-//      //      implicit val r = implicitly[R]
-//    }
-//
-//    it("(a + b - c) / d") {
-//
-//      //      type R = (A Arity_+ B Arity_- C) Arity_/ Arity._1
-//      //      implicit val r = implicitly[R]
-//    }
+    it("(a + b - c) / d") {
+
+      val op = (a + b - c) / Arity._1
+
+      val p = op.asProof
+      p.out.internal.requireEqual(2)
+    }
   }
 }

@@ -50,7 +50,7 @@ object Arity {
       // 'prove' means happening only in compile-time
       def proveEqual[N2](implicit self: Require[SS == N2]): Unit = {
 
-        //TODO: need run-time proof
+        //TODO: need run-time proof?
 
       }
 
@@ -67,22 +67,14 @@ object Arity {
 
   object Const {
 
-    class Same[S](val self: Const[S]) extends Proof.Invar[S] {
+    case class Same[S](self: Const[S]) extends Proof.Invar[S] {
       override type Out = Const[S]
 
       override def out: Out = self
     }
 
-    implicit def same[S]: Const[S] Implies Same[S] = v => new Same(v)
+    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
   }
-
-  // DO NOT directly carry Nat type! (church encoding is slow) convert to Op type first
-  //  class FromSize[S <: Op](val number: Int) extends Exact[S]
-  //
-  //  object FromSize {
-  //
-  //    implicit def summon[S <: Op](implicit s: S): FromSize[S] = new FromSize[S](s.value.asInstanceOf[Int])
-  //  }
 
   class FromOp[S <: Op](val number: Int) extends Const[S]
 

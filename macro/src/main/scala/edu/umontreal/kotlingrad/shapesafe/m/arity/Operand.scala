@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.Op2
-import singleton.ops.{+, /}
+import singleton.ops._
 
 // for "Expression"
 trait Operand {
@@ -12,6 +12,22 @@ trait Operand {
   ](that: Y): Op2[X, Y, +] = {
 
     Op2[X, Y, +](this, that)
+  }
+
+  def -[
+      X >: this.type <: Operand,
+      Y <: Operand
+  ](that: Y): Op2[X, Y, -] = {
+
+    Op2[X, Y, -](this, that)
+  }
+
+  def *[
+      X >: this.type <: Operand,
+      Y <: Operand
+  ](that: Y): Op2[X, Y, *] = {
+
+    Op2[X, Y, *](this, that)
   }
 
   def /[
@@ -25,13 +41,13 @@ trait Operand {
   final def asProof[
       T >: this.type <: Operand,
       R <: Proof
-  ](implicit prove: T Implies R): R = prove.transform(this)
+  ](implicit prove: T Implies R): R = prove.apply(this)
 
   final def asGenericProof[
       T >: this.type <: Operand
   ](
       implicit prove: T Implies Proof
-  ): Proof = prove.transform(this)
+  ): Proof = prove.apply(this)
 }
 
 object Operand {
@@ -40,8 +56,8 @@ object Operand {
 
   object ProvenToBe {
 
-    class Trivial[O <: Arity](
-        val self: ProvenToBe[O]
+    case class Trivial[O <: Arity](
+        self: ProvenToBe[O]
     ) extends Proof {
 
       override type Out = O
@@ -49,6 +65,6 @@ object Operand {
       override def out: Out = self.out
     }
 
-    implicit def trivial[O <: Arity]: ProvenToBe[O] Implies Trivial[O] = v => new Trivial[O](v)
+    implicit def trivial[O <: Arity]: ProvenToBe[O] Implies Trivial[O] = v => Trivial[O](v)
   }
 }

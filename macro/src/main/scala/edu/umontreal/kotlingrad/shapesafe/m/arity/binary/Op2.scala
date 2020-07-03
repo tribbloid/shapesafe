@@ -17,14 +17,14 @@ case class Op2[
 
 object Op2 {
 
-  class ProveInvar[
+  case class ProveInvar[
       A1 <: Operand,
       A2 <: Operand,
       S1,
       S2,
       ??[X1, X2] <: Op
   ](
-      val self: Op2[A1, A2, ??]
+      self: Op2[A1, A2, ??]
   )(
       implicit
       bound1: A1 Implies Proof.Invar[S1],
@@ -51,7 +51,7 @@ object Op2 {
       bound2: A2 Implies Proof.Invar[S2],
       lemma: S1 ?? S2
   ): Op2[A1, A2, ??] Implies ProveInvar[A1, A2, S1, S2, ??] =
-    v => new ProveInvar[A1, A2, S1, S2, ??](v)
+    v => ProveInvar[A1, A2, S1, S2, ??](v)
 
 //  implicit class ProveUnsafe[A1 <: Operand, A2 <: Operand, Fr[X1, X2] <: Op](
 //      val self: Op2[A1, A2, Fr]
