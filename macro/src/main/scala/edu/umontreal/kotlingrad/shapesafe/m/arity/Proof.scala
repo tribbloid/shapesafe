@@ -16,7 +16,9 @@ trait Proof extends Serializable {
 
 object Proof {
 
-  trait Unsafe extends Proof {
+  trait UnsafeLike extends Proof {}
+
+  trait Unsafe extends UnsafeLike {
 
     final type Out = Arity.Unknown.type
     final def out: Out = Arity.Unknown
@@ -30,5 +32,4 @@ object Proof {
 
     type SS = S
   }
-
 }

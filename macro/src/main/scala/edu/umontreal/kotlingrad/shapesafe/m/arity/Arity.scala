@@ -9,8 +9,7 @@ import scala.language.implicitConversions
 trait Arity extends Proven {
 
   override type Out = this.type
-
-  override def out: Arity.this.type = this
+  override def out: Out = this
 
   def numberOpt: Option[Int] // run-time
 
@@ -26,7 +25,7 @@ object Arity {
 
   import Witness._
 
-  implicit object Unknown extends Arity {
+  object Unknown extends Arity with Proof.UnsafeLike {
 
     override def numberOpt: Option[Int] = None
   }
