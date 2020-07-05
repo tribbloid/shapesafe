@@ -90,7 +90,8 @@ allprojects {
                             "-Xlog-implicits",
                             "-Xlog-implicit-conversions"
 
-//                            "-Yissue-debug"
+                            ,
+                            "-Yissue-debug"
 
                             // the following only works on scala 2.13
 //                        ,
