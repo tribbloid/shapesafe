@@ -1,23 +1,12 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
-import edu.umontreal.kotlingrad.shapesafe.m.util.debug.{DebugUtils, TypeView}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture}
 
-class Op2Spec extends BaseSpec {
+class Op2Spec extends AritySpecFixture {
 
   describe("can prove") {
 
-    implicit val a = Arity(3)
-    type A = a.type
-
-    implicit val b = Arity(4)
-    type B = b.type
-
-    implicit val c = Arity(5)
-    type C = c.type
-
-    it("arity itself") {
+    it("arity trivially") {
 
       val p = a.asProof
       p.out.internal.requireEqual(3)

@@ -1,10 +1,10 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.nullary
 
-import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import edu.umontreal.kotlingrad.shapesafe.m.arity.AritySpecFixture
 import shapeless.{::, HNil, Nat}
 import singleton.ops.{==, Require}
 
-class OfSizeSpec extends BaseSpec {
+class OfSizeSpec extends AritySpecFixture {
 
   describe("observing HList") {
 

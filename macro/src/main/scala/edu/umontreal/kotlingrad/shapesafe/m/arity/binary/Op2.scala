@@ -15,9 +15,23 @@ case class Op2[
     a2: A2
 ) extends Operand {}
 
-object Op2 {
+trait Op2_Imp0 {
 
-  implicit def proveInvar[
+  implicit def proveUnsafe[
+      A1 <: Operand,
+      A2 <: Operand,
+      ??[X1, X2] <: Op
+  ](
+      implicit
+      domain: UnsafeDomain[A1, A2]
+  ): Op2[A1, A2, ??] Implies Proof.Unsafe = { v =>
+    domain.Op2Proof(v)
+  }
+}
+
+object Op2 extends Op2_Imp0 {
+
+  implicit def invar[
       A1 <: Operand,
       A2 <: Operand,
       S1,
@@ -28,11 +42,11 @@ object Op2 {
       bound1: A1 Implies Proof.Invar[S1],
       bound2: A2 Implies Proof.Invar[S2],
       lemma: S1 ?? S2
-  ): Op2[A1, A2, ??] Implies Invars[A1, A2, S1, S2]#Op2Proof[??] = {
-    val invars = Invars[A1, A2, S1, S2]()(bound1, bound2)
+  ): Op2[A1, A2, ??] Implies InvarDomain[A1, A2, S1, S2]#Op2Proof[??] = {
+    val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    v: Op2[A1, A2, ??] =>
-      invars.Op2Proof[??](v)(lemma)
-
+    { v =>
+      domain.Op2Proof[??](v)(lemma)
+    }
   }
 }

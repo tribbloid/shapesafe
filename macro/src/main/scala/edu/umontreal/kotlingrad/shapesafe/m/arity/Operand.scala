@@ -43,7 +43,7 @@ trait Operand {
       R <: Proof
   ](implicit prove: T Implies R): R = prove.apply(this)
 
-  final def asGenericProof[
+  final def asProof_generic[
       T >: this.type <: Operand
   ](
       implicit prove: T Implies Proof

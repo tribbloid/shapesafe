@@ -1,5 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
+import scala.language.implicitConversions
+
 // doesn't extend T => R intentionally
 trait Implies[-T, +R] {
   def apply(v: T): R

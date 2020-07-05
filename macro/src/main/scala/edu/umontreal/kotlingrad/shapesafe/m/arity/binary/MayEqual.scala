@@ -11,7 +11,20 @@ case class MayEqual[
     a2: A2
 ) extends Operand {}
 
-object MayEqual {
+trait MayEqual_Imp0 {
+
+  implicit def proveUnsafe[
+      A1 <: Operand,
+      A2 <: Operand
+  ](
+      implicit
+      domain: UnsafeDomain[A1, A2]
+  ): MayEqual[A1, A2] Implies UnsafeDomain[A1, A2]#ProbablyEqual = { v =>
+    domain.ProbablyEqual(v)
+  }
+}
+
+object MayEqual extends MayEqual_Imp0 {
 
   // TODO : both of these signatures are not refined enough, it should contains 4 cases:
   //  Const - Const -> Const[1]
@@ -29,11 +42,12 @@ object MayEqual {
       bound1: A1 Implies Proof.Invar[S1],
       bound2: A2 Implies Proof.Invar[S2],
       lemma: Require[S1 == S2]
-  ): MayEqual[A1, A2] Implies Invars[A1, A2, S1, S2]#EqualProof = {
+  ): MayEqual[A1, A2] Implies InvarDomain[A1, A2, S1, S2]#Equal = {
 
-    val invars = Invars[A1, A2, S1, S2]()(bound1, bound2)
+    val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    v =>
-      invars.EqualProof(v)
+    { v =>
+      domain.Equal(v)
+    }
   }
 }

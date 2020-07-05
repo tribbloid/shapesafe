@@ -1,8 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe
 
 import org.scalatest.FunSpec
-import shapeless.{HList, HNil, Nat, Witness}
 import shapeless.test.illTyped
+import shapeless.{HList, Nat, Witness}
 
 abstract class BaseSpec extends FunSpec {
 
@@ -17,8 +17,6 @@ abstract class BaseSpec extends FunSpec {
 }
 
 object BaseSpec {
-
-  import Witness._
 
   /**
     * Nat uses church encoding and may risk slowing down compilation

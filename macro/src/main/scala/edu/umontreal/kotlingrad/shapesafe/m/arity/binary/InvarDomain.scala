@@ -6,7 +6,7 @@ import singleton.ops.{==, Require}
 
 import scala.language.higherKinds
 
-case class Invars[
+case class InvarDomain[
     A1 <: Operand,
     A2 <: Operand,
     S1,
@@ -30,11 +30,10 @@ case class Invars[
     )
   }
 
-  case class EqualProof(self: MayEqual[A1, A2])(
-      implicit
-      bound1: A1 Implies Proof.Invar[S1],
-      bound2: A2 Implies Proof.Invar[S2],
-      lemma: Require[S1 == S2]
+  case class Equal(
+      self: MayEqual[A1, A2]
+  )(
+      implicit lemma: Require[S1 == S2]
   ) extends Proof.Invar[S1] {
 
     val proof: Proof.Invar[S1] = bound1.apply(self.a1)
