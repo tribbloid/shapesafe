@@ -143,7 +143,7 @@ allprojects {
 
     idea {
 
-        targetVersion = "2018"
+        targetVersion = "2020"
 
 
         module {

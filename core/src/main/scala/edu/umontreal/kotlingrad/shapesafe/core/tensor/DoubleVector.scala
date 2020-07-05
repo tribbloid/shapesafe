@@ -1,11 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
-import edu.umontreal.kotlingrad.shapesafe.common.arity.Arity
-import edu.umontreal.kotlingrad.shapesafe.common.arity.Const.NatAsOp
-import edu.umontreal.kotlingrad.shapesafe.common.arity.binary.MayEqual
-import edu.umontreal.kotlingrad.shapesafe.common.arity.binary.Op2.Arity_+
-import edu.umontreal.kotlingrad.shapesafe.common.arity.nullary.OfSize
-import edu.umontreal.kotlingrad.shapesafe.common.util.Constraint.ElementOfType
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
+import edu.umontreal.kotlingrad.shapesafe.m.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
@@ -35,6 +32,10 @@ class DoubleVector[A <: Arity](
       implicit proof: A MayEqual A2
   ): Double = {
 
+    val op: MayEqual[A, A2] = MayEqual(this.arity, that.arity)
+
+    op.asProof
+
     val result: Double = this.data
       .zip(that.data)
       .map {
@@ -47,18 +48,16 @@ class DoubleVector[A <: Arity](
   }
 
   def concat[A2 <: Arity](that: DoubleVector[A2])(
-      implicit op: A Arity_+ A2
+      implicit prove: ()
   ): DoubleVector[op.Out] = {
 
-    val data = this.data ++ that.data
+    val data = this.ar ++ that.data
 
     new DoubleVector(op.Out, data)
   }
 }
 
 object DoubleVector extends ProductArgs {
-
-  import Arity._
 
   def applyProduct[D <: HList, S <: NatAsOp[_]](data: D)(
       implicit

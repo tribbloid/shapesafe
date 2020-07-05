@@ -44,7 +44,6 @@ object Arity {
       def proveEqual[N2](implicit self: Require[SS == N2]): Unit = {
 
         //TODO: need run-time proof?
-
       }
 
       // TODO: should be named proofEqual, require should do everything in runtime
