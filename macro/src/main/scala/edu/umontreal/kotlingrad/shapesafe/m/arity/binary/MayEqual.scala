@@ -15,11 +15,12 @@ trait MayEqual_Imp0 {
 
   implicit def proveUnsafe[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ](
       implicit
-      domain: UnsafeDomain[A1, A2]
-  ): MayEqual[A1, A2] Implies UnsafeDomain[A1, A2]#ProbablyEqual = { v =>
+      domain: UnsafeDomain[A1, A2, O]
+  ): MayEqual[A1, A2] Implies UnsafeDomain[A1, A2, O]#ProbablyEqual = { v =>
     domain.ProbablyEqual(v)
   }
 }

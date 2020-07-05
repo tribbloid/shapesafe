@@ -7,19 +7,18 @@ import scala.language.{existentials, higherKinds}
 
 abstract class UnsafeDomain[
     A1 <: Operand,
-    A2 <: Operand
+    A2 <: Operand,
+    O <: Proof
 ] {
 
-  def selectSafer(a1: A1, a2: A2): Proof
+  def selectSafer(a1: A1, a2: A2): O
 
   case class ProbablyEqual(
       self: MayEqual[A1, A2]
   ) extends Proof {
 
     // TODO: if this type is not narrow enough, introduce a new generic param to outer class
-    val proof: Proof = {
-      selectSafer(self.a1, self.a2)
-    }
+    val proof: O = selectSafer(self.a1, self.a2)
 
     override type Out = proof.Out
 
@@ -35,54 +34,59 @@ trait UnsafeDomain_Imp0 {
 
   case class D2[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ]()(
       implicit
       bound1: A1 Implies Proof.UnsafeLike,
-      bound2: A2 Implies Proof
-  ) extends UnsafeDomain[A1, A2] {
+      bound2: A2 Implies O
+  ) extends UnsafeDomain[A1, A2, O] {
 
-    override def selectSafer(a1: A1, a2: A2): Proof = bound2(a2)
+    override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
   }
 
   implicit def d2[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ](
       implicit
       bound1: A1 Implies Proof.UnsafeLike,
-      bound2: A2 Implies Proof
-  ): UnsafeDomain[A1, A2] = D2()
+      bound2: A2 Implies O
+  ): UnsafeDomain[A1, A2, O] = D2()
 }
 
 object UnsafeDomain extends UnsafeDomain_Imp0 {
 
   def summon[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ](
       implicit
-      self: UnsafeDomain[A1, A2]
-  ): UnsafeDomain[A1, A2] = self
+      self: UnsafeDomain[A1, A2, O]
+  ): UnsafeDomain[A1, A2, O] = self
 
   case class D1[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ]()(
       implicit
-      bound1: A1 Implies Proof,
+      bound1: A1 Implies O,
       bound2: A2 Implies Proof.UnsafeLike
-  ) extends UnsafeDomain[A1, A2] {
+  ) extends UnsafeDomain[A1, A2, O] {
 
-    override def selectSafer(a1: A1, a2: A2): Proof = bound1(a1)
+    override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
   }
 
   implicit def d1[
       A1 <: Operand,
-      A2 <: Operand
+      A2 <: Operand,
+      O <: Proof
   ](
       implicit
-      bound1: A1 Implies Proof,
+      bound1: A1 Implies O,
       bound2: A2 Implies Proof.UnsafeLike
-  ): UnsafeDomain[A1, A2] = D1()
+  ): UnsafeDomain[A1, A2, O] = D1()
 }

@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Implies, Proof}
-import edu.umontreal.kotlingrad.shapesafe.m.util.debug.TypeView
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Operand}
+import scala.language.existentials
 
 class MayEqualSpec extends AritySpecFixture {
 
@@ -59,6 +59,30 @@ class MayEqualSpec extends AritySpecFixture {
 
         val out = op.asProof.out
         assert(out.numberOpt.contains(7))
+      }
+    }
+  }
+
+  describe("CANNOT prove") {
+
+    describe("<Operand Without Proof> ==") {
+
+      it("a") {
+
+        val op = MayEqual(Operand.Unprovable, a)
+
+        shouldNotCompile(
+          "op.asProof"
+        )
+      }
+
+      it("a + b") {
+
+        val op = MayEqual(Operand.Unprovable, a + b)
+
+        shouldNotCompile(
+          "op.asProof"
+        )
       }
     }
   }

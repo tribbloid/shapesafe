@@ -5,7 +5,7 @@ import singleton.ops.+
 import singleton.ops.impl.Op
 import scala.language.implicitConversions
 
-import scala.languageFeature.implicitConversions
+import scala.language.implicitConversions
 
 package object attempt2 {
 

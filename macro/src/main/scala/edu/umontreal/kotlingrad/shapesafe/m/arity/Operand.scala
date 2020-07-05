@@ -50,4 +50,7 @@ trait Operand {
   ): Proof = prove.apply(this)
 }
 
-object Operand {}
+object Operand {
+
+  private[arity] object Unprovable extends Operand
+}

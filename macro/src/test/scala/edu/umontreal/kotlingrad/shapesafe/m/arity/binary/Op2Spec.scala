@@ -1,6 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Operand}
 
 class Op2Spec extends AritySpecFixture {
 
@@ -68,6 +68,30 @@ class Op2Spec extends AritySpecFixture {
 
       val p = op.asProof
       p.out.internal.requireEqual(2)
+    }
+  }
+
+  describe("CANNOT prove") {
+
+    describe("<Operand Without Proof> +") {
+
+      it("a") {
+
+        val op = Operand.Unprovable + a
+
+        shouldNotCompile(
+          "op.asProof"
+        )
+      }
+
+      it("a + b") {
+
+        val op = Operand.Unprovable + (a + b)
+
+        shouldNotCompile(
+          "op.asProof"
+        )
+      }
     }
   }
 }

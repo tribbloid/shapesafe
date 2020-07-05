@@ -20,10 +20,11 @@ trait Op2_Imp0 {
   implicit def proveUnsafe[
       A1 <: Operand,
       A2 <: Operand,
+      O <: Proof,
       ??[X1, X2] <: Op
   ](
       implicit
-      domain: UnsafeDomain[A1, A2]
+      domain: UnsafeDomain[A1, A2, O]
   ): Op2[A1, A2, ??] Implies Proof.Unsafe = { v =>
     domain.Op2Proof(v)
   }
