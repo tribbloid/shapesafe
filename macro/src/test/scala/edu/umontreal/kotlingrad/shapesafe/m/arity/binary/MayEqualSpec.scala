@@ -5,6 +5,8 @@ import scala.language.existentials
 
 class MayEqualSpec extends AritySpecFixture {
 
+  import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
+
   describe("can prove") {
 
     describe("Arity.Const ==") {

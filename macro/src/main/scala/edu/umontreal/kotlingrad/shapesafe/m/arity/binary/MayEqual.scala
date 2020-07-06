@@ -13,7 +13,7 @@ case class MayEqual[
 
 trait MayEqual_Imp0 {
 
-  implicit def proveUnsafe[
+  implicit def unsafe[
       A1 <: Operand,
       A2 <: Operand,
       O <: Proof
@@ -33,7 +33,7 @@ object MayEqual extends MayEqual_Imp0 {
   //  Unsafe - Const -> Const[2]
   //  Unsafe - Unsafe -> Unsafe
 
-  implicit def proveInvar[
+  implicit def invar[
       A1 <: Operand,
       A2 <: Operand,
       S1,

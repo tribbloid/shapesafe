@@ -25,7 +25,7 @@ object Arity {
 
   import Witness._
 
-  object Unknown extends Arity with Proof.UnsafeLike {
+  implicit object Unknown extends Arity with Proof.UnsafeLike {
 
     override def numberOpt: Option[Int] = None
   }

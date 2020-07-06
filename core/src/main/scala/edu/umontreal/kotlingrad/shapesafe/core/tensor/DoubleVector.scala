@@ -1,40 +1,41 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity.{FromLiteral, Unknown}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
+import edu.umontreal.kotlingrad.shapesafe.m.arity.nullary.OfSize
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Proof}
 import edu.umontreal.kotlingrad.shapesafe.m.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
 
-class DoubleVector[A <: Arity](
-    val arity: A,
+class DoubleVector[X <: Back](
+    val arity: X,
     val data: Seq[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  {
-    crossValidate()
-  }
+  import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
+//  {
+//    crossValidate()
+//  }
 
-  def crossValidate(): Unit = {
-
-    arity.numberOpt foreach { n =>
-      n == data.size
-    }
-  }
+//  def crossValidate(): Unit = {
+//
+//    arity.numberOpt foreach { n =>
+//      n == data.size
+//    }
+//  }
 
   // TODO: the format should be customisable
-  override lazy val toString: String = {
-    s"${arity.valueStr} \u00d7 1: Double"
-  }
+//  override lazy val toString: String = {
+//    s"${arity.valueStr} \u00d7 1: Double"
+//  }
 
-  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
-      implicit proof: A MayEqual A2
+  def dot_*[Y <: Arity](that: DoubleVector[Y])(
+      implicit
+      proof: (X MayEqual Y) Implies Proof
   ): Double = {
-
-    val op: MayEqual[A, A2] = MayEqual(this.arity, that.arity)
-
-    op.asProof
 
     val result: Double = this.data
       .zip(that.data)
@@ -47,13 +48,16 @@ class DoubleVector[A <: Arity](
     result
   }
 
-  def concat[A2 <: Arity](that: DoubleVector[A2])(
-      implicit prove: ()
-  ): DoubleVector[op.Out] = {
+  def concat[Y <: Back, P <: Proof](that: DoubleVector[Y])(
+      implicit prove: (X + Y) Implies P
+  ): DoubleVector[P#Out] = { // TODO: how to add type annotation?
 
-    val data = this.ar ++ that.data
+    val op = this.arity + that.arity
+    val proof: P = prove(op)
 
-    new DoubleVector(op.Out, data)
+    val data = this.data ++ that.data
+
+    new DoubleVector(proof.out, data)
   }
 }
 
@@ -69,7 +73,7 @@ object DoubleVector extends ProductArgs {
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize.Out, list)
+    new DoubleVector(proofOfSize.out, list)
   }
 
   @transient object from {
@@ -85,7 +89,7 @@ object DoubleVector extends ProductArgs {
 
   def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
 
-    new DoubleVector(FromLiteral.apply(lit), List.fill(lit.value)(0.0))
+    new DoubleVector(Arity(lit), List.fill(lit.value)(0.0))
   }
 
   def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
@@ -93,7 +97,7 @@ object DoubleVector extends ProductArgs {
       Random.nextDouble()
     }
 
-    new DoubleVector(FromLiteral.apply(lit), list)
+    new DoubleVector(Arity(lit), list)
   }
 
   @transient object unsafe {

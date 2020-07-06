@@ -17,7 +17,7 @@ case class Op2[
 
 trait Op2_Imp0 {
 
-  implicit def proveUnsafe[
+  implicit def unsafe[
       A1 <: Operand,
       A2 <: Operand,
       O <: Proof,

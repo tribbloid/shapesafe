@@ -4,6 +4,8 @@ import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Oper
 
 class Op2Spec extends AritySpecFixture {
 
+  import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
+
   describe("can prove") {
 
     it("arity trivially") {

@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.common.arity.Arity
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -165,7 +165,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.arity.number == 3)
+      assert(v.arity.numberOpt.contains(3))
     }
   }
 
