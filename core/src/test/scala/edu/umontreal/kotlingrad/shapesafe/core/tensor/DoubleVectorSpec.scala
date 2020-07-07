@@ -10,7 +10,7 @@ class DoubleVectorSpec extends BaseSpec {
 
     val v = DoubleVector(1.0, 2.0, 3.0)
 
-    v.arity.internal.requireEqual(3)
+    v.shape.internal.requireEqual(3)
   }
 
   it("... with YUUGE number of args!") {
@@ -23,7 +23,7 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
     ) // TODO: scalafmt in IDEA failed here
 
-    v.arity.internal.requireEqual(50)
+    v.shape.internal.requireEqual(50)
   }
 
   it(s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
@@ -38,7 +38,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.from.hList(1.0 :: 2.0 :: 3.0 :: HNil)
 
-      v.arity.internal.requireEqual(3)
+      v.shape.internal.requireEqual(3)
     }
   }
 
@@ -56,9 +56,9 @@ class DoubleVectorSpec extends BaseSpec {
       //    val v0type = ScalaReflection.universe.typeOf[v0.arity.type ].finalResultType
       //    println(v0type)
 
-      v0.arity.internal.proveSame[Witness.`3`.T]
-      v0.arity.internal.proveEqual[Witness.`3`.T]
-      v0.arity.internal.requireEqual(3)
+      v0.shape.internal.proveSame[Witness.`3`.T]
+      v0.shape.internal.proveEqual[Witness.`3`.T]
+      v0.shape.internal.requireEqual(3)
 
       //    v0.arity.internal.proveSame[Witness.`4`.T]
       //    v0.arity.internal.proveEqual[Witness.`4`.T]
@@ -146,7 +146,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0 concat v1
       assert(result.data == Seq(1.0, 2.0, 0.0, 0.0, 0.0))
-      result.arity.internal.requireEqual(5)
+      result.shape.internal.requireEqual(5)
 
       val v2 = DoubleVector.zeros(5)
       val v3 = DoubleVector.zeros(6)
@@ -165,7 +165,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.arity.numberOpt.contains(3))
+      assert(v.shape.numberOpt.isEmpty)
     }
   }
 

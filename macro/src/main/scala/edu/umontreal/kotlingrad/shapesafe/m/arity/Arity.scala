@@ -13,12 +13,7 @@ trait Arity extends Proven {
 
   def numberOpt: Option[Int] // run-time
 
-  lazy val valueStr: String = numberOpt.map(_.toString).getOrElse(s"(${this.getClass.getSimpleName})")
-
-  override def toString: String = {
-
-    this.getClass.getSimpleName + ": " + valueStr
-  }
+  override lazy val valueStr: String = numberOpt.map(_.toString).getOrElse(s"[??]")
 }
 
 object Arity {

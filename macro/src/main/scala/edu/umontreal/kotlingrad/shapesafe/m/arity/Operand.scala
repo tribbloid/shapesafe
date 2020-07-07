@@ -16,6 +16,13 @@ trait Operand {
   ](
       implicit prove: T Implies Proof
   ): Proof = prove.apply(this)
+
+  lazy val valueStr: String = "[??]"
+
+  final override def toString: String = {
+
+    this.getClass.getSimpleName + ": " + valueStr
+  }
 }
 
 object Operand {

@@ -10,31 +10,21 @@ import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
 
-class DoubleVector[X <: Back](
-    val arity: X,
+class DoubleVector[A1 <: Shape](
+    val shape: A1,
     val data: Seq[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
   import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
-//  {
-//    crossValidate()
-//  }
-
-//  def crossValidate(): Unit = {
-//
-//    arity.numberOpt foreach { n =>
-//      n == data.size
-//    }
-//  }
 
   // TODO: the format should be customisable
-//  override lazy val toString: String = {
-//    s"${arity.valueStr} \u00d7 1: Double"
-//  }
+  override lazy val toString: String = {
+    s"${shape.valueStr} \u00d7 1: Double"
+  }
 
-  def dot_*[Y <: Arity](that: DoubleVector[Y])(
+  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: (X MayEqual Y) Implies Proof
+      proof: A1 MayEqual A2 Implies Proof
   ): Double = {
 
     val result: Double = this.data
@@ -48,11 +38,11 @@ class DoubleVector[X <: Back](
     result
   }
 
-  def concat[Y <: Back, P <: Proof](that: DoubleVector[Y])(
-      implicit prove: (X + Y) Implies P
+  def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
+      implicit prove: (A1 + A2) Implies P
   ): DoubleVector[P#Out] = { // TODO: how to add type annotation?
 
-    val op = this.arity + that.arity
+    val op = this.shape + that.shape
     val proof: P = prove(op)
 
     val data = this.data ++ that.data
@@ -105,6 +95,27 @@ object DoubleVector extends ProductArgs {
     def zeros(number: Int): DoubleVector[Unknown.type] = {
 
       new DoubleVector(Unknown, List.fill(number)(0.0))
+    }
+  }
+
+  implicit class ReifiedView[A1 <: Shape, P <: Proof](self: DoubleVector[A1])(implicit prove: A1 Implies P) {
+
+    val arity: P#Out = {
+
+      val proof = prove.apply(self.shape)
+      proof.out
+    }
+
+    lazy val reify: DoubleVector[P#Out] = {
+
+      new DoubleVector(arity, self.data)
+    }
+
+    def crossValidate(): Unit = {
+
+      arity.numberOpt foreach { n =>
+        n == self.data.size
+      }
     }
   }
 }

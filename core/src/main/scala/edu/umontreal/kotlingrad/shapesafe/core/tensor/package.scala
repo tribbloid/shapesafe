@@ -4,5 +4,5 @@ import edu.umontreal.kotlingrad.shapesafe.m.arity.Operand
 
 package object tensor {
 
-  type Back = Operand
+  type Shape = Operand
 }
