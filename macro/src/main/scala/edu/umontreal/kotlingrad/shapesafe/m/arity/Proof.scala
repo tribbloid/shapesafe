@@ -20,8 +20,7 @@ object Proof {
 
   trait Unsafe extends UnsafeLike {
 
-    final type Out = Arity.Unknown.type
-    final def out: Out = Arity.Unknown
+    final type Out = Arity.Unknown
   }
 
   trait Out_=[+O <: Arity] extends Proof {

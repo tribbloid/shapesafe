@@ -39,15 +39,38 @@ class DoubleVector[A1 <: Shape](
   }
 
   def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
-      implicit prove: (A1 + A2) Implies P
-  ): DoubleVector[P#Out] = { // TODO: how to add type annotation?
+      implicit lemma: (A1 + A2) Implies P
+  ): DoubleVector[P#Out] = { // TODO: always succesful,can execute lazily without lemma
 
     val op = this.shape + that.shape
-    val proof: P = prove(op)
+    val proof: P = lemma(op)
 
     val data = this.data ++ that.data
 
     new DoubleVector(proof.out, data)
+  }
+
+  def pad[Padding <: Arity](padding: Padding): DoubleVector[A1 + Padding * (Arity._2)] = {
+
+    val op = this.shape + (Arity._2 * padding)
+
+//    val data =
+    ???
+  }
+
+  def conv[
+      A2 <: Shape,
+      Stride <: Arity,
+      P <: Proof
+  ](
+      that: DoubleVector[A2],
+      stride: Stride
+  )(
+      implicit lemma: ((A1 - A2 + Arity._1) / Stride) Implies P
+  ): DoubleVector[P#Out] = {
+
+    val op = this.shape - that.shape
+    ???
   }
 }
 

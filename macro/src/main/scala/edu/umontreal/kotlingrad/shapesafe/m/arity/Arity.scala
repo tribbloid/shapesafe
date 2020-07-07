@@ -20,10 +20,7 @@ object Arity {
 
   import Witness._
 
-  implicit object Unknown extends Arity with Proof.UnsafeLike {
-
-    override def numberOpt: Option[Int] = None
-  }
+  case class Unknown(numberOpt: Option[Int] = None) extends Arity with Proof.UnsafeLike
 
   trait Const[S] extends Arity with Proof.Invar[S] {
 
@@ -92,6 +89,9 @@ object Arity {
 
   lazy val _1 = Arity(1)
   type _1 = _1.type
+
+  lazy val _2 = Arity(2)
+  type _2 = _2.type
 
   // TODO: these doesn't work
   //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly
