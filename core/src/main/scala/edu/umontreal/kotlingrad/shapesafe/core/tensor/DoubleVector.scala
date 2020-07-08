@@ -4,7 +4,7 @@ import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity.{FromLiteral, Unknown}
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
 import edu.umontreal.kotlingrad.shapesafe.m.arity.nullary.OfSize
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
 import edu.umontreal.kotlingrad.shapesafe.m.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
@@ -39,8 +39,9 @@ class DoubleVector[A1 <: Shape](
   }
 
   def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
-      implicit lemma: (A1 + A2) Implies P
-  ): DoubleVector[P#Out] = { // TODO: always succesful,can execute lazily without lemma
+      implicit
+      lemma: (A1 + A2) Implies P
+  ): DoubleVector[P#Out] = { // TODO: always succesful, can execute lazily without lemma
 
     val op = this.shape + that.shape
     val proof: P = lemma(op)

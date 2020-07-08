@@ -1,10 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe.m.util.debug
 
-import edu.umontreal.kotlingrad.shapesafe.m.util.ScalaReflection
-
-object DebugUtils {
-
-  import ScalaReflection.universe
+object Debug {
 
   //  def cartesianProductSet[T](xss: Seq[Set[T]]): Set[List[T]] = xss match {
   //    case Nil => Set(Nil)
@@ -61,7 +57,7 @@ object DebugUtils {
     effectiveElements
   }
 
-  case class InvokeRef(
+  case class CallStackRef(
       depth: Int = 0,
       exclude: Seq[Class[_]] = Nil
   ) {
@@ -95,17 +91,6 @@ object DebugUtils {
 
   def indent(text: String, str: String = "\t"): String = {
     text.split('\n').filter(_.nonEmpty).map(str + _).mkString("\n")
-  }
-
-  def eval[T: universe.TypeTag](fn: => T): EvalData[T] = {
-
-    val caller = InvokeRef(exclude = Seq(this.getClass))
-
-    val v = fn
-
-    EvalData(v, implicitly[universe.TypeTag[T]], v.getClass)(
-      caller
-    )
   }
 
 }
