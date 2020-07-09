@@ -2,6 +2,8 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import singleton.ops.impl.std
+import singleton.twoface.impl.TwoFaceAny
 
 import scala.language.implicitConversions
 import scala.language.higherKinds
@@ -24,7 +26,8 @@ trait Op2_Imp0 {
       ??[X1, X2] <: Op
   ](
       implicit
-      domain: UnsafeDomain[A1, A2, O]
+      domain: UnsafeDomain[A1, A2, O],
+      tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
   ): Op2[A1, A2, ??] Implies Proof.Unsafe = { v =>
     domain.Op2Proof(v)
   }

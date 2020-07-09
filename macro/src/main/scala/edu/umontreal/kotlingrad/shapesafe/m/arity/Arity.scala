@@ -1,6 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
+import edu.umontreal.kotlingrad.shapesafe.m.util.WideTyped
 import shapeless.Witness
 import singleton.ops.{==, Require}
 
@@ -19,8 +20,6 @@ trait Arity extends Proven {
 object Arity {
 
   import Witness._
-
-  case class Unknown(numberOpt: Option[Int] = None) extends Arity with Proof.UnsafeLike
 
   trait Const[S] extends Arity with Proof.Invar[S] {
 
@@ -84,14 +83,31 @@ object Arity {
     FromLiteral.summon[w.T](w) //TODO: IDEA inspection error
   }
 
-  lazy val _0 = Arity(0)
-  type _0 = _0.type
+  // TODO: should use a third-party library or selectDynamic to remove boilerplate
+  lazy val _0 = WideTyped(Arity(0))
 
-  lazy val _1 = Arity(1)
-  type _1 = _1.type
+  lazy val _1 = WideTyped(Arity(1))
 
-  lazy val _2 = Arity(2)
-  type _2 = _2.type
+  lazy val _2 = WideTyped(Arity(2))
+
+  // can be derived from variables instead of literals
+
+  trait Unsafe extends Arity with Proof.UnsafeLike
+
+  object Unsafe {
+
+//    def apply[T](w: TwoFace.Int[T]): Arity TODO: impl later
+  }
+
+  case object Unknown extends Unsafe {
+
+    override def numberOpt: Option[Int] = None
+  }
+
+  case class Var(number: Int) extends Unsafe {
+
+    override def numberOpt: Option[Int] = Some(number)
+  }
 
   // TODO: these doesn't work
   //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly

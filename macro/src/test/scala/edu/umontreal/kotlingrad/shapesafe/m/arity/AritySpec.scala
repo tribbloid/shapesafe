@@ -1,6 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import shapeless.Witness
 import singleton.ops.ToInt
 
 class AritySpec extends BaseSpec {

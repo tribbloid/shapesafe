@@ -41,7 +41,7 @@ class Op2Spec extends AritySpecFixture {
 
     it("a + b + c + d") {
 
-      val op = a + b + c + Arity._1
+      val op = a + b + c + Arity._1.value
 
       val p = op.asProof
       p.out.internal.requireEqual(13)
@@ -57,7 +57,7 @@ class Op2Spec extends AritySpecFixture {
 
     it("... NOT if b == 0") {
 
-      val op = a / Arity._0
+      val op = a / Arity._0.value
 
       shouldNotCompile {
         "val p = op.asProof"
@@ -66,7 +66,7 @@ class Op2Spec extends AritySpecFixture {
 
     it("(a + b - c) / d") {
 
-      val op = (a + b - c) / Arity._1
+      val op = (a + b - c) / Arity._1.value
 
       val p = op.asProof
       p.out.internal.requireEqual(2)

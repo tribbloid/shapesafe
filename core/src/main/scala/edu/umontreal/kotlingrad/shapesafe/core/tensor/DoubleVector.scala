@@ -1,10 +1,9 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity.{FromLiteral, Unknown}
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
 import edu.umontreal.kotlingrad.shapesafe.m.arity.nullary.OfSize
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Proof}
 import edu.umontreal.kotlingrad.shapesafe.m.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
@@ -16,6 +15,7 @@ class DoubleVector[A1 <: Shape](
 ) extends Serializable {
 
   import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
+  import Arity._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
@@ -40,7 +40,7 @@ class DoubleVector[A1 <: Shape](
 
   def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 + A2) Implies P
+      lemma: (A1 Plus A2) Implies P
   ): DoubleVector[P#Out] = { // TODO: always succesful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -51,31 +51,42 @@ class DoubleVector[A1 <: Shape](
     new DoubleVector(proof.out, data)
   }
 
-  def pad[Padding <: Arity](padding: Padding): DoubleVector[A1 + Padding * (Arity._2)] = {
+  def pad[T](padding: Witness.Lt[Int]): DoubleVector[A1 Plus (FromLiteral[padding.T] Times Arity._2.WideType)] = {
 
-    val op = this.shape + (Arity._2 * padding)
+    val _padding: FromLiteral[padding.T] = Arity(padding)
 
-//    val data =
-    ???
+    val op = this.shape + (_padding * Arity._2.value)
+
+    val fill = Seq.fill(padding.value)(0.0)
+    val dOut = fill ++ this.data ++ fill
+
+    new DoubleVector(op, dOut)
   }
 
   def conv[
       A2 <: Shape,
-      Stride <: Arity,
       P <: Proof
   ](
       that: DoubleVector[A2],
-      stride: Stride
+      stride: Witness.Lt[Int]
   )(
-      implicit lemma: ((A1 - A2 + Arity._1) / Stride) Implies P
+      implicit lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) Implies P
   ): DoubleVector[P#Out] = {
 
-    val op = this.shape - that.shape
+    val _stride: FromLiteral[stride.T] = Arity(stride)
+
+    val op = (this.shape - that.shape + Arity._1.value) / _stride
+    val proof: P = lemma(op)
+
+//    for (padding = 0.to(that.data.size - this.data.size))
     ???
   }
+
 }
 
 object DoubleVector extends ProductArgs {
+
+  import Arity._
 
   def applyProduct[D <: HList, S <: NatAsOp[_]](data: D)(
       implicit

@@ -2,8 +2,10 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import singleton.ops.impl.std
 
 import scala.language.{existentials, higherKinds}
+import singleton.twoface.impl.TwoFaceAny
 
 abstract class UnsafeDomain[
     A1 <: Operand,
@@ -30,14 +32,24 @@ abstract class UnsafeDomain[
 
   case class Op2Proof[??[X1, X2] <: Op](
       self: Op2[A1, A2, ??]
+  )(
+      implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int] // TODO: kind of too internal
   ) extends Proof.Unsafe {
 
-    override def out: Arity.Unknown = {
+    override def out: Arity.Unsafe = {
 
       val n1 = bound1.apply(self.a1).out.numberOpt
       val n2 = bound2.apply(self.a2).out.numberOpt
 
-      Arity.Unknown(n1.get + n2.get)
+      (n1, n2) match {
+
+        case (Some(_1), Some(_2)) =>
+          val nOut = tfs.apply(n1.get, n2.get).getValue
+          Arity.Var(nOut)
+        case _ =>
+          Arity.Unknown
+      }
+
     }
   }
 }
