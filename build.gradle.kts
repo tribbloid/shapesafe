@@ -75,7 +75,7 @@ allprojects {
 
 //                    isForce = true
 
-//                    loggingLevel = "verbose"
+                    loggingLevel = "verbose"
 
                     additionalParameters = listOf(
                             "-encoding", "utf8",
@@ -99,10 +99,16 @@ allprojects {
 //                        "-Xlint:implicit-recursion"
                     )
 
-//                    forkOptions.apply {
-//
-//                        memoryMaximumSize = "2g"
-//                    }
+                    forkOptions.apply {
+
+                        memoryInitialSize = "1g"
+                        memoryMaximumSize = "4g"
+
+                        // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
+                        jvmArgs = listOf(
+                                "-Xss256m"
+                        )
+                    }
                 }
             }
         }
