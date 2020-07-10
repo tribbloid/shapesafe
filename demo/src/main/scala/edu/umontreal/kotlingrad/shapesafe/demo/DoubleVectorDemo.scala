@@ -30,5 +30,21 @@ object DoubleVectorDemo {
     println((x50 concat y3) dot_* y53)
 
     //    (x50 concat y3) dot_* y6  doesn't compile
+
+    {
+      val conved = x50.conv(x3)
+      println(conved.data.size)
+
+      conved.arity.internal.requireEqual(48)
+      //    conved.arity.internal.requireEqual(49) // doesn't compile
+    }
+
+    {
+      val conved = x50.pad(5).conv(x3, 2)
+      println(conved.data.size)
+
+      conved.arity.internal.requireEqual(29)
+      //    conved.arity.internal.requireEqual(28) // doesn't compile
+    }
   }
 }

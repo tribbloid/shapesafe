@@ -84,11 +84,13 @@ class DoubleVector[A1 <: Shape](
     val proof: P = lemma(op)
     val out = proof.out
 
+    val range = 0.to(this.data.size - kernel.data.size, stride.value)
+
 //    for (padding = 0.to(that.data.size - this.data.size))
     val dOut: DenseVector[Double] = signal.convolve(
       this.data.toDenseVector,
       kernel.data.toDenseVector,
-      0.to(this.data.size - kernel.data.size, stride.value)
+      range
     )
 
     new DoubleVector(out, dOut)
