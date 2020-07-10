@@ -24,6 +24,13 @@ class DoubleVector[A1 <: Shape](
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
+  def reify[P <: Proof](implicit prove: A1 Implies P): DoubleVector[P#Out] = {
+
+    val proof = prove(shape)
+    val out = proof.out
+    new DoubleVector(out, data)
+  }
+
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
       proof: A1 MayEqual A2 Implies Proof
@@ -67,20 +74,38 @@ class DoubleVector[A1 <: Shape](
       kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
   )(
-      implicit lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) Implies P
+      implicit
+      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) Implies P
   ): DoubleVector[P#Out] = {
 
     val _stride: FromLiteral[stride.T] = Arity(stride)
 
     val op = (this.shape - kernel.shape + Arity._1.value) / _stride
     val proof: P = lemma(op)
+    val out = proof.out
 
 //    for (padding = 0.to(that.data.size - this.data.size))
-    val dOut: DenseVector[Double] = signal.convolve(this.data.toDenseVector, kernel.data.toDenseVector)
+    val dOut: DenseVector[Double] = signal.convolve(
+      this.data.toDenseVector,
+      kernel.data.toDenseVector,
+      0.to(this.data.size - kernel.data.size, stride.value)
+    )
 
-    new DoubleVector(proof.out, dOut)
+    new DoubleVector(out, dOut)
   }
 
+  def conv[
+      A2 <: Shape,
+      P <: Proof
+  ](
+      kernel: DoubleVector[A2]
+  )(
+      implicit
+      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy Arity._1.WideType) Implies P
+  ): DoubleVector[P#Out] = {
+
+    conv(kernel, 1)
+  }
 }
 
 object DoubleVector extends ProductArgs {
@@ -132,18 +157,9 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit class ReifiedView[A1 <: Shape, P <: Proof](self: DoubleVector[A1])(implicit prove: A1 Implies P) {
+  implicit class ReifiedView[A1 <: Arity](self: DoubleVector[A1]) {
 
-    val arity: P#Out = {
-
-      val proof = prove.apply(self.shape)
-      proof.out
-    }
-
-    lazy val reify: DoubleVector[P#Out] = {
-
-      new DoubleVector(arity, self.data)
-    }
+    def arity: A1 = self.shape
 
     def crossValidate(): Unit = {
 

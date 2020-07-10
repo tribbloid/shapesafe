@@ -1,5 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
+import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
@@ -145,7 +146,7 @@ class DoubleVectorSpec extends BaseSpec {
       val v1 = DoubleVector.zeros(3)
 
       val result = v0 concat v1
-      assert(result.data == Seq(1.0, 2.0, 0.0, 0.0, 0.0))
+      assert(result.data == DenseVector(1.0, 2.0, 0.0, 0.0, 0.0))
       result.shape.internal.requireEqual(5)
 
       val v2 = DoubleVector.zeros(5)
@@ -159,14 +160,58 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
+  describe("pad") {
+
+    it("1") {
+
+      val v0 = DoubleVector.random(6)
+
+      val result = v0.pad(3).reify
+      result.crossValidate()
+      result.arity.internal.requireEqual(12)
+    }
+  }
+
+
+  describe("conv") {
+
+    it("1") {
+
+      val v0 = DoubleVector.random(6)
+      val v1 = DoubleVector.random(3)
+
+      val result = v0.conv(v1)
+      result.crossValidate()
+      result.arity.internal.requireEqual(4)
+    }
+
+    it("2") {
+
+      val v0 = DoubleVector.random(6)
+      val v1 = DoubleVector.random(3)
+      val v2 = DoubleVector.random(2)
+
+      {
+        val result = v0.conv(v1, 2)
+        result.crossValidate()
+        result.arity.internal.requireEqual(2)
+      }
+
+      {
+        val result = v0.conv(v2, 2)
+        result.crossValidate()
+        result.arity.internal.requireEqual(2)
+      }
+    }
+  }
+
   describe("unsafe") {
 
     it("zeros") {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.shape.numberOpt.isEmpty)
+      assert(v.shape.number == 3)
     }
   }
-
 }
