@@ -1,5 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
+import breeze.linalg.DenseVector
+import breeze.signal
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
 import edu.umontreal.kotlingrad.shapesafe.m.arity.nullary.OfSize
@@ -11,11 +13,11 @@ import scala.util.Random
 
 class DoubleVector[A1 <: Shape](
     val shape: A1,
-    val data: Seq[Double] // should support sparse/lazy vector
+    val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
   import Arity._
+  import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
@@ -27,13 +29,7 @@ class DoubleVector[A1 <: Shape](
       proof: A1 MayEqual A2 Implies Proof
   ): Double = {
 
-    val result: Double = this.data
-      .zip(that.data)
-      .map {
-        case (v1, v2) =>
-          v1 * v2
-      }
-      .sum
+    val result: Double = this.data.dot(that.data)
 
     result
   }
@@ -46,7 +42,7 @@ class DoubleVector[A1 <: Shape](
     val op = this.shape + that.shape
     val proof: P = lemma(op)
 
-    val data = this.data ++ that.data
+    val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
 
     new DoubleVector(proof.out, data)
   }
@@ -57,8 +53,9 @@ class DoubleVector[A1 <: Shape](
 
     val op = this.shape + (_padding * Arity._2.value)
 
-    val fill = Seq.fill(padding.value)(0.0)
-    val dOut = fill ++ this.data ++ fill
+    val fill = DenseVector.fill(padding.value)(0.0)
+
+    val dOut = DenseVector.vertcat(fill, this.data.toDenseVector, fill)
 
     new DoubleVector(op, dOut)
   }
@@ -67,7 +64,7 @@ class DoubleVector[A1 <: Shape](
       A2 <: Shape,
       P <: Proof
   ](
-      that: DoubleVector[A2],
+      kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
   )(
       implicit lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) Implies P
@@ -75,11 +72,13 @@ class DoubleVector[A1 <: Shape](
 
     val _stride: FromLiteral[stride.T] = Arity(stride)
 
-    val op = (this.shape - that.shape + Arity._1.value) / _stride
+    val op = (this.shape - kernel.shape + Arity._1.value) / _stride
     val proof: P = lemma(op)
 
 //    for (padding = 0.to(that.data.size - this.data.size))
-    ???
+    val dOut: DenseVector[Double] = signal.convolve(this.data.toDenseVector, kernel.data.toDenseVector)
+
+    new DoubleVector(proof.out, dOut)
   }
 
 }
@@ -98,7 +97,7 @@ object DoubleVector extends ProductArgs {
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize.out, list)
+    new DoubleVector(proofOfSize.out, Vec.apply(list.toArray))
   }
 
   @transient object from {
@@ -114,11 +113,11 @@ object DoubleVector extends ProductArgs {
 
   def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
 
-    new DoubleVector(Arity(lit), List.fill(lit.value)(0.0))
+    new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
   }
 
   def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
-    val list = List.fill(lit.value) {
+    val list = DenseVector.fill(lit.value) {
       Random.nextDouble()
     }
 
@@ -127,9 +126,9 @@ object DoubleVector extends ProductArgs {
 
   @transient object unsafe {
 
-    def zeros(number: Int): DoubleVector[Unknown.type] = {
+    def zeros(number: Int): DoubleVector[Var] = {
 
-      new DoubleVector(Unknown, List.fill(number)(0.0))
+      new DoubleVector(Var(number), DenseVector.fill(number)(0.0))
     }
   }
 
