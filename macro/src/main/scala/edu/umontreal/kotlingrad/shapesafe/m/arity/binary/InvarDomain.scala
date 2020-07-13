@@ -1,7 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 import singleton.ops.{==, Require}
 
 import scala.language.higherKinds
@@ -13,8 +14,8 @@ case class InvarDomain[
     S2,
 ]()(
     implicit
-    bound1: A1 Implies Proof.Invar[S1],
-    bound2: A2 Implies Proof.Invar[S2],
+    bound1: A1 ~~> Proof.Invar[S1],
+    bound2: A2 ~~> Proof.Invar[S2],
 ) {
 
   case class Op2Proof[??[X1, X2] <: Op](

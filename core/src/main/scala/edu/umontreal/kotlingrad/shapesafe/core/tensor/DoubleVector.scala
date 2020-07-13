@@ -5,8 +5,9 @@ import breeze.signal
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.NatAsOp
 import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
 import edu.umontreal.kotlingrad.shapesafe.m.arity.nullary.OfSize
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
 import edu.umontreal.kotlingrad.shapesafe.m.util.Constraint.ElementOfType
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
@@ -24,7 +25,7 @@ class DoubleVector[A1 <: Shape](
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
-  def reify[P <: Proof](implicit prove: A1 Implies P): DoubleVector[P#Out] = {
+  def reify[P <: Proof](implicit prove: A1 ~~> P): DoubleVector[P#Out] = {
 
     val proof = prove(shape)
     val out = proof.out
@@ -33,7 +34,7 @@ class DoubleVector[A1 <: Shape](
 
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: A1 MayEqual A2 Implies Proof
+      proof: A1 MayEqual A2 ~~> Proof
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -43,7 +44,7 @@ class DoubleVector[A1 <: Shape](
 
   def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 Plus A2) Implies P
+      lemma: (A1 Plus A2) ~~> P
   ): DoubleVector[P#Out] = { // TODO: always succesful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -75,7 +76,7 @@ class DoubleVector[A1 <: Shape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) Implies P
+      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) ~~> P
   ): DoubleVector[P#Out] = {
 
     val _stride: FromLiteral[stride.T] = Arity(stride)
@@ -103,7 +104,7 @@ class DoubleVector[A1 <: Shape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy Arity._1.WideType) Implies P
+      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy Arity._1.WideType) ~~> P
   ): DoubleVector[P#Out] = {
 
     conv(kernel, 1)

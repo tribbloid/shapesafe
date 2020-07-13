@@ -1,7 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 import singleton.ops.impl.std
 
 import scala.language.{existentials, higherKinds}
@@ -13,8 +14,8 @@ abstract class UnsafeDomain[
     O <: Proof
 ] {
 
-  def bound1: A1 Implies Proof
-  def bound2: A2 Implies Proof
+  def bound1: A1 ~~> Proof
+  def bound2: A2 ~~> Proof
 
   def selectSafer(a1: A1, a2: A2): O
 
@@ -62,8 +63,8 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 Implies Proof.UnsafeLike,
-      val bound2: A2 Implies O
+      val bound1: A1 ~~> Proof.UnsafeLike,
+      val bound2: A2 ~~> O
   ) extends UnsafeDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
@@ -75,8 +76,8 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 Implies Proof.UnsafeLike,
-      bound2: A2 Implies O
+      bound1: A1 ~~> Proof.UnsafeLike,
+      bound2: A2 ~~> O
   ): UnsafeDomain[A1, A2, O] = D2()
 }
 
@@ -97,8 +98,8 @@ object UnsafeDomain extends UnsafeDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 Implies O,
-      val bound2: A2 Implies Proof.UnsafeLike
+      val bound1: A1 ~~> O,
+      val bound2: A2 ~~> Proof.UnsafeLike
   ) extends UnsafeDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -110,7 +111,7 @@ object UnsafeDomain extends UnsafeDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 Implies O,
-      bound2: A2 Implies Proof.UnsafeLike
+      bound1: A1 ~~> O,
+      bound2: A2 ~~> Proof.UnsafeLike
   ): UnsafeDomain[A1, A2, O] = D1()
 }

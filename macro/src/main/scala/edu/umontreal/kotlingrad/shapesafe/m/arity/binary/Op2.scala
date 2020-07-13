@@ -1,12 +1,12 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Implies, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 import singleton.ops.impl.std
 import singleton.twoface.impl.TwoFaceAny
 
-import scala.language.implicitConversions
-import scala.language.higherKinds
+import scala.language.{higherKinds, implicitConversions}
 
 case class Op2[
     +A1 <: Operand,
@@ -28,7 +28,7 @@ trait Op2_Imp0 {
       implicit
       domain: UnsafeDomain[A1, A2, O],
       tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
-  ): Op2[A1, A2, ??] Implies Proof.Unsafe = { v =>
+  ): Op2[A1, A2, ??] ~~> Proof.Unsafe = { v =>
     domain.Op2Proof(v)
   }
 }
@@ -43,10 +43,10 @@ object Op2 extends Op2_Imp0 {
       ??[X1, X2] <: Op
   ](
       implicit
-      bound1: A1 Implies Proof.Invar[S1],
-      bound2: A2 Implies Proof.Invar[S2],
+      bound1: A1 ~~> Proof.Invar[S1],
+      bound2: A2 ~~> Proof.Invar[S2],
       lemma: S1 ?? S2
-  ): Op2[A1, A2, ??] Implies InvarDomain[A1, A2, S1, S2]#Op2Proof[??] = {
+  ): Op2[A1, A2, ??] ~~> InvarDomain[A1, A2, S1, S2]#Op2Proof[??] = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
     { v =>

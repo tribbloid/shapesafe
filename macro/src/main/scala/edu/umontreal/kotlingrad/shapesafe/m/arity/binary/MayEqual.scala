@@ -1,6 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Implies, Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Operand, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 import singleton.ops.{==, Require}
 
 case class MayEqual[
@@ -20,7 +21,7 @@ trait MayEqual_Imp0 {
   ](
       implicit
       domain: UnsafeDomain[A1, A2, O]
-  ): MayEqual[A1, A2] Implies UnsafeDomain[A1, A2, O]#ProbablyEqual = { v =>
+  ): MayEqual[A1, A2] ~~> UnsafeDomain[A1, A2, O]#ProbablyEqual = { v =>
     domain.ProbablyEqual(v)
   }
 }
@@ -40,10 +41,10 @@ object MayEqual extends MayEqual_Imp0 {
       S2
   ](
       implicit
-      bound1: A1 Implies Proof.Invar[S1],
-      bound2: A2 Implies Proof.Invar[S2],
+      bound1: A1 ~~> Proof.Invar[S1],
+      bound2: A2 ~~> Proof.Invar[S2],
       lemma: Require[S1 == S2]
-  ): MayEqual[A1, A2] Implies InvarDomain[A1, A2, S1, S2]#Equal = {
+  ): MayEqual[A1, A2] ~~> InvarDomain[A1, A2, S1, S2]#Equal = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
