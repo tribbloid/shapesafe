@@ -166,7 +166,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v0 = DoubleVector.random(6)
 
-      val result = v0.pad(3).reify
+      val result = v0.pad(3)
       result.crossValidate()
       result.arity.internal.requireEqual(12)
     }
