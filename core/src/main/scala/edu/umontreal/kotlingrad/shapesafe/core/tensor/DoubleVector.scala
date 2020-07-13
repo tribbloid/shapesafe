@@ -159,6 +159,26 @@ object DoubleVector extends ProductArgs {
     }
   }
 
+  implicit class Reify[A1 <: Shape, P <: Proof](
+      self: DoubleVector[A1]
+  )(
+      implicit prove: A1 Implies P
+  ) {
+
+    val arity: P#Out = {
+
+      val proof = prove(self.shape)
+      proof.out
+    }
+
+    def crossValidate(): Unit = {
+
+      arity.numberOpt foreach { n =>
+        n == self.data.size
+      }
+    }
+  }
+
   implicit class ReifiedView[A1 <: Arity](self: DoubleVector[A1]) {
 
     def arity: A1 = self.shape
