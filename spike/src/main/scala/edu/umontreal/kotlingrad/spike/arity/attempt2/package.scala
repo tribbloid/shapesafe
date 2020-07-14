@@ -3,21 +3,20 @@ package edu.umontreal.kotlingrad.spike.arity
 import shapeless.Witness
 import singleton.ops.+
 import singleton.ops.impl.Op
-import scala.language.implicitConversions
 
 import scala.language.implicitConversions
 
 package object attempt2 {
 
   // doesn't extend T => R intentionally
-  trait Implies[-T, +R] {
-    def transform(v: T): R
+  trait ~~>[-T, +R] {
+    def apply(v: T): R
   }
 
-  implicit def implies[T, R](v: T)(implicit bound: T Implies R): R = bound.transform(v)
+  implicit def implies[T, R](v: T)(implicit bound: T ~~> R): R = bound.apply(v)
 
   case class Summoner[R]() {
-    def summon[T](v: T)(implicit ev: Implies[T, R]): R = ev.transform(v)
+    def summon[T](v: T)(implicit ev: T ~~> R): R = ev.apply(v)
   }
 
   trait Operand {
@@ -28,20 +27,6 @@ package object attempt2 {
       Op2[X, Y](this, that)
     }
   }
-//  object Operand {
-//    abstract class ProvenToBe[O <: Arity]()(implicit val out: O) extends Operand {}
-//    object ProvenToBe {
-//      implicit def trivial[O <: Arity, T <: ProvenToBe[O]]: MyTransform[T, Trivial[O, T]] = self => new Trivial(self)
-//
-//      /*implicit*/
-//      class Trivial[O <: Arity, T <: ProvenToBe[O]](
-//          val self: T
-//      ) extends Proof {
-//        override type Out = O
-//        override def out: Out = self.out
-//      }
-//    }
-//  }
 
   trait Proof extends Serializable {
     def self: Operand
@@ -64,7 +49,7 @@ package object attempt2 {
       type SS = S
     }
     object Const {
-      implicit def same[S]: Const[S] Implies Same[S] = self => new Same(self)
+      implicit def same[S]: Const[S] ~~> Same[S] = self => new Same(self)
 
       /*implicit*/
       class Same[S](val self: Const[S]) extends Proof.Invar[S] {
@@ -100,10 +85,10 @@ package object attempt2 {
   object Op2 {
     implicit def proveInvar[A1 <: Operand, A2 <: Operand, S1, S2](
         implicit
-        bound1: A1 Implies Proof.Invar[S1],
-        bound2: A2 Implies Proof.Invar[S2],
+        bound1: A1 ~~> Proof.Invar[S1],
+        bound2: A2 ~~> Proof.Invar[S2],
         lemma: S1 + S2,
-    ): Op2[A1, A2] Implies ProveInvar[A1, A2, S1, S2] =
+    ): Op2[A1, A2] ~~> ProveInvar[A1, A2, S1, S2] =
       self => new ProveInvar(self, lemma)
 
     /*implicit*/
@@ -125,7 +110,6 @@ package object attempt2 {
   implicit val b = Arity(4)
 
   {
-
     val op = a + b
 
     op: Proof // compiles
@@ -150,5 +134,26 @@ package object attempt2 {
 
     val summoner = Summoner[Proof]()
     summoner.summon(op)
+  }
+
+  case class DoubleVector[T <: Operand](op: T)
+
+  object DoubleVector {
+
+    implicit class ReifiedView[T <: Operand, P <: Proof](val v: DoubleVector[T])(
+        implicit
+        prove: T ~~> P
+    ) {
+
+      val proof: P = prove(v.op)
+
+      def reify: Any = DoubleVector[proof.Out](proof.out)
+    }
+  }
+
+  {
+    val vec = DoubleVector(a + b + b)
+
+    vec.reify
   }
 }

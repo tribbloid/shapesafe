@@ -21,7 +21,7 @@ package object attempt1 {
 
   object Arity {
 
-    trait Const[+S] extends Arity {
+    trait Const[S] extends Arity {
 
       type SS = S
     }
@@ -60,12 +60,8 @@ package object attempt1 {
   trait Proof[-I, +O] extends (I => O) with Serializable {}
 
   object Proof {
-//
-//    trait Out_=[+O <: Arity] extends Proof {
-//      type Out <: O
-//    }
 
-    trait Invar[-I, +S] extends Proof[I, Arity.Const[S]] {
+    trait Invar[-I, S] extends Proof[I, Arity.Const[S]] {
 
       type SS = S
     }
@@ -129,15 +125,12 @@ package object attempt1 {
 
   val op = a + b
 
-//  op: Proof // implicit view works
-
-//  val summoner = Summoner[op.type, Proof.Invar[Any]]()
-
   val p2 = {
 
-    prove(op)
-
-    proveGeneric(op)
+    // TODO: these doesn't work! why?
+//    prove(op)
+//
+//    proveGeneric(op)
   }
 //  summoner.summon(op) // oops
 }
