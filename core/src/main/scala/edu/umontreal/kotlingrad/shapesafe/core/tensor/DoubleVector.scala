@@ -160,10 +160,12 @@ object DoubleVector extends ProductArgs {
     }
   }
 
+  // TODO: this doesn't work: Cannot prove requirement Require[...]
+  //  waiting for new versions of singleton-ops?
   implicit class Reify[A1 <: Shape, P <: Proof](
       self: DoubleVector[A1]
   )(
-      implicit prove: A1 Implies P
+      implicit prove: A1 ~~> P
   ) {
 
     val arity: P#Out = {
@@ -180,15 +182,5 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit class ReifiedView[A1 <: Arity](self: DoubleVector[A1]) {
-
-    def arity: A1 = self.shape
-
-    def crossValidate(): Unit = {
-
-      arity.numberOpt foreach { n =>
-        n == self.data.size
-      }
-    }
-  }
+  implicit class ReifiedView[A1 <: Arity](self: DoubleVector[A1]) extends Reify[A1, A1](self) {}
 }
