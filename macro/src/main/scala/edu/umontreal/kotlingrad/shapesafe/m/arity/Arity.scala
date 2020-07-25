@@ -90,6 +90,8 @@ object Arity {
 
   lazy val _2 = WideTyped(Arity(2))
 
+  lazy val _3 = WideTyped(Arity(3))
+
   // can be derived from variables instead of literals
 
   trait Unsafe extends Arity with Proof.UnsafeLike

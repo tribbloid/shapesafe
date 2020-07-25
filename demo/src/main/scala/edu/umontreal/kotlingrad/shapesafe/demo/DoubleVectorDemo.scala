@@ -1,6 +1,9 @@
 package edu.umontreal.kotlingrad.shapesafe.demo
 
-import edu.umontreal.kotlingrad.shapesafe.core.tensor.DoubleVector
+import edu.umontreal.kotlingrad.shapesafe.core.tensor.{DoubleVector, Shape}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.binary.MayEqual
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Proof}
+import edu.umontreal.kotlingrad.shapesafe.m.~~>
 
 object DoubleVectorDemo {
 
@@ -46,5 +49,21 @@ object DoubleVectorDemo {
       conved.arity.internal.requireEqual(29)
       //    conved.arity.internal.requireEqual(28) // doesn't compile
     }
+
+    val _3 = Arity(3)
+
+    def printD3[A <: Shape](v: DoubleVector[A])(
+      implicit
+      proofOfArity: A MayEqual _3.Out ~~> Proof
+    ): Unit = {
+
+      println(v)
+    }
+
+    printD3(DoubleVector.random(3))
+
+//    printD3(DoubleVector.random(4)) // doesn't compile
+
+
   }
 }
