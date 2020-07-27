@@ -42,6 +42,9 @@ allprojects {
         implementation("org.scala-lang:scala-library:${vs.scalaV}")
         implementation("org.scala-lang:scala-reflect:${vs.scalaV}")
 
+        //https://github.com/tek/splain
+        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+
         implementation(kotlin("stdlib"))
         implementation(kotlin("stdlib-jdk8"))
 

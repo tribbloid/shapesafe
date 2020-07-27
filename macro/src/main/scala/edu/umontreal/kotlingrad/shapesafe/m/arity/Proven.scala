@@ -13,6 +13,4 @@ object Proven {
 
     type Out = O
   }
-
-  implicit def trivial[T <: Proven]: T ~~> T = identity
 }

@@ -26,13 +26,13 @@ object DoubleVectorDemo {
 
     println(x3 dot_* y3)
 
-    //    x3 dot_* y4  doesn't compile
+    //    x3 dot_* y6 // doesn't compile
 
     println((y3 concat y50) dot_* y53)
 
     println((x50 concat y3) dot_* y53)
 
-    //    (x50 concat y3) dot_* y6  doesn't compile
+    //    (x50 concat y3) dot_* y6 // doesn't compile
 
     {
       val conved = x50.conv(x3)
@@ -62,7 +62,7 @@ object DoubleVectorDemo {
 
     printD3(DoubleVector.random(3))
 
-//    printD3(DoubleVector.random(4)) // doesn't compile
+    //    printD3(DoubleVector.random(4)) // doesn't compile
 
 
   }
