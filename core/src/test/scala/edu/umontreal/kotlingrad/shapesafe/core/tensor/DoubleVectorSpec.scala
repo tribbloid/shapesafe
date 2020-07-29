@@ -2,7 +2,10 @@ package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
 import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import edu.umontreal.kotlingrad.shapesafe.core.tensor.DoubleVector.Reified
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import graph.commons.util.WideTyped
+import graph.commons.util.debug.print_@
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -162,6 +165,44 @@ class DoubleVectorSpec extends BaseSpec {
 
   describe("pad") {
 
+    it("spike 1") {
+
+      val v0 = DoubleVector.random(6)
+      val v1 = v0.pad(3)
+
+      {
+        val aa = v0.reify.arity
+
+        print_@(WideTyped(aa).viz)
+        aa.internal.dummyImp(3)
+      }
+
+      {
+        val aa = DoubleVector.asReified(v0).arity
+
+        print_@(WideTyped(aa).viz)
+        aa.internal.dummyImp(3)
+      }
+
+//      {
+//        val aa = v0.arity
+//
+//        print_@(WideTyped(aa).viz)
+//        aa.internal.dummyImp(3)
+//      }
+
+//      {
+//        val aa = DoubleVector.asReified(v1)
+//
+//        print_@(WideTyped(aa).viz)
+//      }
+//      {
+//        val aa = v1.arity
+//
+//        print_@(WideTyped(aa).viz)
+//      }
+    }
+
     it("1") {
 
       val v0 = DoubleVector.random(6)
@@ -173,6 +214,13 @@ class DoubleVectorSpec extends BaseSpec {
       {
         val aa = v0.shape
         aa.internal.requireEqual(6)
+      }
+
+      {
+        val aa = Reified(v0).arity
+
+        aa.internal.dummyImp(3)
+
       }
 
       {

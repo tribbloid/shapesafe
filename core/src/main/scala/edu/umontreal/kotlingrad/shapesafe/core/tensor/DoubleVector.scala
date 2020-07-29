@@ -57,7 +57,7 @@ class DoubleVector[A1 <: Shape](
     new DoubleVector(proof.out, data)
   }
 
-  def pad[T](padding: Witness.Lt[Int]): DoubleVector[A1 Plus (FromLiteral[padding.T] Times Arity._2.WideType)] = {
+  def pad[T](padding: Witness.Lt[Int]): DoubleVector[A1 Plus (FromLiteral[padding.T] Times Arity._2.Wide)] = {
 
     val _padding: FromLiteral[padding.T] = Arity(padding)
 
@@ -78,7 +78,7 @@ class DoubleVector[A1 <: Shape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy FromLiteral[stride.T]) ~~> P
+      lemma: ((A1 Minus A2 Plus Arity._1.Wide) DividedBy FromLiteral[stride.T]) ~~> P
   ): DoubleVector[P#Out] = {
 
     val _stride: FromLiteral[stride.T] = Arity(stride)
@@ -106,7 +106,7 @@ class DoubleVector[A1 <: Shape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 Minus A2 Plus Arity._1.WideType) DividedBy Arity._1.WideType) ~~> P
+      lemma: ((A1 Minus A2 Plus Arity._1.Wide) DividedBy Arity._1.Wide) ~~> P
   ): DoubleVector[P#Out] = {
 
     conv(kernel, 1)
