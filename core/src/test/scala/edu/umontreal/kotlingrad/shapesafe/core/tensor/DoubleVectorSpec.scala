@@ -178,9 +178,9 @@ class DoubleVectorSpec extends BaseSpec {
       {
         val aa = v0.arity
 
-        aa.internal.dummyImp(3)
-
-        aa.internal.requireEqual(12)
+//        aa.internal.dummyImp(3)
+//
+//        aa.internal.requireEqual(12)
       }
 
 //      {

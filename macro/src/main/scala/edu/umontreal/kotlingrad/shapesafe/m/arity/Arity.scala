@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.util.WideTyped
+import graph.commons.util.WideTyped
 import shapeless.Witness
 import singleton.ops.{+, ==, Require}
 

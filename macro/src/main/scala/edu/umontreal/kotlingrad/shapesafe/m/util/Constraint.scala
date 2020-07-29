@@ -9,7 +9,7 @@ trait Constraint {}
 
 object Constraint {
 
-  import ScalaReflection.universe
+  import graph.commons.util.ScalaReflection.universe
 
   case class ElementOfType[Data <: HList, Element: TypeTag]() {
 
@@ -30,8 +30,8 @@ object Constraint {
     //    implicit def observe0[Element: TypeTag]: OfElementType[HNil, Element] = OfElementType[HNil, Element]()
 
     implicit def observe[Data <: HList, Element: TypeTag](
-                                                           implicit assuming: hlist.ToArray[Data, Element]
-                                                         ): ElementOfType[Data, Element] =
+        implicit assuming: hlist.ToArray[Data, Element]
+    ): ElementOfType[Data, Element] =
       ElementOfType[Data, Element]()
   }
 
