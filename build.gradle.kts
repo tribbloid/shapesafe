@@ -120,8 +120,8 @@ allprojects {
 
 
             kotlinOptions.jvmTarget = jvmTarget
-            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-
+//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+            // TODO: re-enable after kotlin compiler argument being declared safe
         }
 
         test {

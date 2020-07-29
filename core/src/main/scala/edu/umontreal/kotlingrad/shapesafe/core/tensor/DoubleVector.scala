@@ -177,11 +177,6 @@ object DoubleVector extends ProductArgs {
   implicit def asReified[A1 <: Shape, P <: Proof](v: DoubleVector[A1])(
       implicit prove: A1 ~~> P
   ): Reified[P#Out] = {
-
-    val proof = prove(v.shape)
-    val arity: P#Out = proof.out
-
-    val result = new DoubleVector(arity, v.data)
-    Reified(result)
+    Reified(v.reify)
   }
 }

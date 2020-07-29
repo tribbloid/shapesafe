@@ -2,7 +2,6 @@ package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
 import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.core.tensor.DoubleVector.Reified
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import graph.commons.util.WideTyped
 import graph.commons.util.debug.print_@
@@ -170,12 +169,33 @@ class DoubleVectorSpec extends BaseSpec {
       val v0 = DoubleVector.random(6)
       val v1 = v0.pad(3)
 
-//      {
-//        val aa = v0.reify.arity
+      {
+        val result = v1.reify
+
+        val aa = result.arity
+
+        {
+          print_@(WideTyped(result.arity).viz)
+          // this works
+          result.arity.internal.dummyImp(3)
+          result.crossValidate()
+          result.arity.internal.requireEqual(12)
+        }
+
+        {
+          print_@(WideTyped(aa).viz)
+          // this doesn't, how did it happened?
+          aa.internal.dummyImp(3)
+          aa.internal.requireEqual(12)
+        }
+      }
+
+    }
+
+//    it("spike 2") {
 //
-//        print_@(WideTyped(aa).viz)
-//        aa.internal.dummyImp(3)
-//      }
+//      val v0 = DoubleVector.random(6)
+//      val v1 = v0.pad(3)
 //
 //      {
 //        val aa = DoubleVector.asReified(v0).arity
@@ -183,14 +203,14 @@ class DoubleVectorSpec extends BaseSpec {
 //        print_@(WideTyped(aa).viz)
 //        aa.internal.dummyImp(3)
 //      }
-
+//
 //      {
 //        val aa = v0.arity
 //
 //        print_@(WideTyped(aa).viz)
 //        aa.internal.dummyImp(3)
 //      }
-
+//
 //      {
 //        val aa = DoubleVector.asReified(v1)
 //
@@ -201,40 +221,16 @@ class DoubleVectorSpec extends BaseSpec {
 //
 //        print_@(WideTyped(aa).viz)
 //      }
-    }
+//    }
 
     it("1") {
 
       val v0 = DoubleVector.random(6)
 
-      val result = v0.pad(3)
+      val result = v0.pad(3).reify
 
-//      result.crossValidate()
-
-      {
-        val aa = v0.shape
-        aa.internal.requireEqual(6)
-      }
-
-      {
-        val aa = Reified(v0).arity
-
-        aa.internal.dummyImp(3)
-
-      }
-
-      {
-        val aa = v0.arity
-
-//        aa.internal.dummyImp(3)
-//
-//        aa.internal.requireEqual(12)
-      }
-
-//      {
-//        val aa = result.arity
-//        aa.internal.requireEqual(12)
-//      }
+      result.crossValidate()
+      result.arity.internal.requireEqual(12)
     }
   }
 
