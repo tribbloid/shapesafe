@@ -3,7 +3,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity
 import scala.language.higherKinds
 
 /**
-  * is a view class
+  * Represents a reified Arity
   */
 trait Proof extends Serializable {
 

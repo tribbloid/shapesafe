@@ -3,5 +3,5 @@ val vv: Versions = versions()
 dependencies {
 
     implementation(project(":core"))
-    testApi(project(":macro:testcommon"))
+    testApi(testFixtures(project(":macro")))
 }

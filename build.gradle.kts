@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    base
+//    base
     java
     scala
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.3.72" // TODO: remove?
     idea
 }
 
@@ -12,6 +12,7 @@ allprojects {
 
     apply(plugin = "java")
     apply(plugin = "java-library")
+    apply(plugin = "java-test-fixtures")
     apply(plugin = "scala")
     apply(plugin = "kotlin")
     apply(plugin = "idea")
@@ -22,6 +23,7 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
 
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-dev")
@@ -43,17 +45,21 @@ allprojects {
         implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
-        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+//        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+        //TODO: incompatible with testFixtures?
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("stdlib-jdk8"))
 
+        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
+
+//        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
+
+        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
-
     }
 
     task("dependencyTree") {
@@ -70,7 +76,6 @@ allprojects {
 
         withType<ScalaCompile> {
 
-
             targetCompatibility = jvmTarget
 
             scalaCompileOptions.apply {
@@ -80,22 +85,24 @@ allprojects {
                 loggingLevel = "verbose"
 
                 additionalParameters = listOf(
-                        "-encoding", "utf8",
-                        "-unchecked",
-                        "-deprecation",
-                        "-feature",
+                    "-encoding", "utf8",
+                    "-unchecked",
+                    "-deprecation",
+                    "-feature",
 //                            "-Xfatal-warnings",
 
-                        "-Xlint:poly-implicit-overload",
-                        "-Xlint:option-implicit",
+                    "-Xlint:poly-implicit-overload",
+                    "-Xlint:option-implicit",
 
-                        "-Xlog-implicits",
-                        "-Xlog-implicit-conversions"
+                    "-Xlog-implicits",
+                    "-Xlog-implicit-conversions",
 
-                        ,
-                        "-Yissue-debug"
+                    "-Yissue-debug"
+//                        ,
+//                        "-Ytyper-debug"
+//                        "-Vtyper"
 
-                        // the following only works on scala 2.13
+                    // the following only works on scala 2.13
 //                        ,
 //                        "-Xlint:implicit-not-found",
 //                        "-Xlint:implicit-recursion"
@@ -108,7 +115,7 @@ allprojects {
 
                     // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
                     jvmArgs = listOf(
-                            "-Xss256m"
+                        "-Xss256m"
                     )
                 }
             }
@@ -120,8 +127,8 @@ allprojects {
 
 
             kotlinOptions.jvmTarget = jvmTarget
-            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-
+//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+            // TODO: re-enable after kotlin compiler argument being declared safe
         }
 
         test {
@@ -142,6 +149,9 @@ allprojects {
                 showExceptions = true
                 showCauses = true
                 showStackTraces = true
+
+                // stdout is used for occasional manual verification
+                showStandardStreams = true
             }
         }
     }

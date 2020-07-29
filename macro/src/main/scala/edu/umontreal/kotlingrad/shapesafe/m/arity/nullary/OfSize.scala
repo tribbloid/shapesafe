@@ -7,8 +7,8 @@ import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
 class OfSize[-Data <: HList, S <: NatAsOp[_]](
-    val number: Int
-) extends ProvenToBe[FromOp[S]]()(new FromOp(number)) {}
+    val singleton: S
+) extends ProvenToBe[FromOp[S]]()(new FromOp(singleton)) {}
 
 object OfSize {
 
@@ -18,7 +18,7 @@ object OfSize {
       simplify: NatAsOp[N]
   ): OfSize[Data, NatAsOp[N]] = {
 
-    new OfSize(simplify.value.asInstanceOf[Int])
+    new OfSize(simplify)
   }
 
   //  implicit def fromNat[N <: Nat](n: N)(

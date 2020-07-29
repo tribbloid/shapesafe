@@ -1,9 +1,10 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Operand}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, OperandFixture}
+
 import scala.language.existentials
 
-class MayEqualSpec extends AritySpecFixture {
+class MayEqualSpec extends OperandFixture {
 
   import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
 

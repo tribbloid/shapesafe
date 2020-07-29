@@ -1,11 +1,11 @@
 package edu.umontreal.kotlingrad.shapesafe
 
-import org.scalatest.FunSpec
+import com.tribbloids.graph.commons.util.ScalaReflection
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
-//TODO: merge into :graph-commons:testlib
-abstract class BaseSpec extends FunSpec {
+//TODO: merge into :graph-commons
+trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   /**
     * ScalaTest assertDoesNotCompile sometimes malfunction (due to unwashed execution order?)
@@ -14,16 +14,44 @@ abstract class BaseSpec extends FunSpec {
     */
   val shouldNotCompile: illTyped.type = illTyped
 
-  val big: BaseSpec.big.type = BaseSpec.big
+  val small = BaseSpec.small
+  val big = BaseSpec.big
+
+  def showRaw(v: Any): String = {
+
+    ScalaReflection.universe.showRaw(v)
+
+//    pprint.tokenize(v).mkString("\n")
+  }
 }
 
 object BaseSpec {
+
+  trait TypeN {
+
+    val nat: Nat
+
+    val hList: HList
+
+    val w: Witness { type T <: Int }
+
+    final def number = w.value
+  }
+
+  object small extends TypeN {
+
+    val nat = Nat(6) // DO NOT change! most tests only use literals, they all needs to be consistent
+
+    val hList = HList.fill[Double](nat)(0.0)
+
+    val w = Witness(6)
+  }
 
   /**
     * Nat uses church encoding and may risk slowing down compilation
     * as a result, we recommend tests using member of this object as much as possible
     */
-  object big {
+  object big extends TypeN {
 
     // TODO: add type annotations, IDEA is really not smart enough to do this
     val nat = Nat(100) // DO NOT change! most tests only use literals, they all needs to be consistent

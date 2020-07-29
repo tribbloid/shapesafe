@@ -1,0 +1,3 @@
+[submodule "graph-commons"]
+	path = graph-commons
+	url = https://github.com/tribbloid/graph-commons
