@@ -1,8 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity.binary
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, AritySpecFixture, Operand}
+import edu.umontreal.kotlingrad.shapesafe.m.arity.{Arity, Operand, OperandFixture}
 
-class Op2Spec extends AritySpecFixture {
+class Op2Spec extends OperandFixture {
 
   import edu.umontreal.kotlingrad.shapesafe.m.arity.DSL._
 

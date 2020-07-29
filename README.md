@@ -1,2 +1,3 @@
 # shapesafe
-experimental code to leverage shapeless for shape-
+
+experimental code to leverage shapeless and singleton-ops for shape-safe tensor algebra

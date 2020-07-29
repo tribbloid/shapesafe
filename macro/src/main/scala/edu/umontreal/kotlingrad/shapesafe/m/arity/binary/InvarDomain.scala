@@ -26,9 +26,7 @@ case class InvarDomain[
 
     override type Out = Arity.FromOp[S1 ?? S2]
 
-    override def out: Out = new Arity.FromOp[S1 ?? S2](
-      lemma.value.asInstanceOf[Int]
-    )
+    override def out: Out = Arity.FromOp.summon[S1 ?? S2](lemma)
   }
 
   case class Equal(

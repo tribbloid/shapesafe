@@ -22,6 +22,7 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
 
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-dev")
@@ -48,6 +49,10 @@ allprojects {
         implementation(kotlin("stdlib"))
         implementation(kotlin("stdlib-jdk8"))
 
+        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.1") // used by all modules
+
+//        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
+
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
@@ -69,7 +74,6 @@ allprojects {
 //        }
 
         withType<ScalaCompile> {
-
 
             targetCompatibility = jvmTarget
 
@@ -94,6 +98,9 @@ allprojects {
 
                         ,
                         "-Yissue-debug"
+//                        ,
+//                        "-Ytyper-debug"
+//                        "-Vtyper"
 
                         // the following only works on scala 2.13
 //                        ,
@@ -120,8 +127,8 @@ allprojects {
 
 
             kotlinOptions.jvmTarget = jvmTarget
-            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-
+//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+            // TODO: re-enable after kotlin compiler argument being declared safe
         }
 
         test {
@@ -142,6 +149,9 @@ allprojects {
                 showExceptions = true
                 showCauses = true
                 showStackTraces = true
+
+                // stdout is used for occasional manual verification
+                showStandardStreams = true
             }
         }
     }

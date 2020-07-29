@@ -2,7 +2,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 
-trait AritySpecFixture extends BaseSpec {
+trait OperandFixture extends BaseSpec {
 
   implicit val a = Arity(3)
   //    type A = a.type

@@ -3,7 +3,12 @@ package edu.umontreal.kotlingrad.shapesafe.core.tensor
 import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import com.tribbloids.graph.commons.util.ScalaReflection.universe.PolyType
+import com.tribbloids.graph.commons.util.WideTyped
+import com.tribbloids.graph.commons.util.debug.print_@
+import com.tribbloids.graph.commons.util.viz.VizType
 import shapeless.{HNil, ProductArgs, Witness}
+import singleton.ops.+
 
 class DoubleVectorSpec extends BaseSpec {
 
@@ -21,13 +26,14 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
-      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
+      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     ) // TODO: scalafmt in IDEA failed here
 
     v.shape.internal.requireEqual(50)
   }
 
-  it(s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
+  it(
+    s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
 
     shouldNotCompile(
       "DoubleVector.dummy(1.0)"
@@ -43,11 +49,11 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
-  val stable: Int = 1+2 // stable path!
-  lazy val stableLzy: Int = 1+2 // stable path!
+  val stable: Int = 1 + 2 // stable path!
+  lazy val stableLzy: Int = 1 + 2 // stable path!
 
-  def unstableFn: Int = 1+2 // no path
-  var unstableVar: Int = 1+2 // no path
+  def unstableFn: Int = 1 + 2 // no path
+  var unstableVar: Int = 1 + 2 // no path
 
   describe("zeros") {
 
@@ -100,11 +106,10 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
-
   describe("dot_*") {
 
     it("type manually defined") {
-      val w3 =Witness(3)
+      val w3 = Witness(3)
       type A3 = Arity.FromLiteral[w3.T]
 
       val w4 = Witness(4)
@@ -112,7 +117,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)
-      val v3: DoubleVector[A4]  = DoubleVector.zeros(4)
+      val v3: DoubleVector[A4] = DoubleVector.zeros(4)
 
       assert((v1 dot_* v2) == 0.0)
 
@@ -126,7 +131,7 @@ class DoubleVectorSpec extends BaseSpec {
       val v0 = DoubleVector(1.0, 1.0, 1.0)
       val v1 = DoubleVector.zeros(3)
       val v2 = DoubleVector.zeros(3)
-      val v3  = DoubleVector.zeros(4)
+      val v3 = DoubleVector.zeros(4)
 
       assert((v0 dot_* v2) == 0.0)
       assert((v1 dot_* v2) == 0.0)
@@ -162,6 +167,80 @@ class DoubleVectorSpec extends BaseSpec {
 
   describe("pad") {
 
+    it("spike 0") {
+
+      val v0 = DoubleVector
+    }
+
+    it("spike 1") {
+
+      val v0 = DoubleVector.random(6)
+
+      {
+        val result = v0.reify
+
+        val aa = result.arity
+
+        {
+          result.crossValidate()
+          result.arity.internal.requireEqual(6)
+        }
+
+        {
+          print_@(WideTyped(aa).viz)
+
+          print_@(VizType[aa.type])
+
+          import com.tribbloids.graph.commons.util.ScalaReflection.universe
+
+          def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
+
+          val aaT = sniff(aa).tpe
+
+          print_@(showRaw(aaT))
+          print_@(showRaw(aaT.typeSymbol))
+          print_@(showRaw(aaT.typeSymbol.typeSignature))
+          print_@(aaT.typeSymbol.typeSignature)
+
+          print_@(aaT)
+          print_@(universe.showRaw(aaT))
+          print_@(aaT.dealias)
+          print_@(universe.showRaw(aaT.dealias))
+          print_@(aaT.typeSymbol)
+          print_@(universe.showRaw(aaT.typeSymbol))
+
+          print_@(
+            aaT.baseClasses.map { clazz =>
+              val baseType = aaT.baseType(clazz)
+              baseType
+            }
+          )
+
+          print_@(
+            aaT.baseClasses.map { clazz =>
+              val baseType = aaT.baseType(clazz)
+              universe.showRaw(baseType)
+            }
+          )
+
+//          implicitly[aa.SS + Witness.`3`.T]
+
+//          val sT = aaT.baseType(aaT.baseClasses.head).typeArgs.head
+//
+//          print_@(showRaw(sT))
+//          print_@(showRaw(sT.typeSymbol))
+//          print_@(showRaw(sT.typeSymbol.typeSignature))
+//          print_@(sT)
+
+          //          val ttag2 = universe.typeTag[Witness.`3`]
+          //          val ttag3 = universe.typeTag[aa.SS + Witness.`3`]
+
+//          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
+        }
+
+      }
+    }
+
     it("1") {
 
       val v0 = DoubleVector.random(6)
@@ -172,7 +251,6 @@ class DoubleVectorSpec extends BaseSpec {
       result.arity.internal.requireEqual(12)
     }
   }
-
 
   describe("conv") {
 

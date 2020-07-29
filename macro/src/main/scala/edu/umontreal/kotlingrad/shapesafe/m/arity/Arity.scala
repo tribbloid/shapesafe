@@ -1,16 +1,16 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import edu.umontreal.kotlingrad.shapesafe.m.util.WideTyped
+import com.tribbloids.graph.commons.util.WideTyped
 import shapeless.Witness
-import singleton.ops.{==, Require}
+import singleton.ops.{+, ==, Require}
 
 import scala.language.implicitConversions
 
 trait Arity extends Proven {
 
-  override type Out = this.type
-  override def out: Out = this
+  override type Out >: this.type <: Arity
+  override def out: this.type = this
 
   def numberOpt: Option[Int] // run-time
 
@@ -23,59 +23,58 @@ object Arity {
 
   trait Const[S] extends Arity with Proof.Invar[S] {
 
+    override type Out >: this.type <: Const[S]
+
+    def singleton: S
+
     def number: Int
 
     final override def numberOpt: Option[Int] = Some(number)
 
     @transient protected[shapesafe] object internal {
 
-      def proveSame[N2](implicit self: SS =:= N2): Unit = {}
+      def canPlus(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
+
+      def proveSame[N2](implicit proof: SS =:= N2): Unit = {}
 
       // 'prove' means happening only in compile-time
-      def proveEqual[N2](implicit self: Require[SS == N2]): Unit = {
+      def proveEqual[N2](implicit proof: Require[SS == N2]): Unit = {
 
         //TODO: need run-time proof?
       }
 
       // TODO: should be named proofEqual, require should do everything in runtime
-      def requireEqual(w: Lt[Int])(implicit self: Require[SS == w.T]): Unit = {
+      def requireEqual(w: Lt[Int])(implicit proof: Require[SS == w.T]): Unit = {
 
         proveEqual[w.T]
 
         require(w.value == number)
       }
     }
-
   }
 
-  object Const {
+  object Const {}
 
-//    case class Same[S](self: Const[S]) extends Proof.Invar[S] {
-//      override type Out = Const[S]
-//
-//      override def out: Out = self
-//    }
-//
-//    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
+  class FromOp[S <: Op](val singleton: S) extends Const[S] {
+    override lazy val number: Int = singleton.value.asInstanceOf[Int]
   }
-
-  class FromOp[S <: Op](val number: Int) extends Const[S]
 
   object FromOp {
 
-    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s.value.asInstanceOf[Int])
+    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s)
   }
 
   // this makes it impossible to construct directly from Int type
-  class FromLiteral[S <: Int](val w: Witness.Lt[Int]) extends Const[S] {
+  class FromLiteral[S <: Int](val singleton: S) extends Const[S] {
 
-    override def number: Int = w.value
+    override def number: Int = singleton
   }
 
   object FromLiteral {
 
-    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] =
-      new FromLiteral[S](w)
+    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] = {
+      new FromLiteral[S](w.value)
+    }
   }
 
   def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {
