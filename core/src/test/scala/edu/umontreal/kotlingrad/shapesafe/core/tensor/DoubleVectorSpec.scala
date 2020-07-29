@@ -170,19 +170,19 @@ class DoubleVectorSpec extends BaseSpec {
       val v0 = DoubleVector.random(6)
       val v1 = v0.pad(3)
 
-      {
-        val aa = v0.reify.arity
-
-        print_@(WideTyped(aa).viz)
-        aa.internal.dummyImp(3)
-      }
-
-      {
-        val aa = DoubleVector.asReified(v0).arity
-
-        print_@(WideTyped(aa).viz)
-        aa.internal.dummyImp(3)
-      }
+//      {
+//        val aa = v0.reify.arity
+//
+//        print_@(WideTyped(aa).viz)
+//        aa.internal.dummyImp(3)
+//      }
+//
+//      {
+//        val aa = DoubleVector.asReified(v0).arity
+//
+//        print_@(WideTyped(aa).viz)
+//        aa.internal.dummyImp(3)
+//      }
 
 //      {
 //        val aa = v0.arity
