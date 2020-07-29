@@ -21,13 +21,14 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
-      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
+      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     ) // TODO: scalafmt in IDEA failed here
 
     v.shape.internal.requireEqual(50)
   }
 
-  it(s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
+  it(
+    s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
 
     shouldNotCompile(
       "DoubleVector.dummy(1.0)"
@@ -43,11 +44,11 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
-  val stable: Int = 1+2 // stable path!
-  lazy val stableLzy: Int = 1+2 // stable path!
+  val stable: Int = 1 + 2 // stable path!
+  lazy val stableLzy: Int = 1 + 2 // stable path!
 
-  def unstableFn: Int = 1+2 // no path
-  var unstableVar: Int = 1+2 // no path
+  def unstableFn: Int = 1 + 2 // no path
+  var unstableVar: Int = 1 + 2 // no path
 
   describe("zeros") {
 
@@ -100,11 +101,10 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
-
   describe("dot_*") {
 
     it("type manually defined") {
-      val w3 =Witness(3)
+      val w3 = Witness(3)
       type A3 = Arity.FromLiteral[w3.T]
 
       val w4 = Witness(4)
@@ -112,7 +112,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)
-      val v3: DoubleVector[A4]  = DoubleVector.zeros(4)
+      val v3: DoubleVector[A4] = DoubleVector.zeros(4)
 
       assert((v1 dot_* v2) == 0.0)
 
@@ -126,7 +126,7 @@ class DoubleVectorSpec extends BaseSpec {
       val v0 = DoubleVector(1.0, 1.0, 1.0)
       val v1 = DoubleVector.zeros(3)
       val v2 = DoubleVector.zeros(3)
-      val v3  = DoubleVector.zeros(4)
+      val v3 = DoubleVector.zeros(4)
 
       assert((v0 dot_* v2) == 0.0)
       assert((v1 dot_* v2) == 0.0)
@@ -166,13 +166,29 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v0 = DoubleVector.random(6)
 
-      val result = v0.pad(3).reify
+      val result = v0.pad(3)
 
-      result.crossValidate()
-      result.arity.internal.requireEqual(12)
+//      result.crossValidate()
+
+      {
+        val aa = v0.shape
+        aa.internal.requireEqual(6)
+      }
+
+      {
+        val aa = v0.arity
+
+        aa.internal.dummyImp(3)
+
+        aa.internal.requireEqual(12)
+      }
+
+//      {
+//        val aa = result.arity
+//        aa.internal.requireEqual(12)
+//      }
     }
   }
-
 
   describe("conv") {
 

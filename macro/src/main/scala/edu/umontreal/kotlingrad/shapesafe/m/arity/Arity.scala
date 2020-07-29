@@ -3,7 +3,7 @@ package edu.umontreal.kotlingrad.shapesafe.m.arity
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
 import edu.umontreal.kotlingrad.shapesafe.m.util.WideTyped
 import shapeless.Witness
-import singleton.ops.{==, Require}
+import singleton.ops.{+, ==, Require}
 
 import scala.language.implicitConversions
 
@@ -29,21 +29,24 @@ object Arity {
 
     @transient protected[shapesafe] object internal {
 
-      def proveSame[N2](implicit self: SS =:= N2): Unit = {}
+      def dummyImp(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
+
+      def proveSame[N2](implicit proof: SS =:= N2): Unit = {}
 
       // 'prove' means happening only in compile-time
-      def proveEqual[N2](implicit self: Require[SS == N2]): Unit = {
+      def proveEqual[N2](implicit proof: Require[SS == N2]): Unit = {
 
         //TODO: need run-time proof?
       }
 
       // TODO: should be named proofEqual, require should do everything in runtime
-      def requireEqual(w: Lt[Int])(implicit self: Require[SS == w.T]): Unit = {
+      def requireEqual(w: Lt[Int])(implicit proof: Require[SS == w.T]): Unit = {
 
         proveEqual[w.T]
 
         require(w.value == number)
       }
+
     }
 
   }

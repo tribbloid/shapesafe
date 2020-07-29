@@ -12,6 +12,8 @@ import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
 
+import scala.language.implicitConversions
+
 class DoubleVector[A1 <: Shape](
     val shape: A1,
     val data: Vec[Double] // should support sparse/lazy vector
@@ -160,19 +162,9 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  // TODO: this doesn't work: Cannot prove requirement Require[...]
-  //  waiting for new versions of singleton-ops?
-  implicit class Reify[A1 <: Shape, P <: Proof](
-      self: DoubleVector[A1]
-  )(
-      implicit prove: A1 ~~> P
-  ) {
+  case class Reified[A1 <: Arity](self: DoubleVector[A1]) {
 
-    val arity: P#Out = {
-
-      val proof = prove(self.shape)
-      proof.out
-    }
+    val arity: A1 = self.shape
 
     def crossValidate(): Unit = {
 
@@ -182,5 +174,14 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit class ReifiedView[A1 <: Arity](self: DoubleVector[A1]) extends Reify[A1, A1](self) {}
+  implicit def asReified[A1 <: Shape, P <: Proof](v: DoubleVector[A1])(
+      implicit prove: A1 ~~> P
+  ): Reified[P#Out] = {
+
+    val proof = prove(v.shape)
+    val arity: P#Out = proof.out
+
+    val result = new DoubleVector(arity, v.data)
+    Reified(result)
+  }
 }

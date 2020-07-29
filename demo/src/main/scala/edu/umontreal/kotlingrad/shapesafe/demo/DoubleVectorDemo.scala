@@ -9,14 +9,13 @@ object DoubleVectorDemo {
 
   def main(args: Array[String]): Unit = {
 
-
     val x3 = DoubleVector(1.0, 2.0, 3.0)
     val x50 = DoubleVector(
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
-      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0, //
+      1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     )
 
     val y3 = DoubleVector.random(3)
@@ -53,8 +52,8 @@ object DoubleVectorDemo {
     val _3 = Arity(3)
 
     def printD3[A <: Shape](v: DoubleVector[A])(
-      implicit
-      proofOfArity: A MayEqual _3.Out ~~> Proof
+        implicit
+        proofOfArity: A MayEqual _3.Out ~~> Proof
     ): Unit = {
 
       println(v)
@@ -63,7 +62,6 @@ object DoubleVectorDemo {
     printD3(DoubleVector.random(3))
 
     //    printD3(DoubleVector.random(4)) // doesn't compile
-
 
   }
 }
