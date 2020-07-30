@@ -23,13 +23,15 @@ object Arity {
 
   trait Const[S] extends Arity with Proof.Invar[S] {
 
+    def singleton: S
+
     def number: Int
 
     final override def numberOpt: Option[Int] = Some(number)
 
     @transient protected[shapesafe] object internal {
 
-      def dummyImp(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
+      def canPlus(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
 
       def proveSame[N2](implicit proof: SS =:= N2): Unit = {}
 
@@ -62,23 +64,25 @@ object Arity {
 //    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
   }
 
-  class FromOp[S <: Op](val number: Int) extends Const[S]
+  class FromOp[S <: Op](val singleton: S) extends Const[S] {
+    override lazy val number: Int = singleton.value.asInstanceOf[Int]
+  }
 
   object FromOp {
 
-    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s.value.asInstanceOf[Int])
+    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s)
   }
 
   // this makes it impossible to construct directly from Int type
-  class FromLiteral[S <: Int](val w: Witness.Lt[Int]) extends Const[S] {
+  class FromLiteral[S <: Int](val singleton: S) extends Const[S] {
 
-    override def number: Int = w.value
+    override def number: Int = singleton
   }
 
   object FromLiteral {
 
     implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] = {
-      new FromLiteral[S](w)
+      new FromLiteral[S](w.value)
     }
   }
 

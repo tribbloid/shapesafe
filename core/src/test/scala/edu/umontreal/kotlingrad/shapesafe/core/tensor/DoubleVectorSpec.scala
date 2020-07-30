@@ -168,64 +168,25 @@ class DoubleVectorSpec extends BaseSpec {
     it("spike 1") {
 
       val v0 = DoubleVector.random(6)
-      val v1 = v0.pad(3)
 
       {
-        val result = v1.reify
+        val result = v0.reify
 
         val aa = result.arity
 
         {
-          print_@(WideTyped(result.arity).viz)
-          // this works
           result.crossValidate()
-          result.arity.internal.requireEqual(12)
+          result.arity.internal.requireEqual(6)
         }
 
         {
-          print_@(WideTyped(aa).viz)
-          // this doesn't, how did it happened?
+          print_@(VizType[aa.type])
 
-          val ss = aa.single
-          println(VizType[aa.type])
-
-//          aa.internal.dummyImp(3)
-//          aa.internal.requireEqual(12)
+//          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
         }
       }
 
     }
-
-//    it("spike 2") {
-//
-//      val v0 = DoubleVector.random(6)
-//      val v1 = v0.pad(3)
-//
-//      {
-//        val aa = DoubleVector.asReified(v0).arity
-//
-//        print_@(WideTyped(aa).viz)
-//        aa.internal.dummyImp(3)
-//      }
-//
-//      {
-//        val aa = v0.arity
-//
-//        print_@(WideTyped(aa).viz)
-//        aa.internal.dummyImp(3)
-//      }
-//
-//      {
-//        val aa = DoubleVector.asReified(v1)
-//
-//        print_@(WideTyped(aa).viz)
-//      }
-//      {
-//        val aa = v1.arity
-//
-//        print_@(WideTyped(aa).viz)
-//      }
-//    }
 
     it("1") {
 
