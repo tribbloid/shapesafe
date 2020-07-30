@@ -77,8 +77,9 @@ object Arity {
 
   object FromLiteral {
 
-    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] =
+    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] = {
       new FromLiteral[S](w)
+    }
   }
 
   def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {

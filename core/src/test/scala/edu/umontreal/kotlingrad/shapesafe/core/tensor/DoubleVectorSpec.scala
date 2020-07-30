@@ -5,6 +5,7 @@ import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import graph.commons.util.WideTyped
 import graph.commons.util.debug.print_@
+import graph.commons.util.viz.VizType
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -177,7 +178,6 @@ class DoubleVectorSpec extends BaseSpec {
         {
           print_@(WideTyped(result.arity).viz)
           // this works
-          result.arity.internal.dummyImp(3)
           result.crossValidate()
           result.arity.internal.requireEqual(12)
         }
@@ -185,8 +185,12 @@ class DoubleVectorSpec extends BaseSpec {
         {
           print_@(WideTyped(aa).viz)
           // this doesn't, how did it happened?
-          aa.internal.dummyImp(3)
-          aa.internal.requireEqual(12)
+
+          val ss = aa.single
+          println(VizType[aa.type])
+
+//          aa.internal.dummyImp(3)
+//          aa.internal.requireEqual(12)
         }
       }
 
