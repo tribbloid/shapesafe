@@ -180,7 +180,7 @@ class DoubleVectorSpec extends BaseSpec {
         }
 
         {
-          print_@(VizType[aa.type])
+          print_@(WideTyped(aa).viz)
 
 //          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
         }
