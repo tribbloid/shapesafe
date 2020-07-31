@@ -22,6 +22,7 @@ allprojects {
     version = "0.0.1-SNAPSHOT"
 
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-dev")
@@ -47,6 +48,10 @@ allprojects {
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("stdlib-jdk8"))
+
+        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0") // used by all modules
+
+//        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
 
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
