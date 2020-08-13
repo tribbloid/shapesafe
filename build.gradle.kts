@@ -149,6 +149,9 @@ allprojects {
                 showExceptions = true
                 showCauses = true
                 showStackTraces = true
+
+                // stdout is used for occasional manual verification
+                showStandardStreams = true
             }
         }
     }
