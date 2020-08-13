@@ -1,6 +1,8 @@
 package edu.umontreal.kotlingrad.shapesafe
 
+import graph.commons.util.ScalaReflection
 import org.scalatest.FunSpec
+import pprint.PPrinter
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
@@ -14,6 +16,13 @@ abstract class BaseSpec extends FunSpec {
   val shouldNotCompile: illTyped.type = illTyped
 
   val big: BaseSpec.big.type = BaseSpec.big
+
+  def showRaw(v: Any): String = {
+
+    ScalaReflection.universe.showRaw(v)
+
+//    pprint.tokenize(v).mkString("\n")
+  }
 }
 
 object BaseSpec {

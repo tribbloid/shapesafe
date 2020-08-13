@@ -75,7 +75,6 @@ allprojects {
 
         withType<ScalaCompile> {
 
-
             targetCompatibility = jvmTarget
 
             scalaCompileOptions.apply {
@@ -99,6 +98,9 @@ allprojects {
 
                         ,
                         "-Yissue-debug"
+//                        ,
+//                        "-Ytyper-debug"
+//                        "-Vtyper"
 
                         // the following only works on scala 2.13
 //                        ,

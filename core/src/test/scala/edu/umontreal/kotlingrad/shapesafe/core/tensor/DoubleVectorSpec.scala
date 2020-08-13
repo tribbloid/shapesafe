@@ -3,10 +3,12 @@ package edu.umontreal.kotlingrad.shapesafe.core.tensor
 import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import graph.commons.util.ScalaReflection.universe.PolyType
 import graph.commons.util.WideTyped
 import graph.commons.util.debug.print_@
 import graph.commons.util.viz.VizType
 import shapeless.{HNil, ProductArgs, Witness}
+import singleton.ops.+
 
 class DoubleVectorSpec extends BaseSpec {
 
@@ -165,6 +167,11 @@ class DoubleVectorSpec extends BaseSpec {
 
   describe("pad") {
 
+    it("spike 0") {
+
+      val v0 = DoubleVector
+    }
+
     it("spike 1") {
 
       val v0 = DoubleVector.random(6)
@@ -182,10 +189,52 @@ class DoubleVectorSpec extends BaseSpec {
         {
           print_@(WideTyped(aa).viz)
 
-//          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
-        }
-      }
+          import graph.commons.util.ScalaReflection.universe
 
+          def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
+
+          val aaT = sniff(aa).tpe
+
+          print_@(showRaw(aaT))
+          print_@(showRaw(aaT.typeSymbol))
+          print_@(showRaw(aaT.typeSymbol.typeSignature))
+          print_@(aaT.typeSymbol.typeSignature)
+
+          print_@(aaT)
+          print_@(universe.showRaw(aaT))
+          print_@(aaT.dealias)
+          print_@(universe.showRaw(aaT.dealias))
+          print_@(aaT.typeSymbol)
+          print_@(universe.showRaw(aaT.typeSymbol))
+
+          print_@(
+            aaT.baseClasses.map { clazz =>
+              val baseType = aaT.baseType(clazz)
+              baseType
+            }
+          )
+
+          print_@(
+            aaT.baseClasses.map { clazz =>
+              val baseType = aaT.baseType(clazz)
+              universe.showRaw(baseType)
+            }
+          )
+
+//          val sT = aaT.baseType(aaT.baseClasses.head).typeArgs.head
+//
+//          print_@(showRaw(sT))
+//          print_@(showRaw(sT.typeSymbol))
+//          print_@(showRaw(sT.typeSymbol.typeSignature))
+//          print_@(sT)
+
+          //          val ttag2 = universe.typeTag[Witness.`3`]
+          //          val ttag3 = universe.typeTag[aa.SS + Witness.`3`]
+
+          //          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
+        }
+
+      }
     }
 
     it("1") {
