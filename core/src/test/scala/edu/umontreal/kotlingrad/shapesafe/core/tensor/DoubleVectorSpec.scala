@@ -189,6 +189,8 @@ class DoubleVectorSpec extends BaseSpec {
         {
           print_@(WideTyped(aa).viz)
 
+          print_@(VizType[aa.type])
+
           import graph.commons.util.ScalaReflection.universe
 
           def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
@@ -221,6 +223,8 @@ class DoubleVectorSpec extends BaseSpec {
             }
           )
 
+          implicitly[aa.SS + Witness.`3`.T]
+
 //          val sT = aaT.baseType(aaT.baseClasses.head).typeArgs.head
 //
 //          print_@(showRaw(sT))
@@ -231,7 +235,7 @@ class DoubleVectorSpec extends BaseSpec {
           //          val ttag2 = universe.typeTag[Witness.`3`]
           //          val ttag3 = universe.typeTag[aa.SS + Witness.`3`]
 
-          //          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
+//          aa.internal.canPlus(3) // TODO: this line triggers the implicit error
         }
 
       }

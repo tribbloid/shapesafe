@@ -48,9 +48,7 @@ object Arity {
 
         require(w.value == number)
       }
-
     }
-
   }
 
   object Const {
