@@ -223,7 +223,7 @@ class DoubleVectorSpec extends BaseSpec {
             }
           )
 
-          implicitly[aa.SS + Witness.`3`.T]
+//          implicitly[aa.SS + Witness.`3`.T]
 
 //          val sT = aaT.baseType(aaT.baseClasses.head).typeArgs.head
 //
