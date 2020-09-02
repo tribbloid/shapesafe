@@ -5,7 +5,7 @@ import org.scalatest.FunSpec
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
-abstract class BaseSpec extends FunSpec {
+abstract class BaseSpec extends FunSpec with Suitex {
 
   /**
     * ScalaTest assertDoesNotCompile sometimes malfunction (due to unwashed execution order?)
