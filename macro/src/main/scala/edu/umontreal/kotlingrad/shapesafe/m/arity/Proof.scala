@@ -7,27 +7,15 @@ import scala.language.higherKinds
   */
 trait Proof extends Serializable {
 
-  def self: Operand
-
   type Out <: Arity
-
   def out: Out
 }
 
 object Proof {
 
-  trait UnsafeLike extends Proof {}
+  trait Invar[S] extends Proof {
 
-  trait Unsafe extends UnsafeLike {
-
-    final type Out = Arity.Unsafe
-  }
-
-  trait Out_=[+O <: Arity] extends Proof {
-    type Out <: O
-  }
-
-  trait Invar[S] extends Out_=[Arity.Const[S]] {
+    type Out <: Arity.Const[S]
 
     type SS = S
   }

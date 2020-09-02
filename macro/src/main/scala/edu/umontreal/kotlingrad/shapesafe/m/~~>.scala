@@ -1,7 +1,5 @@
 package edu.umontreal.kotlingrad.shapesafe.m
 
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Proven
-
 import scala.language.implicitConversions
 
 // doesn't extend T => R intentionally
