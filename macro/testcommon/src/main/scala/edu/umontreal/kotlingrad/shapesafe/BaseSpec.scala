@@ -4,6 +4,7 @@ import org.scalatest.FunSpec
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
+//TODO: merge into :graph-commons:testlib
 abstract class BaseSpec extends FunSpec {
 
   /**
