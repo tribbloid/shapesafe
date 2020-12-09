@@ -38,9 +38,9 @@ allprojects {
 
     dependencies {
 
-        implementation("org.scala-lang:scala-compiler:${vs.scalaV}")
-        implementation("org.scala-lang:scala-library:${vs.scalaV}")
-        implementation("org.scala-lang:scala-reflect:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
         scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")

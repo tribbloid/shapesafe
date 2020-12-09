@@ -2,6 +2,8 @@ import org.gradle.api.Project
 
 class Versions(self: Project) {
 
+    val scalaGroup: String = self.properties.get("scalaGroup").toString()
+
     val scalaV: String = self.properties.get("scalaVersion").toString()
 
     protected val scalaVParts = scalaV.split('.')
