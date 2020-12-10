@@ -3,10 +3,10 @@ package edu.umontreal.kotlingrad.shapesafe.core.tensor
 import breeze.linalg.DenseVector
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
-import graph.commons.util.ScalaReflection.universe.PolyType
-import graph.commons.util.WideTyped
-import graph.commons.util.debug.print_@
-import graph.commons.util.viz.VizType
+import com.tribbloids.graph.commons.util.ScalaReflection.universe.PolyType
+import com.tribbloids.graph.commons.util.WideTyped
+import com.tribbloids.graph.commons.util.debug.print_@
+import com.tribbloids.graph.commons.util.viz.VizType
 import shapeless.{HNil, ProductArgs, Witness}
 import singleton.ops.+
 
@@ -191,7 +191,7 @@ class DoubleVectorSpec extends BaseSpec {
 
           print_@(VizType[aa.type])
 
-          import graph.commons.util.ScalaReflection.universe
+          import com.tribbloids.graph.commons.util.ScalaReflection.universe
 
           def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
 

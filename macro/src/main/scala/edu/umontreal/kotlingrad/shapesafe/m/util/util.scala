@@ -1,6 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe.m
 
-import graph.commons.util.ScalaReflection
+import com.tribbloids.graph.commons.util.ScalaReflection
 
 package object util {
 

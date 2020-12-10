@@ -1,6 +1,6 @@
 package edu.umontreal.kotlingrad.shapesafe
 
-import graph.commons.util.ScalaReflection
+import com.tribbloids.graph.commons.util.ScalaReflection
 import org.scalatest.FunSpec
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}

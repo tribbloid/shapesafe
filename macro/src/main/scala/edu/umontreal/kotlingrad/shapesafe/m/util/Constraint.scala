@@ -9,7 +9,7 @@ trait Constraint {}
 
 object Constraint {
 
-  import graph.commons.util.ScalaReflection.universe
+  import com.tribbloids.graph.commons.util.ScalaReflection.universe
 
   case class ElementOfType[Data <: HList, Element: TypeTag]() {
 

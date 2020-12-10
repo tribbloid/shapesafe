@@ -15,8 +15,8 @@ class AritySpec extends BaseSpec {
         plus: S + w.T
     ): Unit = {
 
-      val out: Arity.Const[S] = subject.out
-      val out2: Arity.Const[S] = subject.out.out
+      val out = subject.out
+      val out2 = subject.out.out
 
       subject.internal.requireEqual(w)(proof)
       out.internal.requireEqual(w)(proof) // scala compiler may fumble on this one

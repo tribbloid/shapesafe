@@ -1,7 +1,7 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
 import edu.umontreal.kotlingrad.shapesafe.m.arity.Utils.Op
-import graph.commons.util.WideTyped
+import com.tribbloids.graph.commons.util.WideTyped
 import shapeless.Witness
 import singleton.ops.{+, ==, Require}
 
@@ -9,8 +9,8 @@ import scala.language.implicitConversions
 
 trait Arity extends Proven {
 
-  override type Out = this.type
-  override def out: Out = this
+  override type Out >: this.type <: Arity
+  override def out: this.type = this
 
   def numberOpt: Option[Int] // run-time
 
@@ -22,6 +22,8 @@ object Arity {
   import Witness._
 
   trait Const[S] extends Arity with Proof.Invar[S] {
+
+    override type Out >: this.type <: Const[S]
 
     def singleton: S
 
@@ -51,16 +53,7 @@ object Arity {
     }
   }
 
-  object Const {
-
-//    case class Same[S](self: Const[S]) extends Proof.Invar[S] {
-//      override type Out = Const[S]
-//
-//      override def out: Out = self
-//    }
-//
-//    implicit def same[S]: Const[S] Implies Same[S] = v => Same(v)
-  }
+  object Const {}
 
   class FromOp[S <: Op](val singleton: S) extends Const[S] {
     override lazy val number: Int = singleton.value.asInstanceOf[Int]
