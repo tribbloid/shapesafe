@@ -1,7 +1,5 @@
 package edu.umontreal.kotlingrad.shapesafe.m.arity
 
-import edu.umontreal.kotlingrad.shapesafe.m.~~>
-
 trait Proven extends Operand with Proof {
 
   final def self: this.type = this

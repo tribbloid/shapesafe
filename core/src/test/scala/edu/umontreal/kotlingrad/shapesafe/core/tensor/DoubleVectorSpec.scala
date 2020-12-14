@@ -1,14 +1,12 @@
 package edu.umontreal.kotlingrad.shapesafe.core.tensor
 
 import breeze.linalg.DenseVector
-import edu.umontreal.kotlingrad.shapesafe.BaseSpec
-import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
-import com.tribbloids.graph.commons.util.ScalaReflection.universe.PolyType
 import com.tribbloids.graph.commons.util.WideTyped
 import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
+import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
-import singleton.ops.+
 
 class DoubleVectorSpec extends BaseSpec {
 
