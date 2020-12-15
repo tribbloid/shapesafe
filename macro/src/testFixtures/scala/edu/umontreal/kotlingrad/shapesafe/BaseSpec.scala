@@ -1,12 +1,11 @@
 package edu.umontreal.kotlingrad.shapesafe
 
 import com.tribbloids.graph.commons.util.ScalaReflection
-import org.scalatest.FunSpec
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
 //TODO: merge into :graph-commons:testlib
-abstract class BaseSpec extends FunSpec {
+trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   /**
     * ScalaTest assertDoesNotCompile sometimes malfunction (due to unwashed execution order?)

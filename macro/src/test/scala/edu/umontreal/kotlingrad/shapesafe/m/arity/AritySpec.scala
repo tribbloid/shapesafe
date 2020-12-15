@@ -57,10 +57,10 @@ class AritySpec extends BaseSpec {
     }
   }
   // doesn't work at the moment
-  //  it("OfIntLike") {
-  //
-  //    val v1: _ <: OfIntLike = 3
-  //    println(v1)
-  //  }
+  it("OfIntLike") {
+
+    val v1 = Arity(3)
+    println(v1)
+  }
 
 }

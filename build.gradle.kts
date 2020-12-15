@@ -1,10 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    base
+//    base
     java
     scala
-    kotlin("jvm") version "1.3.72"
+    kotlin("jvm") version "1.3.72" // TODO: remove?
     idea
 }
 
@@ -12,6 +12,7 @@ allprojects {
 
     apply(plugin = "java")
     apply(plugin = "java-library")
+    apply(plugin = "java-test-fixtures")
     apply(plugin = "scala")
     apply(plugin = "kotlin")
     apply(plugin = "idea")
@@ -53,12 +54,11 @@ allprojects {
 
 //        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
 
+        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
-
     }
 
     task("dependencyTree") {
