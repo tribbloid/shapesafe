@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.ScalaReflection
 import shapeless.test.illTyped
 import shapeless.{HList, Nat, Witness}
 
-//TODO: merge into :graph-commons:testlib
+//TODO: merge into :graph-commons
 trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   /**

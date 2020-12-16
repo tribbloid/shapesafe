@@ -45,7 +45,8 @@ allprojects {
         implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
-        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+//        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+        //TODO: incompatible with testFixtures?
 
         implementation(kotlin("stdlib"))
         implementation(kotlin("stdlib-jdk8"))
