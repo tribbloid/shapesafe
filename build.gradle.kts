@@ -85,25 +85,24 @@ allprojects {
                 loggingLevel = "verbose"
 
                 additionalParameters = listOf(
-                        "-encoding", "utf8",
-                        "-unchecked",
-                        "-deprecation",
-                        "-feature",
+                    "-encoding", "utf8",
+                    "-unchecked",
+                    "-deprecation",
+                    "-feature",
 //                            "-Xfatal-warnings",
 
-                        "-Xlint:poly-implicit-overload",
-                        "-Xlint:option-implicit",
+                    "-Xlint:poly-implicit-overload",
+                    "-Xlint:option-implicit",
 
-                        "-Xlog-implicits",
-                        "-Xlog-implicit-conversions"
+                    "-Xlog-implicits",
+                    "-Xlog-implicit-conversions",
 
-                        ,
-                        "-Yissue-debug"
+                    "-Yissue-debug"
 //                        ,
 //                        "-Ytyper-debug"
 //                        "-Vtyper"
 
-                        // the following only works on scala 2.13
+                    // the following only works on scala 2.13
 //                        ,
 //                        "-Xlint:implicit-not-found",
 //                        "-Xlint:implicit-recursion"
@@ -116,7 +115,7 @@ allprojects {
 
                     // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
                     jvmArgs = listOf(
-                            "-Xss256m"
+                        "-Xss256m"
                     )
                 }
             }

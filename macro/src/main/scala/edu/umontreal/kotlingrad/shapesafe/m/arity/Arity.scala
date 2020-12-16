@@ -33,7 +33,8 @@ object Arity {
 
     @transient protected[shapesafe] object internal {
 
-      def canPlus(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
+      // for test only
+      def _can_+(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
 
       def proveSame[N2](implicit proof: SS =:= N2): Unit = {}
 

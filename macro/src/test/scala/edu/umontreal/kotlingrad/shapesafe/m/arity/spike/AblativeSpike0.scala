@@ -1,11 +1,14 @@
-package edu.umontreal.kotlingrad.shapesafe.m.arity
+package edu.umontreal.kotlingrad.shapesafe.m.arity.spike
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import edu.umontreal.kotlingrad.shapesafe.BaseSpec
+import edu.umontreal.kotlingrad.shapesafe.m.arity.Arity
+import org.scalatest.Ignore
 import shapeless.Witness
 import singleton.ops.+
 
-class ArityAblative extends BaseSpec {
+@Ignore // TODO: looks like it is solved in the latest compiler? What's the difference to [[ErrorCase0]]
+class AblativeSpike0 extends BaseSpec {
 
   val a = Arity(6)
 //  val aa: Arity.FromLiteral[Witness.`6`.T] = a.out
@@ -22,18 +25,12 @@ class ArityAblative extends BaseSpec {
     assert(s1 == s2)
   }
 
-  it("stripped to the core") {
+  implicitly[a.SS + Witness.`3`.T]
+  implicitly[aa.SS + Witness.`3`.T]
 
-    {
-      assert_aViz_==(VizType[a.type])
+  it("types should be identical") {
 
-      implicitly[a.SS + Witness.`3`.T]
-    }
-
-    {
-      assert_aViz_==(VizType[aa.type])
-
-      implicitly[aa.SS + Witness.`3`.T]
-    }
+    assert_aViz_==(VizType[a.type])
+    assert_aViz_==(VizType[aa.type])
   }
 }
