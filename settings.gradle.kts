@@ -9,8 +9,8 @@ include(
     // also, despite its name it actually doesn't contain any macro, but it is an option in the future
     ":core",
     // uses common scala features
-    ":demo",
-    "spike"
+    ":demo"
+//    "spike"
 )
 
 
