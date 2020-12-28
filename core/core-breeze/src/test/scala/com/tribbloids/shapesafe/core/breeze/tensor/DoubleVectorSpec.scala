@@ -1,4 +1,4 @@
-package com.tribbloids.shapesafe.core.tensor
+package com.tribbloids.shapesafe.core.breeze.tensor
 
 import breeze.linalg.DenseVector
 import com.tribbloids.shapesafe.BaseSpec
@@ -28,7 +28,8 @@ class DoubleVectorSpec extends BaseSpec {
   }
 
   it(
-    s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation") {
+    s"... won't cause ${classOf[ProductArgs].getSimpleName}.applyDynamic to contaminate compile-time method validation"
+  ) {
 
     shouldNotCompile(
       "DoubleVector.dummy(1.0)"

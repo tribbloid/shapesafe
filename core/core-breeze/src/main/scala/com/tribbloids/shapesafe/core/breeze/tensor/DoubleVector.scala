@@ -1,20 +1,20 @@
-package com.tribbloids.shapesafe.core.tensor
+package com.tribbloids.shapesafe.core.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
+import com.tribbloids.shapesafe.core.tensor.Const.VecShape
 import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
 import com.tribbloids.shapesafe.m.arity.binary.MayEqual
 import com.tribbloids.shapesafe.m.arity.nullary.OfSize
-import com.tribbloids.shapesafe.m.arity.{Arity, Proof}
+import com.tribbloids.shapesafe.m.arity.{Arity, ProofOfArity}
 import com.tribbloids.shapesafe.m.util.Constraint.ElementOfType
 import com.tribbloids.shapesafe.m.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
-
 import scala.language.implicitConversions
 
-class DoubleVector[A1 <: Shape](
+class DoubleVector[A1 <: VecShape](
     val shape: A1,
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
@@ -27,7 +27,7 @@ class DoubleVector[A1 <: Shape](
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
-  def reify[P <: Proof](implicit prove: A1 ~~> P): DoubleVector[P#Out] = {
+  def reify[P <: ProofOfArity](implicit prove: A1 ~~> P): DoubleVector[P#Out] = {
 
     val proof = prove(shape)
     val out = proof.out
@@ -36,7 +36,7 @@ class DoubleVector[A1 <: Shape](
 
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: A1 MayEqual A2 ~~> Proof
+      proof: A1 MayEqual A2 ~~> ProofOfArity
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -44,7 +44,7 @@ class DoubleVector[A1 <: Shape](
     result
   }
 
-  def concat[A2 <: Shape, P <: Proof](that: DoubleVector[A2])(
+  def concat[A2 <: VecShape, P <: ProofOfArity](that: DoubleVector[A2])(
       implicit
       lemma: (A1 T_+ A2) ~~> P
   ): DoubleVector[P#Out] = { // TODO: always succesful, can execute lazily without lemma
@@ -57,7 +57,7 @@ class DoubleVector[A1 <: Shape](
     new DoubleVector(proof.out, data)
   }
 
-  def pad[P <: Proof](padding: Witness.Lt[Int])(
+  def pad[P <: ProofOfArity](padding: Witness.Lt[Int])(
       implicit
       lemma: (A1 T_+ (FromLiteral[padding.T] T_* Arity._2.Wide)) ~~> P
   ): DoubleVector[P#Out] = {
@@ -75,8 +75,8 @@ class DoubleVector[A1 <: Shape](
   }
 
   def conv[
-      A2 <: Shape,
-      P <: Proof
+      A2 <: VecShape,
+      P <: ProofOfArity
   ](
       kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
@@ -104,8 +104,8 @@ class DoubleVector[A1 <: Shape](
   }
 
   def conv[
-      A2 <: Shape,
-      P <: Proof
+      A2 <: VecShape,
+      P <: ProofOfArity
   ](
       kernel: DoubleVector[A2]
   )(
@@ -160,9 +160,9 @@ object DoubleVector extends ProductArgs {
 
   @transient object unsafe {
 
-    def zeros(number: Int): DoubleVector[Var] = {
+    def zeros(number: Int): DoubleVector[Dynamic] = {
 
-      new DoubleVector(Var(number), DenseVector.fill(number)(0.0))
+      new DoubleVector(Dynamic(number), DenseVector.fill(number)(0.0))
     }
   }
 
@@ -178,7 +178,7 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit def asReified[A1 <: Shape, P <: Proof](v: DoubleVector[A1])(
+  implicit def asReified[A1 <: VecShape, P <: ProofOfArity](v: DoubleVector[A1])(
       implicit prove: A1 ~~> P
   ): Reified[P#Out] = {
     Reified(v.reify)

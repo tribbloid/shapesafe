@@ -1,7 +1,7 @@
-val vv: Versions = versions()
+val vs: Versions = versions()
 
 dependencies {
 
-    implementation(project(":core"))
+    implementation(project(":core:core-breeze"))
     testApi(testFixtures(project(":macro")))
 }

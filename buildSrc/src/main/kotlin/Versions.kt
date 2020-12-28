@@ -12,4 +12,6 @@ class Versions(self: Project) {
     val scalaMinorV: String = scalaVParts[2]
 
     val sparkV: String = self.properties.get("sparkVersion").toString()
+
+    val scalatestV: String = "3.2.3"
 }

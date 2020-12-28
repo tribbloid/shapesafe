@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.arity
 
 import com.tribbloids.shapesafe.BaseSpec
 
-trait OperandFixture extends BaseSpec {
+trait ExpressionFixture extends BaseSpec {
 
   implicit val a = Arity(3)
   //    type A = a.type

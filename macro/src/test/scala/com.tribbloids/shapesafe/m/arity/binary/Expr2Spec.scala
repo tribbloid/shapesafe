@@ -1,8 +1,8 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
-import com.tribbloids.shapesafe.m.arity.{Arity, Operand, OperandFixture}
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ExpressionFixture}
 
-class Op2Spec extends OperandFixture {
+class Expr2Spec extends ExpressionFixture {
 
   import com.tribbloids.shapesafe.m.arity.DSL._
 
@@ -10,7 +10,7 @@ class Op2Spec extends OperandFixture {
 
     it("arity trivially") {
 
-      val p = a.asProof
+      val p = a.proveArity
       p.out.internal.requireEqual(3)
     }
 
@@ -18,7 +18,7 @@ class Op2Spec extends OperandFixture {
 
       val op = a + b
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(7)
     }
 
@@ -27,7 +27,7 @@ class Op2Spec extends OperandFixture {
       val op0 = a + b
       val op = op0 + c
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(12)
     }
 
@@ -35,7 +35,7 @@ class Op2Spec extends OperandFixture {
 
       val op = a + b + c
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(12)
     }
 
@@ -43,7 +43,7 @@ class Op2Spec extends OperandFixture {
 
       val op = a + b + c + Arity._1.value
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(13)
     }
 
@@ -51,7 +51,7 @@ class Op2Spec extends OperandFixture {
 
       val op = b / a
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(1)
     }
 
@@ -68,7 +68,7 @@ class Op2Spec extends OperandFixture {
 
       val op = (a + b - c) / Arity._1.value
 
-      val p = op.asProof
+      val p = op.proveArity
       p.out.internal.requireEqual(2)
     }
   }
@@ -79,7 +79,7 @@ class Op2Spec extends OperandFixture {
 
       it("a") {
 
-        val op = Operand.Unprovable + a
+        val op = Expression.Unprovable + a
 
         shouldNotCompile(
           "op.asProof"
@@ -88,7 +88,7 @@ class Op2Spec extends OperandFixture {
 
       it("a + b") {
 
-        val op = Operand.Unprovable + (a + b)
+        val op = Expression.Unprovable + (a + b)
 
         shouldNotCompile(
           "op.asProof"

@@ -31,9 +31,9 @@ object Arity {
 
   import Witness._
 
-  trait Const[S] extends Arity.Known with Proof.Invar[S] {
+  trait Static[S] extends Arity.Known with ProofOfArity.Invar[S] {
 
-    override type Out >: this.type <: Const[S]
+    override type Out >: this.type <: Static[S]
 
     def singleton: S
 
@@ -60,9 +60,9 @@ object Arity {
     }
   }
 
-  object Const {}
+  object Static {}
 
-  class FromOp[S <: Op](val singleton: S) extends Const[S] {
+  class FromOp[S <: Op](val singleton: S) extends Static[S] {
     override lazy val number: Int = singleton.value.asInstanceOf[Int]
   }
 
@@ -72,7 +72,7 @@ object Arity {
   }
 
   // this makes it impossible to construct directly from Int type
-  class FromLiteral[S <: Int](val singleton: S) extends Const[S] {
+  class FromLiteral[S <: Int](val singleton: S) extends Static[S] {
 
     override def number: Int = singleton
   }
@@ -117,7 +117,7 @@ object Arity {
 
   trait Known extends Arity
 
-  trait Unsafe extends Arity with Proof.UnsafeLike
+  trait Unsafe extends Arity with ProofOfArity.UnsafeLike
 
   object Unsafe {
 
@@ -129,7 +129,7 @@ object Arity {
     override def number = throw new UnsupportedOperationException("[??]")
   }
 
-  case class Var(number: Int) extends Known with Unsafe {}
+  case class Dynamic(number: Int) extends Known with Unsafe {}
 
   // TODO: these doesn't work
   //  see https://stackoverflow.com/questions/62205940/when-calling-a-scala-function-with-compile-time-macro-how-to-failover-smoothly

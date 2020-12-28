@@ -1,10 +1,10 @@
 package com.tribbloids.shapesafe.m.arity.nullary
 
-import com.tribbloids.shapesafe.m.arity.OperandFixture
+import com.tribbloids.shapesafe.m.arity.ExpressionFixture
 import shapeless.{::, HNil, Nat}
 import singleton.ops.{==, Require}
 
-class OfSizeSpec extends OperandFixture {
+class OfSizeSpec extends ExpressionFixture {
 
   describe("observing HList") {
 

@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
 import com.tribbloids.shapesafe.m.arity.Utils.Op
-import com.tribbloids.shapesafe.m.arity.{Arity, Operand, Proof}
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ProofOfArity}
 import com.tribbloids.shapesafe.m.~~>
 import singleton.ops.impl.std
 
@@ -9,19 +9,19 @@ import scala.language.{existentials, higherKinds}
 import singleton.twoface.impl.TwoFaceAny
 
 abstract class UnsafeDomain[
-    A1 <: Operand,
-    A2 <: Operand,
-    O <: Proof
+    A1 <: Expression,
+    A2 <: Expression,
+    O <: ProofOfArity
 ] {
 
-  def bound1: A1 ~~> Proof
-  def bound2: A2 ~~> Proof
+  def bound1: A1 ~~> ProofOfArity
+  def bound2: A2 ~~> ProofOfArity
 
   def selectSafer(a1: A1, a2: A2): O
 
   case class ProbablyEqual(
       self: MayEqual[A1, A2]
-  ) extends Proof {
+  ) extends ProofOfArity {
 
     // TODO: if this type is not narrow enough, introduce a new generic param to outer class
     val proof: O = selectSafer(self.a1, self.a2)
@@ -32,10 +32,10 @@ abstract class UnsafeDomain[
   }
 
   case class Op2Proof[??[X1, X2] <: Op](
-      self: Op2[A1, A2, ??]
+      self: Expr2[A1, A2, ??]
   )(
       implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int] // TODO: kind of too internal
-  ) extends Proof.Unsafe {
+  ) extends ProofOfArity.Unsafe {
 
     override def out: Arity.Unsafe = {
 
@@ -46,7 +46,7 @@ abstract class UnsafeDomain[
 
         case (Some(_1), Some(_2)) =>
           val nOut = tfs.apply(n1.get, n2.get).getValue
-          Arity.Var(nOut)
+          Arity.Dynamic(nOut)
         case _ =>
           Arity.Unknown
       }
@@ -58,12 +58,12 @@ abstract class UnsafeDomain[
 trait UnsafeDomain_Imp0 {
 
   case class D2[
-      A1 <: Operand,
-      A2 <: Operand,
-      O <: Proof
+      A1 <: Expression,
+      A2 <: Expression,
+      O <: ProofOfArity
   ]()(
       implicit
-      val bound1: A1 ~~> Proof.UnsafeLike,
+      val bound1: A1 ~~> ProofOfArity.UnsafeLike,
       val bound2: A2 ~~> O
   ) extends UnsafeDomain[A1, A2, O] {
 
@@ -71,12 +71,12 @@ trait UnsafeDomain_Imp0 {
   }
 
   implicit def d2[
-      A1 <: Operand,
-      A2 <: Operand,
-      O <: Proof
+      A1 <: Expression,
+      A2 <: Expression,
+      O <: ProofOfArity
   ](
       implicit
-      bound1: A1 ~~> Proof.UnsafeLike,
+      bound1: A1 ~~> ProofOfArity.UnsafeLike,
       bound2: A2 ~~> O
   ): UnsafeDomain[A1, A2, O] = D2()
 }
@@ -84,34 +84,34 @@ trait UnsafeDomain_Imp0 {
 object UnsafeDomain extends UnsafeDomain_Imp0 {
 
   def summon[
-      A1 <: Operand,
-      A2 <: Operand,
-      O <: Proof
+      A1 <: Expression,
+      A2 <: Expression,
+      O <: ProofOfArity
   ](
       implicit
       self: UnsafeDomain[A1, A2, O]
   ): UnsafeDomain[A1, A2, O] = self
 
   case class D1[
-      A1 <: Operand,
-      A2 <: Operand,
-      O <: Proof
+      A1 <: Expression,
+      A2 <: Expression,
+      O <: ProofOfArity
   ]()(
       implicit
       val bound1: A1 ~~> O,
-      val bound2: A2 ~~> Proof.UnsafeLike
+      val bound2: A2 ~~> ProofOfArity.UnsafeLike
   ) extends UnsafeDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
   }
 
   implicit def d1[
-      A1 <: Operand,
-      A2 <: Operand,
-      O <: Proof
+      A1 <: Expression,
+      A2 <: Expression,
+      O <: ProofOfArity
   ](
       implicit
       bound1: A1 ~~> O,
-      bound2: A2 ~~> Proof.UnsafeLike
+      bound2: A2 ~~> ProofOfArity.UnsafeLike
   ): UnsafeDomain[A1, A2, O] = D1()
 }

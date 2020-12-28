@@ -1,10 +1,10 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
-import com.tribbloids.shapesafe.m.arity.{Arity, Operand, OperandFixture}
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ExpressionFixture}
 
 import scala.language.existentials
 
-class MayEqualSpec extends OperandFixture {
+class MayEqualSpec extends ExpressionFixture {
 
   import com.tribbloids.shapesafe.m.arity.DSL._
 
@@ -15,19 +15,19 @@ class MayEqualSpec extends OperandFixture {
       it("a") {
 
         val op = MayEqual(a, a)
-        op.asProof.out.internal.requireEqual(3)
+        op.proveArity.out.internal.requireEqual(3)
       }
 
       it("a + b") {
 
         val op = MayEqual(a + b, ab)
-        op.asProof.out.internal.requireEqual(7)
+        op.proveArity.out.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
         val op = MayEqual(a + b + c, abc)
-        op.asProof.out.internal.requireEqual(12)
+        op.proveArity.out.internal.requireEqual(12)
       }
     }
 
@@ -36,7 +36,7 @@ class MayEqualSpec extends OperandFixture {
       it("a + b + c") {
 
         val op = MayEqual(a + b + c, ab + c)
-        op.asProof.out.internal.requireEqual(12)
+        op.proveArity.out.internal.requireEqual(12)
       }
     }
 
@@ -50,7 +50,7 @@ class MayEqualSpec extends OperandFixture {
 //
 //        UnsafeDomain.summon[Arity.Unknown.type, a.type]
 
-        val out = op.asProof.out
+        val out = op.proveArity.out
         assert(out.numberOpt.contains(3))
 
 //        op.asProof.out.internal.requireEqual(3)
@@ -60,7 +60,7 @@ class MayEqualSpec extends OperandFixture {
 
         val op = MayEqual(a + b, Arity.Unknown)
 
-        val out = op.asProof.out
+        val out = op.proveArity.out
         assert(out.numberOpt.contains(7))
       }
     }
@@ -72,7 +72,7 @@ class MayEqualSpec extends OperandFixture {
 
       it("a") {
 
-        val op = MayEqual(Operand.Unprovable, a)
+        val op = MayEqual(Expression.Unprovable, a)
 
         shouldNotCompile(
           "op.asProof"
@@ -81,7 +81,7 @@ class MayEqualSpec extends OperandFixture {
 
       it("a + b") {
 
-        val op = MayEqual(Operand.Unprovable, a + b)
+        val op = MayEqual(Expression.Unprovable, a + b)
 
         shouldNotCompile(
           "op.asProof"

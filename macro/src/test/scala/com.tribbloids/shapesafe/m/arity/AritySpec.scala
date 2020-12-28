@@ -10,7 +10,7 @@ class AritySpec extends BaseSpec {
 
   describe("big") {
 
-    def validate[S](subject: Arity.Const[S], w: Lt[Int])(
+    def validate[S](subject: Arity.Static[S], w: Lt[Int])(
         implicit proof: Require[S == w.T],
         plus: S + w.T
     ): Unit = {
@@ -62,5 +62,4 @@ class AritySpec extends BaseSpec {
     val v1 = Arity(3)
     println(v1)
   }
-
 }

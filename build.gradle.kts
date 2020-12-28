@@ -55,11 +55,14 @@ allprojects {
 
 //        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
 
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
+        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.8")
+
+//        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
+
     }
 
     task("dependencyTree") {
