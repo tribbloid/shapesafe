@@ -16,6 +16,10 @@ trait ProofOfArity extends Proof {
 
 object ProofOfArity {
 
+  type Lt[O <: Arity] = ProofOfArity {
+    type Out <: O
+  }
+
   trait Unsafe extends ProofOfArity {
 
     final type Out = Arity.Unsafe
