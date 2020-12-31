@@ -3,19 +3,25 @@ package com.tribbloids.shapesafe.m.shape
 import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.m.arity.Expression
-import shapeless.labelled.FieldType
 import shapeless.ops.record.Selector
-import shapeless.{HList, LUBConstraint}
+import shapeless.{::, HList, HNil, LUBConstraint}
 
-case class NamedShape[H1 <: HList](
-    self: H1
+case class NamedShape[
+    H1 <: HList
+](
+    hList: H1
 )(
     implicit
-    isIndexToExpr: LUBConstraint[H1, Expression]
+    val lub: LUBConstraint[H1, Expression]
 ) extends Shape {
 
   import shapeless._
   import record._
+
+  def +:[E <: Expression](element: E): NamedShape[E :: H1] = {
+
+    this.copy(element :: hList)
+  }
 
   // implement tensor contraction/einsum???
 
@@ -40,9 +46,8 @@ case class NamedShape[H1 <: HList](
       selectThat: Selector[H2, thatDim.T] { type Out <: Expression }
   ) = {
 
-    val thisSelected = this.self.apply(thisDim)
-    val thatSelected = (that.self).apply(thatDim)
-
+    val thisSelected = this.hList.apply(thisDim)
+    val thatSelected = that.hList.apply(thatDim)
   }
 
 //  case class EinSum[
@@ -61,6 +66,21 @@ case class NamedShape[H1 <: HList](
 }
 
 object NamedShape {
+
+  type Empty = NamedShape[HNil]
+  object Empty extends NamedShape(HNil: HNil)
+
+  implicit class NonEmptyOps[HH <: Expression, TT](self: NamedShape[HH :: TT]) {
+
+    def head: HH = self.hList.head
+
+    object tailLUB extends LUBConstraint[TT, Expression]
+
+    def tail: NamedShape[TT] = self.copy(self.hList.tail)(
+      tailLUB
+    )
+
+  }
 
   def main(args: Array[String]): Unit = {
 
