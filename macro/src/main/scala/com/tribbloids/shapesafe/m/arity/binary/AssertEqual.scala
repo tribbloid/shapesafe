@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.arity.{Expression, ProofOfArity}
 import com.tribbloids.shapesafe.m.~~>
 import singleton.ops.{==, Require}
 
-case class MayEqual[
+case class AssertEqual[
     +A1 <: Expression,
     +A2 <: Expression
 ](
@@ -21,12 +21,12 @@ trait MayEqual_Imp0 {
   ](
       implicit
       domain: UnsafeDomain[A1, A2, O]
-  ): MayEqual[A1, A2] ~~> UnsafeDomain[A1, A2, O]#ProbablyEqual = { v =>
-    domain.ProbablyEqual(v)
+  ): AssertEqual[A1, A2] ~~> UnsafeDomain[A1, A2, O]#DynamicEqual = { v =>
+    domain.DynamicEqual(v)
   }
 }
 
-object MayEqual extends MayEqual_Imp0 {
+object AssertEqual extends MayEqual_Imp0 {
 
   // TODO : both of these signatures are not refined enough, it should contains 4 cases:
   //  Const - Const -> Const[1]
@@ -44,7 +44,7 @@ object MayEqual extends MayEqual_Imp0 {
       bound1: A1 ~~> ProofOfArity.Invar[S1],
       bound2: A2 ~~> ProofOfArity.Invar[S2],
       lemma: Require[S1 == S2]
-  ): MayEqual[A1, A2] ~~> InvarDomain[A1, A2, S1, S2]#Equal = {
+  ): AssertEqual[A1, A2] ~~> InvarDomain[A1, A2, S1, S2]#Equal = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 

@@ -17,7 +17,7 @@ case class Expr2[
     a2: A2
 ) extends Expression {}
 
-trait Op2_Imp0 {
+trait Expr2_Imp0 {
 
   implicit def unsafe[
       A1 <: Expression,
@@ -29,11 +29,11 @@ trait Op2_Imp0 {
       domain: UnsafeDomain[A1, A2, O],
       tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
   ): Expr2[A1, A2, ??] ~~> ProofOfArity.Unsafe = { v =>
-    domain.Op2Proof(v)
+    domain.Proof2(v)
   }
 }
 
-object Expr2 extends Op2_Imp0 {
+object Expr2 extends Expr2_Imp0 {
 
   implicit def invar[
       A1 <: Expression,
@@ -46,11 +46,11 @@ object Expr2 extends Op2_Imp0 {
       bound1: A1 ~~> ProofOfArity.Invar[S1],
       bound2: A2 ~~> ProofOfArity.Invar[S2],
       lemma: S1 ?? S2
-  ): Expr2[A1, A2, ??] ~~> InvarDomain[A1, A2, S1, S2]#Op2Proof[??] = {
+  ): Expr2[A1, A2, ??] ~~> InvarDomain[A1, A2, S1, S2]#Proof2[??] = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
     { v =>
-      domain.Op2Proof[??](v)(lemma)
+      domain.Proof2[??](v)(lemma)
     }
   }
 }

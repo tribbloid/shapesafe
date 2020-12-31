@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ExpressionFixture}
 
 import scala.language.existentials
 
-class MayEqualSpec extends ExpressionFixture {
+class AssertEqualSpec extends ExpressionFixture {
 
   import com.tribbloids.shapesafe.m.arity.DSL._
 
@@ -14,19 +14,19 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a") {
 
-        val op = MayEqual(a, a)
+        val op = AssertEqual(a, a)
         op.proveArity.out.internal.requireEqual(3)
       }
 
       it("a + b") {
 
-        val op = MayEqual(a + b, ab)
+        val op = AssertEqual(a + b, ab)
         op.proveArity.out.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
-        val op = MayEqual(a + b + c, abc)
+        val op = AssertEqual(a + b + c, abc)
         op.proveArity.out.internal.requireEqual(12)
       }
     }
@@ -35,7 +35,7 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a + b + c") {
 
-        val op = MayEqual(a + b + c, ab + c)
+        val op = AssertEqual(a + b + c, ab + c)
         op.proveArity.out.internal.requireEqual(12)
       }
     }
@@ -44,7 +44,7 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a") {
 
-        val op = MayEqual(Arity.Unknown, a)
+        val op = AssertEqual(Arity.Unknown, a)
 
 //        val impl = Implies.summon[a.type, Proof.Invar[a.SS]] _
 //
@@ -58,7 +58,7 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a + b") {
 
-        val op = MayEqual(a + b, Arity.Unknown)
+        val op = AssertEqual(a + b, Arity.Unknown)
 
         val out = op.proveArity.out
         assert(out.numberOpt.contains(7))
@@ -72,7 +72,7 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a") {
 
-        val op = MayEqual(Expression.Unprovable, a)
+        val op = AssertEqual(Expression.Unprovable, a)
 
         shouldNotCompile(
           "op.asProof"
@@ -81,7 +81,7 @@ class MayEqualSpec extends ExpressionFixture {
 
       it("a + b") {
 
-        val op = MayEqual(Expression.Unprovable, a + b)
+        val op = AssertEqual(Expression.Unprovable, a + b)
 
         shouldNotCompile(
           "op.asProof"

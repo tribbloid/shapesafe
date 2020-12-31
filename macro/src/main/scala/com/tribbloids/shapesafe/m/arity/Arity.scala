@@ -33,7 +33,7 @@ object Arity {
 
   trait Static[S] extends Arity.Known with ProofOfArity.Invar[S] {
 
-    override type Out >: this.type <: Static[S]
+//    override type Out >: this.type <: Static[S]
 
     def singleton: S
 
@@ -117,7 +117,7 @@ object Arity {
 
   trait Known extends Arity
 
-  trait Unsafe extends Arity with ProofOfArity.UnsafeLike
+  trait Unsafe extends Arity with ProofOfArity.Unsafe
 
   object Unsafe {
 

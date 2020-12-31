@@ -4,7 +4,7 @@ import breeze.linalg.DenseVector
 import breeze.signal
 import com.tribbloids.shapesafe.core.tensor.Const.VecShape
 import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
-import com.tribbloids.shapesafe.m.arity.binary.MayEqual
+import com.tribbloids.shapesafe.m.arity.binary.AssertEqual
 import com.tribbloids.shapesafe.m.arity.nullary.OfSize
 import com.tribbloids.shapesafe.m.arity.{Arity, ProofOfArity}
 import com.tribbloids.shapesafe.m.util.Constraint.ElementOfType
@@ -36,7 +36,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: A1 MayEqual A2 ~~> ProofOfArity
+      proof: A1 AssertEqual A2 ~~> ProofOfArity
   ): Double = {
 
     val result: Double = this.data.dot(that.data)

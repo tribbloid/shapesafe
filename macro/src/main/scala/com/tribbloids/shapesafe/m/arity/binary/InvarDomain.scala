@@ -18,26 +18,26 @@ case class InvarDomain[
     bound2: A2 ~~> ProofOfArity.Invar[S2],
 ) {
 
-  case class Op2Proof[??[X1, X2] <: Op](
-      self: Expr2[A1, A2, ??]
+  case class Proof2[??[X1, X2] <: Op](
+      in: Expr2[A1, A2, ??]
   )(
       implicit lemma: S1 ?? S2
   ) extends ProofOfArity.Invar[S1 ?? S2] {
 
-    override type Out = Arity.FromOp[S1 ?? S2]
+//    override type Out = Arity.FromOp[S1 ?? S2]
 
     override def out: Out = Arity.FromOp.summon[S1 ?? S2](lemma)
   }
 
   case class Equal(
-      self: MayEqual[A1, A2]
+      in: AssertEqual[A1, A2]
   )(
       implicit lemma: Require[S1 == S2]
   ) extends ProofOfArity.Invar[S1] {
 
-    val proof: ProofOfArity.Invar[S1] = bound1.apply(self.a1)
+    val proof: ProofOfArity.Invar[S1] = bound1.apply(in.a1)
 
-    override type Out = proof.Out
+//    override type Out = proof.Out
 
     override def out: Out = proof.out
   }

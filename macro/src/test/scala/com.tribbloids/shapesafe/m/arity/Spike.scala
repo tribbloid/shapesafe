@@ -3,7 +3,9 @@ package com.tribbloids.shapesafe.m.arity
 import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
+import org.scalatest.Ignore
 
+@Ignore
 class Spike extends BaseSpec {
 
   it("narrow vs wide type") {

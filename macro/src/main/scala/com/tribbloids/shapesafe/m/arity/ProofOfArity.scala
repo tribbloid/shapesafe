@@ -9,20 +9,21 @@ import scala.language.higherKinds
   */
 trait ProofOfArity extends Proof {
 
+  def in: Expression
+
   override type Out <: Arity
 }
 
 object ProofOfArity {
 
-  trait UnsafeLike extends ProofOfArity {}
-
-  trait Unsafe extends UnsafeLike {
+  trait Unsafe extends ProofOfArity {
 
     final type Out = Arity.Unsafe
   }
 
-  trait Out_=[+O <: Arity] extends ProofOfArity {
-    type Out <: O
+  // Can't use Aux Pattern due to several subclasses
+  trait Out_=[O <: Arity] extends ProofOfArity {
+    type Out = O
   }
 
   trait Invar[S] extends Out_=[Arity.Static[S]] {

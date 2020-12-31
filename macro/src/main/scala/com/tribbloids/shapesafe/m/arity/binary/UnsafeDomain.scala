@@ -19,28 +19,33 @@ abstract class UnsafeDomain[
 
   def selectSafer(a1: A1, a2: A2): O
 
-  case class ProbablyEqual(
-      self: MayEqual[A1, A2]
+  case class DynamicEqual(
+      in: AssertEqual[A1, A2]
   ) extends ProofOfArity {
 
     // TODO: if this type is not narrow enough, introduce a new generic param to outer class
-    val proof: O = selectSafer(self.a1, self.a2)
+    val proof: O = selectSafer(in.a1, in.a2)
 
     override type Out = proof.Out
 
-    override def out: Out = proof.out
+    override def out: Out = {
+      //TODO: runtime validation
+      proof.out
+    }
   }
 
-  case class Op2Proof[??[X1, X2] <: Op](
-      self: Expr2[A1, A2, ??]
+  case class Proof2[??[X1, X2] <: Op](
+      in: Expr2[A1, A2, ??]
   )(
-      implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int] // TODO: kind of too internal
+      implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
+      // TODO: kind of too internal
+      // TODO: need more testing
   ) extends ProofOfArity.Unsafe {
 
     override def out: Arity.Unsafe = {
 
-      val n1 = bound1.apply(self.a1).out.numberOpt
-      val n2 = bound2.apply(self.a2).out.numberOpt
+      val n1 = bound1.apply(in.a1).out.numberOpt
+      val n2 = bound2.apply(in.a2).out.numberOpt
 
       (n1, n2) match {
 
@@ -63,7 +68,7 @@ trait UnsafeDomain_Imp0 {
       O <: ProofOfArity
   ]()(
       implicit
-      val bound1: A1 ~~> ProofOfArity.UnsafeLike,
+      val bound1: A1 ~~> ProofOfArity.Unsafe,
       val bound2: A2 ~~> O
   ) extends UnsafeDomain[A1, A2, O] {
 
@@ -76,7 +81,7 @@ trait UnsafeDomain_Imp0 {
       O <: ProofOfArity
   ](
       implicit
-      bound1: A1 ~~> ProofOfArity.UnsafeLike,
+      bound1: A1 ~~> ProofOfArity.Unsafe,
       bound2: A2 ~~> O
   ): UnsafeDomain[A1, A2, O] = D2()
 }
@@ -99,7 +104,7 @@ object UnsafeDomain extends UnsafeDomain_Imp0 {
   ]()(
       implicit
       val bound1: A1 ~~> O,
-      val bound2: A2 ~~> ProofOfArity.UnsafeLike
+      val bound2: A2 ~~> ProofOfArity.Unsafe
   ) extends UnsafeDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -112,6 +117,6 @@ object UnsafeDomain extends UnsafeDomain_Imp0 {
   ](
       implicit
       bound1: A1 ~~> O,
-      bound2: A2 ~~> ProofOfArity.UnsafeLike
+      bound2: A2 ~~> ProofOfArity.Unsafe
   ): UnsafeDomain[A1, A2, O] = D1()
 }
