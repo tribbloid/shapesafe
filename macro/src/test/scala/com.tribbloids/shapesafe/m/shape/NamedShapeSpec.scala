@@ -1,32 +1,39 @@
 package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.BaseSpec
-import com.tribbloids.shapesafe.m.arity.Arity
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression}
 
 class NamedShapeSpec extends BaseSpec {
+
+  import shapeless.record._
 
   describe("create") {
 
     it("named") {
 
-      val shape = Shape ~
-        (Arity.FromLiteral(2) <<- "x") |
-        (Arity.FromLiteral(3) <<- "y")
+      val shape = Shape |>
+        Arity.FromLiteral(2) <<- "x" cross
+        Arity.FromLiteral(3) <<- "y"
+
+      assert(shape.dimensions.apply("x").number == 2)
     }
 
     it("nameless") {
 
-      val shape = Shape ~
-        Arity.FromLiteral(2) |
+      val shape = Shape |>
+        Arity.FromLiteral(2) cross
         Arity.FromLiteral(3)
     }
 
     it("mixed") {
 
-      val shape = Shape ~
-        (Arity.FromLiteral(2) <<- "x") |
-        (Arity.FromLiteral(3)) |
-        (Arity.FromLiteral(2) <<- "z")
+      val shape = Shape |>
+        Arity.FromLiteral(2) <<- "x" |
+        Arity.FromLiteral(3) cross
+        Arity.FromLiteral(4) <<- "z"
+
+      assert(shape.dimensions.apply("x").number == 2)
+      assert(shape.dimensions.apply("z").number == 4)
     }
   }
 

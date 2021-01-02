@@ -1,9 +1,10 @@
 package com.tribbloids.shapesafe.m.shape
 
+import com.tribbloids.shapesafe.m.arity.Expression.emptyName
 import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ProofOfArity}
-import com.tribbloids.shapesafe.m.shape.NamedShape.Bound
 import com.tribbloids.shapesafe.m.{~~>, Proof}
 import shapeless._
+import shapeless.labelled.FieldType
 
 trait ProofOfShape extends Proof {
 
@@ -33,29 +34,29 @@ object ProofOfShape {
   }
 
 //  implicit def proveByInduction[
-//      H <: Element,
+//      N <: Expression.Name,
+//      V <: Expression,
 //      T <: HList,
-//      HO <: Arity,
-//      TO <: HList
+//      VOut <: Arity,
+//      TOut <: HList
 //  ](
 //      implicit
-//      proveHead: H ~~> ProofOfArity.Lt[HO],
-//      proveTail: NamedShape[T] ~~> Named[TO]
-//      //      lubTail: LUBConstraint[Tail, Expression]
-//  ): NamedShape[H :: T] ~~> Named[HO :: TO] = { v =>
-//    new Named[HO :: TO] {
+//      proveHead: V ~~> ProofOfArity.Lt[VOut],
+//      proveTail: NamedShape[T] ~~> Named[TOut]
+//  ): NamedShape[FieldType[N, V] :: T] ~~> Named[FieldType[N, VOut] :: TOut] = { v =>
+//    new Named[FieldType[N, VOut] :: TOut] {
 //
 //      override def in: Shape = v
 //
 //      override lazy val out: Out = {
 //
 //        val headProof = proveHead(v.head)
-//        val headOut: HO = headProof.out
+//        val headOut: FieldType[N, VOut] = headProof.out.named[N]
 //
 //        val tailProof = proveTail(v.tail)
-//        val tailOut = tailProof.out
+//        val tailOut: NamedShape[TOut] = tailProof.out
 //
-//        val result = tailOut | headOut
+//        val result: NamedShape[FieldType[N, VOut] :: TOut] = tailOut | headOut
 //
 //        result
 //      }

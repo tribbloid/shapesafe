@@ -1,9 +1,8 @@
 package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.arity.Expression
-import shapeless.labelled.FieldType
 import shapeless.ops.record.Selector
-import shapeless.{::, HList, LUBConstraint, Witness}
+import shapeless.{::, HList, LUBConstraint}
 
 case class NamedShape[
     H1 <: HList
@@ -11,43 +10,23 @@ case class NamedShape[
     dimensions: H1
 )(
     implicit
-    val bound: LUBConstraint[H1, FieldType[_ <: String, Expression]]
+    val bound: LUBConstraint[H1, Expression.NamedUB]
 ) extends Shape {
 
-  import com.tribbloids.shapesafe.m.shape.NamedShape._
   import shapeless._
   import record._
 
-//  def |[F <: Field](element: F): NamedShape[F :: H1] = {
-//
-//    this.copy(element :: dimensions)
-//  }
+  def cross[N <: Expression.Name, V <: Expression](
+      dim: Expression.Named[N, V]
+  ): NamedShape[Expression.Named[N, V] :: H1] = {
 
-//  def |[K <: String, V <: Expression](field: FieldType[K, V]): NamedShape[FieldType[K, V] :: H1] = {
-//
-//    NamedShape(field :: dimensions)
-//  }
-
-  def |[
-      I <: Expression
-  ](dim: I)(
-      implicit canName: CanName[I]
-  ): NamedShape[canName.Out :: H1] = {
-
-    val named = canName(dim)
-    NamedShape(named :: dimensions)
+    NamedShape(dim :: dimensions)
   }
 
-  // appender
-//  case class |(name: Witness.Lt[String]) {
-//
-//    def |>[T <: Expression](dim: T): NamedShape[Tuple2[name.T, T] :: H1] = {
-//
-//      val newField: Tuple2[name.T, T] = name.value -> dim
-//      NamedShape(newField :: dimensions)
-////      ???
-//    }
-//  }
+  // DON'T Refactor! `|` has the lowest operator priority
+  def |[N <: Expression.Name, V <: Expression](
+      dim: Expression.Named[N, V]
+  ) = cross(dim)
 
   // implement tensor contraction/einsum???
 
@@ -93,46 +72,11 @@ case class NamedShape[
 
 object NamedShape {
 
-  trait CanName[I <: Expression] {
-
-    type Out <: FieldType[_ <: String, Expression]
-
-    def apply(v: I): Out
-  }
-
-  trait CanName_Imp0 {
-
-    implicit def _nameless[I <: Expression]: Nameless[I] = new Nameless[I]
-
-    class Nameless[I <: Expression] extends CanName[I] {
-
-      type Out = FieldType[nameless.T, I]
-
-      override def apply(v: I): FieldType[nameless.T, I] = v <<- nameless // v <<- nameless
-    }
-  }
-
-  object CanName extends CanName_Imp0 {
-
-    implicit def _passThrough[Base <: Expression]: PassThrough[Base] = new PassThrough[Base]
-
-    class PassThrough[Base <: Expression] extends CanName[FieldType[_ <: String, Base]] {
-
-      type Out = FieldType[_ <: String, Base]
-
-      override def apply(v: FieldType[_ <: String, Base]): FieldType[_ <: String, Base] = v
-    }
-  }
-
-  val nameless: Witness.Lt[String] = Witness("")
-
-  type Bound = FieldType[_ <: String, Expression]
-
-  implicit class NonEmptyOps[HH <: Bound, TT <: HList](self: NamedShape[HH :: TT]) {
+  implicit class NonEmptyOps[HH <: Expression.NamedUB, TT <: HList](self: NamedShape[HH :: TT]) {
 
     def head: HH = self.dimensions.head
 
-    object tailLUB extends LUBConstraint[TT, Bound]
+    object tailLUB extends LUBConstraint[TT, Expression.NamedUB]
 
     def tail: NamedShape[TT] = self.copy(self.dimensions.tail)(
       tailLUB

@@ -1,8 +1,6 @@
 package com.tribbloids.shapesafe.m.shape
 import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.shape
-import com.tribbloids.shapesafe.m.shape.NamedShape.CanName
-import shapeless.{::, HNil, Witness}
+import shapeless.{::, HNil}
 
 trait Shape {}
 
@@ -11,9 +9,7 @@ object Shape {
   type Empty = NamedShape[HNil]
   object Empty extends NamedShape(HNil: HNil)
 
-  def ~[
-      I <: Expression
-  ](dim: I)(
-      implicit canName: CanName[I]
-  ) = Empty | (dim)
+  def |>[N <: Expression.Name, V <: Expression](
+      dim: Expression.Named[N, V]
+  ) = Empty cross dim
 }

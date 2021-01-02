@@ -1,8 +1,8 @@
 package com.tribbloids.shapesafe.m.shape
 
-import com.tribbloids.graph.commons.testlib.BaseSpec
 import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
+import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
 import shapeless.{HNil, Witness}
 
@@ -75,6 +75,55 @@ class ShapeSpike extends BaseSpec {
 
       print_@(VizType.infer(field).toString)
     }
+
+    it("4") {
+      {
+
+        val fields =
+          (Symbol("id").narrow -> 262162091) ::
+            (Symbol("price").narrow -> 44.11) ::
+            HNil
+
+        val record = fields.record
+
+//        print_@(record.price)
+      }
+
+      {
+        val fields =
+          (Symbol("id") ->> 262162091) ::
+            (Symbol("price") ->> 44.11) ::
+            HNil
+
+        val record = fields.record
+
+        print_@(record.price)
+      }
+
+      // TODO: only works in shapeless 3.x
+      {
+        val fields =
+          ("id" ->> 262162091) ::
+            ("price" ->> 44.11) ::
+            HNil
+
+        val record = fields.record
+
+//        print_@(record.price)
+      }
+
+    }
+
+//    it("5") {
+//      val fields =
+//        ("id" -> 262162091) ::
+//          44.11 ::
+//          HNil
+//
+//      val record = fields.record
+//
+//      print_@(record.apply("id"))
+//    }
 
     def asW_H(v: Witness.Lt[Symbol]*) = {}
 
