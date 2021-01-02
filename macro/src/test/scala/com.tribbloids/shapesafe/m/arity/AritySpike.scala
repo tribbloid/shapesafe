@@ -6,7 +6,7 @@ import com.tribbloids.shapesafe.BaseSpec
 import org.scalatest.Ignore
 
 @Ignore
-class Spike extends BaseSpec {
+class AritySpike extends BaseSpec {
 
   it("narrow vs wide type") {
 

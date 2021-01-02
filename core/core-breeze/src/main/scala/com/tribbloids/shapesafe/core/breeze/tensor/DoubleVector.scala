@@ -145,12 +145,12 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  def zeros[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
+  def zeros(lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
 
     new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
   }
 
-  def random[Lit](lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
+  def random(lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
     val list = DenseVector.fill(lit.value) {
       Random.nextDouble()
     }
