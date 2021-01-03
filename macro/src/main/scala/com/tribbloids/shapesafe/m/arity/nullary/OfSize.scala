@@ -6,7 +6,7 @@ import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
-class OfSize[-Data <: HList, S <: NatAsOp[_]](
+class OfSize[-DATA <: HList, S <: NatAsOp[_]](
     val singleton: S
 ) extends ProvenToBe[FromOp[S]]()(new FromOp(singleton)) {}
 

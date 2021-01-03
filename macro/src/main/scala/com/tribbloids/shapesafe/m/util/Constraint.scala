@@ -11,7 +11,7 @@ object Constraint {
 
   import com.tribbloids.graph.commons.util.ScalaReflection.universe
 
-  case class ElementOfType[Data <: HList, Element: TypeTag]() {
+  case class ElementOfType[Data <: HList, Element: TypeTag]() extends Constraint {
 
     val ttg: TypeTag[Element] = universe.typeTag[Element]
 

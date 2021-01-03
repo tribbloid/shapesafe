@@ -47,7 +47,7 @@ class DoubleVector[A1 <: VecShape](
   def concat[A2 <: VecShape, O <: Arity](that: DoubleVector[A2])(
       implicit
       lemma: (A1 T_+ A2) ~~> OfArity.Proof.Lt[O]
-  ): DoubleVector[O] = { // TODO: always succesful, can execute lazily without lemma
+  ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape + that.shape
     val proof = lemma(op)

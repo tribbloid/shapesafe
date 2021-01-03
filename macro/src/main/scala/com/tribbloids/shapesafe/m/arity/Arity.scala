@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity
 
 import com.tribbloids.shapesafe.m.arity.Utils.Op
-import com.tribbloids.graph.commons.util.WideTyped
+import com.tribbloids.graph.commons.util.{IDMixin, WideTyped}
 import shapeless.Witness
 import singleton.ops.{+, ==, Require}
 
@@ -31,11 +31,13 @@ object Arity {
 
   import Witness._
 
-  trait Static[S] extends Arity.Known with OfArity.Invar[S] {
+  trait Static[S] extends Arity.Known with OfArity.Invar[S] with IDMixin {
 
 //    override type Out >: this.type <: Static[S]
 
     def singleton: S
+
+    override def _id: S = singleton
 
     @transient case object internal {
 
@@ -62,7 +64,7 @@ object Arity {
 
   object Static {}
 
-  class FromOp[S <: Op](val singleton: S) extends Static[S] {
+  class FromOp[S <: Op](override val singleton: S) extends Static[S] {
     override lazy val number: Int = singleton.value.asInstanceOf[Int]
   }
 

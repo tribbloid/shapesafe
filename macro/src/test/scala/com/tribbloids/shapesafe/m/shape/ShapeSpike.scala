@@ -4,7 +4,10 @@ import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
-import shapeless.{HNil, Witness}
+import shapeless.labelled.FieldType
+import shapeless.ops.record.Keys
+import shapeless.syntax.SingletonOps
+import shapeless.{HList, HNil, Witness}
 
 class ShapeSpike extends BaseSpec {
 
@@ -64,70 +67,99 @@ class ShapeSpike extends BaseSpec {
         }
 
         {
-//          val values = book.values
+          //          val values = book.values
         }
       }
-    }
 
-    it("3") {
+      it("3") {
 
-      val field = "id" ->> 262162091
+        val field = "id" ->> 262162091
 
-      print_@(VizType.infer(field).toString)
-    }
-
-    it("4") {
-      {
-
-        val fields =
-          (Symbol("id").narrow -> 262162091) ::
-            (Symbol("price").narrow -> 44.11) ::
-            HNil
-
-        val record = fields.record
-
-//        print_@(record.price)
+        print_@(VizType.infer(field).toString)
       }
 
-      {
-        val fields =
-          (Symbol("id") ->> 262162091) ::
-            (Symbol("price") ->> 44.11) ::
-            HNil
+      it("4") {
+        {
 
-        val record = fields.record
+          val fields =
+            (Symbol("id").narrow -> 262162091) ::
+              (Symbol("price").narrow -> 44.11) ::
+              HNil
 
-        print_@(record.price)
+          val record = fields.record
+
+          //        print_@(record.price)
+        }
+
+        {
+          val fields =
+            (Symbol("id") ->> 262162091) ::
+              (Symbol("price") ->> 44.11) ::
+              HNil
+
+          val record = fields.record
+
+          print_@(record.price)
+        }
+
+        // TODO: only works in shapeless 3.x
+        {
+          val fields =
+            ("id" ->> 262162091) ::
+              ("price" ->> 44.11) ::
+              HNil
+
+          val record = fields.record
+
+          //        print_@(record.price)
+        }
+
       }
 
-      // TODO: only works in shapeless 3.x
-      {
+      it("5") {
         val fields =
           ("id" ->> 262162091) ::
             ("price" ->> 44.11) ::
             HNil
 
-        val record = fields.record
+        val keys = fields.keys
 
-//        print_@(record.price)
+        print_@(VizType.infer(keys))
       }
-
     }
-
-//    it("5") {
-//      val fields =
-//        ("id" -> 262162091) ::
-//          44.11 ::
-//          HNil
-//
-//      val record = fields.record
-//
-//      print_@(record.apply("id"))
-//    }
 
     def asW_H(v: Witness.Lt[Symbol]*) = {}
 
-    it("2") {
+//    it("infer keys") {
+//
+//      val record = {
+//        ("a" ->> 1) ::
+//          ("b" ->> 2) ::
+//          HNil
+//      }
+//
+//      def inferKeys[T <: HList](v: T)(implicit keys: shapeless.ops.record.Keys[T]) = keys
+//
+//      {
+//        val keys = record.keys // works
+//        print(keys)
+//
+//        inferKeys(record) // works
+//      }
+//
+//      {
+//        val record2: record.type = record
+//        val keys = record2.keys // works
+//        print(keys)
+//
+//        inferKeys(record2) // works
+////        inferKeys[record.type](record2) // compilation error!
+//      }
+//
+//      VizType[record.type].toString().shouldBe()
+//    }
+
+    it("zip") {
 
       val dims = {
         (Symbol("x") ->> Arity.FromLiteral(3)) ::
@@ -151,6 +183,9 @@ class ShapeSpike extends BaseSpec {
 //      print_@(VizType.infer(reIndexed))
     }
 
-    type A = shapeless._0
+//    it("constraint") {
+//
+//      def
+//    }
   }
 }

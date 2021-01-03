@@ -1,8 +1,8 @@
 package com.tribbloids.shapesafe.m.arity
 
+import com.tribbloids.shapesafe.m.arity.Dim.Name
 import com.tribbloids.shapesafe.m.~~>
 import shapeless.Witness
-import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
@@ -35,25 +35,15 @@ object Expression {
 
   implicit class ExpressionOps[T <: Expression](self: T) {
 
-    def named[N <: Name]: Named[N, T] = self.asInstanceOf[Named[N, T]]
+    def withNameT(implicit name: Witness.Lt[String]) = Dim(self, name)
 
-    def named(name: Witness.Lt[Name]): Named[name.T, T] = {
+    def withName(name: Witness.Lt[Name]) = {
 
-      named[name.T]
+      withNameT(name)
     }
 
-    def <<-(name: Witness.Lt[Name]): Named[name.T, T] = named(name)
-
+    def <<-(name: Witness.Lt[Name]) = withName(name)
   }
-
-  type Name = String
-  val emptyName: Witness.Lt[Name] = Witness("")
-
-  type Named[N <: Name, V <: Expression] = FieldType[N, V]
-  type NamedUB = Named[_ <: Name, Expression]
-
-  implicit def asNameless[T <: Expression](self: T): Named[emptyName.T, T] =
-    self.asInstanceOf[Named[emptyName.T, T]]
 
   // TODO: this can be simplified by writing 1 function to cast Expression to FieldType
   //  or type lambda in dotty

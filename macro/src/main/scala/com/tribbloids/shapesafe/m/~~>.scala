@@ -1,7 +1,5 @@
 package com.tribbloids.shapesafe.m
 
-import com.tribbloids.shapesafe.m.arity.Proven
-
 import scala.language.implicitConversions
 
 // doesn't extend T => R intentionally
