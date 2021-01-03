@@ -11,14 +11,14 @@ trait Expression {
 
   final def proveArity[
       T >: this.type <: Expression,
-      R <: ProofOfArity
+      R <: OfArity.Proof
   ](implicit prove: T ~~> R): R = prove.apply(this)
 
   final def proveArity_generic[
       T >: this.type <: Expression
   ](
-      implicit prove: T ~~> ProofOfArity
-  ): ProofOfArity = prove.apply(this)
+      implicit prove: T ~~> OfArity.Proof
+  ): OfArity.Proof = prove.apply(this)
 
   lazy val valueStr: String = "[??]"
 

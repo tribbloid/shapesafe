@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
 import com.tribbloids.shapesafe.m.arity.Utils.Op
-import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ProofOfArity}
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression, OfArity}
 import com.tribbloids.shapesafe.m.~~>
 import singleton.ops.{==, Require}
 
@@ -14,15 +14,15 @@ case class InvarDomain[
     S2,
 ]()(
     implicit
-    bound1: A1 ~~> ProofOfArity.Invar[S1],
-    bound2: A2 ~~> ProofOfArity.Invar[S2],
+    bound1: A1 ~~> OfArity.Invar[S1],
+    bound2: A2 ~~> OfArity.Invar[S2],
 ) {
 
   case class Proof2[??[X1, X2] <: Op](
       in: Expr2[A1, A2, ??]
   )(
       implicit lemma: S1 ?? S2
-  ) extends ProofOfArity.Invar[S1 ?? S2] {
+  ) extends OfArity.Invar[S1 ?? S2] {
 
 //    override type Out = Arity.FromOp[S1 ?? S2]
 
@@ -33,9 +33,9 @@ case class InvarDomain[
       in: AssertEqual[A1, A2]
   )(
       implicit lemma: Require[S1 == S2]
-  ) extends ProofOfArity.Invar[S1] {
+  ) extends OfArity.Invar[S1] {
 
-    val proof: ProofOfArity.Invar[S1] = bound1.apply(in.a1)
+    val proof: OfArity.Invar[S1] = bound1.apply(in.a1)
 
 //    override type Out = proof.Out
 

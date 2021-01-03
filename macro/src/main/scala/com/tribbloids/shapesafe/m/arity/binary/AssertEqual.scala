@@ -1,6 +1,6 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
-import com.tribbloids.shapesafe.m.arity.{Expression, ProofOfArity}
+import com.tribbloids.shapesafe.m.arity.{Expression, OfArity}
 import com.tribbloids.shapesafe.m.~~>
 import singleton.ops.{==, Require}
 
@@ -17,7 +17,7 @@ trait MayEqual_Imp0 {
   implicit def unsafe[
       A1 <: Expression,
       A2 <: Expression,
-      O <: ProofOfArity
+      O <: OfArity.Proof
   ](
       implicit
       domain: UnsafeDomain[A1, A2, O]
@@ -41,8 +41,8 @@ object AssertEqual extends MayEqual_Imp0 {
       S2
   ](
       implicit
-      bound1: A1 ~~> ProofOfArity.Invar[S1],
-      bound2: A2 ~~> ProofOfArity.Invar[S2],
+      bound1: A1 ~~> OfArity.Invar[S1],
+      bound2: A2 ~~> OfArity.Invar[S2],
       lemma: Require[S1 == S2]
   ): AssertEqual[A1, A2] ~~> InvarDomain[A1, A2, S1, S2]#Equal = {
 
