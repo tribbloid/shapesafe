@@ -7,5 +7,5 @@ trait Proven extends Expression with OfArity.Proof {
 
 object Proven {
 
-  abstract class ProvenToBe[O <: Arity]()(implicit val out: O) extends Proven with OfArity.Proof.Out_=[O] {}
+  abstract class ProvenToBe[O <: Arity]()(implicit val out: O) extends Proven with OfArity.Out_=[O] {}
 }

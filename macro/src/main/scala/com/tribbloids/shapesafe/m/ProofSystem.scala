@@ -19,9 +19,10 @@ trait ProofSystem[UB] {
       type Out <: O
     }
 
-    // Can't use Aux Pattern due to several subclasses
-    trait Out_=[O <: UB] extends Proof {
-      final type Out = O
-    }
+  }
+
+  // Can't use Aux Pattern due to several subclasses
+  trait Out_=[O <: UB] extends Proof {
+    final type Out = O
   }
 }
