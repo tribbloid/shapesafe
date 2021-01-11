@@ -3,7 +3,7 @@ package com.tribbloids.shapesafe.m.shape
 import com.tribbloids.shapesafe.m.arity.Dim.{<<-, Name}
 import com.tribbloids.shapesafe.m.arity.{Dim, Expression}
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.ops.record.{Keys, Values}
 import shapeless.{::, HList, HNil}
@@ -74,12 +74,12 @@ trait Shape extends ShapeLike {
       O <: Shape
   ](nameList: NamesView[NN])(
       implicit
-      zipper: ZipWithKeys.Aux[NN, _ValueList, ZZ],
-      proof: ZZ ~~> OfStatic[O]
+      zipping: ZipWithKeys.Aux[NN, _ValueList, ZZ],
+      prove: ZZ ~~> OfStatic[O]
   ): O = {
 
     val zipped: ZZ = values.zipWithKeys(nameList.self)
-    proof(zipped).out
+    prove(zipped).out
   }
 
   //  def <<-[
@@ -136,17 +136,7 @@ object Shape {
     final type Field = head.Field
 
     final override type Static = Field :: tail.Static
-
     override def static: Static = head.asField :: tail.static
-
-    //    override val keys = {
-    //      implicit val w = head.name
-    //      implicit val prev: tail.keys.type = tail.keys
-    //
-    //      Keys.hlistKeys(w.asInstanceOf[Witness.Aux[w.T]], prev)
-    //
-    ////      implicitly[Keys[Static]]
-    //    }
 
     type _NameList = head.Name :: tail._NameList
     type _ValueList = head.Value :: tail._ValueList

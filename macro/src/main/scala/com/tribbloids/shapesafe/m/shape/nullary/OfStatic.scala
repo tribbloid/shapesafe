@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.arity.Dim.<<-
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.shape.Shape.|
 import com.tribbloids.shapesafe.m.shape.{OfShape, Shape}
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import shapeless.labelled.FieldType
 import shapeless.{::, HList, HNil, Witness}
 
@@ -23,12 +23,12 @@ object OfStatic {
       V <: Expression
   ](
       implicit
-      observeTail: TAIL ~~> OfStatic[PREV],
+      proveTail: TAIL ~~> OfStatic[PREV],
       name: Witness.Aux[N]
   ): (FieldType[N, V] :: TAIL) ~~> OfStatic[PREV | (V <<- N)] = {
 
     { v =>
-      val tail = observeTail(v.tail)
+      val tail = proveTail(v.tail)
       val value = v.head: V
 
       val head = value <<- name
@@ -38,9 +38,9 @@ object OfStatic {
     }
   }
 
-  def observe[H <: HList, O <: Shape](v: H)(implicit proofOfRecord: H ~~> OfStatic[O]): O = {
+  def observe[H <: HList, O <: Shape](v: H)(implicit prove: H ~~> OfStatic[O]): O = {
 
-    val p = proofOfRecord(v)
+    val p = prove(v)
     p.out
   }
 }

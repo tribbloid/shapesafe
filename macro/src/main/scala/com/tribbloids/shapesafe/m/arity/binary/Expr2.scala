@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.arity.binary
 
 import com.tribbloids.shapesafe.m.arity.Utils.Op
 import com.tribbloids.shapesafe.m.arity.{Expression, OfArity}
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.arity.OfArity.~~>
 import singleton.ops.impl.std
 import singleton.twoface.impl.TwoFaceAny
 

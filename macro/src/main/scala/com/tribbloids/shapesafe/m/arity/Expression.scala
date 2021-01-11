@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity
 
 import com.tribbloids.shapesafe.m.arity.Dim.Name
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.arity.OfArity.~~>
 import shapeless.Witness
 
 import scala.language.implicitConversions

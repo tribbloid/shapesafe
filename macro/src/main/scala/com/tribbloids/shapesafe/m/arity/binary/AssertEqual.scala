@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
 import com.tribbloids.shapesafe.m.arity.{Expression, OfArity}
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.arity.OfArity.~~>
 import singleton.ops.{==, Require}
 
 case class AssertEqual[

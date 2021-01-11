@@ -8,7 +8,7 @@ import com.tribbloids.shapesafe.m.arity.binary.AssertEqual
 import com.tribbloids.shapesafe.m.arity.nullary.OfSize
 import com.tribbloids.shapesafe.m.arity.{Arity, OfArity}
 import com.tribbloids.shapesafe.m.util.Constraint.ElementOfType
-import com.tribbloids.shapesafe.m.~~>
+import com.tribbloids.shapesafe.m.arity.OfArity.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
