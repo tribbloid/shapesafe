@@ -8,7 +8,7 @@ case class NamesView[H <: HList](self: H)(
 
   type HH = H
 
-  def |(name: Witness.Lt[String]): NamesView[name.T :: H] = NamesView(
+  def ><(name: Witness.Lt[String]): NamesView[name.T :: H] = NamesView(
     name.value :: self
   )
 }
@@ -18,5 +18,5 @@ object NamesView {
   type Empty = NamesView[HNil]
   object Empty extends NamesView(HNil: HNil)
 
-  def |>(name: Witness.Lt[String]): NamesView[name.T :: HNil] = Empty | name
+  def ><(name: Witness.Lt[String]): NamesView[name.T :: HNil] = Empty >< name
 }

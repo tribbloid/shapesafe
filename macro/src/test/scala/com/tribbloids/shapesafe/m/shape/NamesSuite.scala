@@ -10,7 +10,7 @@ class NamesSuite extends BaseSpec {
 
     import shapeless.syntax.singleton._
 
-    val names = NamesView |> "x" | "y" | "z"
+    val names = NamesView >< "x" >< "y" >< "z"
 
     val expected = "z".narrow :: "y".narrow :: "x".narrow :: HNil
 

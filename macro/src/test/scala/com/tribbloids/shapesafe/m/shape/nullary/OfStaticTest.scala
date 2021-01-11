@@ -16,7 +16,7 @@ class OfStaticTest extends BaseSpec {
 
     val shape = OfStatic.observe(hh)
 
-    assert(shape == Shape.SNil)
+    assert(shape == Shape.Nil)
   }
 
   it("1") {

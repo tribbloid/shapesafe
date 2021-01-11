@@ -1,6 +1,6 @@
 package com.tribbloids.shapesafe.m.shape
 
-import com.tribbloids.shapesafe.m.arity.Dim.{<<-, Name}
+import com.tribbloids.shapesafe.m.arity.Dim.{:<<-, Name}
 import com.tribbloids.shapesafe.m.arity.{Dim, Expression}
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
@@ -35,19 +35,19 @@ trait Shape extends ShapeLike {
       V <: Expression,
       N <: Name
   ](
-      dim: V <<- N
+      dim: V :<<- N
   ) = {
 
-    |(dim)
+    ><(dim)
   }
 
   // DON'T Refactor! `|` has the lowest operator priority
-  def |[
+  def ><[
       V <: Expression,
       N <: Name
   ](
-      dim: V <<- N
-  ): |[Self, V <<- N] = new Shape.|(this, dim)
+      dim: V :<<- N
+  ): ><[Self, V :<<- N] = new Shape.><(this, dim)
 
   def asMap: Map[String, Expression]
 
@@ -68,7 +68,7 @@ trait Shape extends ShapeLike {
     * @param nameList
     * @tparam H
     */
-  def <<-[
+  def |<<-[
       NN <: HList,
       ZZ <: HList,
       O <: Shape
@@ -81,27 +81,13 @@ trait Shape extends ShapeLike {
     val zipped: ZZ = values.zipWithKeys(nameList.self)
     prove(zipped).out
   }
-
-  //  def <<-[
-//      N <: HList,
-//      HOut <: HList
-//  ](names: NameSet[N])(
-//      implicit
-//      withKeys: ZipWithKeys[N, _keys.Out] { type Out <: HOut },
-//      observeHList: HOut ~~> FromHList
-//  ) = {
-//
-//    val newHList: HOut = keys.zipWithKeys(names.self)(withKeys)
-//
-//    observeHList(newHList).out
-//  }
 }
 
 object Shape {
 
-  class SNil extends Shape {
+  class Nil extends Shape {
 
-    final override type Self = SNil
+    final override type Self = Nil
 
     final override type Static = HNil
     override def static: Static = HNil
@@ -120,9 +106,10 @@ object Shape {
     override def asMap: Map[String, Expression] = Map.empty
   }
 
-  val SNil = new SNil()
+  val Nil = new Nil()
 
-  class |[
+  // cartesian product symbol
+  class ><[
       TAIL <: Shape,
       HEAD <: Dim
   ](
@@ -130,7 +117,7 @@ object Shape {
       val head: HEAD
   ) extends Shape {
 
-    final override type Self = |[TAIL, HEAD]
+    final override type Self = ><[TAIL, HEAD]
     type Tail = TAIL
 
     final type Field = head.Field
@@ -156,12 +143,12 @@ object Shape {
     }
   }
 
-  def |>[
+  def ><[
       V <: Expression,
       N <: Name
   ](
-      dim: V <<- N
-  ) = SNil cross dim
+      dim: V :<<- N
+  ) = Nil cross dim
 
   def fromHList[
       H <: HList

@@ -39,10 +39,10 @@ object Expression {
 
     def withName(name: Witness.Lt[Name]) = {
 
-      withNameT(name)
+      :<<-(name)
     }
 
-    def <<-(name: Witness.Lt[Name]) = withName(name)
+    def :<<-(name: Witness.Lt[Name]) = withNameT(name)
   }
 
   // TODO: this can be simplified by writing 1 function to cast Expression to FieldType

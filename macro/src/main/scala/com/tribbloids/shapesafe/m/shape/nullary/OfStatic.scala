@@ -1,8 +1,8 @@
 package com.tribbloids.shapesafe.m.shape.nullary
 
-import com.tribbloids.shapesafe.m.arity.Dim.<<-
+import com.tribbloids.shapesafe.m.arity.Dim.:<<-
 import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.shape.Shape.|
+import com.tribbloids.shapesafe.m.shape.Shape.><
 import com.tribbloids.shapesafe.m.shape.{OfShape, Shape}
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import shapeless.labelled.FieldType
@@ -12,8 +12,8 @@ class OfStatic[O <: Shape](val out: O) extends OfShape.Out_=[O] {}
 
 object OfStatic {
 
-  implicit def hNil: HNil ~~> OfStatic[Shape.SNil] = { _ =>
-    new OfStatic(Shape.SNil)
+  implicit def hNil: HNil ~~> OfStatic[Shape.Nil] = { _ =>
+    new OfStatic(Shape.Nil)
   }
 
   implicit def recursive[
@@ -25,14 +25,14 @@ object OfStatic {
       implicit
       proveTail: TAIL ~~> OfStatic[PREV],
       name: Witness.Aux[N]
-  ): (FieldType[N, V] :: TAIL) ~~> OfStatic[PREV | (V <<- N)] = {
+  ): (FieldType[N, V] :: TAIL) ~~> OfStatic[PREV >< (V :<<- N)] = {
 
     { v =>
       val tail = proveTail(v.tail)
       val value = v.head: V
 
-      val head = value <<- name
-      val result = new Shape.|(tail.out, head)
+      val head = value :<<- name
+      val result = new Shape.><(tail.out, head)
 
       new OfStatic(result)
     }

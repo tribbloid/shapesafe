@@ -28,7 +28,7 @@ object Dim {
   val emptyName = ""
 
   // TODO: N can be eliminated
-  case class <<-[
+  case class :<<-[
       V <: Expression,
       N <: Name
   ](
@@ -48,9 +48,9 @@ object Dim {
   ](
       value: V,
       name: Witness.Lt[String]
-  ): <<-[V, name.T] = {
+  ): :<<-[V, name.T] = {
 
-    new <<-(value, name)
+    new :<<-(value, name)
   }
 
   implicit def nameless[V <: Expression](self: V) = apply(self, emptyName)

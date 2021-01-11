@@ -9,14 +9,14 @@ class DimTest extends BaseSpec {
 
     val arity = Arity.FromLiteral(3)
 
-    val dim = arity <<- "abc"
+    val dim = arity :<<- "abc"
 
     VizType
       .infer(dim)
       .tree
       .typeStr
       .shouldBe(
-        """com.tribbloids.shapesafe.m.arity.Arity.FromLiteral[Int(3)] <<- String("abc")"""
+        """com.tribbloids.shapesafe.m.arity.Arity.FromLiteral[Int(3)] :<<- String("abc")"""
       )
   }
 }
