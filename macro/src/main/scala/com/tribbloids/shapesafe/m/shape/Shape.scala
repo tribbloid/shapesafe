@@ -2,8 +2,8 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.arity.Dim.{:<<-, Name}
 import com.tribbloids.shapesafe.m.arity.{Dim, Expression}
-import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
+import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.ops.record.{Keys, Values}
 import shapeless.{::, HList, HNil}
@@ -13,10 +13,6 @@ import shapeless.{::, HList, HNil}
   * this saves compiler burden and reduces error
   */
 trait Shape extends ShapeLike {
-
-  import Shape._
-
-  type Self >: this.type <: Shape
 
   type Static <: HList
   def static: Static
@@ -31,71 +27,35 @@ trait Shape extends ShapeLike {
 
   //TODO: add dynamic indices
 
-  def cross[
-      V <: Expression,
-      N <: Name
-  ](
-      dim: V :<<- N
-  ) = {
-
-    ><(dim)
-  }
-
-  // DON'T Refactor! `|` has the lowest operator priority
-  def ><[
-      V <: Expression,
-      N <: Name
-  ](
-      dim: V :<<- N
-  ): ><[Self, V :<<- N] = new Shape.><(this, dim)
-
-  def asMap: Map[String, Expression]
-
-//  def withNamesProto[
-//      NN <: HList,
-//      ZZ <: HList
-//  ](nameList: NamesView[NN])(
-//      implicit
-//      zipper: ZipWithKeys.Aux[NN, _ValueList, ZZ]
-//  ): ZZ = {
-//
-//    val zipped: ZZ = values.zipWithKeys(nameList.self)
-//    zipped
-//  }
+  def list: List[Dim]
 
   /**
     * assign new names
-    * @param nameList
+    * @param names
     * @tparam H
     */
   def |<<-[
-      NN <: HList,
+      NN <: Names.Impl,
       ZZ <: HList,
       O <: Shape
-  ](nameList: NamesView[NN])(
+  ](names: NN)(
       implicit
-      zipping: ZipWithKeys.Aux[NN, _ValueList, ZZ],
+      zipping: ZipWithKeys.Aux[names.Static, _ValueList, ZZ],
       prove: ZZ ~~> OfStatic[O]
   ): O = {
 
-    val zipped: ZZ = values.zipWithKeys(nameList.self)
+    val zipped: ZZ = values.zipWithKeys(names.static)
     prove(zipped).out
   }
 }
 
 object Shape {
 
-  class Nil extends Shape {
-
-    final override type Self = Nil
+  // Cartesian product doesn't have eye but whatever
+  sealed class Eye extends Shape {
 
     final override type Static = HNil
     override def static: Static = HNil
-
-//    override val _keys: Keys[Static] = Keys.hnilKeys
-//    override val _values: Values[Static] = Values.hnilValues
-
-//    override val keys = implicitly[Keys[Static]]
 
     type _NameList = HNil
     type _ValueList = HNil
@@ -103,10 +63,10 @@ object Shape {
     override val namesFactory = Keys.hnilKeys
     override val valuesFactory = Values.hnilValues
 
-    override def asMap: Map[String, Expression] = Map.empty
+    override def list: List[Dim] = Nil
   }
 
-  val Nil = new Nil()
+  val Eye = new Eye()
 
   // cartesian product symbol
   class ><[
@@ -117,7 +77,6 @@ object Shape {
       val head: HEAD
   ) extends Shape {
 
-    final override type Self = ><[TAIL, HEAD]
     type Tail = TAIL
 
     final type Field = head.Field
@@ -137,18 +96,8 @@ object Shape {
       Values.hlistValues(tail.valuesFactory)
     }
 
-    lazy val asMap: Map[String, Expression] = {
-
-      tail.asMap.updated(head.name, head.value)
-    }
+    override def list: List[Dim] = tail.list ++ Seq(head)
   }
-
-  def ><[
-      V <: Expression,
-      N <: Name
-  ](
-      dim: V :<<- N
-  ) = Nil cross dim
 
   def fromHList[
       H <: HList
@@ -165,4 +114,32 @@ object Shape {
 
     lemma(record).out
   }
+
+  implicit class ShapeOps[SELF <: Shape](self: SELF) {
+
+    def cross[
+        V <: Expression,
+        N <: Name
+    ](
+        dim: V :<<- N
+    ) = {
+
+      ><(dim)
+    }
+
+    // DON'T Refactor! `|` has the lowest operator priority
+    def ><[
+        V <: Expression,
+        N <: Name
+    ](
+        dim: V :<<- N
+    ): ><[SELF, V :<<- N] = new Shape.><(self, dim)
+  }
+
+  def ><[
+      V <: Expression,
+      N <: Name
+  ](
+      dim: V :<<- N
+  ) = Eye cross dim
 }

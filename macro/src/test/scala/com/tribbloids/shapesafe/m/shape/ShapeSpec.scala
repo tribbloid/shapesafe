@@ -57,7 +57,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) :<<- "y"
 
       inferShort(shape).shouldBe(
-        """shape.Shape.Nil >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String("y"))"""
+        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String("y"))"""
       )
 
       assert(shape.static.apply("x").number == 2)
@@ -70,7 +70,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3)
 
       inferShort(shape).shouldBe(
-        """shape.Shape.Nil >< (arity.Arity.FromLiteral[Int(2)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type)"""
+        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type)"""
       )
 
     }
@@ -86,7 +86,7 @@ class ShapeSpec extends BaseSpec {
       assert(shape.static.apply("z").number == 4)
 
       inferShort(shape).shouldBe(
-        """shape.Shape.Nil >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
+        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
       )
     }
 
@@ -101,7 +101,7 @@ class ShapeSpec extends BaseSpec {
 
       val shape = Shape.ofStatic(hh)
 
-      shape.static.head.toString.shouldBe()
+      assert(shape.static.head == Arity(3))
     }
   }
 
@@ -191,48 +191,38 @@ class ShapeSpec extends BaseSpec {
 
   describe("withNames") {
 
-//    it("spike") {
-//
-//      val shape = Shape |>
-//        Arity.FromLiteral(2) <<- "x" |
-//        Arity.FromLiteral(3) <<- "y"
-//
-//      val newNames = NamesView |> "a" | "b"
-//
-//      VizType.infer(newNames).treeString.shouldBe()
-//
-//      val vv = shape.withNamesProto(newNames)
-//
-//      VizType.infer(vv).treeString.shouldBe()
-//
-//    }
-
     val shape = Shape ><
       Arity.FromLiteral(2) :<<- "x" ><
       Arity.FromLiteral(3) :<<- "y"
 
+    val names1 = Names >< "a" >< "b"
+    val names2 = Names >< "a" >< "b" >< "c"
+
+    val shapeRenamed = Shape ><
+      Arity.FromLiteral(2) :<<- "a" ><
+      Arity.FromLiteral(3) :<<- "b"
+
     it("1") {
 
-      val newNames = NamesView >< "a" >< "b"
+//      inferShort(names1).shouldBe()
 
-      inferShort(newNames).shouldBe(
-        // TODO: hard to read comparing to Shape
-        """shape.NamesView[String("b") :: String("a") :: shapeless.HNil]"""
-      )
+      val shape2 = shape |<<- names1
 
-      val shape2 = shape |<<- newNames
+      VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
 
-      inferShort(shape2).shouldBe(
-        """shape.Shape.Nil >< (shape.tail.head.Value :<<- String("a")) >< (shape.head.Value :<<- String("b"))"""
-      )
     }
 
     it("2") {
 
-      val newNames = NamesView >< "a" >< "b" >< "c"
+      val shape2 = shape |<<- Names >< "a" >< "b"
+
+      VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
+    }
+
+    it("should fail if operands are of different dimensions") {
 
       shouldNotCompile(
-        "shape <<- newNames"
+        "shape <<- names2"
       )
     }
   }

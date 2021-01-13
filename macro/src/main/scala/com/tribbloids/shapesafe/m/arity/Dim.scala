@@ -12,7 +12,6 @@ trait Dim {
   def value: Value
 
   type Name <: String
-
   def nameSingleton: Witness.Aux[Name]
 
   final def name: Name = nameSingleton.value

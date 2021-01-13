@@ -60,6 +60,6 @@ class AritySpec extends BaseSpec {
   it("OfIntLike") {
 
     val v1 = Arity(3)
-    println(v1)
+    v1.toString.shouldBe("FromLiteral: 3")
   }
 }

@@ -1,6 +1,5 @@
 package com.tribbloids.shapesafe.m.shape.nullary
 
-import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
 import com.tribbloids.shapesafe.m.shape.Shape
@@ -16,7 +15,7 @@ class OfStaticTest extends BaseSpec {
 
     val shape = OfStatic.observe(hh)
 
-    assert(shape == Shape.Nil)
+    assert(shape == Shape.Eye)
   }
 
   it("1") {
@@ -26,7 +25,7 @@ class OfStaticTest extends BaseSpec {
 
     val shape = OfStatic.observe(hh)
 
-    VizType.infer(shape).toString.shouldBe()
+//    VizType.infer(shape).toString.shouldBe()
 
     assert(shape.static == hh)
   }
@@ -39,7 +38,7 @@ class OfStaticTest extends BaseSpec {
 
     val shape = OfStatic.observe(hh)
 
-    VizType.infer(shape).toString.shouldBe()
+//    VizType.infer(shape).toString.shouldBe()
 
     assert(shape.static == hh)
   }

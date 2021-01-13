@@ -8,12 +8,13 @@ import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import shapeless.labelled.FieldType
 import shapeless.{::, HList, HNil, Witness}
 
+// TODO: to be discarded after Shape becomes a TupleSystem
 class OfStatic[O <: Shape](val out: O) extends OfShape.Out_=[O] {}
 
 object OfStatic {
 
-  implicit def hNil: HNil ~~> OfStatic[Shape.Nil] = { _ =>
-    new OfStatic(Shape.Nil)
+  implicit def hNil: HNil ~~> OfStatic[Shape.Eye] = { _ =>
+    new OfStatic(Shape.Eye)
   }
 
   implicit def recursive[

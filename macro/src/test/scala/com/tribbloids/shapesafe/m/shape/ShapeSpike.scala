@@ -4,11 +4,13 @@ import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
+import org.scalatest.Ignore
 import shapeless.labelled.FieldType
 import shapeless.ops.record.Keys
 import shapeless.syntax.SingletonOps
 import shapeless.{HList, HNil, Witness}
 
+@Ignore
 class ShapeSpike extends BaseSpec {
 
   import shapeless.record._

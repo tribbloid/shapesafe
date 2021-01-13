@@ -2,25 +2,36 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
-import shapeless.{HNil, Witness}
+import com.tribbloids.shapesafe.m.shape.Names.Impl._
+import shapeless.HNil
 
 class NamesSuite extends BaseSpec {
 
+  import shapeless.syntax.singleton._
+
+  val names = Names >< "x" >< "y" >< "z"
+
+  val hList = "z".narrow :: "y".narrow :: "x".narrow :: HNil
+
   it("create") {
 
-    import shapeless.syntax.singleton._
+    require(names.static == hList)
 
-    val names = NamesView >< "x" >< "y" >< "z"
+    val t1 = VizType.infer(names.static)
+    val t2 = VizType.infer(hList)
 
-    val expected = "z".narrow :: "y".narrow :: "x".narrow :: HNil
+    assert(t1.tt =:= t2.tt)
+  }
 
-//    val expected = Witness("z").value :: Witness("y").value :: Witness("x").value :: HNil
+  it("FromStatic") {
 
-    require(names.self == expected)
+    val names2 = Names.FromStatic(hList)
 
-    val t1 = VizType.infer(names.self)
-    val t2 = VizType.infer(expected)
+    // TODO: runtime assertion?
 
-    t1.toString shouldBe t2.toString
+    val t1 = VizType.infer(names)
+    val t2 = VizType.infer(names2)
+
+    assert(t1.tt =:= t2.tt)
   }
 }
