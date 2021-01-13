@@ -1,11 +1,11 @@
 package com.tribbloids.shapesafe.m.shape
 
-import com.tribbloids.shapesafe.m.arity.Dim.{:<<-, Name}
-import com.tribbloids.shapesafe.m.arity.{Dim, Expression}
+import com.tribbloids.shapesafe.m.arity.Expression
+import com.tribbloids.shapesafe.m.axis.Axis.:<<-
+import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import shapeless.ops.hlist.ZipWithKeys
-import shapeless.ops.record.{Keys, Values}
 import shapeless.{::, HList, HNil}
 
 /**
@@ -13,38 +13,36 @@ import shapeless.{::, HList, HNil}
   * this saves compiler burden and reduces error
   */
 trait Shape extends ShapeLike {
+  // TODO: merged into TupleSystem
 
-  type Static <: HList
-  def static: Static
-
-  type _NameList <: HList
-  protected val namesFactory: Keys.Aux[Static, _NameList]
-  final lazy val names: _NameList = namesFactory()
-
-  type _ValueList <: HList
-  protected val valuesFactory: Values.Aux[Static, _ValueList]
-  final lazy val values: _ValueList = valuesFactory(static)
+  type _Record <: HList // not 'Static' which should be ann HList of [[Axis]]
+  def record: _Record
 
   //TODO: add dynamic indices
+  def list: List[Axis]
 
-  def list: List[Dim]
+  type _Names <: Names.Impl
+  val names: _Names
+
+  type _Dimensions <: Dimensions.Impl
+  val dimensions: _Dimensions
 
   /**
     * assign new names
-    * @param names
+    * @param newNames
     * @tparam H
     */
   def |<<-[
       NN <: Names.Impl,
       ZZ <: HList,
       O <: Shape
-  ](names: NN)(
+  ](newNames: NN)(
       implicit
-      zipping: ZipWithKeys.Aux[names.Static, _ValueList, ZZ],
+      zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
       prove: ZZ ~~> OfStatic[O]
   ): O = {
 
-    val zipped: ZZ = values.zipWithKeys(names.static)
+    val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
     prove(zipped).out
   }
 }
@@ -54,24 +52,23 @@ object Shape {
   // Cartesian product doesn't have eye but whatever
   sealed class Eye extends Shape {
 
-    final override type Static = HNil
-    override def static: Static = HNil
+    final override type _Record = HNil
+    final override def record: _Record = HNil
 
-    type _NameList = HNil
-    type _ValueList = HNil
+    override def list: List[Axis] = Nil
 
-    override val namesFactory = Keys.hnilKeys
-    override val valuesFactory = Values.hnilValues
+    final override type _Names = Names.Eye
+    final override val names = Names.Eye
 
-    override def list: List[Dim] = Nil
+    final override type _Dimensions = Dimensions.Eye
+    final override val dimensions = Dimensions.Eye
   }
-
   val Eye = new Eye()
 
   // cartesian product symbol
   class ><[
       TAIL <: Shape,
-      HEAD <: Dim
+      HEAD <: Axis
   ](
       val tail: TAIL,
       val head: HEAD
@@ -81,27 +78,17 @@ object Shape {
 
     final type Field = head.Field
 
-    final override type Static = Field :: tail.Static
-    override def static: Static = head.asField :: tail.static
+    final override type _Record = Field :: tail._Record
+    override def record: _Record = head.asField :: tail.record
 
-    type _NameList = head.Name :: tail._NameList
-    type _ValueList = head.Value :: tail._ValueList
+    override def list: List[Axis] = tail.list ++ Seq(head)
 
-    override val namesFactory = {
+    final override type _Names = Names.><[tail._Names, head.Name]
+    final override val names = tail.names >< head.nameSingleton
 
-      Keys.hlistKeys(head.nameSingleton, tail.namesFactory)
-    }
-    override val valuesFactory = {
-
-      Values.hlistValues(tail.valuesFactory)
-    }
-
-    override def list: List[Dim] = tail.list ++ Seq(head)
+    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Dimension]
+    final override val dimensions = tail.dimensions >< head.dimension
   }
-
-  def fromHList[
-      H <: HList
-  ](list: H): Unit = {}
 
   def ofStatic[
       H <: HList,
@@ -119,7 +106,7 @@ object Shape {
 
     def cross[
         V <: Expression,
-        N <: Name
+        N <: NameUB
     ](
         dim: V :<<- N
     ) = {
@@ -130,7 +117,7 @@ object Shape {
     // DON'T Refactor! `|` has the lowest operator priority
     def ><[
         V <: Expression,
-        N <: Name
+        N <: NameUB
     ](
         dim: V :<<- N
     ): ><[SELF, V :<<- N] = new Shape.><(self, dim)
@@ -138,7 +125,7 @@ object Shape {
 
   def ><[
       V <: Expression,
-      N <: Name
+      N <: NameUB
   ](
       dim: V :<<- N
   ) = Eye cross dim

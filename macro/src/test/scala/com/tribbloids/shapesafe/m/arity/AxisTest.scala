@@ -3,7 +3,7 @@ package com.tribbloids.shapesafe.m.arity
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 
-class DimTest extends BaseSpec {
+class AxisTest extends BaseSpec {
 
   it("correct type") {
 

@@ -1,10 +1,10 @@
 package com.tribbloids.shapesafe.m.shape.nullary
 
-import com.tribbloids.shapesafe.m.arity.Dim.:<<-
 import com.tribbloids.shapesafe.m.arity.Expression
+import com.tribbloids.shapesafe.m.axis.Axis.:<<-
+import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import com.tribbloids.shapesafe.m.shape.Shape.><
 import com.tribbloids.shapesafe.m.shape.{OfShape, Shape}
-import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import shapeless.labelled.FieldType
 import shapeless.{::, HList, HNil, Witness}
 

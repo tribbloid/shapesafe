@@ -31,7 +31,7 @@ class ShapeSpec extends BaseSpec {
 //      VizType[shape.Field].toString.shouldBe()
 //      VizType[shape.Tail].toString.shouldBe()
 //      VizType[shape.tail.type].toString.shouldBe()
-      VizType[shape.Static].toString.shouldBe()
+      VizType[shape._Record].toString.shouldBe()
     }
 
     it("2") {
@@ -44,7 +44,7 @@ class ShapeSpec extends BaseSpec {
 
       //    VizType[shape.Tail].toString.shouldBe()
 //      VizType[shape.Field].toString.shouldBe()
-      VizType[shape.Static].toString.shouldBe()
+      VizType[shape._Record].toString.shouldBe()
     }
   }
 
@@ -60,7 +60,7 @@ class ShapeSpec extends BaseSpec {
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String("y"))"""
       )
 
-      assert(shape.static.apply("x").number == 2)
+      assert(shape.record.apply("x").number == 2)
     }
 
     it("nameless") {
@@ -70,7 +70,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3)
 
       inferShort(shape).shouldBe(
-        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type)"""
+        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type)"""
       )
 
     }
@@ -82,11 +82,11 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) cross
         Arity.FromLiteral(4) :<<- "z"
 
-      assert(shape.static.apply("x").number == 2)
-      assert(shape.static.apply("z").number == 4)
+      assert(shape.record.apply("x").number == 2)
+      assert(shape.record.apply("z").number == 4)
 
       inferShort(shape).shouldBe(
-        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- arity.Dim.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
+        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
       )
     }
 
@@ -101,7 +101,7 @@ class ShapeSpec extends BaseSpec {
 
       val shape = Shape.ofStatic(hh)
 
-      assert(shape.static.head == Arity(3))
+      assert(shape.record.head == Arity(3))
     }
   }
 
@@ -112,7 +112,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         Arity.FromLiteral(2) :<<- "x"
 
-      val static = shape.static
+      val static = shape.record
 
 //      VizType.infer(static).treeString.shouldBe()
 
@@ -131,7 +131,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "x" ><
         Arity.FromLiteral(3) :<<- "y"
 
-      val static = shape.static
+      val static = shape.record
 
       //      VizType.infer(static).treeString.shouldBe()
 
@@ -170,7 +170,7 @@ class ShapeSpec extends BaseSpec {
 //      val _vv = shape.valuesFactory //.apply(shape.static)
 //      VizType.infer(_vv).toString.shouldBe()
 
-      val vv = shape.values
+      val vv = shape.dimensions
 
 //      VizType
 //        .infer(vv)

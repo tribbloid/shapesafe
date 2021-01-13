@@ -28,7 +28,7 @@ trait TupleSystem[UB] {
         HEAD <: UB
     ](
         head: HEAD
-    ): ><[SELF, HEAD] = new ><(self, head)
+    ): ><[SELF, HEAD] = TupleSystem.this.><(self, head)
 
     def cross[
         HEAD <: UB
@@ -45,7 +45,7 @@ trait TupleSystem[UB] {
     override type Static = HNil
     override def static: HNil = HNil
   }
-  val Eye = new Eye()
+  val Eye: Eye = new Eye()
 
   // cartesian product symbol
   class ><[
@@ -59,6 +59,13 @@ trait TupleSystem[UB] {
     override type Static = HEAD :: tail.Static
     override def static: Static = head :: tail.static
   }
+  protected def ><[
+      TAIL <: Impl,
+      HEAD <: UB
+  ](
+      tail: TAIL,
+      head: HEAD
+  ): ><[TAIL, HEAD] = new ><(tail, head)
 
   object FromStatic {
 
@@ -83,7 +90,7 @@ trait TupleSystem[UB] {
       { v =>
         val prev = forTail(v.tail)
 
-        new ><(prev, v.head)
+        ><(prev, v.head)
       }
     }
 

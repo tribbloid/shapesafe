@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity
 
-import com.tribbloids.shapesafe.m.arity.Dim.Name
 import com.tribbloids.shapesafe.m.arity.OfArity.~~>
+import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -35,14 +35,14 @@ object Expression {
 
   implicit class ExpressionOps[T <: Expression](self: T) {
 
-    def withNameT(implicit name: Witness.Lt[String]) = Dim(self, name)
+    def withNameT(implicit name: Witness.Lt[String]) = Axis(self, name)
 
-    def withName(name: Witness.Lt[Name]) = {
+    def withName(name: Witness.Lt[NameUB]) = {
 
       :<<-(name)
     }
 
-    def :<<-(name: Witness.Lt[Name]) = withNameT(name)
+    def :<<-(name: Witness.Lt[NameUB]) = withNameT(name)
   }
 
   // TODO: this can be simplified by writing 1 function to cast Expression to FieldType

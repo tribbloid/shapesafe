@@ -1,46 +1,44 @@
-package com.tribbloids.shapesafe.m.arity
+package com.tribbloids.shapesafe.m.axis
 
+import com.tribbloids.shapesafe.m.arity.Expression
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
-trait Dim {
+trait Axis {
   //TODO:; can be a subclass of shapeless KeyTag
 
-  type Value <: Expression
-  def value: Value
+  type Dimension <: Expression
+  def dimension: Dimension
 
   type Name <: String
   def nameSingleton: Witness.Aux[Name]
 
   final def name: Name = nameSingleton.value
 
-  final type Field = FieldType[Name, Value]
-  final def asField: Field = value.asInstanceOf[Field]
+  final type Field = FieldType[Name, Dimension]
+  final def asField: Field = dimension.asInstanceOf[Field]
 }
 
-object Dim {
-
-  type Name = String
+object Axis {
 
   val emptyName = ""
 
   // TODO: N can be eliminated
   case class :<<-[
       V <: Expression,
-      N <: Name
+      N <: NameUB
   ](
-      value: V,
+      dimension: V,
       nameSingleton: Witness.Aux[N]
-  ) extends Dim {
+  ) extends Axis {
 
     type Name = N
-
-    type Value = V
+    type Dimension = V
   }
 
-  type UB = FieldType[_ <: Name, Expression]
+  type FieldUB = FieldType[_ <: NameUB, Expression]
 
   def apply[
       V <: Expression

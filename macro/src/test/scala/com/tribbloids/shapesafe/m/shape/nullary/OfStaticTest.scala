@@ -27,7 +27,7 @@ class OfStaticTest extends BaseSpec {
 
 //    VizType.infer(shape).toString.shouldBe()
 
-    assert(shape.static == hh)
+    assert(shape.record == hh)
   }
 
   it("2") {
@@ -40,6 +40,6 @@ class OfStaticTest extends BaseSpec {
 
 //    VizType.infer(shape).toString.shouldBe()
 
-    assert(shape.static == hh)
+    assert(shape.record == hh)
   }
 }
