@@ -1,19 +1,21 @@
 package com.tribbloids.shapesafe.m.shape
 
-import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.axis.Axis.:<<-
-import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
+import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
-import shapeless.ops.hlist.ZipWithKeys
-import shapeless.{::, HList, HNil}
+import com.tribbloids.shapesafe.m.shape.op.ShapeOps
+import shapeless.ops.hlist.{At, ZipWithKeys}
+import shapeless.ops.record.Selector
+import shapeless.{::, HList, HNil, Nat, Witness}
+
+import scala.language.implicitConversions
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait Shape extends ShapeLike {
-  // TODO: merged into TupleSystem
+trait Shape {
+  // TODO: merged into TupleSystem?
 
   type _Record <: HList // not 'Static' which should be ann HList of [[Axis]]
   def record: _Record
@@ -33,10 +35,9 @@ trait Shape extends ShapeLike {
     * @tparam H
     */
   def |<<-[
-      NN <: Names.Impl,
       ZZ <: HList,
       O <: Shape
-  ](newNames: NN)(
+  ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
       prove: ZZ ~~> OfStatic[O]
@@ -45,6 +46,29 @@ trait Shape extends ShapeLike {
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
     prove(zipped).out
   }
+
+  object Axes {
+
+    def get(index: Nat)(implicit at: At[_Record, index.N]): at.Out = {
+
+//      record.reverse TODO: use it later
+
+      record.apply(index)(at)
+    }
+
+    def get(name: Witness.Lt[String])(implicit selector: Selector[_Record, name.T]): selector.Out = {
+
+      import shapeless.record._
+
+      record.apply(name)(selector)
+    }
+  }
+
+  //  object EinSum extends TupleSystem[String] {
+//
+//    class Ops[SELF <: Impl](self: SELF) {}
+//    override def getOps[SELF <: Impl](self: SELF): Ops[SELF] = new Ops(self)
+//  }
 }
 
 object Shape {
@@ -102,31 +126,7 @@ object Shape {
     lemma(record).out
   }
 
-  implicit class ShapeOps[SELF <: Shape](self: SELF) {
+  implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = new ShapeOps(self)
 
-    def cross[
-        V <: Expression,
-        N <: NameUB
-    ](
-        dim: V :<<- N
-    ) = {
-
-      ><(dim)
-    }
-
-    // DON'T Refactor! `|` has the lowest operator priority
-    def ><[
-        V <: Expression,
-        N <: NameUB
-    ](
-        dim: V :<<- N
-    ): ><[SELF, V :<<- N] = new Shape.><(self, dim)
-  }
-
-  def ><[
-      V <: Expression,
-      N <: NameUB
-  ](
-      dim: V :<<- N
-  ) = Eye cross dim
+  implicit def toOps(v: this.type): ShapeOps[Eye] = ops(Eye)
 }

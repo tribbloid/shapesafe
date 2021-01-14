@@ -12,7 +12,7 @@ case class AssertEqual[
     a2: A2
 ) extends Expression {}
 
-trait MayEqual_Imp0 {
+trait AssertEqual_Imp0 {
 
   implicit def unsafe[
       A1 <: Expression,
@@ -26,7 +26,7 @@ trait MayEqual_Imp0 {
   }
 }
 
-object AssertEqual extends MayEqual_Imp0 {
+object AssertEqual extends AssertEqual_Imp0 {
 
   // TODO : both of these signatures are not refined enough, it should contains 4 cases:
   //  Const - Const -> Const[1]

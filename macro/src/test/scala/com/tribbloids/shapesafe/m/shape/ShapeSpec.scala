@@ -60,7 +60,9 @@ class ShapeSpec extends BaseSpec {
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String("y"))"""
       )
 
-      assert(shape.record.apply("x").number == 2)
+//      VizType.infer(shape.record).toString.shouldBe()
+
+      assert(shape.record.apply("x").dimension.number == 2)
     }
 
     it("nameless") {
@@ -82,8 +84,8 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) cross
         Arity.FromLiteral(4) :<<- "z"
 
-      assert(shape.record.apply("x").number == 2)
-      assert(shape.record.apply("z").number == 4)
+      assert(shape.record.apply("x").dimension.number == 2)
+      assert(shape.record.apply("z").dimension.number == 4)
 
       inferShort(shape).shouldBe(
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
@@ -101,11 +103,11 @@ class ShapeSpec extends BaseSpec {
 
       val shape = Shape.ofStatic(hh)
 
-      assert(shape.record.head == Arity(3))
+      assert(shape.record.head.dimension == Arity(3))
     }
   }
 
-  describe("static") {
+  describe("record") {
 
     it("1") {
 
@@ -121,7 +123,7 @@ class ShapeSpec extends BaseSpec {
       )
 
       inferShort(static.values).shouldBe(
-        """arity.Arity.FromLiteral[Int(2)] :: shapeless.HNil"""
+        """(arity.Arity.FromLiteral[Int(2)] :<<- String("x")) :: shapeless.HNil"""
       )
     }
 
@@ -131,16 +133,16 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "x" ><
         Arity.FromLiteral(3) :<<- "y"
 
-      val static = shape.record
+      val record = shape.record
 
       //      VizType.infer(static).treeString.shouldBe()
 
-      inferShort(static.keys).shouldBe(
+      inferShort(record.keys).shouldBe(
         """String("y") :: String("x") :: shapeless.HNil"""
       )
 
-      inferShort(static.values).shouldBe(
-        """arity.Arity.FromLiteral[Int(3)] :: arity.Arity.FromLiteral[Int(2)] :: shapeless.HNil"""
+      inferShort(record.values).shouldBe(
+        """(arity.Arity.FromLiteral[Int(3)] :<<- String("y")) :: (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) :: shapeless.HNil"""
       )
     }
   }
@@ -195,8 +197,9 @@ class ShapeSpec extends BaseSpec {
       Arity.FromLiteral(2) :<<- "x" ><
       Arity.FromLiteral(3) :<<- "y"
 
-    val names1 = Names >< "a" >< "b"
-    val names2 = Names >< "a" >< "b" >< "c"
+    val ab = Names >< "a" >< "b"
+    val ij = Names >< "i" >< "j"
+    val namesTooMany = Names >< "a" >< "b" >< "c"
 
     val shapeRenamed = Shape ><
       Arity.FromLiteral(2) :<<- "a" ><
@@ -206,15 +209,20 @@ class ShapeSpec extends BaseSpec {
 
 //      inferShort(names1).shouldBe()
 
-      val shape2 = shape |<<- names1
+      val shape2 = shape |<<- ab
+
+//      VizType.infer(shape2).toString.shouldBe()
 
       VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
-
     }
 
     it("2") {
 
-      val shape2 = shape |<<- Names >< "a" >< "b"
+      val shape1 = shape |<<- ij
+
+      val shape2 = shape1 |<<- Names >< "a" >< "b"
+
+      VizType.infer(shape2).toString.shouldBe()
 
       VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
     }
@@ -222,8 +230,30 @@ class ShapeSpec extends BaseSpec {
     it("should fail if operands are of different dimensions") {
 
       shouldNotCompile(
-        "shape <<- names2"
+        "shape <<- namesTooMany"
       )
+    }
+  }
+
+  describe("Axes") {
+
+    val shape = Shape ><
+      Arity.FromLiteral(2) :<<- "x" ><
+      Arity.FromLiteral(3) :<<- "y" ><
+      Arity.FromLiteral(4) :<<- "z"
+
+    it("getByIndex") {
+
+      val v = shape.Axes.get(0)
+
+      assert(v == Arity.FromLiteral(4) :<<- "z") // HList is of inverse order
+    }
+
+    it("getByName") {
+
+      val v = shape.Axes.get("y")
+
+      assert(v == Arity.FromLiteral(3) :<<- "y")
     }
   }
 

@@ -1,12 +1,13 @@
 package com.tribbloids.shapesafe.m.axis
 
+import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.shapesafe.m.arity.Expression
 import shapeless.Witness
-import shapeless.labelled.FieldType
+import shapeless.labelled.{FieldType, KeyTag}
 
 import scala.language.implicitConversions
 
-trait Axis {
+trait Axis extends IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
 
   type Dimension <: Expression
@@ -17,8 +18,15 @@ trait Axis {
 
   final def name: Name = nameSingleton.value
 
-  final type Field = FieldType[Name, Dimension]
-  final def asField: Field = dimension.asInstanceOf[Field]
+  type Field <: FieldType[Name, Axis]
+  final def asField: Field = this.asInstanceOf[Field]
+
+  override protected lazy val _id: Any = (dimension, name)
+
+  override lazy val toString = s"$dimension :<<- $name"
+
+//  final type Field = FieldType[Name, Dimension]
+//  final def asField: Field = dimension.asInstanceOf[Field]
 }
 
 object Axis {
@@ -26,19 +34,23 @@ object Axis {
   val emptyName = ""
 
   // TODO: N can be eliminated
-  case class :<<-[
-      V <: Expression,
+  class :<<-[
+      D <: Expression,
       N <: NameUB
   ](
-      dimension: V,
-      nameSingleton: Witness.Aux[N]
-  ) extends Axis {
+      val dimension: D,
+      val nameSingleton: Witness.Aux[N]
+  ) extends Axis
+      with KeyTag[N, D :<<- N] {
 
     type Name = N
-    type Dimension = V
+    type Dimension = D
+
+    // TODO: why this can't be simplified?
+    final type Field = FieldType[N, D :<<- N]
   }
 
-  type FieldUB = FieldType[_ <: NameUB, Expression]
+  type FieldUB = :<<-[_ <: Expression, _ <: NameUB]
 
   def apply[
       V <: Expression
@@ -51,4 +63,6 @@ object Axis {
   }
 
   implicit def nameless[V <: Expression](self: V) = apply(self, emptyName)
+
+  implicit class AxisOps[SELF <: Axis](self: SELF) {}
 }

@@ -1,15 +1,20 @@
 package com.tribbloids.shapesafe.m.shape
 
+import com.tribbloids.graph.commons.util.IDMixin
 import shapeless.{::, HList, HNil}
 
 import scala.language.implicitConversions
 
 trait TupleSystem[UB] {
 
-  trait Impl {
+  trait Impl extends IDMixin {
 
     type Static <: HList
     def static: Static
+
+    def asList: List[UB]
+
+    override protected def _id: Any = asList
   }
 
   object Impl {
@@ -17,8 +22,8 @@ trait TupleSystem[UB] {
     implicit def toOps[SELF <: Impl](self: SELF): Ops[SELF] = getOps(self)
   }
 
-  def getOps[SELF <: Impl](self: SELF): Ops[SELF]
   type Ops[SELF <: Impl]
+  def getOps[SELF <: Impl](self: SELF): Ops[SELF]
 
   trait InfixOpsMixin[SELF <: Impl] {
 
@@ -44,6 +49,10 @@ trait TupleSystem[UB] {
 
     override type Static = HNil
     override def static: HNil = HNil
+
+    override def asList: List[UB] = Nil
+
+    override lazy val toString = "Eye"
   }
   val Eye: Eye = new Eye()
 
@@ -58,6 +67,10 @@ trait TupleSystem[UB] {
 
     override type Static = HEAD :: tail.Static
     override def static: Static = head :: tail.static
+
+    override def asList: List[UB] = tail.asList ++ Seq(head)
+
+    override lazy val toString = s"${tail.toString} >< $head"
   }
   protected def ><[
       TAIL <: Impl,

@@ -32,6 +32,8 @@ class NamesSuite extends BaseSpec {
     val t1 = VizType.infer(names)
     val t2 = VizType.infer(names2)
 
+//    t1.toString.shouldBe()
+
     assert(t1.tt =:= t2.tt)
   }
 }
