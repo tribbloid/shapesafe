@@ -1,7 +1,8 @@
-package com.tribbloids.shapesafe.m.shape
+package com.tribbloids.shapesafe.m
 
 /**
   * Not sure if this thing is ever going to be useful, maybe HType1 => HList => mapped => HType2 is sufficient
+  *
   * @tparam UBI Upper bound type of input system
   * @tparam UBO Upper bound type of output system
   */

@@ -1,4 +1,4 @@
-package com.tribbloids.shapesafe.m.shape
+package com.tribbloids.shapesafe.m
 
 import com.tribbloids.graph.commons.util.IDMixin
 import shapeless.{::, HList, HNil}

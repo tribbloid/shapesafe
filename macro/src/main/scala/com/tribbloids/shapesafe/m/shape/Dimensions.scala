@@ -1,5 +1,6 @@
 package com.tribbloids.shapesafe.m.shape
 
+import com.tribbloids.shapesafe.m.TupleSystem
 import com.tribbloids.shapesafe.m.arity.Expression
 
 import scala.language.implicitConversions
