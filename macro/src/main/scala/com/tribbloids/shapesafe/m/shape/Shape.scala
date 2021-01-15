@@ -4,6 +4,7 @@ import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
+import com.tribbloids.shapesafe.m.tuple.TupleSystem
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, Witness}
@@ -64,17 +65,22 @@ trait Shape {
     }
   }
 
-  //  object EinSum extends TupleSystem[String] {
+  object EinSum extends TupleSystem[String] {
+
+    implicit class Ops[SELF <: Impl](val self: SELF) {}
+
+//    implicit def canCrossIfComply[TAIL <: Impl, HEAD <: String]: CanCross[TAIL, HEAD] = { (tail, head) =>
+//      val sameIndex = tail.
 //
-//    class Ops[SELF <: Impl](self: SELF) {}
-//    override def getOps[SELF <: Impl](self: SELF): Ops[SELF] = new Ops(self)
-//  }
+//      new ><(tail, head)
+//    }
+  }
 }
 
 object Shape {
 
   // Cartesian product doesn't have eye but whatever
-  sealed class Eye extends Shape {
+  object Eye extends Shape {
 
     final override type _Record = HNil
     final override def record: _Record = HNil
@@ -87,7 +93,7 @@ object Shape {
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
   }
-  val Eye = new Eye()
+  type Eye = Eye.type
 
   // cartesian product symbol
   class ><[

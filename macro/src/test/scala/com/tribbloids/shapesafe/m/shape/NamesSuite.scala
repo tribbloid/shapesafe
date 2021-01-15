@@ -2,7 +2,6 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
-import com.tribbloids.shapesafe.m.shape.Names.Impl._
 import shapeless.HNil
 
 class NamesSuite extends BaseSpec {

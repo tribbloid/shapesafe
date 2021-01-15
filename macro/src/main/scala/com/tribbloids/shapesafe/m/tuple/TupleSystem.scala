@@ -1,4 +1,4 @@
-package com.tribbloids.shapesafe.m
+package com.tribbloids.shapesafe.m.tuple
 
 import com.tribbloids.graph.commons.util.IDMixin
 import shapeless.{::, HList, HNil}
@@ -17,35 +17,16 @@ trait TupleSystem[UB] {
     override protected def _id: Any = asList
   }
 
-  object Impl {
+//  object Impl {
+//
+//    implicit def toOps[SELF <: Impl](self: SELF)(
+//        implicit canOps: SELF => Ops[SELF]
+//    ): Ops[SELF] = canOps(self)
+//  }
 
-    implicit def toOps[SELF <: Impl](self: SELF): Ops[SELF] = getOps(self)
-  }
+//  type Ops[SELF <: Impl]
 
-  type Ops[SELF <: Impl]
-  def getOps[SELF <: Impl](self: SELF): Ops[SELF]
-
-  trait InfixOpsMixin[SELF <: Impl] {
-
-    def self: SELF
-
-    def ><[
-        HEAD <: UB
-    ](
-        head: HEAD
-    ): ><[SELF, HEAD] = TupleSystem.this.><(self, head)
-
-    def cross[
-        HEAD <: UB
-    ](
-        head: HEAD
-    ): SELF >< HEAD = {
-
-      ><(head)
-    }
-  }
-
-  class Eye extends Impl {
+  object Eye extends Impl {
 
     override type Static = HNil
     override def static: HNil = HNil
@@ -54,7 +35,7 @@ trait TupleSystem[UB] {
 
     override lazy val toString = "Eye"
   }
-  val Eye: Eye = new Eye()
+  type Eye = Eye.type
 
   // cartesian product symbol
   class ><[
@@ -72,22 +53,19 @@ trait TupleSystem[UB] {
 
     override lazy val toString = s"${tail.toString} >< $head"
   }
-  protected def ><[
-      TAIL <: Impl,
-      HEAD <: UB
-  ](
-      tail: TAIL,
-      head: HEAD
-  ): ><[TAIL, HEAD] = new ><(tail, head)
 
+  trait CanCross[TAIL <: Impl, HEAD <: UB] {
+
+    def apply(tail: TAIL, head: HEAD): ><[TAIL, HEAD]
+  }
+
+  private[TupleSystem] trait FromStatic[I <: HList, O <: Impl] {
+
+    def apply(in: I): O
+  }
   object FromStatic {
 
-    trait ~~>[I <: HList, O <: Impl] {
-
-      def apply(in: I): O
-    }
-
-    implicit def toEye: HNil ~~> Eye = { _ =>
+    implicit def toEye: HNil FromStatic Eye = { _ =>
       Eye
     }
 
@@ -97,17 +75,18 @@ trait TupleSystem[UB] {
         HEAD <: UB
     ](
         implicit
-        forTail: TAIL ~~> PREV
-    ): (HEAD :: TAIL) ~~> (PREV >< HEAD) = {
+        forTail: TAIL FromStatic PREV,
+        canCross: CanCross[PREV, HEAD]
+    ): (HEAD :: TAIL) FromStatic (PREV >< HEAD) = {
 
       { v =>
         val prev = forTail(v.tail)
 
-        ><(prev, v.head)
+        canCross(prev, v.head)
       }
     }
 
-    def apply[T <: HList, O <: Impl](v: T)(implicit ev: T ~~> O): O = {
+    def apply[T <: HList, O <: Impl](v: T)(implicit ev: T FromStatic O): O = {
 
       ev.apply(v)
     }

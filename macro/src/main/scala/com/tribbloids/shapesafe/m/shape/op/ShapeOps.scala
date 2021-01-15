@@ -23,5 +23,4 @@ class ShapeOps[SELF <: Shape](self: SELF) {
 
     ><(dim)
   }
-
 }
