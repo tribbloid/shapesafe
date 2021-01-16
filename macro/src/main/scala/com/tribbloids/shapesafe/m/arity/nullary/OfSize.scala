@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.arity.nullary
 
 import com.tribbloids.shapesafe.m.arity.Arity.FromOp
-import com.tribbloids.shapesafe.m.arity.Proven.ProvenToBe
+import com.tribbloids.shapesafe.m.arity.ProvenExpression.ProvenToBe
 import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}

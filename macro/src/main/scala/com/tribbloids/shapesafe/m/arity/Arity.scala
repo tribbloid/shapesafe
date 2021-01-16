@@ -8,7 +8,7 @@ import singleton.ops.{+, ==, Require}
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity extends Proven {
+trait Arity extends ProvenExpression {
 
   override type Out >: this.type <: Arity
   override def out: this.type = this

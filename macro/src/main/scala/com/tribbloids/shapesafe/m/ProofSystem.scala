@@ -1,11 +1,12 @@
 package com.tribbloids.shapesafe.m
 
+import scala.language.implicitConversions
+
 trait ProofSystem[UB] {
 
   trait Proof extends Serializable {
 
     type Out <: UB
-
     def out: Out
   }
 
@@ -28,15 +29,21 @@ trait ProofSystem[UB] {
 
   // doesn't extend T => R intentionally
   // each ProofSystem use a different one to alleviate search burden of compiler (or is it redundant?)
-  trait ~~>[-T, +R] {
+  trait ~~>[-T, +R <: Proof] {
     def apply(v: T): R
   }
 
   object ~~> {
 
-    implicit def summon[T, R](v: T)(implicit bound: T ~~> R): R = bound.apply(v)
+    implicit def summon[T, R <: Proof](v: T)(implicit bound: T ~~> R): R = bound.apply(v)
 
-    implicit def trivial[T]: T ~~> T = identity
+    implicit def trivial[T <: Proof]: T ~~> T = identity
   }
 
+  trait ForAll[-T, +R <: Proof] extends (T ~~> R) {
+
+    def proveArity: T => R
+
+    final override def apply(in: T): R = proveArity(in)
+  }
 }

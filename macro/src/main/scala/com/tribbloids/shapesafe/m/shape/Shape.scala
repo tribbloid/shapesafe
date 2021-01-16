@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.shape.OfShape.~~>
 import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
-import com.tribbloids.shapesafe.m.tuple.TupleSystem
+import com.tribbloids.shapesafe.m.tuple.CanonicalTupleSystem
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, Witness}
@@ -65,7 +65,12 @@ trait Shape {
     }
   }
 
-  object EinSum extends TupleSystem[String] {
+  object EinSumHelper extends CanonicalTupleSystem[String] {
+
+    class ImplView[TAIL <: Impl, HEAD <: String](self: TAIL >< HEAD) {
+
+      class ImplView
+    }
 
     implicit class Ops[SELF <: Impl](val self: SELF) {}
 

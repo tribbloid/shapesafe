@@ -2,15 +2,15 @@ package com.tribbloids.shapesafe.m.tuple
 
 import scala.language.implicitConversions
 
-trait CanInfix[UB] {
-  _self: TupleSystem[UB] =>
+trait CanInfix {
+  _self: TupleSystem =>
 
-  trait InfixOpsMixin[SELF <: Impl] {
+  trait InfixMixin[SELF <: Impl] {
 
     def self: SELF
 
     def ><[
-        HEAD <: UB
+        HEAD <: Upper
     ](
         head: HEAD
     )(
@@ -18,7 +18,7 @@ trait CanInfix[UB] {
     ): ><[SELF, HEAD] = canCross(self, head)
 
     def cross[
-        HEAD <: UB
+        HEAD <: Upper
     ](
         head: HEAD
     )(
@@ -29,7 +29,7 @@ trait CanInfix[UB] {
     }
   }
 
-  implicit class Ops[SELF <: Impl](val self: SELF) extends InfixOpsMixin[SELF] {}
+  implicit class Infix[SELF <: Impl](val self: SELF) extends InfixMixin[SELF] {}
 
-  implicit def toEyeOps(s: this.type): Ops[s.Eye] = Ops(s.Eye)
+  implicit def toEyeInfix(s: this.type): Infix[s.Eye] = Infix(s.Eye)
 }

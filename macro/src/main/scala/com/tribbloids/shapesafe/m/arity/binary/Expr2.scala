@@ -28,8 +28,8 @@ trait Expr2_Imp0 {
       implicit
       domain: UnsafeDomain[A1, A2, O],
       tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
-  ): Expr2[A1, A2, ??] ~~> OfArity.Unsafe = { v =>
-    domain.Proof2(v)
+  ): domain.ForOp2[??] = {
+    domain.ForOp2[??]()
   }
 }
 
@@ -46,11 +46,9 @@ object Expr2 extends Expr2_Imp0 {
       bound1: A1 ~~> OfArity.Invar[S1],
       bound2: A2 ~~> OfArity.Invar[S2],
       lemma: S1 ?? S2
-  ): Expr2[A1, A2, ??] ~~> InvarDomain[A1, A2, S1, S2]#Proof2[??] = {
+  ): InvarDomain[A1, A2, S1, S2]#ForOp2[??] = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    { v =>
-      domain.Proof2[??](v)(lemma)
-    }
+    domain.ForOp2[??]()(lemma)
   }
 }

@@ -21,8 +21,8 @@ trait AssertEqual_Imp0 {
   ](
       implicit
       domain: UnsafeDomain[A1, A2, O]
-  ): AssertEqual[A1, A2] ~~> UnsafeDomain[A1, A2, O]#DynamicEqual = { v =>
-    domain.DynamicEqual(v)
+  ): UnsafeDomain[A1, A2, O]#ForEqual = {
+    domain.ForEqual
   }
 }
 
@@ -44,12 +44,10 @@ object AssertEqual extends AssertEqual_Imp0 {
       bound1: A1 ~~> OfArity.Invar[S1],
       bound2: A2 ~~> OfArity.Invar[S2],
       lemma: Require[S1 == S2]
-  ): AssertEqual[A1, A2] ~~> InvarDomain[A1, A2, S1, S2]#Equal = {
+  ): InvarDomain[A1, A2, S1, S2]#ForEqual = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    { v =>
-      domain.Equal(v)
-    }
+    domain.ForEqual()
   }
 }
