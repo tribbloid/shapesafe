@@ -8,8 +8,8 @@ package com.tribbloids.shapesafe.m.tuple
   */
 trait TupleLambdaSystem[UBI, UBO] {
 
-  val sysI: CanonicalTupleSystem[UBI]
-  val sysO: CanonicalTupleSystem[UBO]
+  val sysI: StaticTuples[UBI]
+  val sysO: StaticTuples[UBO]
 
   // Implementations of HTypedSystem MUST declare type classes for this trait
   trait UnitLambda[

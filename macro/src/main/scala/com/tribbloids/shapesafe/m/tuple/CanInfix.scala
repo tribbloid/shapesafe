@@ -10,7 +10,7 @@ trait CanInfix {
     def self: SELF
 
     def ><[
-        HEAD <: Upper
+        HEAD <: UpperBound
     ](
         head: HEAD
     )(
@@ -18,7 +18,7 @@ trait CanInfix {
     ): ><[SELF, HEAD] = canCross(self, head)
 
     def cross[
-        HEAD <: Upper
+        HEAD <: UpperBound
     ](
         head: HEAD
     )(

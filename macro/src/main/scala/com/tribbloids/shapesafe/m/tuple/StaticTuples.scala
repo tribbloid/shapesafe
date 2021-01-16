@@ -5,9 +5,9 @@ import shapeless.{::, HList, HNil}
 
 import scala.language.implicitConversions
 
-trait CanonicalTupleSystem[UB] extends TupleSystem {
+trait StaticTuples[UB] extends TupleSystem {
 
-  type Upper = UB
+  type UpperBound = UB
 
   trait Impl extends IDMixin {
 
@@ -56,7 +56,14 @@ trait CanonicalTupleSystem[UB] extends TupleSystem {
   }
 }
 
-object CanonicalTupleSystem {
+object StaticTuples {
 
 //  implicit def toEyeOps(s: TupleSystem[_]): s.Impl.InfixOps[s.Eye] = new s.Impl.InfixOps(s.Eye)
+
+  trait Total[UB] extends StaticTuples[UB] {
+
+    implicit def canCrossAlways[TAIL <: Impl, HEAD <: UB]: CanCross[TAIL, HEAD] = { (tail, head) =>
+      new ><(tail, head)
+    }
+  }
 }

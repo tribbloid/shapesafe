@@ -13,7 +13,7 @@ trait Axis extends IDMixin {
   type Dimension <: Expression
   def dimension: Dimension
 
-  type Name <: String
+  type Name <: NameUB
   def nameSingleton: Witness.Aux[Name]
 
   final def name: Name = nameSingleton.value
@@ -41,6 +41,7 @@ object Axis {
       val dimension: D,
       val nameSingleton: Witness.Aux[N]
   ) extends Axis
+//  with KeyTag[N, Axis] // TODO: remove? redundant
       with KeyTag[N, D :<<- N] {
 
     type Name = N
@@ -50,7 +51,7 @@ object Axis {
     final type Field = FieldType[N, D :<<- N]
   }
 
-  type FieldUB = :<<-[_ <: Expression, _ <: NameUB]
+  type FieldUB = FieldType[_ <: NameUB, _ <: Axis]
 
   def apply[
       V <: Expression

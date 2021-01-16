@@ -4,7 +4,7 @@ import shapeless.{::, HList, HNil}
 
 trait TupleSystem {
 
-  type Upper
+  type UpperBound
 
   type Impl
 
@@ -13,15 +13,15 @@ trait TupleSystem {
 
   type ><[
       TAIL <: Impl,
-      HEAD <: Upper
+      HEAD <: UpperBound
   ] <: Impl
 
-  trait CanCross[TAIL <: Impl, HEAD <: Upper] {
+  trait CanCross[TAIL <: Impl, HEAD <: UpperBound] {
 
     def apply(tail: TAIL, head: HEAD): ><[TAIL, HEAD]
   }
 
-  private[TupleSystem] trait FromStatic[I <: HList, O <: Impl] {
+  trait FromStatic[I <: HList, O <: Impl] {
 
     def apply(in: I): O
   }
@@ -34,7 +34,7 @@ trait TupleSystem {
     implicit def recursive[
         TAIL <: HList,
         PREV <: Impl,
-        HEAD <: Upper
+        HEAD <: UpperBound
     ](
         implicit
         forTail: TAIL FromStatic PREV,

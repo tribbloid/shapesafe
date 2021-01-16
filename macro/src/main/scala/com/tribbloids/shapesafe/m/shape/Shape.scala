@@ -1,10 +1,11 @@
 package com.tribbloids.shapesafe.m.shape
 
+import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis
-import com.tribbloids.shapesafe.m.shape.OfShape.~~>
-import com.tribbloids.shapesafe.m.shape.nullary.OfStatic
+import com.tribbloids.shapesafe.m.axis.Axis.:<<-
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
-import com.tribbloids.shapesafe.m.tuple.CanonicalTupleSystem
+import com.tribbloids.shapesafe.m.tuple.{CanInfix, StaticTuples, TupleSystem}
+import shapeless.labelled.FieldType
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, Witness}
@@ -18,8 +19,8 @@ import scala.language.implicitConversions
 trait Shape {
   // TODO: merged into TupleSystem?
 
-  type _Record <: HList // not 'Static' which should be ann HList of [[Axis]]
-  def record: _Record
+  type Static <: HList // not 'Static' which should be ann HList of [[Axis]]
+  def static: Static
 
   //TODO: add dynamic indices
   def list: List[Axis]
@@ -32,8 +33,7 @@ trait Shape {
 
   /**
     * assign new names
-    * @param newNames
-    * @tparam H
+    * @param newNames a tuple of names
     */
   def |<<-[
       ZZ <: HList,
@@ -41,31 +41,31 @@ trait Shape {
   ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: ZZ ~~> OfStatic[O]
+      prove: Shape.FromRecord[ZZ, O]
   ): O = {
 
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
-    prove(zipped).out
+    prove(zipped)
   }
 
   object Axes {
 
-    def get(index: Nat)(implicit at: At[_Record, index.N]): at.Out = {
+    def get(index: Nat)(implicit at: At[Static, index.N]): at.Out = {
 
 //      record.reverse TODO: use it later
 
-      record.apply(index)(at)
+      static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[_Record, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(implicit selector: Selector[Static, name.T]): selector.Out = {
 
       import shapeless.record._
 
-      record.apply(name)(selector)
+      static.apply(name)(selector)
     }
   }
 
-  object EinSumHelper extends CanonicalTupleSystem[String] {
+  object EinSumHelper extends StaticTuples[String] {
 
     class ImplView[TAIL <: Impl, HEAD <: String](self: TAIL >< HEAD) {
 
@@ -82,13 +82,16 @@ trait Shape {
   }
 }
 
-object Shape {
+object Shape extends TupleSystem with CanInfix {
+
+  final type UpperBound = Axis.FieldUB
+  final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object Eye extends Shape {
+  object Eye extends Impl {
 
-    final override type _Record = HNil
-    final override def record: _Record = HNil
+    final override type Static = HNil
+    final override def static: Static = HNil
 
     override def list: List[Axis] = Nil
 
@@ -98,7 +101,6 @@ object Shape {
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
   }
-  type Eye = Eye.type
 
   // cartesian product symbol
   class ><[
@@ -107,14 +109,14 @@ object Shape {
   ](
       val tail: TAIL,
       val head: HEAD
-  ) extends Shape {
+  ) extends Impl {
 
     type Tail = TAIL
 
     final type Field = head.Field
 
-    final override type _Record = Field :: tail._Record
-    override def record: _Record = head.asField :: tail.record
+    final override type Static = Field :: tail.Static
+    override def static: Static = head.asField :: tail.static
 
     override def list: List[Axis] = tail.list ++ Seq(head)
 
@@ -125,17 +127,54 @@ object Shape {
     final override val dimensions = tail.dimensions >< head.dimension
   }
 
-  def ofStatic[
-      H <: HList,
-      O <: Shape
-  ](
-      record: H
-  )(
-      implicit lemma: H ~~> OfStatic[O]
-  ): O = {
+  // TODO: lots of boilerplate can be merged with FromStatic using Poly1Group
+  trait FromRecord[I <: HList, O <: Impl] {
 
-    lemma(record).out
+    def apply(in: I): O
   }
+  object FromRecord {
+
+    implicit def toEye: HNil FromRecord Eye = { _ =>
+      Eye
+    }
+
+    implicit def recursive[
+        TAIL <: HList,
+        PREV <: Impl,
+        N <: String,
+        V <: Expression
+    ](
+        implicit
+        forTail: TAIL FromRecord PREV,
+        singleton: Witness.Aux[N]
+    ): (FieldType[N, V] :: TAIL) FromRecord (PREV >< (V :<<- N)) = {
+
+      { v =>
+        val prev = forTail(v.tail)
+        val vHead = v.head: V
+        val head = vHead :<<- singleton
+
+        prev >< head
+      }
+    }
+
+    def apply[T <: HList, O <: Impl](v: T)(implicit ev: T FromRecord O): O = {
+
+      ev.apply(v)
+    }
+  }
+
+//  def ofStatic[
+//      H <: HList,
+//      O <: Shape
+//  ](
+//      record: H
+//  )(
+//      implicit lemma: H ~~> OfStatic[O]
+//  ): O = {
+//
+//    lemma(record).out
+//  }
 
   implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = new ShapeOps(self)
 
