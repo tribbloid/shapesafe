@@ -16,14 +16,10 @@ import scala.language.implicitConversions
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait Shape {
-  // TODO: merged into TupleSystem?
+trait Shape extends Shape.BackBone.Impl {
 
-  type Static <: HList // not 'Static' which should be ann HList of [[Axis]]
-  def static: Static
-
-  //TODO: add dynamic indices
-  def list: List[Axis]
+  type Record <: HList
+  def record: Record
 
   type _Names <: Names.Impl
   val names: _Names
@@ -57,11 +53,11 @@ trait Shape {
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[Static, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(implicit selector: Selector[Record, name.T]): selector.Out = {
 
       import shapeless.record._
 
-      static.apply(name)(selector)
+      record.apply(name)(selector)
     }
   }
 
@@ -84,16 +80,17 @@ trait Shape {
 
 object Shape extends TupleSystem with CanInfix {
 
-  final type UpperBound = Axis.FieldUB
+  final type UpperBound = Axis
+
+  object BackBone extends StaticTuples[UpperBound]
+
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object Eye extends Impl {
+  object Eye extends Impl with BackBone.EyeLike {
 
-    final override type Static = HNil
-    final override def static: Static = HNil
-
-    override def list: List[Axis] = Nil
+    type Record = HNil
+    override def record: HNil = HNil
 
     final override type _Names = Names.Eye
     final override val names = Names.Eye
@@ -104,21 +101,17 @@ object Shape extends TupleSystem with CanInfix {
 
   // cartesian product symbol
   class ><[
-      TAIL <: Shape,
-      HEAD <: Axis
+      TAIL <: Impl,
+      HEAD <: UpperBound
   ](
-      val tail: TAIL,
-      val head: HEAD
-  ) extends Impl {
-
-    type Tail = TAIL
+      override val tail: TAIL,
+      override val head: HEAD
+  ) extends BackBone.><[TAIL, HEAD](tail, head)
+      with Impl {
 
     final type Field = head.Field
-
-    final override type Static = Field :: tail.Static
-    override def static: Static = head.asField :: tail.static
-
-    override def list: List[Axis] = tail.list ++ Seq(head)
+    type Record = Field :: tail.Record
+    def record: Record = head.asField :: tail.record
 
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
@@ -142,16 +135,16 @@ object Shape extends TupleSystem with CanInfix {
         TAIL <: HList,
         PREV <: Impl,
         N <: String,
-        V <: Expression
+        D <: Expression
     ](
         implicit
         forTail: TAIL FromRecord PREV,
         singleton: Witness.Aux[N]
-    ): (FieldType[N, V] :: TAIL) FromRecord (PREV >< (V :<<- N)) = {
+    ): (FieldType[N, D] :: TAIL) FromRecord (PREV >< (D :<<- N)) = {
 
       { v =>
         val prev = forTail(v.tail)
-        val vHead = v.head: V
+        val vHead = v.head: D
         val head = vHead :<<- singleton
 
         prev >< head

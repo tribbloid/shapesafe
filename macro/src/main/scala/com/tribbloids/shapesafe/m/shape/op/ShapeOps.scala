@@ -8,19 +8,22 @@ import com.tribbloids.shapesafe.m.shape.Shape
 class ShapeOps[SELF <: Shape](self: SELF) {
 
   def ><[
-      V <: Expression,
+      D <: Expression,
       N <: NameUB
   ](
-      dim: V :<<- N
-  ): Shape.><[SELF, V :<<- N] = new Shape.><(self, dim)
+      axis: D :<<- N
+  ): Shape.><[SELF, D :<<- N] = {
+
+    new Shape.><(self, axis)
+  }
 
   def cross[
-      V <: Expression,
+      D <: Expression,
       N <: NameUB
   ](
-      dim: V :<<- N
+      axis: D :<<- N
   ) = {
 
-    ><(dim)
+    ><(axis)
   }
 }

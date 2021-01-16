@@ -28,7 +28,7 @@ trait StaticTuples[UB] extends TupleSystem {
 
 //  type Ops[SELF <: Impl]
 
-  object Eye extends Impl {
+  trait EyeLike extends Impl {
 
     override type Static = HNil
     override def static: HNil = HNil
@@ -37,6 +37,7 @@ trait StaticTuples[UB] extends TupleSystem {
 
     override lazy val toString = "Eye"
   }
+  override object Eye extends EyeLike {}
 
   // cartesian product symbol
   class ><[

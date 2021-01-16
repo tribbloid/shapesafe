@@ -2,6 +2,7 @@ package com.tribbloids.shapesafe.m.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.shapesafe.m.arity.Expression
+import com.tribbloids.shapesafe.m.shape.Shape
 import shapeless.Witness
 import shapeless.labelled.{FieldType, KeyTag}
 
@@ -41,17 +42,18 @@ object Axis {
       val dimension: D,
       val nameSingleton: Witness.Aux[N]
   ) extends Axis
-//  with KeyTag[N, Axis] // TODO: remove? redundant
-      with KeyTag[N, D :<<- N] {
+//      with KeyTag[N, D :<<- N]
+      // TODO: remove? FieldType[] has some black magic written in macro
+      {
 
     type Name = N
     type Dimension = D
 
     // TODO: why this can't be simplified?
     final type Field = FieldType[N, D :<<- N]
-  }
 
-  type FieldUB = FieldType[_ <: NameUB, _ <: Axis]
+    // theoretically correct but shapeless recordOps still fumble on it
+  }
 
   def apply[
       V <: Expression
