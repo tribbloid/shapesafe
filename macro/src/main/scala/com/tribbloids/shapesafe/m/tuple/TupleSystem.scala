@@ -21,7 +21,7 @@ trait TupleSystem {
     def apply(tail: TAIL, head: HEAD): ><[TAIL, HEAD]
   }
 
-  trait FromStatic[I <: HList, O <: Impl] {
+  trait FromStatic[-I <: HList, +O <: Impl] {
 
     def apply(in: I): O
   }

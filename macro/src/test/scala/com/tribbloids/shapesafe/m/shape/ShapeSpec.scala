@@ -91,11 +91,34 @@ class ShapeSpec extends BaseSpec {
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
       )
     }
+  }
 
-    it("ofStatic") {
+  describe("FromRecord") {
 
-      // see OfRecord for main unit tests
-      import shapeless.syntax.singleton.mkSingletonOps
+    import shapeless.syntax.singleton.mkSingletonOps
+
+    it("from HNil") {
+
+      val hh = HNil
+
+      val shape = Shape.FromRecord(hh)
+
+      assert(shape == Shape.Eye)
+    }
+
+    it("1") {
+
+      val hh = ("x" ->> Arity(3)) ::
+        HNil
+
+      val shape = Shape.FromRecord(hh)
+
+      //    VizType.infer(shape).toString.shouldBe()
+
+      assert(shape.dimensions.static == hh)
+    }
+
+    it("2") {
 
       val hh = ("x" ->> Arity(3)) ::
         ("y" ->> Arity(4)) ::
@@ -103,11 +126,14 @@ class ShapeSpec extends BaseSpec {
 
       val shape = Shape.FromRecord(hh)
 
+      //    VizType.infer(shape).toString.shouldBe()
+
+      assert(shape.dimensions.static == hh)
       assert(shape.static.head.dimension == Arity(3))
     }
   }
 
-  describe("record") {
+  describe("static") {
 
     it("1") {
 

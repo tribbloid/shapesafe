@@ -128,7 +128,7 @@ object Shape extends TupleSystem with CanInfix {
   }
 
   // TODO: lots of boilerplate can be merged with FromStatic using Poly1Group
-  trait FromRecord[I <: HList, O <: Impl] {
+  trait FromRecord[-I <: HList, +O <: Impl] {
 
     def apply(in: I): O
   }
@@ -163,18 +163,6 @@ object Shape extends TupleSystem with CanInfix {
       ev.apply(v)
     }
   }
-
-//  def ofStatic[
-//      H <: HList,
-//      O <: Shape
-//  ](
-//      record: H
-//  )(
-//      implicit lemma: H ~~> OfStatic[O]
-//  ): O = {
-//
-//    lemma(record).out
-//  }
 
   implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = new ShapeOps(self)
 
