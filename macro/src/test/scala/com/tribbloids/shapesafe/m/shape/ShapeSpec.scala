@@ -283,22 +283,15 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-//  describe("einsum") {
-//    it("1") {
+//  describe("einSum") {
 //
-//      val s1 = NamedShape(
-//        ("x" -> Arity.FromLiteral(2)) ::
-//          ("y" -> Arity.FromLiteral(3)) ::
-//          HNil
-//      )
+//    val shape = Shape ><
+//      Arity.FromLiteral(2) :<<- "x" ><
+//      Arity.FromLiteral(3) :<<- "z"
 //
-//      val s2 = NamedShape(
-//        ("z" -> Arity.FromLiteral(3)) ::
-//          ("w" -> Arity.FromLiteral(4)) ::
-//          HNil
-//      )
+//    it("asOperand") {
 //
-//      s1.einSum(s2)("y", "z")
+//      shape.asEinSumOperand(Names >< "i" >< "j")
 //    }
 //  }
 }

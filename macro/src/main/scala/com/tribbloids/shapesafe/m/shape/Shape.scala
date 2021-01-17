@@ -37,7 +37,7 @@ trait Shape extends Shape.BackBone.Impl {
   ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: Shape.FromRecord[ZZ, O]
+      prove: Shape.FromRecord.==>[ZZ, O]
   ): O = {
 
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
@@ -61,21 +61,34 @@ trait Shape extends Shape.BackBone.Impl {
     }
   }
 
-  object EinSumHelper extends StaticTuples[String] {
-
-    class ImplView[TAIL <: Impl, HEAD <: String](self: TAIL >< HEAD) {
-
-      class ImplView
-    }
-
-    implicit class Ops[SELF <: Impl](val self: SELF) {}
-
-//    implicit def canCrossIfComply[TAIL <: Impl, HEAD <: String]: CanCross[TAIL, HEAD] = { (tail, head) =>
-//      val sameIndex = tail.
+//  def asEinSumOperand[
+//      ZZ <: HList,
+//      O <: Shape
+//  ](newNames: Names.Impl)(
+//      implicit
+//      zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
+//      prove: Shape.FromEinSumRecord.==>[ZZ, O]
+//  ): O = {
 //
-//      new ><(tail, head)
+//    val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
+//    prove(zipped)
+//  }
+//
+//  object EinSumHelper extends StaticTuples[String] {
+//
+//    class ImplView[TAIL <: Impl, HEAD <: String](self: TAIL >< HEAD) {
+//
+//      class ImplView
 //    }
-  }
+//
+//    implicit class Ops[SELF <: Impl](val self: SELF) {}
+//
+////    implicit def canCrossIfComply[TAIL <: Impl, HEAD <: String]: CanCross[TAIL, HEAD] = { (tail, head) =>
+////      val sameIndex = tail.
+////
+////      new ><(tail, head)
+////    }
+//  }
 }
 
 object Shape extends TupleSystem with CanInfix {
@@ -120,16 +133,7 @@ object Shape extends TupleSystem with CanInfix {
     final override val dimensions = tail.dimensions >< head.dimension
   }
 
-  // TODO: lots of boilerplate can be merged with FromStatic using Poly1Group
-  trait FromRecord[-I <: HList, +O <: Impl] {
-
-    def apply(in: I): O
-  }
-  object FromRecord {
-
-    implicit def toEye: HNil FromRecord Eye = { _ =>
-      Eye
-    }
+  object FromRecord extends FromEyeLike {
 
     implicit def recursive[
         TAIL <: HList,
@@ -138,9 +142,9 @@ object Shape extends TupleSystem with CanInfix {
         D <: Expression
     ](
         implicit
-        forTail: TAIL FromRecord PREV,
+        forTail: TAIL ==> PREV,
         singleton: Witness.Aux[N]
-    ): (FieldType[N, D] :: TAIL) FromRecord (PREV >< (D :<<- N)) = {
+    ): (FieldType[N, D] :: TAIL) ==> (PREV >< (D :<<- N)) = {
 
       { v =>
         val prev = forTail(v.tail)
@@ -150,12 +154,34 @@ object Shape extends TupleSystem with CanInfix {
         prev >< head
       }
     }
-
-    def apply[T <: HList, O <: Impl](v: T)(implicit ev: T FromRecord O): O = {
-
-      ev.apply(v)
-    }
   }
+
+//  object FromEinSumRecord extends FromEyeLike {
+//
+//    implicit def recursive[
+//        TAIL <: HList,
+//        PREV <: Impl,
+//        D_EXISTING <: Expression,
+//        N <: String,
+//        D <: Expression
+//    ](
+//        implicit
+//        forTail: TAIL ==> PREV,
+//        singleton: Witness.Aux[N]
+////        selector: Selector[PREV#Record, N] { type Out = D_EXISTING }
+////        proveEquals: AssertEqual[D, D_EXISTING] ~~> Proof
+//    ): (FieldType[N, D] :: TAIL) ==> (PREV >< (D :<<- N)) = {
+//
+//      { v =>
+//        val prev = forTail(v.tail)
+//
+//        val vHead = v.head: D
+//        val head = vHead :<<- singleton
+//
+//        prev >< head
+//      }
+//    }
+//  }
 
   implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = new ShapeOps(self)
 

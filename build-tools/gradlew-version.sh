@@ -6,3 +6,5 @@ FWDIR="$(
 )"
 
 ${FWDIR}/gradlew wrapper --gradle-version=6.8
+
+${FWDIR}/gradlew dependencyUpdates

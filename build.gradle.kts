@@ -6,6 +6,8 @@ plugins {
     scala
     kotlin("jvm") version "1.3.72" // TODO: remove?
     idea
+
+    id("com.github.ben-manes.versions" ) version "0.36.0"
 }
 
 allprojects {

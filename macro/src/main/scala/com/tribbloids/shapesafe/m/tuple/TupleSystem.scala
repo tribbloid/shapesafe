@@ -1,5 +1,6 @@
 package com.tribbloids.shapesafe.m.tuple
 
+import com.tribbloids.shapesafe.m.Poly1Group
 import shapeless.{::, HList, HNil}
 
 trait TupleSystem {
@@ -21,15 +22,14 @@ trait TupleSystem {
     def apply(tail: TAIL, head: HEAD): ><[TAIL, HEAD]
   }
 
-  trait FromStatic[-I <: HList, +O <: Impl] {
+  trait FromEyeLike extends Poly1Group[HList, Impl] {
 
-    def apply(in: I): O
-  }
-  object FromStatic {
-
-    implicit def toEye: HNil FromStatic Eye = { _ =>
+    implicit def toEye: HNil ==> Eye = { _ =>
       Eye
     }
+  }
+
+  object FromStatic extends FromEyeLike {
 
     implicit def recursive[
         TAIL <: HList,
@@ -37,20 +37,15 @@ trait TupleSystem {
         HEAD <: UpperBound
     ](
         implicit
-        forTail: TAIL FromStatic PREV,
+        forTail: TAIL ==> PREV,
         canCross: CanCross[PREV, HEAD]
-    ): (HEAD :: TAIL) FromStatic (PREV >< HEAD) = {
+    ): (HEAD :: TAIL) ==> (PREV >< HEAD) = {
 
       { v =>
         val prev = forTail(v.tail)
 
         canCross(prev, v.head)
       }
-    }
-
-    def apply[T <: HList, O <: Impl](v: T)(implicit ev: T FromStatic O): O = {
-
-      ev.apply(v)
     }
   }
 }
