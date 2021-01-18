@@ -19,15 +19,6 @@ trait StaticTuples[UB] extends TupleSystem {
     override protected def _id: Any = asList
   }
 
-//  object Impl {
-//
-//    implicit def toOps[SELF <: Impl](self: SELF)(
-//        implicit canOps: SELF => Ops[SELF]
-//    ): Ops[SELF] = canOps(self)
-//  }
-
-//  type Ops[SELF <: Impl]
-
   trait EyeLike extends Impl {
 
     override type Static = HNil

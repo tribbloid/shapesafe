@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.axis.Axis.:<<-
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
-import com.tribbloids.shapesafe.m.tuple.{CanInfix, StaticTuples, TupleSystem}
+import com.tribbloids.shapesafe.m.tuple.{StaticTuples, TupleSystem}
 import shapeless.labelled.FieldType
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
@@ -91,7 +91,7 @@ trait Shape extends Shape.BackBone.Impl {
 //  }
 }
 
-object Shape extends TupleSystem with CanInfix {
+object Shape extends TupleSystem {
 
   final type UpperBound = Axis
 
