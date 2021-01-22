@@ -31,7 +31,7 @@ object Arity {
 
   import Witness._
 
-  trait Static[S] extends Arity.Known with OfArity.Invar[S] with IDMixin {
+  trait Static[S] extends Arity.Known with ProveArity.Invar[S] with IDMixin {
 
 //    override type Out >: this.type <: Static[S]
 
@@ -119,7 +119,7 @@ object Arity {
 
   trait Known extends Arity
 
-  trait Unsafe extends Arity with OfArity.Unsafe
+  trait Unsafe extends Arity with ProveArity.Unsafe
 
   object Unsafe {
 

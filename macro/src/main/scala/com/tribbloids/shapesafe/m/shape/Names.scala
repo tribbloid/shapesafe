@@ -9,8 +9,10 @@ object Names extends StaticTuples.Total[String] {
 
   implicit class Ops[SELF <: Impl](self: SELF) {
 
-    def ><(name: Witness.Lt[String]): SELF >< name.T =
+    def ><(name: Witness.Lt[String]): SELF >< name.T = {
+
       new ><(self, name.value.asInstanceOf[name.T])
+    }
   }
 
   implicit def toEyeOps(s: Names.type): Ops[s.Eye] = Ops(s.Eye)

@@ -6,9 +6,9 @@ import com.tribbloids.shapesafe.core.tensor.Const.VecShape
 import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
 import com.tribbloids.shapesafe.m.arity.binary.AssertEqual
 import com.tribbloids.shapesafe.m.arity.nullary.OfSize
-import com.tribbloids.shapesafe.m.arity.{Arity, OfArity}
+import com.tribbloids.shapesafe.m.arity.{Arity, ProveArity}
 import com.tribbloids.shapesafe.m.util.Constraint.ElementOfType
-import com.tribbloids.shapesafe.m.arity.OfArity.~~>
+import com.tribbloids.shapesafe.m.arity.ProveArity.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
@@ -27,7 +27,7 @@ class DoubleVector[A1 <: VecShape](
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
-  def reify[O <: Arity](implicit prove: A1 ~~> OfArity.Proof.Lt[O]): DoubleVector[O] = {
+  def reify[O <: Arity](implicit prove: A1 ~~> ProveArity.Proof.Lt[O]): DoubleVector[O] = {
 
     val proof = prove(shape)
     val out = proof.out
@@ -36,7 +36,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: A1 AssertEqual A2 ~~> OfArity.Proof
+      proof: A1 AssertEqual A2 ~~> ProveArity.Proof
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -46,7 +46,7 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: Arity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 T_+ A2) ~~> OfArity.Proof.Lt[O]
+      lemma: (A1 T_+ A2) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -59,7 +59,7 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: Arity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 T_+ (FromLiteral[padding.T] T_* Arity._2.Wide)) ~~> OfArity.Proof.Lt[O]
+      lemma: (A1 T_+ (FromLiteral[padding.T] T_* Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -82,7 +82,7 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ FromLiteral[stride.T]) ~~> OfArity.Proof.Lt[O]
+      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ FromLiteral[stride.T]) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _stride: FromLiteral[stride.T] = Arity(stride)
@@ -110,7 +110,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ Arity._1.Wide) ~~> OfArity.Proof.Lt[O]
+      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ Arity._1.Wide) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -179,7 +179,7 @@ object DoubleVector extends ProductArgs {
   }
 
   implicit def asReified[A1 <: VecShape, O <: Arity](v: DoubleVector[A1])(
-      implicit prove: A1 ~~> OfArity.Proof.Lt[O]
+      implicit prove: A1 ~~> ProveArity.Proof.Lt[O]
   ): Reified[O] = {
     Reified(v.reify)
   }

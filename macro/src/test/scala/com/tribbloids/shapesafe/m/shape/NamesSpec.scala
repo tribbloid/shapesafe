@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import shapeless.HNil
 
-class NamesSuite extends BaseSpec {
+class NamesSpec extends BaseSpec {
 
   import shapeless.syntax.singleton._
 

@@ -42,8 +42,8 @@ trait ProofSystem[UB] {
 
   trait ForAll[-T, +R <: Proof] extends (T ~~> R) {
 
-    def proveArity: T => R
+    def prove: T => R
 
-    final override def apply(in: T): R = proveArity(in)
+    final override def apply(in: T): R = prove(in)
   }
 }

@@ -10,26 +10,29 @@ trait TupleSystem {
   type Impl
 
   val Eye: Impl
-  final type Eye = Eye.type
+  type Eye = Eye.type
 
-  type ><[
-      TAIL <: Impl,
-      HEAD <: UpperBound
-  ] <: Impl
+//  type ><[
+//      TAIL <: Impl,
+//      HEAD <: UpperBound
+//  ] <: Impl
 
-  trait CanCross[TAIL <: Impl, HEAD <: UpperBound] {
+  // TODO:too cumbersome to define impl, switch to ~~> Proof pattern?
+  trait Cons[-TAIL <: Impl, -HEAD <: UpperBound] {
 
-    def apply(tail: TAIL, head: HEAD): ><[TAIL, HEAD]
+    type Out <: Impl
+
+    def apply(tail: TAIL, head: HEAD): Out
   }
 
-  trait FromEyeLike extends Poly1Group[HList, Impl] {
+  trait ToEye extends Poly1Group[HList, Impl] {
 
     implicit def toEye: HNil ==> Eye = { _ =>
       Eye
     }
   }
 
-  object FromStatic extends FromEyeLike {
+  object FromStatic extends ToEye {
 
     implicit def recursive[
         TAIL <: HList,
@@ -38,14 +41,16 @@ trait TupleSystem {
     ](
         implicit
         forTail: TAIL ==> PREV,
-        canCross: CanCross[PREV, HEAD]
-    ): (HEAD :: TAIL) ==> (PREV >< HEAD) = {
+        cons: Cons[PREV, HEAD]
+    ): (HEAD :: TAIL) ==> cons.Out = {
 
-      { v =>
+      { v: (HEAD :: TAIL) =>
         val prev = forTail(v.tail)
 
-        canCross(prev, v.head)
+        cons(prev, v.head)
       }
     }
   }
 }
+
+object TupleSystem {}

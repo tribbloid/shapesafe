@@ -14,16 +14,16 @@ trait CanInfix {
     ](
         head: HEAD
     )(
-        implicit canCross: CanCross[SELF, HEAD]
-    ): ><[SELF, HEAD] = canCross(self, head)
+        implicit cons: Cons[SELF, HEAD]
+    ): cons.Out = cons(self, head)
 
     def cross[
         HEAD <: UpperBound
     ](
         head: HEAD
     )(
-        implicit canCross: CanCross[SELF, HEAD]
-    ): SELF >< HEAD = {
+        implicit cons: Cons[SELF, HEAD]
+    ) = {
 
       ><(head)
     }
@@ -33,3 +33,5 @@ trait CanInfix {
 
   implicit def toEyeInfix(s: this.type): Infix[Eye] = Infix[Eye](Eye)
 }
+
+object CanInfix {}

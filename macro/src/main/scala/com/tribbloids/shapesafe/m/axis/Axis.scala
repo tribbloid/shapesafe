@@ -2,14 +2,15 @@ package com.tribbloids.shapesafe.m.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.shape.Shape
 import shapeless.Witness
-import shapeless.labelled.{FieldType, KeyTag}
+import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
 trait Axis extends IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
+
+  import Axis._
 
   type Dimension <: Expression
   def dimension: Dimension
@@ -19,7 +20,7 @@ trait Axis extends IDMixin {
 
   final def name: Name = nameSingleton.value
 
-  type Field <: FieldType[Name, Axis]
+  type Field <: Name ->> Axis
   final def asField: Field = this.asInstanceOf[Field]
 
   override protected lazy val _id: Any = (dimension, name)
@@ -54,6 +55,8 @@ object Axis {
 
     // theoretically correct but shapeless recordOps still fumble on it
   }
+
+  type ->>[N <: NameUB, D] = FieldType[N, D]
 
   def apply[
       V <: Expression

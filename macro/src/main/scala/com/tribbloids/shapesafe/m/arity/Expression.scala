@@ -1,6 +1,6 @@
 package com.tribbloids.shapesafe.m.arity
 
-import com.tribbloids.shapesafe.m.arity.OfArity.~~>
+import com.tribbloids.shapesafe.m.arity.ProveArity.~~>
 import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
 import shapeless.Witness
 
@@ -11,14 +11,14 @@ trait Expression {
 
   final def proveArity[
       T >: this.type <: Expression,
-      R <: OfArity.Proof
+      R <: ProveArity.Proof
   ](implicit prove: T ~~> R): R = prove.apply(this)
 
   final def proveArity_generic[
       T >: this.type <: Expression
   ](
-      implicit prove: T ~~> OfArity.Proof
-  ): OfArity.Proof = prove.apply(this)
+      implicit prove: T ~~> ProveArity.Proof
+  ): ProveArity.Proof = prove.apply(this)
 
   lazy val valueStr: String = "[??]"
 

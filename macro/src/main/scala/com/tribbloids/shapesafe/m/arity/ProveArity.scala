@@ -7,7 +7,7 @@ import scala.language.higherKinds
 /**
   * Represents a reified Arity
   */
-object OfArity extends ProofSystem[Arity] {
+object ProveArity extends ProofSystem[Arity] {
 
   trait Unsafe extends Out_=[Arity.Unsafe] {}
 

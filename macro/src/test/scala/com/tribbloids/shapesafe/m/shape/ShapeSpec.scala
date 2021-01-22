@@ -31,7 +31,7 @@ class ShapeSpec extends BaseSpec {
 //      VizType[shape.Field].toString.shouldBe()
 //      VizType[shape.Tail].toString.shouldBe()
 //      VizType[shape.tail.type].toString.shouldBe()
-      VizType[shape.Static].toString.shouldBe()
+//      VizType[shape.Static].toString.shouldBe()
     }
 
     it("2") {
@@ -44,7 +44,7 @@ class ShapeSpec extends BaseSpec {
 
       //    VizType[shape.Tail].toString.shouldBe()
 //      VizType[shape.Field].toString.shouldBe()
-      VizType[shape.Static].toString.shouldBe()
+//      VizType[shape.Static].toString.shouldBe()
     }
   }
 
@@ -248,7 +248,7 @@ class ShapeSpec extends BaseSpec {
 
       val shape2 = shape1 |<<- Names >< "a" >< "b"
 
-      VizType.infer(shape2).toString.shouldBe()
+//      VizType.infer(shape2).toString.shouldBe()
 
       VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
     }

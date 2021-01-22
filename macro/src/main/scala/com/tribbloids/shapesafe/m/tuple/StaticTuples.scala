@@ -7,7 +7,7 @@ import scala.language.implicitConversions
 
 trait StaticTuples[UB] extends TupleSystem {
 
-  type UpperBound = UB
+  final type UpperBound = UB
 
   trait Impl extends IDMixin {
 
@@ -28,7 +28,7 @@ trait StaticTuples[UB] extends TupleSystem {
 
     override lazy val toString = "Eye"
   }
-  override object Eye extends EyeLike {}
+  final object Eye extends EyeLike
 
   // cartesian product symbol
   class ><[
@@ -54,8 +54,13 @@ object StaticTuples {
 
   trait Total[UB] extends StaticTuples[UB] {
 
-    implicit def canCrossAlways[TAIL <: Impl, HEAD <: UB]: CanCross[TAIL, HEAD] = { (tail, head) =>
-      new ><(tail, head)
+    implicit def consAlways[TAIL <: Impl, HEAD <: UB] = {
+      new (TAIL Cons HEAD) {
+
+        override type Out = TAIL >< HEAD
+
+        override def apply(tail: TAIL, head: HEAD) = new ><(tail, head)
+      }
     }
   }
 }

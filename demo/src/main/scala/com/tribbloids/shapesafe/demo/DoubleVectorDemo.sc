@@ -2,7 +2,7 @@
 import com.tribbloids.graph.commons.util.debug.print_@
 import com.tribbloids.shapesafe.core.breeze.tensor.{DoubleVector, Shape}
 import com.tribbloids.shapesafe.m.arity.binary.AssertEqual
-import com.tribbloids.shapesafe.m.arity.{Arity, OfArity.Proof}
+import com.tribbloids.shapesafe.m.arity.{Arity, ProveArity.Proof}
 import com.tribbloids.shapesafe.m.~~>
 
 
@@ -50,7 +50,7 @@ val _3 = Arity(3)
 
 def printD3[A <: Shape](v: DoubleVector[A])(
   implicit
-  OfArity.Proof: A AssertEqual _3.Out ~~> OfArity.Proof
+  OfArity.Proof: A AssertEqual _3.Out ~~> ProveArity.Proof
 ): Unit = {
 
   print_@(v)

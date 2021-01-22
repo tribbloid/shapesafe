@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.arity.binary
 
 import com.tribbloids.shapesafe.m.arity.Utils.Op
 import com.tribbloids.shapesafe.m.arity.{Arity, Expression}
-import com.tribbloids.shapesafe.m.arity.OfArity._
+import com.tribbloids.shapesafe.m.arity.ProveArity._
 import singleton.ops.impl.std
 
 import scala.language.{existentials, higherKinds}
@@ -23,7 +23,7 @@ abstract class UnsafeDomain[
       implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
   ) extends (Expr2[A1, A2, ??] ForAll Unsafe) {
 
-    case class proveArity(in: Expr2[A1, A2, ??]) extends Unsafe {
+    case class prove(in: Expr2[A1, A2, ??]) extends Unsafe {
 
       override def out: Arity.Unsafe = {
 

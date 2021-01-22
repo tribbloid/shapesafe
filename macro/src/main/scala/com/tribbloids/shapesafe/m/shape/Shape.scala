@@ -2,10 +2,9 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis
-import com.tribbloids.shapesafe.m.axis.Axis.:<<-
+import com.tribbloids.shapesafe.m.axis.Axis.{->>, :<<-}
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
 import com.tribbloids.shapesafe.m.tuple.{StaticTuples, TupleSystem}
-import shapeless.labelled.FieldType
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, Witness}
@@ -100,7 +99,7 @@ object Shape extends TupleSystem {
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object Eye extends Impl with BackBone.EyeLike {
+  object Eye extends BackBone.EyeLike with Impl {
 
     type Record = HNil
     override def record: HNil = HNil
@@ -130,10 +129,10 @@ object Shape extends TupleSystem {
     final override val names = tail.names >< head.nameSingleton
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Dimension]
-    final override val dimensions = tail.dimensions >< head.dimension
+    final override val dimensions = tail.dimensions.><(head.dimension)
   }
 
-  object FromRecord extends FromEyeLike {
+  object FromRecord extends ToEye {
 
     implicit def recursive[
         TAIL <: HList,
@@ -144,7 +143,7 @@ object Shape extends TupleSystem {
         implicit
         forTail: TAIL ==> PREV,
         singleton: Witness.Aux[N]
-    ): (FieldType[N, D] :: TAIL) ==> (PREV >< (D :<<- N)) = {
+    ): ((N ->> D) :: TAIL) ==> (PREV >< (D :<<- N)) = {
 
       { v =>
         val prev = forTail(v.tail)
