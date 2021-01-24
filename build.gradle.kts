@@ -3,9 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 //    base
     java
+
     scala
     kotlin("jvm") version "1.3.72" // TODO: remove?
+
     idea
+
+    `maven-publish`
 
     id("com.github.ben-manes.versions" ) version "0.36.0"
 }
@@ -15,9 +19,13 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "java-library")
     apply(plugin = "java-test-fixtures")
+
     apply(plugin = "scala")
     apply(plugin = "kotlin")
+
     apply(plugin = "idea")
+
+    apply(plugin = "maven-publish")
 
     val vs = this.versions()
 
@@ -42,16 +50,16 @@ allprojects {
 
     dependencies {
 
-        implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
 //        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
         //TODO: incompatible with testFixtures?
 
-        implementation(kotlin("stdlib"))
-        implementation(kotlin("stdlib-jdk8"))
+        compileOnly(kotlin("stdlib"))
+        compileOnly(kotlin("stdlib-jdk8"))
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
@@ -178,6 +186,23 @@ allprojects {
 
             isDownloadJavadoc = true
             isDownloadSources = true
+        }
+    }
+
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = vs.projectGroup
+                artifactId = "shapesafe-" + project.name
+                version = vs.projectV
+
+                from(components["java"])
+
+                suppressPomMetadataWarningsFor("testFixturesApiElements")
+                suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
+            }
+
+
         }
     }
 }
