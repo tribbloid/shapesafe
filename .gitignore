@@ -9,7 +9,7 @@ logs/**
 **/.gradle/*
 **/build
 
-# sbt specific
+# sbt
 .cache/
 .history/
 .lib/
@@ -20,20 +20,28 @@ src_managed/
 project/boot/
 project/plugins/project/
 
-# Scala-IDE specific
+# Scala-IDE
 .scala_dependencies
 .worksheet
 
-# Eclipse specific
+# Eclipse
 .pmd
 .classpath
 .project
 .settings/
 
-# IntelliJ-IDEA specific
+# IntelliJ-IDEA
 *.iml
 .idea/
 .idea_modules/
+
+# VSCode
+.vscode/
+
+# BSP & Metals
+.bloop/
+.metals/
+**/metals.sbt
 
 # Compiler
 output

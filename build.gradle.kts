@@ -135,14 +135,15 @@ allprojects {
         }
 
 //        kotlin {}
-
-        withType<KotlinCompile> {
-
-
-            kotlinOptions.jvmTarget = jvmTarget
-//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-            // TODO: re-enable after kotlin compiler argument being declared safe
-        }
+// TODO: remove, kotlin is not in scope at the moment
+//
+//        withType<KotlinCompile> {
+//
+//
+//            kotlinOptions.jvmTarget = jvmTarget
+////            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+//            // TODO: re-enable after kotlin compiler argument being declared safe
+//        }
 
         test {
 
@@ -169,6 +170,11 @@ allprojects {
         }
     }
 
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
     idea {
 
         targetVersion = "2020"
@@ -176,13 +182,18 @@ allprojects {
 
         module {
 
-            // apache spark
-            excludeDirs.add(file("warehouse"))
-            excludeDirs.add(file("latex"))
+            excludeDirs.addAll(
+                listOf(
+                    file(".gradle"),
+                    file(".build"),
+                    file(".idea"),
 
-            // gradle log
-            excludeDirs.add(file("logs"))
-            excludeDirs.add(file("gradle"))
+                    file("logs"),
+
+                    // apache spark
+                    file("warehouse")
+                )
+            )
 
             isDownloadJavadoc = true
             isDownloadSources = true
@@ -201,10 +212,6 @@ allprojects {
                 suppressPomMetadataWarningsFor("testFixturesApiElements")
                 suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
             }
-
-
         }
     }
 }
-
-

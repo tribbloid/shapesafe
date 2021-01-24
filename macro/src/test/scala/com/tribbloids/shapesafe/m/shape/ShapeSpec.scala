@@ -283,6 +283,25 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
+  describe("concat") {
+
+    it("1") {
+
+      val s1 = Shape ><
+        Arity.FromLiteral(2) :<<- "x" ><
+        Arity.FromLiteral(3) :<<- "y"
+
+      val s2 = Shape ><
+        Arity.FromLiteral(2) :<<- "i" ><
+        Arity.FromLiteral(3) :<<- "j"
+
+      val r = s1 ><>< s2
+
+      VizType.infer(r).toString.shouldBe()
+    }
+
+  }
+
 //  describe("einSum") {
 //
 //    val shape = Shape ><
