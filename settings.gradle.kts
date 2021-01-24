@@ -11,7 +11,7 @@ include(
     ":core:core-breeze",
     ":core:core-djl",
     // uses common scala features
-    ":demo"
+    ":shapesafe-demo"
 //    "spike"
 )
 
