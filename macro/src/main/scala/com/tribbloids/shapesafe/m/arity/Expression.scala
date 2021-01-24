@@ -1,6 +1,7 @@
 package com.tribbloids.shapesafe.m.arity
 
 import com.tribbloids.shapesafe.m.arity.OfArity.~~>
+import com.tribbloids.shapesafe.m.axis.Axis.:<<-
 import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
 import shapeless.Witness
 
@@ -35,14 +36,15 @@ object Expression {
 
   implicit class ExpressionOps[T <: Expression](self: T) {
 
-    def withNameT(implicit name: Witness.Lt[String]) = Axis(self, name)
+    def withNameT(implicit name: Witness.Lt[String]): T :<<- name.T = Axis(self, name)
 
-    def withName(name: Witness.Lt[NameUB]) = {
+    def :<<-(name: Witness.Lt[NameUB]): T :<<- name.T = withNameT(name)
+
+    def withName(name: Witness.Lt[NameUB]): T :<<- name.T = {
 
       :<<-(name)
     }
 
-    def :<<-(name: Witness.Lt[NameUB]) = withNameT(name)
   }
 
   // TODO: this can be simplified by writing 1 function to cast Expression to FieldType

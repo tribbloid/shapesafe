@@ -10,7 +10,7 @@ class ShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
-  def inferShort[T: ScalaReflection.TypeTag](v: T): String = {
+  def inferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
     VizType
       .infer(v)
@@ -62,7 +62,7 @@ class ShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.record.apply("x").dimension.number == 2)
+      assert(shape.static.apply("x").dimension.number == 2)
     }
 
     it("nameless") {
@@ -84,8 +84,8 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) cross
         Arity.FromLiteral(4) :<<- "z"
 
-      assert(shape.record.apply("x").dimension.number == 2)
-      assert(shape.record.apply("z").dimension.number == 4)
+      assert(shape.static.apply("x").dimension.number == 2)
+      assert(shape.static.apply("z").dimension.number == 4)
 
       inferShort(shape).shouldBe(
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
@@ -140,7 +140,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         Arity.FromLiteral(2) :<<- "x"
 
-      val record = shape.record
+      val record = shape.static
 
 //      VizType.infer(record).treeString.shouldBe()
 

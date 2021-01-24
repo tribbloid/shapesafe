@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.axis.Axis
+import com.tribbloids.shapesafe.m.axis.{Axis, NameUB}
 import com.tribbloids.shapesafe.m.axis.Axis.:<<-
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
 import com.tribbloids.shapesafe.m.tuple.{StaticTuples, TupleSystem}
@@ -93,7 +93,7 @@ trait Shape extends Shape.BackBone.Impl {
 
 object Shape extends TupleSystem {
 
-  final type UpperBound = Axis
+  final type UpperBound = FieldType[_ <: NameUB, Axis]
 
   object BackBone extends StaticTuples[UpperBound]
 

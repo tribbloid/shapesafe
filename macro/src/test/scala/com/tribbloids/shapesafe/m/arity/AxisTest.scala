@@ -11,10 +11,12 @@ class AxisTest extends BaseSpec {
 
     val dim = arity :<<- "abc"
 
-    VizType
+    val viz = VizType
       .infer(dim)
-      .tree
-      .typeStr
+
+    viz.toString.shouldBe()
+
+    viz.tree.typeStr
       .shouldBe(
         """com.tribbloids.shapesafe.m.arity.Arity.FromLiteral[Int(3)] :<<- String("abc")"""
       )

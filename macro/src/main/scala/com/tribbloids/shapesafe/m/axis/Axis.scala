@@ -2,13 +2,15 @@ package com.tribbloids.shapesafe.m.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.shapesafe.m.arity.Expression
-import com.tribbloids.shapesafe.m.shape.Shape
 import shapeless.Witness
-import shapeless.labelled.{FieldType, KeyTag}
+import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
 trait Axis extends IDMixin {
+
+  import Axis._
+
   //TODO:; can be a subclass of shapeless KeyTag
 
   type Dimension <: Expression
@@ -19,23 +21,28 @@ trait Axis extends IDMixin {
 
   final def name: Name = nameSingleton.value
 
-  type Field <: FieldType[Name, Axis]
-  final def asField: Field = this.asInstanceOf[Field]
+  type Field <: AxisField[Dimension, Name]
+  def asField: Field
 
   override protected lazy val _id: Any = (dimension, name)
 
   override lazy val toString = s"$dimension :<<- $name"
-
-//  final type Field = FieldType[Name, Dimension]
-//  final def asField: Field = dimension.asInstanceOf[Field]
 }
 
 object Axis {
 
   val emptyName = ""
 
-  // TODO: N can be eliminated
-  class :<<-[
+  type Aux[D <: Expression] = Axis {
+    type Dimension = D
+  }
+
+  type AxisField[D <: Expression, N <: NameUB] = FieldType[N, Aux[D]]
+
+  type :<<-[D <: Expression, N <: NameUB] = FieldType[N, Named[D, N]]
+
+  // TODO: N can be eliminated?
+  class Named[
       D <: Expression,
       N <: NameUB
   ](
@@ -50,22 +57,24 @@ object Axis {
     type Dimension = D
 
     // TODO: why this can't be simplified?
-    final type Field = FieldType[N, D :<<- N]
+    final type Field = D :<<- N
+    override def asField: Field = this.asInstanceOf[Field]
 
     // theoretically correct but shapeless recordOps still fumble on it
   }
 
   def apply[
-      V <: Expression
+      D <: Expression
   ](
-      value: V,
+      value: D,
       name: Witness.Lt[String]
-  ): :<<-[V, name.T] = {
+  ): D :<<- name.T = {
 
-    new :<<-(value, name)
+    new Named[D, name.T](value, name).asField
   }
 
-  implicit def nameless[V <: Expression](self: V) = apply(self, emptyName)
+  implicit def nameless[V <: Expression](self: V): :<<-[V, emptyName.type] =
+    apply(self, emptyName)
 
   implicit class AxisOps[SELF <: Axis](self: SELF) {}
 }
