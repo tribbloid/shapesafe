@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
-
 plugins {
 //    base
     java
@@ -51,16 +48,20 @@ allprojects {
 
     dependencies {
 
-        testImplementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        testImplementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        testImplementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+
+        compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        testCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        // This is a dirty hack to circumvent https://youtrack.jetbrains.com/issue/SCL-17284
+
+        compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
 //        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
         //TODO: incompatible with testFixtures?
 
-        testImplementation(kotlin("stdlib"))
-        testImplementation(kotlin("stdlib-jdk8"))
+//        compileOnly(kotlin("stdlib"))
+//        compileOnly(kotlin("stdlib-jdk8"))
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
@@ -199,7 +200,7 @@ idea {
 
     module {
 
-        excludeDirs.addAll(
+        excludeDirs = excludeDirs + (
             listOf(
                 file(".gradle"),
                 file(".build"),

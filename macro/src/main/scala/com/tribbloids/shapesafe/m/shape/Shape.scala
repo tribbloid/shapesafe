@@ -156,33 +156,6 @@ object Shape extends TupleSystem {
     }
   }
 
-//  object FromEinSumRecord extends FromEyeLike {
-//
-//    implicit def recursive[
-//        TAIL <: HList,
-//        PREV <: Impl,
-//        D_EXISTING <: Expression,
-//        N <: String,
-//        D <: Expression
-//    ](
-//        implicit
-//        forTail: TAIL ==> PREV,
-//        singleton: Witness.Aux[N]
-////        selector: Selector[PREV#Record, N] { type Out = D_EXISTING }
-////        proveEquals: AssertEqual[D, D_EXISTING] ~~> Proof
-//    ): (FieldType[N, D] :: TAIL) ==> (PREV >< (D :<<- N)) = {
-//
-//      { v =>
-//        val prev = forTail(v.tail)
-//
-//        val vHead = v.head: D
-//        val head = vHead :<<- singleton
-//
-//        prev >< head
-//      }
-//    }
-//  }
-
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {
     new (TAIL Cons HEAD) {
 
