@@ -5,6 +5,7 @@ import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.axis.Axis.{->>, :<<-}
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
 import com.tribbloids.shapesafe.m.tuple.{StaticTuples, TupleSystem}
+import com.tribbloids.shapesafe.m.util.TypeTag
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, Witness}
@@ -136,7 +137,7 @@ object Shape extends TupleSystem {
 
     implicit def recursive[
         TAIL <: HList,
-        PREV <: Impl,
+        PREV <: Impl: TypeTag,
         N <: String,
         D <: Expression
     ](
@@ -150,7 +151,7 @@ object Shape extends TupleSystem {
         val vHead = v.head: D
         val head = vHead :<<- singleton
 
-        prev >< head
+        prev.><(head)
       }
     }
   }
@@ -182,7 +183,19 @@ object Shape extends TupleSystem {
 //    }
 //  }
 
-  implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = new ShapeOps(self)
+  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {
+    new (TAIL Cons HEAD) {
 
-  implicit def toOps(v: this.type): ShapeOps[Eye] = ops(Eye)
+      override type Out = TAIL >< HEAD
+
+      override def apply(tail: TAIL, head: HEAD) = new ><(tail, head)
+    }
+  }
+
+  implicit def ops[SELF <: Shape: TypeTag](self: SELF): ShapeOps[SELF] = {
+
+    new ShapeOps(self)
+  }
+
+  implicit def toEyeOps(v: this.type): ShapeOps[Eye] = ops[Eye](Eye)
 }

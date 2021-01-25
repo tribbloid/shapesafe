@@ -68,7 +68,7 @@ class EinSumOperandSpec extends BaseSpec {
         ("i" ->> Arity(3)) ::
         ("j" ->> Arity(4)) :: HNil
 
-      val op = EinSumOperand.FromStatic.apply(record)
+      val op = EinSumOperand.FromStatic(record)
     }
   }
 

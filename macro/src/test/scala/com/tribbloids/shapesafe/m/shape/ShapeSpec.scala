@@ -93,6 +93,46 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
+  describe("FromStatic") {
+
+    import shapeless.syntax.singleton.mkSingletonOps
+
+    it("from HNil") {
+
+      val hh = HNil
+
+      val shape = Shape.FromStatic(hh)
+
+      assert(shape == Shape.Eye)
+    }
+
+    it("1") {
+
+      val hh = (Arity(3) :<<- "x") ::
+        HNil
+
+      val shape = Shape.FromStatic(hh)
+
+      //    VizType.infer(shape).toString.shouldBe()
+
+      assert(shape.static == hh)
+    }
+
+    it("2") {
+
+      val hh = (Arity(3) :<<- "x") ::
+        (Arity(4) :<<- "y") ::
+        HNil
+
+      val shape = Shape.FromStatic(hh)
+
+      //    VizType.infer(shape).toString.shouldBe()
+
+      assert(shape.static == hh)
+      assert(shape.static.head.dimension == Arity(3))
+    }
+  }
+
   describe("FromRecord") {
 
     import shapeless.syntax.singleton.mkSingletonOps
@@ -288,6 +328,23 @@ class ShapeSpec extends BaseSpec {
     it("1") {
 
       val s1 = Shape ><
+        Arity.FromLiteral(2) :<<- "x"
+//        Arity.FromLiteral(3) :<<- "y"
+
+      val s2 = Shape ><
+        Arity.FromLiteral(2) :<<- "i"
+//        Arity.FromLiteral(3) :<<- "j"
+
+      val r = s1 ><>< s2
+
+      inferShort(r).shouldBe(
+        """shape.Shape.Eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(2)] :<<- String("i"))"""
+      )
+    }
+
+    it("2") {
+
+      val s1 = Shape ><
         Arity.FromLiteral(2) :<<- "x" ><
         Arity.FromLiteral(3) :<<- "y"
 
@@ -295,11 +352,13 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "i" ><
         Arity.FromLiteral(3) :<<- "j"
 
-      val r = s1 ><>< s2
+      val r = s1 concat s2
 
-      VizType.infer(r).toString.shouldBe()
+      inferShort(r).shouldBe(
+        "shape.Shape.Eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"x\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"y\"))" +
+          " >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"i\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"j\"))"
+      )
     }
-
   }
 
 //  describe("einSum") {

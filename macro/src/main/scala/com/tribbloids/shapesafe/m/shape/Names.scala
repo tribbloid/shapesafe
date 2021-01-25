@@ -7,7 +7,7 @@ import scala.language.implicitConversions
 
 object Names extends StaticTuples.Total[String] {
 
-  implicit class Ops[SELF <: Impl](self: SELF) {
+  implicit class Infix[SELF <: Impl](self: SELF) {
 
     def ><(name: Witness.Lt[String]): SELF >< name.T = {
 
@@ -15,5 +15,5 @@ object Names extends StaticTuples.Total[String] {
     }
   }
 
-  implicit def toEyeOps(s: Names.type): Ops[s.Eye] = Ops(s.Eye)
+  implicit def toEyeInfix(s: Names.type): Infix[s.Eye] = Infix(s.Eye)
 }

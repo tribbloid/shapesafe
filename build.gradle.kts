@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.utils.loadPropertyFromResources
 
 plugins {
 //    base
@@ -50,16 +51,16 @@ allprojects {
 
     dependencies {
 
-        compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        testImplementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        testImplementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        testImplementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
 //        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
         //TODO: incompatible with testFixtures?
 
-        compileOnly(kotlin("stdlib"))
-        compileOnly(kotlin("stdlib-jdk8"))
+        testImplementation(kotlin("stdlib"))
+        testImplementation(kotlin("stdlib-jdk8"))
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
@@ -82,10 +83,6 @@ allprojects {
 
     tasks {
         val jvmTarget = JavaVersion.VERSION_1_8.toString()
-
-//        scala {
-//            this.zincVersion
-//        }
 
         withType<ScalaCompile> {
 
@@ -174,31 +171,10 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
     }
+//    scala {
+//        this.zincVersion
+//    }
 
-    idea {
-
-        targetVersion = "2020"
-
-
-        module {
-
-            excludeDirs.addAll(
-                listOf(
-                    file(".gradle"),
-                    file(".build"),
-                    file(".idea"),
-
-                    file("logs"),
-
-                    // apache spark
-                    file("warehouse")
-                )
-            )
-
-            isDownloadJavadoc = true
-            isDownloadSources = true
-        }
-    }
 
     publishing {
         publications {
@@ -213,5 +189,31 @@ allprojects {
                 suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
             }
         }
+    }
+}
+
+idea {
+
+    targetVersion = "2020"
+
+
+    module {
+
+        excludeDirs.addAll(
+            listOf(
+                file(".gradle"),
+                file(".build"),
+                file(".idea"),
+                file(".github"),
+
+                file("logs"),
+
+                // apache spark
+                file("warehouse")
+            )
+        )
+
+        isDownloadJavadoc = true
+        isDownloadSources = true
     }
 }

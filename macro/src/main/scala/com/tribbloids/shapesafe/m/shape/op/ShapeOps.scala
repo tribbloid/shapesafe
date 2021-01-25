@@ -1,7 +1,5 @@
 package com.tribbloids.shapesafe.m.shape.op
 
-import com.tribbloids.graph.commons.util.debug.print_@
-import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis.:<<-
 import com.tribbloids.shapesafe.m.axis.NameUB
@@ -30,21 +28,21 @@ class ShapeOps[SELF <: Shape](self: SELF) {
 
   def ><><[
       THAT <: Shape,
-      H_OUT <: HList
-//      OUT <: Shape
+      H_OUT <: HList,
+      OUT <: Shape
   ](
       that: THAT
   )(
       implicit
-      prepend: Prepend.Aux[self.Static, that.Static, H_OUT]
-//      prove: Shape.FromStatic.==>[H_OUT, Shape]
-  ): Unit = {
+      prepend: Prepend.Aux[that.Static, self.Static, H_OUT],
+      prove: Shape.FromStatic.==>[H_OUT, OUT]
+  ): OUT = {
 
-    val concat: H_OUT = self.static ++ that.static
+    val concat: H_OUT = that.static ++ self.static
 
-    print_@(VizType.infer(concat).toString)
+//    val v = (VizType.Strong[H_OUT].toString)
 
-//    Shape.FromStatic(concat)
+    Shape.FromStatic(concat)
   }
 
   def concat[
@@ -55,7 +53,7 @@ class ShapeOps[SELF <: Shape](self: SELF) {
       that: THAT
   )(
       implicit
-      prepend: Prepend.Aux[self.Static, that.Static, H_OUT],
+      prepend: Prepend.Aux[that.Static, self.Static, H_OUT],
       prove: Shape.FromStatic.==>[H_OUT, OUT]
   ) = ><><(that)
 }
