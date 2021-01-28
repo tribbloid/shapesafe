@@ -19,4 +19,5 @@ class AritySpike extends BaseSpec {
 
     print_@(VizType[y1.Wide])
   }
+
 }

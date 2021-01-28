@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
-import shapeless.HNil
+import shapeless.{::, HNil, Witness}
 
 class NamesSpec extends BaseSpec {
 
@@ -22,6 +22,22 @@ class NamesSpec extends BaseSpec {
     assert(t1.tt =:= t2.tt)
   }
 
+  it("cons") {
+
+    shouldNotCompile(
+      """implicitly[Names.Cons[Names.Eye, String]]"""
+    )
+
+    val w = Witness("a")
+    implicitly[Names.Cons[Names.Eye, w.T]]
+
+    val hh = "a".narrow :: HNil
+
+    Names.FromStatic.apply(hh)
+
+//    Names.FromStatic.apply("a" :: HNil)
+  }
+
   it("FromStatic") {
 
     val names2 = Names.FromStatic(hList)
@@ -31,8 +47,6 @@ class NamesSpec extends BaseSpec {
     val t1 = VizType.infer(names)
     val t2 = VizType.infer(names2)
 
-//    t1.toString.shouldBe()
-
-    assert(t1.tt =:= t2.tt)
+    t1.shouldBe(t2)
   }
 }

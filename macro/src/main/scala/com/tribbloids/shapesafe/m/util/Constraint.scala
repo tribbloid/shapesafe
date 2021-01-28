@@ -11,6 +11,7 @@ object Constraint {
 
   import com.tribbloids.graph.commons.util.ScalaReflection.universe
 
+  // TODO: why reinventing the wheel? shapeless LUBConstraint is the same
   case class ElementOfType[Data <: HList, Element: TypeTag]() extends Constraint {
 
     val ttg: TypeTag[Element] = universe.typeTag[Element]

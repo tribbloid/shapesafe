@@ -5,7 +5,7 @@ import shapeless.{::, HList, HNil}
 
 import scala.language.implicitConversions
 
-trait StaticTuples[UB] extends TupleSystem {
+trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   final type UpperBound = UB
 
@@ -28,7 +28,7 @@ trait StaticTuples[UB] extends TupleSystem {
 
     override lazy val toString = "Eye"
   }
-  final object Eye extends EyeLike
+  final object _Eye extends EyeLike
 
   // cartesian product symbol
   class ><[
@@ -54,12 +54,10 @@ object StaticTuples {
 
   trait Total[UB] extends StaticTuples[UB] {
 
-    implicit def consAlways[TAIL <: Impl, HEAD <: UB] = {
-      new (TAIL Cons HEAD) {
+    implicit def consAlways[TAIL <: Impl, HEAD <: UB]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
 
-        override type Out = TAIL >< HEAD
-
-        override def apply(tail: TAIL, head: HEAD) = new ><(tail, head)
+      Cons[TAIL, HEAD].build { (tail, head) =>
+        new ><(tail, head)
       }
     }
   }

@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis.->>
-import com.tribbloids.shapesafe.m.tuple.{CanInfix, StaticTuples, TupleSystem}
+import com.tribbloids.shapesafe.m.tuple.{CanFromStatic, CanInfix_><, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil}
 
 import scala.language.implicitConversions
@@ -12,9 +12,7 @@ trait EinSumOperand[S <: HList] extends EinSumOperand.Backbone.Impl {
   override type Static = S
 }
 
-object EinSumOperand extends TupleSystem with CanInfix {
-
-  import EinSumCondition._
+object EinSumOperand extends TupleSystem with CanInfix_>< with CanFromStatic {
 
   object Backbone extends StaticTuples[(_ <: String) ->> Expression]
 
@@ -22,7 +20,7 @@ object EinSumOperand extends TupleSystem with CanInfix {
 
   override type Impl = Backbone.Impl
 
-  object Eye extends EinSumOperand[HNil] with Backbone.EyeLike
+  object _Eye extends EinSumOperand[HNil] with Backbone.EyeLike
 
   class ><[
       H_TAIL <: HList,
@@ -42,15 +40,12 @@ object EinSumOperand extends TupleSystem with CanInfix {
       D <: Expression
   ](
       implicit
-      condition: (H_TAIL, (N ->> D)) ==> _
+      condition: EinSumCondition.Case[(H_TAIL, N ->> D)]
 //      obv: Int =:= Int
-  ) = {
-    new (EinSumOperand[H_TAIL] Cons (N ->> D)) {
+  ): Cons.FromFn[EinSumOperand[H_TAIL], N ->> D, H_TAIL >< (N ->> D)] = {
 
-      override type Out = ><[H_TAIL, (N ->> D)]
-
-      override def apply(tail: EinSumOperand[H_TAIL], head: (N ->> D)): Out =
-        new ><(tail, head)
+    Cons[EinSumOperand[H_TAIL], N ->> D].build { (tail, head) =>
+      new ><(tail, head)
     }
   }
 }

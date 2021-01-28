@@ -3,8 +3,9 @@ package com.tribbloids.shapesafe.m.shape
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.axis.Axis.{->>, :<<-}
+import com.tribbloids.shapesafe.m.shape.EinSumOperand.><
 import com.tribbloids.shapesafe.m.shape.op.ShapeOps
-import com.tribbloids.shapesafe.m.tuple.{StaticTuples, TupleSystem}
+import com.tribbloids.shapesafe.m.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import com.tribbloids.shapesafe.m.util.TypeTag
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
@@ -18,8 +19,11 @@ import scala.language.implicitConversions
   */
 trait Shape extends Shape.BackBone.Impl {
 
-  type Record <: HList
-  def record: Record
+  type Lookup <: HList // name: String -> axis: Axis
+  def lookup: Lookup
+
+  type Name_Dimension <: HList // name: String -> dim: arity.Expression
+  def name_Dimension: Name_Dimension
 
   type _Names <: Names.Impl
   val names: _Names
@@ -37,7 +41,7 @@ trait Shape extends Shape.BackBone.Impl {
   ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: Shape.FromRecord.==>[ZZ, O]
+      prove: Shape.FromName_Dimension.==>[ZZ, O]
   ): O = {
 
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
@@ -53,11 +57,11 @@ trait Shape extends Shape.BackBone.Impl {
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[Record, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(implicit selector: Selector[Lookup, name.T]): selector.Out = {
 
       import shapeless.record._
 
-      record.apply(name)(selector)
+      lookup.apply(name)(selector)
     }
   }
 
@@ -91,7 +95,7 @@ trait Shape extends Shape.BackBone.Impl {
 //  }
 }
 
-object Shape extends TupleSystem {
+object Shape extends TupleSystem with CanFromStatic {
 
   final type UpperBound = Axis
 
@@ -100,10 +104,13 @@ object Shape extends TupleSystem {
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object Eye extends BackBone.EyeLike with Impl {
+  object _Eye extends BackBone.EyeLike with Impl {
 
-    type Record = HNil
-    override def record: HNil = HNil
+    type Lookup = HNil
+    override def lookup: HNil = HNil
+
+    type Name_Dimension = HNil
+    override def name_Dimension: Name_Dimension = HNil
 
     final override type _Names = Names.Eye
     final override val names = Names.Eye
@@ -123,17 +130,22 @@ object Shape extends TupleSystem {
       with Impl {
 
     final type Field = head.Field
-    type Record = Field :: tail.Record
-    def record: Record = head.asField :: tail.record
+
+    type Lookup = Field :: tail.Lookup
+    lazy val lookup: Lookup = head.asField :: tail.lookup
+
+    override type Name_Dimension = head.Dimension :: tail.Name_Dimension
+    override lazy val name_Dimension: Name_Dimension = head.dimension :: tail.name_Dimension
 
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Dimension]
-    final override val dimensions = tail.dimensions.><(head.dimension)
+    final override val dimensions = new Dimensions.><(tail.dimensions, head.dimension)
+
   }
 
-  object FromRecord extends ToEye {
+  object FromName_Dimension extends HListConverter {
 
     implicit def recursive[
         TAIL <: HList,
@@ -156,12 +168,10 @@ object Shape extends TupleSystem {
     }
   }
 
-  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {
-    new (TAIL Cons HEAD) {
+  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
 
-      override type Out = TAIL >< HEAD
-
-      override def apply(tail: TAIL, head: HEAD) = new ><(tail, head)
+    Cons[TAIL, HEAD].build { (tail, head) =>
+      new ><(tail, head)
     }
   }
 

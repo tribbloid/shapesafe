@@ -1,7 +1,7 @@
 package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.tuple.StaticTuples
-import shapeless.Witness
+import shapeless.{::, HList, SingletonProductArgs, Witness}
 
 import scala.language.implicitConversions
 

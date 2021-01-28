@@ -1,6 +1,7 @@
 plugins {
 //    base
     java
+    `java-test-fixtures`
 
     scala
     kotlin("jvm") version "1.3.72" // TODO: remove?
@@ -41,7 +42,7 @@ allprojects {
     configurations.all {
         resolutionStrategy.dependencySubstitution {
             substitute(module("com.chuusai:shapeless_${vs.scalaBinaryV}")).apply {
-                with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:2.3.3"))
+                with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
         }
     }
@@ -51,13 +52,14 @@ allprojects {
         compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
 
         compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        testFixturesCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
         testCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
         // This is a dirty hack to circumvent https://youtrack.jetbrains.com/issue/SCL-17284
 
         compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
-//        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
+        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.8")
         //TODO: incompatible with testFixtures?
 
 //        compileOnly(kotlin("stdlib"))
@@ -191,30 +193,36 @@ allprojects {
             }
         }
     }
-}
-
-idea {
-
-    targetVersion = "2020"
 
 
-    module {
+    idea {
 
-        excludeDirs = excludeDirs + (
-            listOf(
-                file(".gradle"),
-                file(".build"),
-                file(".idea"),
-                file(".github"),
+        targetVersion = "2020"
 
-                file("logs"),
+        module {
 
-                // apache spark
-                file("warehouse")
-            )
-        )
+            excludeDirs = excludeDirs + (
+                    listOf(
+                        file(".gradle"),
+                        file(".github"),
 
-        isDownloadJavadoc = true
-        isDownloadSources = true
+                        file ("target"),
+//                        file ("out"),
+
+                        file(".idea"),
+                        file(".vscode"),
+                        file(".bloop"),
+                        file(".metals"),
+
+                        file("logs"),
+
+                        // apache spark
+                        file("warehouse")
+                    )
+                    )
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
+        }
     }
 }

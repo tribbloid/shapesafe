@@ -62,7 +62,7 @@ class ShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.record.apply("x").dimension.number == 2)
+      assert(shape.lookup.apply("x").dimension.number == 2)
     }
 
     it("nameless") {
@@ -84,8 +84,8 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) cross
         Arity.FromLiteral(4) :<<- "z"
 
-      assert(shape.record.apply("x").dimension.number == 2)
-      assert(shape.record.apply("z").dimension.number == 4)
+      assert(shape.lookup.apply("x").dimension.number == 2)
+      assert(shape.lookup.apply("z").dimension.number == 4)
 
       inferShort(shape).shouldBe(
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
@@ -141,7 +141,7 @@ class ShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = Shape.FromName_Dimension(hh)
 
       assert(shape == Shape.Eye)
     }
@@ -151,7 +151,7 @@ class ShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3)) ::
         HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = Shape.FromName_Dimension(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -164,7 +164,7 @@ class ShapeSpec extends BaseSpec {
         ("y" ->> Arity(4)) ::
         HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = Shape.FromName_Dimension(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -180,7 +180,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         Arity.FromLiteral(2) :<<- "x"
 
-      val record = shape.record
+      val record = shape.lookup
 
 //      VizType.infer(record).treeString.shouldBe()
 
@@ -199,7 +199,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "x" ><
         Arity.FromLiteral(3) :<<- "y"
 
-      val record = shape.record
+      val record = shape.lookup
 
       //      VizType.infer(static).treeString.shouldBe()
 

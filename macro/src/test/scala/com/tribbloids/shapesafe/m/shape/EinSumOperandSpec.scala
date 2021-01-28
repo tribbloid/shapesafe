@@ -62,6 +62,22 @@ class EinSumOperandSpec extends BaseSpec {
 
   describe("can convert FromStatic") {
 
+    it("if HNil") {
+      val record = HNil
+
+      val op = EinSumOperand.FromStatic(record)
+    }
+
+    it("if singleton") {
+      val record = ("j" ->> Arity(4)) :: HNil
+
+      val vv = ("j" ->> Arity(4))
+
+      val op = EinSumOperand.FromStatic(record)
+
+//      val op = EinSumOperand.FromStatic.recursive[HNil, EinSumOperand.Eye, vv.type].apply(record)
+    }
+
     it("if name-dimension is a map") {
       val record = ("i" ->> Arity(3)) ::
         ("j" ->> Arity(4)) ::

@@ -2,7 +2,7 @@ package com.tribbloids.shapesafe.m.tuple
 
 import scala.language.implicitConversions
 
-trait CanInfix {
+trait CanInfix_>< extends CanCons {
   _self: TupleSystem =>
 
   trait InfixMixin[SELF <: Impl] {
@@ -34,4 +34,4 @@ trait CanInfix {
   implicit def toEyeInfix(s: this.type): Infix[Eye] = Infix[Eye](Eye)
 }
 
-object CanInfix {}
+object CanInfix_>< {}
