@@ -104,7 +104,7 @@ object Shape extends TupleSystem with CanFromStatic {
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object _Eye extends BackBone.EyeLike with Impl {
+  object eye extends BackBone.EyeLike with Impl {
 
     type Lookup = HNil
     override def lookup: HNil = HNil

@@ -1,7 +1,8 @@
 package com.tribbloids.shapesafe.m.shape
 
 import com.tribbloids.shapesafe.m.tuple.StaticTuples
-import shapeless.{::, HList, SingletonProductArgs, Witness}
+import shapeless.Witness
+import shapeless.Witness.Aux
 
 import scala.language.implicitConversions
 
@@ -15,5 +16,14 @@ object Names extends StaticTuples.Total[String] {
     }
   }
 
-  implicit def toEyeInfix(s: Names.type): Infix[s.Eye] = Infix(s.Eye)
+  implicit def toEyeInfix(s: Names.type): Infix[s.Eye] = Infix(Eye)
+
+  object Implicits {
+
+    implicit def fromSingleton(v: String)(implicit w: Witness.Aux[v.type]): Infix[Eye >< v.type] = {
+
+      Infix(Eye >< w)
+    }
+  }
+
 }

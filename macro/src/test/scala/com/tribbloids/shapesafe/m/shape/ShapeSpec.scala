@@ -338,7 +338,7 @@ class ShapeSpec extends BaseSpec {
       val r = s1 ><>< s2
 
       inferShort(r).shouldBe(
-        """shape.Shape.Eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(2)] :<<- String("i"))"""
+        """shape.Shape.eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(2)] :<<- String("i"))"""
       )
     }
 
@@ -355,7 +355,7 @@ class ShapeSpec extends BaseSpec {
       val r = s1 concat s2
 
       inferShort(r).shouldBe(
-        "shape.Shape.Eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"x\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"y\"))" +
+        "shape.Shape.eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"x\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"y\"))" +
           " >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"i\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"j\"))"
       )
     }

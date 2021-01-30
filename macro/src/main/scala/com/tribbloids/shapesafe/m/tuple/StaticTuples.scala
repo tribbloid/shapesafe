@@ -28,7 +28,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override lazy val toString = "Eye"
   }
-  final object _Eye extends EyeLike
+  final object eye extends EyeLike
 
   // cartesian product symbol
   class ><[

@@ -20,7 +20,7 @@ object EinSumOperand extends TupleSystem with CanInfix_>< with CanFromStatic {
 
   override type Impl = Backbone.Impl
 
-  object _Eye extends EinSumOperand[HNil] with Backbone.EyeLike
+  object eye extends EinSumOperand[HNil] with Backbone.EyeLike
 
   class ><[
       H_TAIL <: HList,
