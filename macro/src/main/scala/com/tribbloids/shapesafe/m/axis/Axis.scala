@@ -15,13 +15,16 @@ trait Axis extends IDMixin {
   type Dimension <: Expression
   def dimension: Dimension
 
-  type Name <: NameUB
+  type Name <: NameWide
   def nameSingleton: Witness.Aux[Name]
 
   final def name: Name = nameSingleton.value
 
-  type Field <: Name ->> Axis
-  final def asField: Field = this.asInstanceOf[Field]
+  type AxisField <: Name ->> Axis
+  final def asAxisField: AxisField = this.asInstanceOf[AxisField]
+
+  type Field <: Name ->> Dimension
+  final def asField: Field = dimension.asInstanceOf[Field]
 
   override protected lazy val _id: Any = (dimension, name)
 
@@ -38,7 +41,7 @@ object Axis {
   // TODO: N can be eliminated
   class :<<-[
       D <: Expression,
-      N <: NameUB
+      N <: NameWide
   ](
       val dimension: D,
       val nameSingleton: Witness.Aux[N]
@@ -51,12 +54,12 @@ object Axis {
     type Dimension = D
 
     // TODO: why this can't be simplified?
-    final type Field = FieldType[N, D :<<- N]
+    final type AxisField = FieldType[N, D :<<- N]
 
     // theoretically correct but shapeless recordOps still fumble on it
   }
 
-  type ->>[N <: NameUB, D] = FieldType[N, D]
+  type ->>[N <: NameWide, D] = FieldType[N, D]
 
   def apply[
       V <: Expression

@@ -1,4 +1,4 @@
-package com.tribbloids.shapesafe.m.shape
+package com.tribbloids.shapesafe.m.shape.op
 
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity

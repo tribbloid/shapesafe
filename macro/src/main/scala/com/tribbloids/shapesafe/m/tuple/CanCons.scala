@@ -17,7 +17,7 @@ trait CanCons {
 
     class Builder[TAIL <: Impl, HEAD <: UpperBound] {
 
-      def build[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn[TAIL, HEAD, O](fn)
+      def to[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn[TAIL, HEAD, O](fn)
     }
 
     case class FromFn[-TAIL <: Impl, -HEAD <: UpperBound, O <: Impl](

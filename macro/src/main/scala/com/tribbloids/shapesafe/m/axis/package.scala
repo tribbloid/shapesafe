@@ -4,7 +4,7 @@ import com.tribbloids.shapesafe.m.arity.Expression
 
 package object axis {
 
-  type NameUB = String
+  type NameWide = String
 
   type DimensionUB = Expression
 }

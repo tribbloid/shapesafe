@@ -1,32 +1,34 @@
 package com.tribbloids.shapesafe.m.tuple
 
-import com.tribbloids.shapesafe.m.Poly1Group
+import com.tribbloids.shapesafe.m.Poly1Base
 import shapeless.{::, HList, HNil}
 
 trait CanFromStatic extends CanCons {
   _self: TupleSystem =>
 
-  trait HListConverter extends Poly1Group[HList, Impl] {
+  trait HListConverter extends Poly1Base[HList, Impl] {
 
-    implicit def toEye: HNil ==> Eye = Builder[HNil].build { _: HNil =>
-      Eye
+    implicit val toEye: HNil =:=> Eye = {
+      buildFrom[HNil].to { _ =>
+        Eye
+      }
     }
   }
 
   object FromStatic extends HListConverter {
 
-    implicit def recursive[
-        TAIL <: HList,
-        PREV <: Impl,
+    implicit def inductive[
+        H_TAIL <: HList,
+        TAIL <: Impl,
         HEAD <: UpperBound
     ](
         implicit
-        forTail: TAIL ==> PREV,
-        cons: Cons[PREV, HEAD]
-    ): (HEAD :: TAIL) ==> cons.Out = {
+        forTail: H_TAIL =:=> TAIL,
+        cons: Cons[TAIL, HEAD]
+    ): (HEAD :: H_TAIL) =:=> cons.Out = {
 
-      { v: (HEAD :: TAIL) =>
-        val prev = forTail(v.tail)
+      buildFrom[HEAD :: H_TAIL].to { v =>
+        val prev = apply(v.tail)
 
         cons(prev, v.head)
       }

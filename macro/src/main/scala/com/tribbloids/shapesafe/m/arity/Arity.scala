@@ -1,8 +1,8 @@
 package com.tribbloids.shapesafe.m.arity
 
-import com.tribbloids.shapesafe.m.arity.Utils.Op
+import com.tribbloids.shapesafe.m.arity.Utils.{NatAsOp, Op}
 import com.tribbloids.graph.commons.util.{IDMixin, WideTyped}
-import shapeless.Witness
+import shapeless.{Nat, Witness}
 import singleton.ops.{+, ==, Require}
 
 import scala.language.implicitConversions
@@ -44,18 +44,14 @@ object Arity {
       // for test only
       def _can_+(w: Lt[Int])(implicit proof: SS + w.T): Unit = {}
 
-      def proveSame[N2](implicit proof: SS =:= N2): Unit = {}
+      def proveSameType[N2](implicit proof: SS =:= N2): Unit = {}
 
-      // 'prove' means happening only in compile-time
-      def proveEqual[N2](implicit proof: Require[SS == N2]): Unit = {
+      def proveEqualType[N2](implicit proof: Require[SS == N2]): Unit = {}
 
-        //TODO: need run-time proof?
-      }
-
-      // TODO: should be named proofEqual, require should do everything in runtime
+      // TODO: should be named proofEqual, require should do everything in runtime?
       def requireEqual(w: Lt[Int])(implicit proof: Require[SS == w.T]): Unit = {
 
-        proveEqual[w.T]
+        proveEqualType[w.T]
 
         require(w.value == number)
       }
@@ -88,6 +84,14 @@ object Arity {
     def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {
 
       FromLiteral.summon[w.T](w) //TODO: IDEA inspection error
+    }
+  }
+
+  object FromNat {
+
+    def apply[N <: Nat](v: N)(implicit ev: NatAsOp[N]): FromOp[NatAsOp[N]] = {
+
+      FromOp.summon[NatAsOp[N]](ev) //TODO: IDEA inspection error
     }
   }
 

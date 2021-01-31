@@ -4,13 +4,14 @@ import com.tribbloids.graph.commons.util.ScalaReflection
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
+import com.tribbloids.shapesafe.m.shape.Shape.FromIndex
 import shapeless.HNil
 
 class ShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
-  def inferShort[T: ScalaReflection.TypeTag](v: T): String = {
+  def inferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
     VizType
       .infer(v)
@@ -62,7 +63,7 @@ class ShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.lookup.apply("x").dimension.number == 2)
+      assert(shape.namedIndex.apply("x").dimension.number == 2)
     }
 
     it("nameless") {
@@ -84,8 +85,8 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(3) cross
         Arity.FromLiteral(4) :<<- "z"
 
-      assert(shape.lookup.apply("x").dimension.number == 2)
-      assert(shape.lookup.apply("z").dimension.number == 4)
+      assert(shape.namedIndex.apply("x").dimension.number == 2)
+      assert(shape.namedIndex.apply("z").dimension.number == 4)
 
       inferShort(shape).shouldBe(
         """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
@@ -133,7 +134,7 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe("FromRecord") {
+  describe(FromIndex.getClass.getSimpleName) {
 
     import shapeless.syntax.singleton.mkSingletonOps
 
@@ -141,7 +142,7 @@ class ShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = Shape.FromName_Dimension(hh)
+      val shape = Shape.FromIndex(hh)
 
       assert(shape == Shape.Eye)
     }
@@ -151,7 +152,7 @@ class ShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3)) ::
         HNil
 
-      val shape = Shape.FromName_Dimension(hh)
+      val shape = Shape.FromIndex(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -164,12 +165,29 @@ class ShapeSpec extends BaseSpec {
         ("y" ->> Arity(4)) ::
         HNil
 
-      val shape = Shape.FromName_Dimension(hh)
+      val shape = Shape.FromIndex(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.dimensions.static == hh)
       assert(shape.static.head.dimension == Arity(3))
+    }
+  }
+
+  describe("FromNats") {
+
+    it("1") {
+      val ss = Shape(4)
+
+      ss.dimensions.static.head.internal.requireEqual(4)
+      ss.dimensions.static.last.internal.requireEqual(4)
+    }
+
+    it("2") {
+      val ss = Shape(4, 3, 2)
+
+      ss.dimensions.static.head.internal.requireEqual(4)
+      ss.dimensions.static.last.internal.requireEqual(2)
     }
   }
 
@@ -180,7 +198,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         Arity.FromLiteral(2) :<<- "x"
 
-      val record = shape.lookup
+      val record = shape.namedIndex
 
 //      VizType.infer(record).treeString.shouldBe()
 
@@ -199,7 +217,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "x" ><
         Arity.FromLiteral(3) :<<- "y"
 
-      val record = shape.lookup
+      val record = shape.namedIndex
 
       //      VizType.infer(static).treeString.shouldBe()
 
@@ -335,7 +353,7 @@ class ShapeSpec extends BaseSpec {
         Arity.FromLiteral(2) :<<- "i"
 //        Arity.FromLiteral(3) :<<- "j"
 
-      val r = s1 ><>< s2
+      val r = s1 >< s2
 
       inferShort(r).shouldBe(
         """shape.Shape.eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(2)] :<<- String("i"))"""

@@ -97,9 +97,9 @@
 //
 //    import Names._
 //
-//    implicit def recursive[
+//    implicit def inductive[
 //        TAIL <: HList,
-//        HEAD <: UpperBound
+//        HEAD <: String
 //    ](
 //        implicit
 //        forTail: Case[TAIL],

@@ -59,8 +59,8 @@ allprojects {
         compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
-        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.8")
-        //TODO: incompatible with testFixtures?
+        if (vs.splainV !=null)
+            scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
 
 //        compileOnly(kotlin("stdlib"))
 //        compileOnly(kotlin("stdlib-jdk8"))
@@ -97,7 +97,7 @@ allprojects {
 
                 loggingLevel = "verbose"
 
-                additionalParameters = listOf(
+                val compilerOptions = mutableListOf(
                     "-encoding", "utf8",
                     "-unchecked",
                     "-deprecation",
@@ -111,15 +111,31 @@ allprojects {
                     "-Xlog-implicit-conversions",
 
                     "-Yissue-debug"
-//                        ,
-//                        "-Ytyper-debug"
-//                        "-Vtyper"
+//                    ,
+//                    "-Ytyper-debug",
+//                    "-Vtyper"
 
                     // the following only works on scala 2.13
 //                        ,
 //                        "-Xlint:implicit-not-found",
 //                        "-Xlint:implicit-recursion"
+
                 )
+
+                if (vs.splainV != null) {
+                    compilerOptions.addAll(
+                        listOf(
+                            //splain
+                            "-P:splain:tree",
+                            "-P:splain:breakinfix:80",
+                            "-P:splain:bounds:true",
+                            "-P:splain:boundsimplicits:true",
+                            "-P:splain:keepmodules:2"
+                        )
+                    )
+                }
+
+                additionalParameters = compilerOptions
 
                 forkOptions.apply {
 

@@ -59,8 +59,8 @@ class DoubleVectorSpec extends BaseSpec {
       //    val v0type = ScalaReflection.universe.typeOf[v0.arity.type ].finalResultType
       //    println(v0type)
 
-      v0.shape.internal.proveSame[Witness.`3`.T]
-      v0.shape.internal.proveEqual[Witness.`3`.T]
+      v0.shape.internal.proveSameType[Witness.`3`.T]
+      v0.shape.internal.proveEqualType[Witness.`3`.T]
       v0.shape.internal.requireEqual(3)
 
       //    v0.arity.internal.proveSame[Witness.`4`.T]
@@ -169,8 +169,8 @@ class DoubleVectorSpec extends BaseSpec {
 
       val aa = v0.arity
 
-      aa.internal.proveSame[Witness.`6`.T]
-      aa.internal.proveEqual[Witness.`6`.T]
+      aa.internal.proveSameType[Witness.`6`.T]
+      aa.internal.proveEqualType[Witness.`6`.T]
       aa.internal.requireEqual(6)
 
       aa.internal._can_+(3)

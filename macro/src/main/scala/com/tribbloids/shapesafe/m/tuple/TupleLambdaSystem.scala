@@ -31,7 +31,7 @@ trait TupleLambdaSystem[UBI, UBO] {
       sysO.Eye
     }
 
-    implicit def recursive[
+    implicit def inductive[
         TAIL_I <: sysI.Impl,
         HEAD_I <: UBI,
         TAIL_O <: sysO.Impl,

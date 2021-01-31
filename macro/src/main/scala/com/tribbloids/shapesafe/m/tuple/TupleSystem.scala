@@ -8,7 +8,7 @@ trait TupleSystem {
 
   protected val eye: Impl
   final type Eye = eye.type
-  def Eye: Eye = eye
+  final def Eye: Eye = eye
 
 //  type ><[
 //      TAIL <: Impl,

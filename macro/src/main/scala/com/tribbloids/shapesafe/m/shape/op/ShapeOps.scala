@@ -2,31 +2,37 @@ package com.tribbloids.shapesafe.m.shape.op
 
 import com.tribbloids.shapesafe.m.arity.Expression
 import com.tribbloids.shapesafe.m.axis.Axis.:<<-
-import com.tribbloids.shapesafe.m.axis.NameUB
+import com.tribbloids.shapesafe.m.axis.NameWide
 import com.tribbloids.shapesafe.m.shape.Shape
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
-class ShapeOps[SELF <: Shape](self: SELF) {
+class ShapeOps[SELF <: Shape](val self: SELF) {
+
+  type Static = self.Static
+  def static: Static = self.static
+
+  import Shape.><
 
   def ><[
       D <: Expression,
-      N <: NameUB
+      N <: NameWide
   ](
       axis: D :<<- N
-  ): Shape.><[SELF, D :<<- N] = {
+  ): ><[SELF, D :<<- N] = {
 
     new Shape.><(self, axis)
   }
 
   def cross[
       D <: Expression,
-      N <: NameUB
+      N <: NameWide
   ](
       axis: D :<<- N
-  ) = ><(axis)
+  ): SELF >< (D :<<- N) = ><(axis)
 
-  def ><><[
+  def ><[
+      // TODO : not sure if overloading >< is a good idea
       THAT <: Shape,
       H_OUT <: HList,
       OUT <: Shape
@@ -34,13 +40,11 @@ class ShapeOps[SELF <: Shape](self: SELF) {
       that: THAT
   )(
       implicit
-      prepend: Prepend.Aux[that.Static, self.Static, H_OUT],
-      prove: Shape.FromStatic.==>[H_OUT, OUT]
+      toConcat: Prepend.Aux[that.Static, Static, H_OUT],
+      toShape: Shape.FromStatic.=:=>[H_OUT, OUT]
   ): OUT = {
 
-    val concat: H_OUT = that.static ++ self.static
-
-//    val v = (VizType.Strong[H_OUT].toString)
+    val concat: H_OUT = that.static ++ static
 
     Shape.FromStatic(concat)
   }
@@ -53,7 +57,7 @@ class ShapeOps[SELF <: Shape](self: SELF) {
       that: THAT
   )(
       implicit
-      prepend: Prepend.Aux[that.Static, self.Static, H_OUT],
-      prove: Shape.FromStatic.==>[H_OUT, OUT]
-  ) = ><><(that)
+      toConcat: Prepend.Aux[that.Static, Static, H_OUT],
+      toShape: Shape.FromStatic.=:=>[H_OUT, OUT]
+  ): OUT = ><(that)
 }

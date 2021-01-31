@@ -1,10 +1,10 @@
-package com.tribbloids.shapesafe.m.shape
+package com.tribbloids.shapesafe.m.shape.op
 
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.arity.Arity
 import shapeless.HNil
 
-class EinSumOperandSpec extends BaseSpec {
+class EinSumIndexedSpec extends BaseSpec {
 
   import shapeless.syntax.singleton.mkSingletonOps
 
@@ -14,13 +14,13 @@ class EinSumOperandSpec extends BaseSpec {
 
 //      val eye = EinSumOperand.Eye
 
-      val op = EinSumOperand ><
+      val op = EinSumIndexed ><
         ("i" ->> Arity(3))
     }
 
     it("if names has no duplicate") {
 
-      val op = EinSumOperand ><
+      val op = EinSumIndexed ><
         ("i" ->> Arity(3)) ><
         ("j" ->> Arity(4))
 
@@ -30,7 +30,7 @@ class EinSumOperandSpec extends BaseSpec {
 
     it("if name-dimension is a map") {
 
-      val op = EinSumOperand ><
+      val op = EinSumIndexed ><
         ("i" ->> Arity(3)) ><
         ("j" ->> Arity(4))
 
@@ -50,7 +50,7 @@ class EinSumOperandSpec extends BaseSpec {
 
     it("if name-dimension mapping is NOT a map") {
 
-      val op = EinSumOperand ><
+      val op = EinSumIndexed ><
         ("i" ->> Arity(3)) ><
         ("j" ->> Arity(4))
 
@@ -65,7 +65,7 @@ class EinSumOperandSpec extends BaseSpec {
     it("if HNil") {
       val record = HNil
 
-      val op = EinSumOperand.FromStatic(record)
+      val op = EinSumIndexed.FromStatic(record)
     }
 
     it("if singleton") {
@@ -73,7 +73,7 @@ class EinSumOperandSpec extends BaseSpec {
 
       val vv = ("j" ->> Arity(4))
 
-      val op = EinSumOperand.FromStatic(record)
+      val op = EinSumIndexed.FromStatic(record)
 
 //      val op = EinSumOperand.FromStatic.recursive[HNil, EinSumOperand.Eye, vv.type].apply(record)
     }
@@ -84,7 +84,7 @@ class EinSumOperandSpec extends BaseSpec {
         ("i" ->> Arity(3)) ::
         ("j" ->> Arity(4)) :: HNil
 
-      val op = EinSumOperand.FromStatic(record)
+      val op = EinSumIndexed.FromStatic(record)
     }
   }
 

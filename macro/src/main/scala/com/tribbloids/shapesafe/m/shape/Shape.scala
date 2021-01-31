@@ -1,15 +1,14 @@
 package com.tribbloids.shapesafe.m.shape
 
-import com.tribbloids.shapesafe.m.arity.Expression
+import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
+import com.tribbloids.shapesafe.m.arity.{Arity, Expression}
 import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.axis.Axis.{->>, :<<-}
-import com.tribbloids.shapesafe.m.shape.EinSumOperand.><
-import com.tribbloids.shapesafe.m.shape.op.ShapeOps
+import com.tribbloids.shapesafe.m.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
 import com.tribbloids.shapesafe.m.tuple.{CanFromStatic, StaticTuples, TupleSystem}
-import com.tribbloids.shapesafe.m.util.TypeTag
 import shapeless.ops.hlist.{At, ZipWithKeys}
 import shapeless.ops.record.Selector
-import shapeless.{::, HList, HNil, Nat, Witness}
+import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
 
 import scala.language.implicitConversions
 
@@ -17,13 +16,13 @@ import scala.language.implicitConversions
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait Shape extends Shape.BackBone.Impl {
+trait Shape extends Shape.Proto {
 
-  type Lookup <: HList // name: String -> axis: Axis
-  def lookup: Lookup
+  type NamedIndex <: HList // name: String -> axis: Axis
+  def namedIndex: NamedIndex
 
-  type Name_Dimension <: HList // name: String -> dim: arity.Expression
-  def name_Dimension: Name_Dimension
+  type Index <: HList // name: String -> dim: arity.Expression
+  def index: Index
 
   type _Names <: Names.Impl
   val names: _Names
@@ -41,11 +40,11 @@ trait Shape extends Shape.BackBone.Impl {
   ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: Shape.FromName_Dimension.==>[ZZ, O]
+      prove: Shape.FromIndex.=:=>[ZZ, O]
   ): O = {
 
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
-    prove(zipped)
+    Shape.FromIndex(zipped)
   }
 
   object Axes {
@@ -57,60 +56,33 @@ trait Shape extends Shape.BackBone.Impl {
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[Lookup, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(implicit selector: Selector[NamedIndex, name.T]): selector.Out = {
 
       import shapeless.record._
 
-      lookup.apply(name)(selector)
+      namedIndex.apply(name)(selector)
     }
   }
 
-//  def asEinSumOperand[
-//      ZZ <: HList,
-//      O <: Shape
-//  ](newNames: Names.Impl)(
-//      implicit
-//      zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-//      prove: Shape.FromEinSumRecord.==>[ZZ, O]
-//  ): O = {
-//
-//    val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
-//    prove(zipped)
-//  }
-//
-//  object EinSumHelper extends StaticTuples[String] {
-//
-//    class ImplView[TAIL <: Impl, HEAD <: String](self: TAIL >< HEAD) {
-//
-//      class ImplView
-//    }
-//
-//    implicit class Ops[SELF <: Impl](val self: SELF) {}
-//
-////    implicit def canCrossIfComply[TAIL <: Impl, HEAD <: String]: CanCross[TAIL, HEAD] = { (tail, head) =>
-////      val sameIndex = tail.
-////
-////      new ><(tail, head)
-////    }
-//  }
 }
 
-object Shape extends TupleSystem with CanFromStatic {
+object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
 
   final type UpperBound = Axis
 
-  object BackBone extends StaticTuples[UpperBound]
+  object Proto extends StaticTuples[UpperBound]
+  type Proto = Proto.Impl
 
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object eye extends BackBone.EyeLike with Impl {
+  object eye extends Proto.EyeLike with Impl {
 
-    type Lookup = HNil
-    override def lookup: HNil = HNil
+    type NamedIndex = HNil
+    override def namedIndex: HNil = HNil
 
-    type Name_Dimension = HNil
-    override def name_Dimension: Name_Dimension = HNil
+    type Index = HNil
+    override def index: Index = HNil
 
     final override type _Names = Names.Eye
     final override val names = Names.Eye
@@ -126,16 +98,16 @@ object Shape extends TupleSystem with CanFromStatic {
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends BackBone.><[TAIL, HEAD](tail, head)
+  ) extends Proto.><[TAIL, HEAD](tail, head)
       with Impl {
 
+    final type AxisField = head.AxisField
+    override type NamedIndex = AxisField :: tail.NamedIndex
+    lazy val namedIndex: NamedIndex = head.asAxisField :: tail.namedIndex
+
     final type Field = head.Field
-
-    type Lookup = Field :: tail.Lookup
-    lazy val lookup: Lookup = head.asField :: tail.lookup
-
-    override type Name_Dimension = head.Dimension :: tail.Name_Dimension
-    override lazy val name_Dimension: Name_Dimension = head.dimension :: tail.name_Dimension
+    override type Index = head.Field :: tail.Index
+    override lazy val index: Index = head.asField :: tail.index
 
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
@@ -145,40 +117,106 @@ object Shape extends TupleSystem with CanFromStatic {
 
   }
 
-  object FromName_Dimension extends HListConverter {
+  object FromIndex extends HListConverter {
 
-    implicit def recursive[
-        TAIL <: HList,
-        PREV <: Impl: TypeTag,
-        N <: String,
+    implicit def inductive[
+        H_TAIL <: HList,
+        TAIL <: Impl,
+        N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
         D <: Expression
     ](
         implicit
-        forTail: TAIL ==> PREV,
-        singleton: Witness.Aux[N]
-    ): ((N ->> D) :: TAIL) ==> (PREV >< (D :<<- N)) = {
+        forTail: H_TAIL =:=> TAIL,
+        w: Witness.Aux[N]
+    ): ((N ->> D) :: H_TAIL) =:=> (TAIL >< (D :<<- N)) = {
 
-      { v =>
-        val prev = forTail(v.tail)
+      buildFrom[(N ->> D) :: H_TAIL].to { v =>
+        val prev = apply(v.tail)
         val vHead = v.head: D
-        val head = vHead :<<- singleton
+        val head = vHead :<<- w
 
-        prev.><(head)
+        prev >< head
       }
     }
   }
 
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
 
-    Cons[TAIL, HEAD].build { (tail, head) =>
+    Cons[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }
 
-  implicit def ops[SELF <: Shape: TypeTag](self: SELF): ShapeOps[SELF] = {
+  implicit def ops[SELF <: Shape](self: SELF): ShapeOps[SELF] = {
 
     new ShapeOps(self)
   }
 
   implicit def toEyeOps(v: this.type): ShapeOps[Eye] = ops[Eye](Eye)
+
+  implicit def einSumOps[
+      S <: Shape
+  ](self: S)(
+      implicit
+      checkThis: EinSumIndexed.FromStatic.Spec[self.Index]
+  ) = {
+
+    val indexed = EinSumIndexed.FromStatic.apply(self.index)
+
+    EinSumOps(Seq(self))(indexed)
+  }
+
+  //TODO: doesn't work, blocked by https://github.com/milessabin/shapeless/issues/1072
+  object FromLiterals extends HListConverter {
+
+    implicit def inductive[
+        H_TAIL <: HList,
+        TAIL <: Impl,
+        HEAD <: Int
+    ](
+        implicit
+        forTail: H_TAIL =:=> TAIL,
+        w: Witness.Aux[HEAD]
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.FromLiteral[w.T] :<<- Axis.emptyName.type] = {
+
+      buildFrom[w.T :: H_TAIL].to { v =>
+        val prev = apply(v.tail)
+        val head = Arity.FromLiteral(w) :<<- Axis.emptyName
+
+        prev >< head
+      }
+    }
+  }
+
+//  def applyProduct[T <: HList](v: T)(implicit ev: FromLiterals.Case[T]): ev.Out = {
+//    ev.apply(v)
+//  }
+
+  object FromNats extends HListConverter {
+
+    implicit def inductive[
+        H_TAIL <: HList,
+        TAIL <: Impl,
+        HEAD <: Nat
+    ](
+        implicit
+        forTail: H_TAIL =:=> TAIL,
+        ev: NatAsOp[HEAD]
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.FromOp[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+
+      buildFrom[(HEAD :: H_TAIL)].to { v =>
+        val prev = apply(v.tail)
+        val head = Arity.FromNat(v.head) :<<- Axis.emptyName
+
+        prev >< head
+      }
+    }
+  }
+
+  // TODO: should this be reversed?
+  //  HList :: operator is right to left
+  //  our >< operator is left to right
+  def applyNatProduct[T <: HList](v: T)(implicit ev: FromNats.Spec[T]): ev.Out = {
+    FromNats.apply(v)
+  }
 }

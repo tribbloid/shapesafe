@@ -56,7 +56,7 @@ object StaticTuples {
 
     implicit def consAlways[TAIL <: Impl, HEAD <: UB]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
 
-      Cons[TAIL, HEAD].build { (tail, head) =>
+      Cons[TAIL, HEAD].to { (tail, head) =>
         new ><(tail, head)
       }
     }
