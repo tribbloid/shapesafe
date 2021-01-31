@@ -106,10 +106,10 @@ class DoubleVectorSpec extends BaseSpec {
 
     it("type manually defined") {
       val w3 = Witness(3)
-      type A3 = Arity.FromLiteral[w3.T]
+      type A3 = Arity.Literal[w3.T]
 
       val w4 = Witness(4)
-      type A4 = Arity.FromLiteral[w4.T]
+      type A4 = Arity.Literal[w4.T]
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)

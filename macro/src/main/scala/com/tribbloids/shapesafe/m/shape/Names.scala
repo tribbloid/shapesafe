@@ -17,7 +17,7 @@ object Names extends StaticTuples.Total[String] {
 
   implicit def toEyeInfix(s: Names.type): Infix[s.Eye] = Infix(Eye)
 
-  object Implicits {
+  trait Syntax {
 
     implicit def fromSingleton(v: String)(implicit w: Witness.Aux[v.type]): Infix[Eye >< v.type] = {
 
@@ -25,4 +25,5 @@ object Names extends StaticTuples.Total[String] {
     }
   }
 
+  object Syntax extends Syntax
 }

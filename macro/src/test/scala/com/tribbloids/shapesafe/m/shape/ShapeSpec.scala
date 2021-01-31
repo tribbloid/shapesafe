@@ -11,20 +11,12 @@ class ShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
-  def inferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
-
-    VizType
-      .infer(v)
-      .typeStr
-      .replaceAllLiterally("com.tribbloids.shapesafe.m.", "")
-  }
-
   ignore("spike") {
 
     it("1") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x"
+        Arity.Literal(2) :<<- "x"
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -38,8 +30,8 @@ class ShapeSpec extends BaseSpec {
     it("2") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x" ><
-        Arity.FromLiteral(3) :<<- "y"
+        Arity.Literal(2) :<<- "x" ><
+        Arity.Literal(3) :<<- "y"
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -54,11 +46,13 @@ class ShapeSpec extends BaseSpec {
     it("named") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x" cross
-        Arity.FromLiteral(3) :<<- "y"
+        Arity.Literal(2) :<<- "x" cross
+        Arity.Literal(3) :<<- "y"
 
-      inferShort(shape).shouldBe(
-        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String("y"))"""
+      typeInferShort(shape).shouldBe(
+        """
+          |Shape.Eye >< (Arity.Literal[Int(2)] :<<- String("x")) >< (Arity.Literal[Int(3)] :<<- String("y"))
+          |""".stripMargin
       )
 
 //      VizType.infer(shape.static).toString.shouldBe()
@@ -69,11 +63,13 @@ class ShapeSpec extends BaseSpec {
     it("nameless") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) cross
-        Arity.FromLiteral(3)
+        Arity.Literal(2) cross
+        Arity.Literal(3)
 
-      inferShort(shape).shouldBe(
-        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type)"""
+      typeInferShort(shape).shouldBe(
+        """
+          |Shape.Eye >< (Arity.Literal[Int(2)] :<<- Axis.emptyName.type) >< (Arity.Literal[Int(3)] :<<- Axis.emptyName.type)
+          |""".stripMargin
       )
 
     }
@@ -81,15 +77,17 @@ class ShapeSpec extends BaseSpec {
     it("mixed") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x" ><
-        Arity.FromLiteral(3) cross
-        Arity.FromLiteral(4) :<<- "z"
+        Arity.Literal(2) :<<- "x" ><
+        Arity.Literal(3) cross
+        Arity.Literal(4) :<<- "z"
 
       assert(shape.namedIndex.apply("x").dimension.number == 2)
       assert(shape.namedIndex.apply("z").dimension.number == 4)
 
-      inferShort(shape).shouldBe(
-        """shape.Shape.Eye >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(3)] :<<- axis.Axis.emptyName.type) >< (arity.Arity.FromLiteral[Int(4)] :<<- String("z"))"""
+      typeInferShort(shape).shouldBe(
+        """
+          |Shape.Eye >< (Arity.Literal[Int(2)] :<<- String("x")) >< (Arity.Literal[Int(3)] :<<- Axis.emptyName.type) >< (Arity.Literal[Int(4)] :<<- String("z"))
+          |""".stripMargin
       )
     }
   }
@@ -186,8 +184,8 @@ class ShapeSpec extends BaseSpec {
     it("2") {
       val ss = Shape(4, 3, 2)
 
-      ss.dimensions.static.head.internal.requireEqual(4)
-      ss.dimensions.static.last.internal.requireEqual(2)
+      ss.dimensions.static.head.internal.requireEqual(2)
+      ss.dimensions.static.last.internal.requireEqual(4)
     }
   }
 
@@ -196,37 +194,42 @@ class ShapeSpec extends BaseSpec {
     it("1") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x"
+        Arity.Literal(2) :<<- "x"
 
       val record = shape.namedIndex
 
 //      VizType.infer(record).treeString.shouldBe()
 
-      inferShort(record.keys).shouldBe(
-        """String("x") :: shapeless.HNil"""
+      typeInferShort(record.keys).shouldBe(
+        """
+          |String("x") :: HNil""".stripMargin
       )
 
-      inferShort(record.values).shouldBe(
-        """(arity.Arity.FromLiteral[Int(2)] :<<- String("x")) :: shapeless.HNil"""
+      typeInferShort(record.values).shouldBe(
+        """
+          |(Arity.Literal[Int(2)] :<<- String("x")) :: HNil""".stripMargin
       )
     }
 
     it("2") {
 
       val shape = Shape ><
-        Arity.FromLiteral(2) :<<- "x" ><
-        Arity.FromLiteral(3) :<<- "y"
+        Arity.Literal(2) :<<- "x" ><
+        Arity.Literal(3) :<<- "y"
 
       val record = shape.namedIndex
 
       //      VizType.infer(static).treeString.shouldBe()
 
-      inferShort(record.keys).shouldBe(
-        """String("y") :: String("x") :: shapeless.HNil"""
+      typeInferShort(record.keys).shouldBe(
+        """
+          |String("y") :: String("x") :: HNil""".stripMargin
       )
 
-      inferShort(record.values).shouldBe(
-        """(arity.Arity.FromLiteral[Int(3)] :<<- String("y")) :: (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) :: shapeless.HNil"""
+      typeInferShort(record.values).shouldBe(
+        """
+          |(Arity.Literal[Int(3)] :<<- String("y")) :: (Arity.Literal[Int(2)] :<<- String("x")) :: HNil
+          |""".stripMargin
       )
     }
   }
@@ -234,8 +237,8 @@ class ShapeSpec extends BaseSpec {
   describe("names") {
 
     val shape = Shape ><
-      Arity.FromLiteral(2) :<<- "x" cross
-      Arity.FromLiteral(3) :<<- "y"
+      Arity.Literal(2) :<<- "x" cross
+      Arity.Literal(3) :<<- "y"
 
     it("1") {
 
@@ -248,8 +251,8 @@ class ShapeSpec extends BaseSpec {
   describe("values") {
 
     val shape = Shape ><
-      Arity.FromLiteral(2) :<<- "x" ><
-      Arity.FromLiteral(3) :<<- "y"
+      Arity.Literal(2) :<<- "x" ><
+      Arity.Literal(3) :<<- "y"
 
     it("1") {
 
@@ -278,16 +281,16 @@ class ShapeSpec extends BaseSpec {
   describe("withNames") {
 
     val shape = Shape ><
-      Arity.FromLiteral(2) :<<- "x" ><
-      Arity.FromLiteral(3) :<<- "y"
+      Arity.Literal(2) :<<- "x" ><
+      Arity.Literal(3) :<<- "y"
 
     val ab = Names >< "a" >< "b"
     val ij = Names >< "i" >< "j"
     val namesTooMany = Names >< "a" >< "b" >< "c"
 
     val shapeRenamed = Shape ><
-      Arity.FromLiteral(2) :<<- "a" ><
-      Arity.FromLiteral(3) :<<- "b"
+      Arity.Literal(2) :<<- "a" ><
+      Arity.Literal(3) :<<- "b"
 
     it("1") {
 
@@ -322,22 +325,22 @@ class ShapeSpec extends BaseSpec {
   describe("Axes") {
 
     val shape = Shape ><
-      Arity.FromLiteral(2) :<<- "x" ><
-      Arity.FromLiteral(3) :<<- "y" ><
-      Arity.FromLiteral(4) :<<- "z"
+      Arity.Literal(2) :<<- "x" ><
+      Arity.Literal(3) :<<- "y" ><
+      Arity.Literal(4) :<<- "z"
 
     it("getByIndex") {
 
       val v = shape.Axes.get(0)
 
-      assert(v == Arity.FromLiteral(4) :<<- "z") // HList is of inverse order
+      assert(v == Arity.Literal(4) :<<- "z") // HList is of inverse order
     }
 
     it("getByName") {
 
       val v = shape.Axes.get("y")
 
-      assert(v == Arity.FromLiteral(3) :<<- "y")
+      assert(v == Arity.Literal(3) :<<- "y")
     }
   }
 
@@ -346,35 +349,39 @@ class ShapeSpec extends BaseSpec {
     it("1") {
 
       val s1 = Shape ><
-        Arity.FromLiteral(2) :<<- "x"
+        Arity.Literal(2) :<<- "x"
 //        Arity.FromLiteral(3) :<<- "y"
 
       val s2 = Shape ><
-        Arity.FromLiteral(2) :<<- "i"
+        Arity.Literal(2) :<<- "i"
 //        Arity.FromLiteral(3) :<<- "j"
 
       val r = s1 >< s2
 
-      inferShort(r).shouldBe(
-        """shape.Shape.eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String("x")) >< (arity.Arity.FromLiteral[Int(2)] :<<- String("i"))"""
+      typeInferShort(r).shouldBe(
+        """
+          |Shape.eye.type >< (Arity.Literal[Int(2)] :<<- String("x")) >< (Arity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
     }
 
     it("2") {
 
       val s1 = Shape ><
-        Arity.FromLiteral(2) :<<- "x" ><
-        Arity.FromLiteral(3) :<<- "y"
+        Arity.Literal(2) :<<- "x" ><
+        Arity.Literal(3) :<<- "y"
 
       val s2 = Shape ><
-        Arity.FromLiteral(2) :<<- "i" ><
-        Arity.FromLiteral(3) :<<- "j"
+        Arity.Literal(2) :<<- "i" ><
+        Arity.Literal(3) :<<- "j"
 
       val r = s1 concat s2
 
-      inferShort(r).shouldBe(
-        "shape.Shape.eye.type >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"x\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"y\"))" +
-          " >< (arity.Arity.FromLiteral[Int(2)] :<<- String(\"i\")) >< (arity.Arity.FromLiteral[Int(3)] :<<- String(\"j\"))"
+      typeInferShort(r).shouldBe(
+        """
+          |
+          |Shape.eye.type >< (Arity.Literal[Int(2)] :<<- String("x")) >< (Arity.Literal[Int(3)] :<<- String("y")) ><
+          | (Arity.Literal[Int(2)] :<<- String("i")) >< (Arity.Literal[Int(3)] :<<- String("j"))
+          |""".stripMargin.split('\n').mkString
       )
     }
   }

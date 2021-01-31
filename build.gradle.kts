@@ -4,7 +4,7 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.3.72" // TODO: remove?
+    kotlin("jvm") version "1.4.30" // TODO: remove?
 
     idea
 

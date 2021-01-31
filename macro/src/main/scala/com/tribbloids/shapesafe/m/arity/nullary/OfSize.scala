@@ -1,6 +1,6 @@
 package com.tribbloids.shapesafe.m.arity.nullary
 
-import com.tribbloids.shapesafe.m.arity.Arity.FromOp
+import com.tribbloids.shapesafe.m.arity.Arity.Derived
 import com.tribbloids.shapesafe.m.arity.ProvenExpression.ProvenToBe
 import com.tribbloids.shapesafe.m.arity.Utils.NatAsOp
 import shapeless.ops.hlist
@@ -8,7 +8,7 @@ import shapeless.{HList, Nat}
 
 class OfSize[-DATA <: HList, S <: NatAsOp[_]](
     val singleton: S
-) extends ProvenToBe[FromOp[S]]()(new FromOp(singleton)) {}
+) extends ProvenToBe[Derived[S]]()(new Derived(singleton)) {}
 
 object OfSize {
 

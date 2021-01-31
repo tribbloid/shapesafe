@@ -5,8 +5,8 @@ class Versions(self: Project) {
     val projectGroup = "com.tribbloids.shapesafe"
 
     val projectV = self.properties.get("projectVersion").toString()
-
-    val projectVComposition = projectV.split('-')
+    val projectVMajor = projectV.removeSuffix("-SNAPSHOT")
+//    val projectVComposition = projectV.split('-')
 
     val scalaGroup: String = self.properties.get("scalaGroup").toString()
 
@@ -24,5 +24,5 @@ class Versions(self: Project) {
     val scalatestV: String = "3.2.3"
 
     val splainV: String? = null
-//    val splainV: String? = 0.5.9-SNAPSHOT
+//    val splainV: String? = "0.5.9-SNAPSHOT"
 }

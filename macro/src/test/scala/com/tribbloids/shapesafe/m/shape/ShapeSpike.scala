@@ -161,8 +161,8 @@ class ShapeSpike extends BaseSpec {
     it("zip") {
 
       val dims = {
-        (Symbol("x") ->> Arity.FromLiteral(3)) ::
-          (Symbol("y") ->> Arity.FromLiteral(4)) ::
+        (Symbol("x") ->> Arity.Literal(3)) ::
+          (Symbol("y") ->> Arity.Literal(4)) ::
           HNil
       }
 

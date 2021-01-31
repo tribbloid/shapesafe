@@ -17,7 +17,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       val out = EinSumCondition.apply(HNil -> ii)
 
-      out.fields.toString.shouldBe("(i,FromLiteral: 3) :: HNil")
+      out.fields.toString.shouldBe("(i,3:Literal) :: HNil")
     }
 
     describe("new name to a Record") {
@@ -28,7 +28,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val out = EinSumCondition.apply(existing -> ii)
 
-        out.fields.toString.shouldBe("(i,FromLiteral: 3) :: (a,FromLiteral: 4) :: HNil")
+        out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: HNil")
       }
 
       it("2") {
@@ -37,7 +37,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val out = EinSumCondition.apply(existing -> ii)
 
-        out.fields.toString.shouldBe("(i,FromLiteral: 3) :: (a,FromLiteral: 4) :: (b,FromLiteral: 5) :: HNil")
+        out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: (b,5:Literal) :: HNil")
       }
     }
 
@@ -49,7 +49,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val out = EinSumCondition.apply(existing -> ii)
 
-        out.fields.toString.shouldBe("(i,FromLiteral: 3) :: (i,FromLiteral: 3) :: HNil")
+        out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: HNil")
       }
 
       it("2") {
@@ -58,7 +58,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val out = EinSumCondition.apply(existing -> ii)
 
-        out.fields.toString.shouldBe("(i,FromLiteral: 3) :: (i,FromLiteral: 3) :: (j,FromLiteral: 4) :: HNil")
+        out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: (j,4:Literal) :: HNil")
       }
     }
 

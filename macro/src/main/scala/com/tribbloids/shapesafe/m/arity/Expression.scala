@@ -24,7 +24,7 @@ trait Expression {
 
   final override def toString: String = {
 
-    this.getClass.getSimpleName + ": " + valueStr
+    valueStr + ":" + this.getClass.getSimpleName
   }
 
 }

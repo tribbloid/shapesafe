@@ -60,43 +60,43 @@ object Arity {
 
   object Static {}
 
-  class FromOp[S <: Op](override val singleton: S) extends Static[S] {
+  class Derived[S <: Op](override val singleton: S) extends Static[S] {
     override lazy val number: Int = singleton.value.asInstanceOf[Int]
   }
 
-  object FromOp {
+  object Derived {
 
-    implicit def summon[S <: Op](implicit s: S): FromOp[S] = new FromOp[S](s)
+    implicit def summon[S <: Op](implicit s: S): Derived[S] = new Derived[S](s)
   }
 
   // this makes it impossible to construct directly from Int type
-  class FromLiteral[S <: Int](val singleton: S) extends Static[S] {
+  class Literal[S <: Int](val singleton: S) extends Static[S] {
 
     override def number: Int = singleton
   }
 
-  object FromLiteral {
+  object Literal {
 
-    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): FromLiteral[S] = {
-      new FromLiteral[S](w.value)
+    implicit def summon[S <: Int](implicit w: Witness.Aux[S]): Literal[S] = {
+      new Literal[S](w.value)
     }
 
-    def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {
+    def apply(w: Witness.Lt[Int]): Literal[w.T] = {
 
-      FromLiteral.summon[w.T](w) //TODO: IDEA inspection error
+      Literal.summon[w.T](w) //TODO: IDEA inspection error
     }
   }
 
   object FromNat {
 
-    def apply[N <: Nat](v: N)(implicit ev: NatAsOp[N]): FromOp[NatAsOp[N]] = {
+    def apply[N <: Nat](v: N)(implicit ev: NatAsOp[N]): Derived[NatAsOp[N]] = {
 
-      FromOp.summon[NatAsOp[N]](ev) //TODO: IDEA inspection error
+      Derived.summon[NatAsOp[N]](ev) //TODO: IDEA inspection error
     }
   }
 
-  def apply(w: Witness.Lt[Int]): FromLiteral[w.T] = {
-    FromLiteral.apply(w)
+  def apply(w: Witness.Lt[Int]): Literal[w.T] = {
+    Literal.apply(w)
   }
 
   // TODO: should use a third-party library or selectDynamic to remove boilerplate

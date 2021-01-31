@@ -7,16 +7,14 @@ class AxisTest extends BaseSpec {
 
   it("correct type") {
 
-    val arity = Arity.FromLiteral(3)
+    val arity = Arity.Literal(3)
 
     val dim = arity :<<- "abc"
 
-    VizType
-      .infer(dim)
-      .tree
-      .typeStr
+    typeInferShort(dim)
       .shouldBe(
-        """com.tribbloids.shapesafe.m.arity.Arity.FromLiteral[Int(3)] :<<- String("abc")"""
+        """
+          |Arity.Literal[Int(3)] :<<- String("abc")""".stripMargin
       )
   }
 }

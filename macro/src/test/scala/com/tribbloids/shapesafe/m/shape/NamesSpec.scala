@@ -24,7 +24,7 @@ class NamesSpec extends BaseSpec {
 
   it("from String literal") {
 
-    import Names.Implicits._
+    import Names.Syntax._
 
     val v1 = Names >< "x" >< "y" >< "z"
     val v2 = fromSingleton("x") >< "y" >< "z"

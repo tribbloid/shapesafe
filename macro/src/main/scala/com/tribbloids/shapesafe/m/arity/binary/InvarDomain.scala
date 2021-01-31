@@ -24,7 +24,7 @@ case class InvarDomain[
 
     case class prove(in: Expr2[A1, A2, ??]) extends Invar[S1 ?? S2] {
 
-      override def out: Out = Arity.FromOp.summon[S1 ?? S2](lemma)
+      override def out: Out = Arity.Derived.summon[S1 ?? S2](lemma)
     }
   }
 

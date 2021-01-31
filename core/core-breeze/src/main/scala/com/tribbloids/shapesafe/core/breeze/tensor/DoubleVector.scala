@@ -59,7 +59,7 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: Arity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 T_+ (FromLiteral[padding.T] T_* Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 T_+ (Literal[padding.T] T_* Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -82,10 +82,10 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ FromLiteral[stride.T]) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
-    val _stride: FromLiteral[stride.T] = Arity(stride)
+    val _stride: Literal[stride.T] = Arity(stride)
 
     val op = (this.shape - kernel.shape + Arity._1.value) / _stride
     val proof = lemma(op)
@@ -145,12 +145,12 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  def zeros(lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
+  def zeros(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
 
     new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
   }
 
-  def random(lit: Witness.Lt[Int]): DoubleVector[FromLiteral[lit.T]] = {
+  def random(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
     val list = DenseVector.fill(lit.value) {
       Random.nextDouble()
     }

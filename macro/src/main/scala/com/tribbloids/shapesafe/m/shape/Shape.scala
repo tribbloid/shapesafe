@@ -6,7 +6,7 @@ import com.tribbloids.shapesafe.m.axis.Axis
 import com.tribbloids.shapesafe.m.axis.Axis.{->>, :<<-}
 import com.tribbloids.shapesafe.m.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
 import com.tribbloids.shapesafe.m.tuple.{CanFromStatic, StaticTuples, TupleSystem}
-import shapeless.ops.hlist.{At, ZipWithKeys}
+import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
 
@@ -177,11 +177,11 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL =:=> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.FromLiteral[w.T] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.Literal[w.T] :<<- Axis.emptyName.type] = {
 
       buildFrom[w.T :: H_TAIL].to { v =>
         val prev = apply(v.tail)
-        val head = Arity.FromLiteral(w) :<<- Axis.emptyName
+        val head = Arity.Literal(w) :<<- Axis.emptyName
 
         prev >< head
       }
@@ -202,7 +202,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL =:=> TAIL,
         ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.FromOp[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
       buildFrom[(HEAD :: H_TAIL)].to { v =>
         val prev = apply(v.tail)
@@ -213,10 +213,12 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
     }
   }
 
-  // TODO: should this be reversed?
-  //  HList :: operator is right to left
-  //  our >< operator is left to right
-  def applyNatProduct[T <: HList](v: T)(implicit ev: FromNats.Spec[T]): ev.Out = {
-    FromNats.apply(v)
+  // TODO: should the reverse be justified?
+  def applyNatProduct[H1 <: HList, H2 <: HList](v: H1)(
+      implicit
+      reverse: Reverse.Aux[H1, H2],
+      ev: FromNats.Spec[H2]
+  ): ev.Out = {
+    FromNats.apply(v.reverse)
   }
 }

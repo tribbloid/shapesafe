@@ -33,12 +33,12 @@ class AritySpec extends BaseSpec {
       //    v1.internal.requireEqual(100)
 
       {
-        val v = implicitly[FromOp[ToInt[big.nat.N]]]
+        val v = implicitly[Derived[ToInt[big.nat.N]]]
         validate(v, 100)
       }
 
       {
-        val v = implicitly[FromOp[ToInt[big.w.T]]]
+        val v = implicitly[Derived[ToInt[big.w.T]]]
         validate(v, 100)
       }
     }
@@ -51,7 +51,7 @@ class AritySpec extends BaseSpec {
       }
 
       {
-        val v = implicitly[FromLiteral[big.w.T]]
+        val v = implicitly[Literal[big.w.T]]
         validate(v, 100)
       }
     }
@@ -60,6 +60,6 @@ class AritySpec extends BaseSpec {
   it("OfIntLike") {
 
     val v1 = Arity(3)
-    v1.toString.shouldBe("FromLiteral: 3")
+    v1.toString.shouldBe("3:Literal")
   }
 }
