@@ -1,3 +1,15 @@
+
+buildscript {
+    repositories {
+        // Add here whatever repositories you're already using
+        mavenCentral()
+    }
+
+//    dependencies {
+//        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6") // no support for multi-module
+//    }
+}
+
 plugins {
 //    base
     java
@@ -217,8 +229,7 @@ allprojects {
 
         module {
 
-            excludeDirs = excludeDirs + (
-                    listOf(
+            excludeDirs = excludeDirs + listOf(
                         file(".gradle"),
                         file(".github"),
 
@@ -228,13 +239,13 @@ allprojects {
                         file(".idea"),
                         file(".vscode"),
                         file(".bloop"),
+                        file(".bsp"),
                         file(".metals"),
 
                         file("logs"),
 
                         // apache spark
                         file("warehouse")
-                    )
                     )
 
             isDownloadJavadoc = true

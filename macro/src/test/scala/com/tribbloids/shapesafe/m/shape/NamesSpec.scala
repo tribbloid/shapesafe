@@ -27,7 +27,7 @@ class NamesSpec extends BaseSpec {
     import Names.Syntax._
 
     val v1 = Names >< "x" >< "y" >< "z"
-    val v2 = fromSingleton("x") >< "y" >< "z"
+    val v2 = literalToInfix("x") >< "y" >< "z"
     val v3 = "x" >< "y" >< "z"
 
     assert(v1 == v2)

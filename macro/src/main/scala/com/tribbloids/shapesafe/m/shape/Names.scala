@@ -19,7 +19,12 @@ object Names extends StaticTuples.Total[String] {
 
   trait Syntax {
 
-    implicit def fromSingleton(v: String)(implicit w: Witness.Aux[v.type]): Infix[Eye >< v.type] = {
+    implicit def literalToNames(v: String)(implicit w: Witness.Aux[v.type]): Eye >< v.type = {
+
+      Eye >< w
+    }
+
+    implicit def literalToInfix(v: String)(implicit w: Witness.Aux[v.type]): Infix[Eye >< v.type] = {
 
       Infix(Eye >< w)
     }
