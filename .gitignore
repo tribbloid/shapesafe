@@ -39,6 +39,7 @@ project/plugins/project/
 .vscode/
 
 # BSP & Metals
+.bsp/
 .bloop/
 .metals/
 **/metals.sbt
