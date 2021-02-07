@@ -81,9 +81,7 @@ class EinSumSpec extends BaseSpec {
       val s2 = Shape(3, 4) |<<-
         ("i" >< "j")
 
-      val ops = s1 einSum s2
-
-      val r = ops --> ("x" >< "i")
+      val r = (s1 einSum s2) --> ("x" >< "i")
 
       r.toString.shouldBe(
         "Eye >< 1:Derived :<<- x >< 3:Derived :<<- i"
@@ -137,5 +135,23 @@ class EinSumSpec extends BaseSpec {
         """s1 einSum s2"""
       )
     }
+
+    it("result refers to non-existing index") {
+
+      import Names.Syntax._
+
+      val s1 = Shape(1, 2) |<<-
+        ("x" >< "y")
+
+      val s2 = Shape(3, 4) |<<-
+        ("i" >< "j")
+
+      val ops = s1 einSum s2
+
+      shouldNotCompile(
+        """val r = ops --> ("x" >< "k")"""
+      )
+    }
+
   }
 }
