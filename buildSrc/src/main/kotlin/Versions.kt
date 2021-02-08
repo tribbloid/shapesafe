@@ -2,9 +2,11 @@ import org.gradle.api.Project
 
 class Versions(self: Project) {
 
+    // TODO : how to group them?
     val projectGroup = "org.shapesafe"
+    val projectRootID = "shapesafe"
 
-    val projectV = self.properties.get("projectVersion").toString()
+    val projectV = "0.1.0-SNAPSHOT"
     val projectVMajor = projectV.removeSuffix("-SNAPSHOT")
 //    val projectVComposition = projectV.split('-')
 

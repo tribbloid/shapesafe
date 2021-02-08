@@ -1,3 +1,4 @@
+val vs = versions()
 
 buildscript {
     repositories {
@@ -25,7 +26,7 @@ plugins {
     id("com.github.ben-manes.versions" ) version "0.36.0"
 }
 
-val rootID = "shapesafe"
+val rootID = vs.projectRootID
 
 allprojects {
 
@@ -40,11 +41,9 @@ allprojects {
 
     apply(plugin = "maven-publish")
 
-    val vs = this.versions()
 
-
-    group = "edu.umontreal.$rootID"
-    version = "0.0.1-SNAPSHOT"
+    group = vs.projectGroup
+    version = vs.projectV
 
     repositories {
         mavenLocal()
@@ -211,14 +210,14 @@ allprojects {
 
 
     publishing {
-        val artifactID = if (project.name.startsWith(rootID)) project.name
+        val moduleID = if (project.name.startsWith(rootID)) project.name
         else rootID + "-" + project.name
 
         publications {
             create<MavenPublication>("maven") {
-                groupId = vs.projectGroup
-                artifactId = artifactID
-                version = vs.projectV
+                groupId = groupId
+                artifactId = moduleID
+                version = version
 
                 from(components["java"])
 
