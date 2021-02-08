@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import org.shapesafe.BaseSpec
-import org.shapesafe.m.arity.Arity
+import org.shapesafe.core.arity.Arity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {

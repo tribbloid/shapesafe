@@ -3,12 +3,12 @@ package org.shapesafe.breeze.tensor
 import breeze.linalg.DenseVector
 import breeze.signal
 import org.shapesafe.core.tensor.Const.VecShape
-import org.shapesafe.m.arity.Utils.NatAsOp
-import org.shapesafe.m.arity.binary.AssertEqual
-import org.shapesafe.m.arity.nullary.OfSize
-import org.shapesafe.m.arity.{Arity, ProveArity}
-import org.shapesafe.m.util.Constraint.ElementOfType
-import org.shapesafe.m.arity.ProveArity.~~>
+import org.shapesafe.core.arity.Utils.NatAsOp
+import org.shapesafe.core.arity.binary.AssertEqual
+import org.shapesafe.core.arity.nullary.OfSize
+import org.shapesafe.core.arity.{Arity, ProveArity}
+import org.shapesafe.core.util.Constraint.ElementOfType
+import org.shapesafe.core.arity.ProveArity.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.util.Random
@@ -20,7 +20,7 @@ class DoubleVector[A1 <: VecShape](
 ) extends Serializable {
 
   import Arity._
-  import org.shapesafe.m.arity.DSL._
+  import org.shapesafe.core.arity.DSL._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
