@@ -2,7 +2,7 @@ import org.gradle.api.Project
 
 class Versions(self: Project) {
 
-    val projectGroup = "com.tribbloids.shapesafe"
+    val projectGroup = "org.shapesafe"
 
     val projectV = self.properties.get("projectVersion").toString()
     val projectVMajor = projectV.removeSuffix("-SNAPSHOT")

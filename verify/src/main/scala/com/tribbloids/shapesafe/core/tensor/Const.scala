@@ -1,6 +1,6 @@
-package com.tribbloids.shapesafe.core.tensor
+package org.shapesafe.core.tensor
 
-import com.tribbloids.shapesafe.m.arity.Expression
+import org.shapesafe.m.arity.Expression
 
 object Const {
 
