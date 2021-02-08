@@ -2,8 +2,8 @@ val vs: Versions = versions()
 
 dependencies {
 
-    api(project(":core"))
-    testApi(testFixtures(project(":core")))
+    api(project(":verify"))
+    testApi(testFixtures(project(":verify")))
 
     // https://mvnrepository.com/artifact/org.scalanlp/breeze
     api("org.scalanlp:breeze_${vs.scalaBinaryV}:1.1")

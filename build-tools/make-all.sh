@@ -13,3 +13,7 @@ ${FWDIR}/gradlew -q dependencyTree "${@}" >${FWDIR}/logs/dependencyTree_"$DATE".
 #${FWDIR}/gradlew clean testClasses "${@}"
 
 ${FWDIR}/gradlew clean publishToMavenLocal "${@}"
+
+#CD ${FWDIR}/shapeshape-demo/
+#
+#sbt clean compile //  TODO: generates project dir at wrong location

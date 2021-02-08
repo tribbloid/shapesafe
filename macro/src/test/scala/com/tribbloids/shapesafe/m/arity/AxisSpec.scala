@@ -1,9 +1,8 @@
 package com.tribbloids.shapesafe.m.arity
 
-import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 
-class AxisTest extends BaseSpec {
+class AxisSpec extends BaseSpec {
 
   it("correct type") {
 

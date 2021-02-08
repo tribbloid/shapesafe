@@ -46,7 +46,7 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: Arity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 T_+ A2) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` A2) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -59,7 +59,7 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: Arity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 T_+ (Literal[padding.T] T_* Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` (Literal[padding.T] `*` Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -82,7 +82,7 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Arity._1.Wide) `/` Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _stride: Literal[stride.T] = Arity(stride)
@@ -110,7 +110,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 T_- A2 T_+ Arity._1.Wide) T_/ Arity._1.Wide) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Arity._1.Wide) `/` Arity._1.Wide) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     conv(kernel, 1)

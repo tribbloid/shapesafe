@@ -25,6 +25,8 @@ plugins {
     id("com.github.ben-manes.versions" ) version "0.36.0"
 }
 
+val rootID = "shapesafe"
+
 allprojects {
 
     apply(plugin = "java")
@@ -40,7 +42,8 @@ allprojects {
 
     val vs = this.versions()
 
-    group = "edu.umontreal.shapesafe"
+
+    group = "edu.umontreal.$rootID"
     version = "0.0.1-SNAPSHOT"
 
     repositories {
@@ -208,10 +211,13 @@ allprojects {
 
 
     publishing {
+        val artifactID = if (project.name.startsWith(rootID)) project.name
+        else rootID + "-" + project.name
+
         publications {
             create<MavenPublication>("maven") {
                 groupId = vs.projectGroup
-                artifactId = "shapesafe-" + project.name
+                artifactId = artifactID
                 version = vs.projectV
 
                 from(components["java"])

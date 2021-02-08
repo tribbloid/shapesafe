@@ -3,8 +3,10 @@ package com.tribbloids.shapesafe.m
 import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.BaseSpec
 import com.tribbloids.shapesafe.m.shape.Names
+import org.scalatest.Ignore
 import shapeless.{HNil, Witness}
 
+@Ignore
 class Spike extends BaseSpec {
 
   import Spike._

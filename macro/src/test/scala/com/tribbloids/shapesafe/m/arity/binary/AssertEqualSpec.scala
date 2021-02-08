@@ -1,5 +1,6 @@
 package com.tribbloids.shapesafe.m.arity.binary
 
+import com.tribbloids.graph.commons.util.viz.VizType
 import com.tribbloids.shapesafe.m.arity.{Arity, Expression, ExpressionFixture}
 
 import scala.language.existentials
