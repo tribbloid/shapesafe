@@ -6,9 +6,9 @@ buildscript {
         mavenCentral()
     }
 
-//    dependencies {
-//        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6") // no support for multi-module
-//    }
+    dependencies {
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6") // no support for multi-module
+    }
 }
 
 plugins {
@@ -33,6 +33,8 @@ allprojects {
     apply(plugin = "java")
     apply(plugin = "java-library")
     apply(plugin = "java-test-fixtures")
+
+    apply(plugin = "bloop")
 
     apply(plugin = "scala")
     apply(plugin = "kotlin")
