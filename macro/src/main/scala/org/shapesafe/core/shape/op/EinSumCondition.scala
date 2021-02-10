@@ -2,21 +2,21 @@ package org.shapesafe.core.shape.op
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.binary.AssertEqual
-import org.shapesafe.core.arity.{Arity, Expression}
+import org.shapesafe.core.arity.{Arity, Leaf}
 import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Keys, Selector}
 import shapeless.{::, HList, NotContainsConstraint, Witness}
 
-trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Expression), HList] {
+trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList] {
 
   import org.shapesafe.core.arity.ProveArity._
 
   implicit def IfExistingName[
       OLD <: HList,
       N <: String,
-      D1 <: Expression,
-      D2 <: Expression,
-      O <: Arity
+      D1 <: Arity,
+      D2 <: Arity,
+      O <: Leaf
   ](
       implicit
       name: Witness.Aux[N],
@@ -46,7 +46,7 @@ object EinSumCondition extends EinSumCondition {
   implicit def IfNewName[
       OLD <: HList,
       N <: String,
-      D <: Expression,
+      D <: Arity,
       OLDNS <: HList
   ](
       implicit

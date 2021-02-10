@@ -1,7 +1,7 @@
 package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
-import org.shapesafe.core.arity.Expression
+import org.shapesafe.core.arity.Arity
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
@@ -12,7 +12,7 @@ trait Axis extends IDMixin {
 
   import Axis._
 
-  type Dimension <: Expression
+  type Dimension <: Arity
   def dimension: Dimension
 
   type Name <: NameWide
@@ -40,7 +40,7 @@ object Axis {
 
   // TODO: N can be eliminated
   class :<<-[
-      D <: Expression,
+      D <: Arity,
       N <: NameWide
   ](
       val dimension: D,
@@ -62,7 +62,7 @@ object Axis {
   type ->>[N <: NameWide, D] = FieldType[N, D]
 
   def apply[
-      V <: Expression
+      V <: Arity
   ](
       value: V,
       name: Witness.Lt[String]
@@ -71,7 +71,7 @@ object Axis {
     new :<<-(value, name)
   }
 
-  implicit def nameless[V <: Expression](self: V) = apply(self, emptyName)
+  implicit def nameless[V <: Arity](self: V) = apply(self, emptyName)
 
   implicit class AxisOps[SELF <: Axis](self: SELF) {}
 }

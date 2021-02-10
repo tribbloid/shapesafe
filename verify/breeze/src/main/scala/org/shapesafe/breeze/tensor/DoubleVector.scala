@@ -6,7 +6,7 @@ import org.shapesafe.core.tensor.Const.VecShape
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.binary.AssertEqual
 import org.shapesafe.core.arity.nullary.OfSize
-import org.shapesafe.core.arity.{Arity, ProveArity}
+import org.shapesafe.core.arity.{Leaf, ProveArity}
 import org.shapesafe.core.util.Constraint.ElementOfType
 import org.shapesafe.core.arity.ProveArity.~~>
 import shapeless.{HList, ProductArgs, Witness}
@@ -19,22 +19,22 @@ class DoubleVector[A1 <: VecShape](
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import Arity._
-  import org.shapesafe.core.arity.DSL._
+  import Leaf._
+  import org.shapesafe.core.arity.Syntax._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
-  def reify[O <: Arity](implicit prove: A1 ~~> ProveArity.Proof.Lt[O]): DoubleVector[O] = {
+  def reify[O <: Leaf](implicit prove: A1 ~~> ProveArity.Proof.Lt[O]): DoubleVector[O] = {
 
     val proof = prove(shape)
     val out = proof.out
     new DoubleVector(out, data)
   }
 
-  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
+  def dot_*[A2 <: Leaf](that: DoubleVector[A2])(
       implicit
       proof: A1 AssertEqual A2 ~~> ProveArity.Proof
   ): Double = {
@@ -44,7 +44,7 @@ class DoubleVector[A1 <: VecShape](
     result
   }
 
-  def concat[A2 <: VecShape, O <: Arity](that: DoubleVector[A2])(
+  def concat[A2 <: VecShape, O <: Leaf](that: DoubleVector[A2])(
       implicit
       lemma: (A1 `+` A2) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
@@ -57,13 +57,13 @@ class DoubleVector[A1 <: VecShape](
     new DoubleVector(proof.out, data)
   }
 
-  def pad[O <: Arity](padding: Witness.Lt[Int])(
+  def pad[O <: Leaf](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 `+` (Literal[padding.T] `*` Arity._2.Wide)) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` (Literal[padding.T] `*` Leaf._2.value.Out)) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
-    val _padding = Arity(padding)
-    val op = this.shape + (_padding * Arity._2.value)
+    val _padding = Leaf(padding)
+    val op = this.shape + (_padding * Leaf._2.value)
     val proof = lemma(op)
     val out = proof.out
 
@@ -76,18 +76,18 @@ class DoubleVector[A1 <: VecShape](
 
   def conv[
       A2 <: VecShape,
-      O <: Arity
+      O <: Leaf
   ](
       kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` Arity._1.Wide) `/` Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
-    val _stride: Literal[stride.T] = Arity(stride)
+    val _stride: Literal[stride.T] = Leaf(stride)
 
-    val op = (this.shape - kernel.shape + Arity._1.value) / _stride
+    val op = (this.shape - kernel.shape + Leaf._1.value) / _stride
     val proof = lemma(op)
     val out = proof.out
 
@@ -105,12 +105,12 @@ class DoubleVector[A1 <: VecShape](
 
   def conv[
       A2 <: VecShape,
-      O <: Arity
+      O <: Leaf
   ](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` Arity._1.Wide) `/` Arity._1.Wide) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Leaf._1.value.Out) ~~> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -119,7 +119,7 @@ class DoubleVector[A1 <: VecShape](
 
 object DoubleVector extends ProductArgs {
 
-  import Arity._
+  import Leaf._
 
   def applyProduct[D <: HList, S <: NatAsOp[_]](data: D)(
       implicit
@@ -147,7 +147,7 @@ object DoubleVector extends ProductArgs {
 
   def zeros(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
 
-    new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
+    new DoubleVector(Leaf(lit), DenseVector.fill(lit.value)(0.0))
   }
 
   def random(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
@@ -155,7 +155,7 @@ object DoubleVector extends ProductArgs {
       Random.nextDouble()
     }
 
-    new DoubleVector(Arity(lit), list)
+    new DoubleVector(Leaf(lit), list)
   }
 
   @transient object unsafe {
@@ -166,7 +166,7 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  case class Reified[A1 <: Arity](self: DoubleVector[A1]) {
+  case class Reified[A1 <: Leaf](self: DoubleVector[A1]) {
 
     val arity: A1 = self.shape
 
@@ -178,7 +178,7 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit def asReified[A1 <: VecShape, O <: Arity](v: DoubleVector[A1])(
+  implicit def asReified[A1 <: VecShape, O <: Leaf](v: DoubleVector[A1])(
       implicit prove: A1 ~~> ProveArity.Proof.Lt[O]
   ): Reified[O] = {
     Reified(v.reify)

@@ -9,9 +9,11 @@ import scala.language.higherKinds
   */
 object ProveArity extends ProofSystem[Arity] {
 
-  trait Unsafe extends Out_=[Arity.Unsafe] {}
+  type OfUnknown = Proof.Lt[Leaf.Unknown]
+  trait OfUnknownImpl extends Of[Leaf.Unknown]
 
-  trait Invar[S] extends Out_=[Arity.Static[S]] {
+  type OfLeaf = Proof.Lt[Leaf]
+  trait OfStaticImpl[S] extends Of[Leaf.Static[S]] {
 
     type SS = S
   }

@@ -1,13 +1,15 @@
 package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.viz.VizType
-import org.shapesafe.core.arity.{Arity, Expression, ExpressionFixture}
+import org.shapesafe.core.arity
+import org.shapesafe.core.arity.ProveArity.OfUnknown
+import org.shapesafe.core.arity.{Arity, ArityFixture, Leaf}
 
 import scala.language.existentials
 
-class AssertEqualSpec extends ExpressionFixture {
+class AssertEqualSpec extends ArityFixture {
 
-  import org.shapesafe.core.arity.DSL._
+  import org.shapesafe.core.arity.Syntax._
 
   describe("can prove") {
 
@@ -16,19 +18,19 @@ class AssertEqualSpec extends ExpressionFixture {
       it("a") {
 
         val op = AssertEqual(a, a)
-        op.proveArity.out.internal.requireEqual(3)
+        op.proveLeaf.out.internal.requireEqual(3)
       }
 
       it("a + b") {
 
         val op = AssertEqual(a + b, ab)
-        op.proveArity.out.internal.requireEqual(7)
+        op.proveLeaf.out.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
         val op = AssertEqual(a + b + c, abc)
-        op.proveArity.out.internal.requireEqual(12)
+        op.proveLeaf.out.internal.requireEqual(12)
       }
     }
 
@@ -37,7 +39,7 @@ class AssertEqualSpec extends ExpressionFixture {
       it("a + b + c") {
 
         val op = AssertEqual(a + b + c, ab + c)
-        op.proveArity.out.internal.requireEqual(12)
+        op.proveLeaf.out.internal.requireEqual(12)
       }
     }
 
@@ -45,13 +47,13 @@ class AssertEqualSpec extends ExpressionFixture {
 
       it("a") {
 
-        val op = AssertEqual(Arity.Unknown, a)
+        val op = AssertEqual(Leaf.Unknown, a)
 
 //        val impl = Implies.summon[a.type, Proof.Invar[a.SS]] _
 //
 //        UnsafeDomain.summon[Arity.Unknown.type, a.type]
 
-        val out = op.proveArity.out
+        val out = op.proveLeaf.out
         assert(out.numberOpt.contains(3))
 
 //        op.asProof.out.internal.requireEqual(3)
@@ -59,9 +61,9 @@ class AssertEqualSpec extends ExpressionFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(a + b, Arity.Unknown)
+        val op = AssertEqual(a + b, Leaf.Unknown)
 
-        val out = op.proveArity.out
+        val out = op.proveLeaf.out
         assert(out.numberOpt.contains(7))
       }
     }
@@ -73,7 +75,7 @@ class AssertEqualSpec extends ExpressionFixture {
 
       it("a") {
 
-        val op = AssertEqual(Expression.Unprovable, a)
+        val op = AssertEqual(Leaf.Unknown, a)
 
         shouldNotCompile(
           "op.asProof"
@@ -82,7 +84,7 @@ class AssertEqualSpec extends ExpressionFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(Expression.Unprovable, a + b)
+        val op = AssertEqual(Leaf.Unknown, a + b)
 
         shouldNotCompile(
           "op.asProof"

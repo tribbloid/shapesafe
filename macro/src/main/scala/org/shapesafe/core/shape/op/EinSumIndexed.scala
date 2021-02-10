@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.op
 
-import org.shapesafe.core.arity.Expression
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.->>
 import org.shapesafe.core.tuple.{CanFromStatic, CanInfix_><, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil}
@@ -14,7 +14,7 @@ trait EinSumIndexed[S <: HList] extends EinSumIndexed.Proto {
 
 object EinSumIndexed extends TupleSystem with CanInfix_>< with CanFromStatic {
 
-  object Proto extends StaticTuples[(_ <: String) ->> Expression]
+  object Proto extends StaticTuples[(_ <: String) ->> Arity]
   type Proto = Proto.Impl
 
   override type UpperBound = Proto.UpperBound
@@ -38,7 +38,7 @@ object EinSumIndexed extends TupleSystem with CanInfix_>< with CanFromStatic {
   implicit def consIfNoConflict[
       H_TAIL <: HList,
       N <: String,
-      D <: Expression
+      D <: Arity
   ](
       implicit
       condition: EinSumCondition.Spec[(H_TAIL, N ->> D)]

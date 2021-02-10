@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.op
 
-import org.shapesafe.core.arity.Expression
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.axis.NameWide
 import org.shapesafe.core.shape.Shape
@@ -15,7 +15,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   import Shape.><
 
   def ><[
-      D <: Expression,
+      D <: Arity,
       N <: NameWide
   ](
       axis: D :<<- N
@@ -25,7 +25,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   }
 
   def cross[
-      D <: Expression,
+      D <: Arity,
       N <: NameWide
   ](
       axis: D :<<- N

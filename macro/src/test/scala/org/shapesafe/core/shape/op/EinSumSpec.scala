@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.op
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.Leaf
 import org.shapesafe.core.shape.{Names, Shape}
 
 class EinSumSpec extends BaseSpec {
@@ -18,7 +18,7 @@ class EinSumSpec extends BaseSpec {
     it("1") {
 
       val s1 = Shape ><
-        (Arity(1) :<<- "x")
+        (Leaf(1) :<<- "x")
 
       val ops = Shape.einSumOps(s1)
     }
@@ -26,9 +26,9 @@ class EinSumSpec extends BaseSpec {
     it("2") {
 
       val s1 = Shape ><
-        (Arity(1) :<<- "x") ><
-        (Arity(2) :<<- "y") ><
-        (Arity(1) :<<- "x")
+        (Leaf(1) :<<- "x") ><
+        (Leaf(2) :<<- "y") ><
+        (Leaf(1) :<<- "x")
 
       val ops = Shape.einSumOps(s1)
     }
@@ -43,7 +43,7 @@ class EinSumSpec extends BaseSpec {
 
       val ops = s1.einSum(
         Shape ><
-          (Arity(1) :<<- "i")
+          (Leaf(1) :<<- "i")
       )
 
       val r = ops --> (Names >< "i")
@@ -55,13 +55,13 @@ class EinSumSpec extends BaseSpec {
 
     it("2") {
       val s1 = Shape ><
-        (Arity(1) :<<- "x") ><
-        Arity(2) :<<- "y"
+        (Leaf(1) :<<- "x") ><
+        Leaf(2) :<<- "y"
 
       val ops = s1.einSum(
         Shape ><
-          (Arity(3) :<<- "i") ><
-          Arity(4) :<<- "j"
+          (Leaf(3) :<<- "i") ><
+          Leaf(4) :<<- "j"
       )
 
       val r = ops --> (Names >< "x" >< "i")

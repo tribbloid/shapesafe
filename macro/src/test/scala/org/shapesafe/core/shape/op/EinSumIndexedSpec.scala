@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.op
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.Leaf
 import shapeless.HNil
 
 class EinSumIndexedSpec extends BaseSpec {
@@ -15,34 +15,34 @@ class EinSumIndexedSpec extends BaseSpec {
 //      val eye = EinSumOperand.Eye
 
       val op = EinSumIndexed ><
-        ("i" ->> Arity(3))
+        ("i" ->> Leaf(3))
     }
 
     it("if names has no duplicate") {
 
       val op = EinSumIndexed ><
-        ("i" ->> Arity(3)) ><
-        ("j" ->> Arity(4))
+        ("i" ->> Leaf(3)) ><
+        ("j" ->> Leaf(4))
 
       val op2 = op ><
-        ("k" ->> Arity(5))
+        ("k" ->> Leaf(5))
     }
 
     it("if name-dimension is a map") {
 
       val op = EinSumIndexed ><
-        ("i" ->> Arity(3)) ><
-        ("j" ->> Arity(4))
+        ("i" ->> Leaf(3)) ><
+        ("j" ->> Leaf(4))
 
 //      VizType[op.Static].toString.shouldBe()
 //      val v1 = EinSumCondition.apply(op.static -> ("j" ->> Arity(4)))
 //      VizType.infer(v1).toString.shouldBe()
 
       val op1 = op ><
-        ("j" ->> Arity(4))
+        ("j" ->> Leaf(4))
 
       val op2 = op1 ><
-        ("i" ->> Arity(3))
+        ("i" ->> Leaf(3))
     }
   }
 
@@ -51,8 +51,8 @@ class EinSumIndexedSpec extends BaseSpec {
     it("if name-dimension mapping is NOT a map") {
 
       val op = EinSumIndexed ><
-        ("i" ->> Arity(3)) ><
-        ("j" ->> Arity(4))
+        ("i" ->> Leaf(3)) ><
+        ("j" ->> Leaf(4))
 
       shouldNotCompile(
         """op >< ("j" ->> Arity(3))"""
@@ -69,9 +69,9 @@ class EinSumIndexedSpec extends BaseSpec {
     }
 
     it("if singleton") {
-      val record = ("j" ->> Arity(4)) :: HNil
+      val record = ("j" ->> Leaf(4)) :: HNil
 
-      val vv = ("j" ->> Arity(4))
+      val vv = ("j" ->> Leaf(4))
 
       val op = EinSumIndexed.FromStatic(record)
 
@@ -79,10 +79,10 @@ class EinSumIndexedSpec extends BaseSpec {
     }
 
     it("if name-dimension is a map") {
-      val record = ("i" ->> Arity(3)) ::
-        ("j" ->> Arity(4)) ::
-        ("i" ->> Arity(3)) ::
-        ("j" ->> Arity(4)) :: HNil
+      val record = ("i" ->> Leaf(3)) ::
+        ("j" ->> Leaf(4)) ::
+        ("i" ->> Leaf(3)) ::
+        ("j" ->> Leaf(4)) :: HNil
 
       val op = EinSumIndexed.FromStatic(record)
     }
@@ -91,9 +91,9 @@ class EinSumIndexedSpec extends BaseSpec {
   describe("CANNOT convert FromStatic") {
 
     it("if name-dimension is NOT a map") {
-      val record = ("i" ->> Arity(3)) ::
-        ("j" ->> Arity(4)) ::
-        ("i" ->> Arity(4)) :: HNil
+      val record = ("i" ->> Leaf(3)) ::
+        ("j" ->> Leaf(4)) ::
+        ("i" ->> Leaf(4)) :: HNil
 
       shouldNotCompile(
         """EinSumOperand.FromStatic.apply(record)"""

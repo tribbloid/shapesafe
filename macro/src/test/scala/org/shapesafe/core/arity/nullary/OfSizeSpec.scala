@@ -1,10 +1,10 @@
 package org.shapesafe.core.arity.nullary
 
-import org.shapesafe.core.arity.ExpressionFixture
+import org.shapesafe.core.arity.ArityFixture
 import shapeless.{::, HNil, Nat}
 import singleton.ops.{==, Require}
 
-class OfSizeSpec extends ExpressionFixture {
+class OfSizeSpec extends ArityFixture {
 
   describe("observing HList") {
 

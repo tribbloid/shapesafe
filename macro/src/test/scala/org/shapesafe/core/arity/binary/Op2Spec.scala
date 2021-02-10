@@ -1,16 +1,16 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, Expression, ExpressionFixture}
+import org.shapesafe.core.arity.{Arity, ArityFixture, Leaf}
 
-class Expr2Spec extends ExpressionFixture {
+class Op2Spec extends ArityFixture {
 
-  import org.shapesafe.core.arity.DSL._
+  import org.shapesafe.core.arity.Syntax._
 
   describe("can prove") {
 
     it("arity trivially") {
 
-      val p = a.proveArity
+      val p = a.proveLeaf
       p.out.internal.requireEqual(3)
     }
 
@@ -18,7 +18,7 @@ class Expr2Spec extends ExpressionFixture {
 
       val op = a + b
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(7)
     }
 
@@ -27,7 +27,7 @@ class Expr2Spec extends ExpressionFixture {
       val op0 = a + b
       val op = op0 + c
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(12)
     }
 
@@ -35,15 +35,15 @@ class Expr2Spec extends ExpressionFixture {
 
       val op = a + b + c
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(12)
     }
 
     it("a + b + c + d") {
 
-      val op = a + b + c + Arity._1.value
+      val op = a + b + c + Leaf._1.value
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(13)
     }
 
@@ -51,13 +51,13 @@ class Expr2Spec extends ExpressionFixture {
 
       val op = b / a
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(1)
     }
 
     it("... NOT if b == 0") {
 
-      val op = a / Arity._0.value
+      val op = a / Leaf._0.value
 
       shouldNotCompile {
         "val p = op.asProof"
@@ -66,9 +66,9 @@ class Expr2Spec extends ExpressionFixture {
 
     it("(a + b - c) / d") {
 
-      val op = (a + b - c) / Arity._1.value
+      val op = (a + b - c) / Leaf._1.value
 
-      val p = op.proveArity
+      val p = op.proveLeaf
       p.out.internal.requireEqual(2)
     }
   }
@@ -79,7 +79,7 @@ class Expr2Spec extends ExpressionFixture {
 
       it("a") {
 
-        val op = Expression.Unprovable + a
+        val op = Leaf.Unknown + a
 
         shouldNotCompile(
           "op.asProof"
@@ -88,7 +88,7 @@ class Expr2Spec extends ExpressionFixture {
 
       it("a + b") {
 
-        val op = Expression.Unprovable + (a + b)
+        val op = Leaf.Unknown + (a + b)
 
         shouldNotCompile(
           "op.asProof"

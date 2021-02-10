@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, Expression}
+import org.shapesafe.core.arity.{Arity, Leaf}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
@@ -123,7 +123,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         H_TAIL <: HList,
         TAIL <: Impl,
         N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
-        D <: Expression
+        D <: Arity
     ](
         implicit
         forTail: H_TAIL =:=> TAIL,
@@ -177,11 +177,11 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL =:=> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.Literal[w.T] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Leaf.Literal[w.T] :<<- Axis.emptyName.type] = {
 
       buildFrom[w.T :: H_TAIL].to { v =>
         val prev = apply(v.tail)
-        val head = Arity.Literal(w) :<<- Axis.emptyName
+        val head = Leaf.Literal(w) :<<- Axis.emptyName
 
         prev >< head
       }
@@ -202,11 +202,11 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL =:=> TAIL,
         ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Arity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Leaf.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
       buildFrom[(HEAD :: H_TAIL)].to { v =>
         val prev = apply(v.tail)
-        val head = Arity.FromNat(v.head) :<<- Axis.emptyName
+        val head = Leaf.FromNat(v.head) :<<- Axis.emptyName
 
         prev >< head
       }

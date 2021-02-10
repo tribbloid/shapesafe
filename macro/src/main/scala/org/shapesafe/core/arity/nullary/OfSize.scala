@@ -1,14 +1,17 @@
 package org.shapesafe.core.arity.nullary
 
-import org.shapesafe.core.arity.Arity.Derived
-import org.shapesafe.core.arity.ProvenExpression.ProvenToBe
+import org.shapesafe.core.arity.Leaf.Derived
+import org.shapesafe.core.arity.Proven.ProvenAs
 import org.shapesafe.core.arity.Utils.NatAsOp
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
 class OfSize[-DATA <: HList, S <: NatAsOp[_]](
     val singleton: S
-) extends ProvenToBe[Derived[S]]()(new Derived(singleton)) {}
+) extends ProvenAs[Derived[S]]()(new Derived(singleton)) {
+
+  override def number: Int = singleton.value.asInstanceOf[Int]
+}
 
 object OfSize {
 

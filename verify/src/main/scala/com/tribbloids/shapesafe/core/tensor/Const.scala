@@ -1,8 +1,8 @@
 package org.shapesafe.core.tensor
 
-import org.shapesafe.core.arity.Expression
+import org.shapesafe.core.arity.Arity
 
 object Const {
 
-  type VecShape = Expression
+  type VecShape = Arity
 }

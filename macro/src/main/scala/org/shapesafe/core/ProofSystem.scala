@@ -19,11 +19,10 @@ trait ProofSystem[UB] {
     type Lt[O <: UB] = Proof {
       type Out <: O
     }
-
   }
 
   // Can't use Aux, syntax not supported by scala
-  trait Out_=[O <: UB] extends Proof {
+  trait Of[O <: UB] extends Proof {
     final type Out = O
   }
 
