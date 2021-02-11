@@ -49,7 +49,10 @@ class EinSumSpec extends BaseSpec {
       val r = ops --> (Names >< "i")
 
       r.toString.shouldBe(
-        "Eye >< 1:Literal :<<- i"
+        """
+          |Eye ><
+          |  1:Literal :<<- i
+          |""".stripMargin
       )
     }
 
@@ -67,7 +70,11 @@ class EinSumSpec extends BaseSpec {
       val r = ops --> (Names >< "x" >< "i")
 
       r.toString.shouldBe(
-        "Eye >< 1:Literal :<<- x >< 3:Literal :<<- i"
+        """
+          |Eye ><
+          |  1:Literal :<<- x ><
+          |  3:Literal :<<- i
+          |""".stripMargin
       )
     }
 
@@ -84,7 +91,11 @@ class EinSumSpec extends BaseSpec {
       val r = (s1 einSum s2) --> ("x" >< "i")
 
       r.toString.shouldBe(
-        "Eye >< 1:Derived :<<- x >< 3:Derived :<<- i"
+        """
+          |Eye ><
+          |  1:Derived :<<- x ><
+          |  3:Derived :<<- i
+          |""".stripMargin
       )
     }
   }

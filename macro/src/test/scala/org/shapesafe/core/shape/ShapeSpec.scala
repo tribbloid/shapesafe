@@ -446,12 +446,32 @@ class ShapeSpec extends BaseSpec {
         Leaf(3) :<<- "c"
 
       val r = shape.transpose(Names >< "c")
+
+      val cc = r.getClass
+
+      r.toString.shouldBe(
+        """
+          |Eye ><
+          |  3:Literal :<<- c
+          |""".stripMargin
+      )
     }
 
     it("... alternative syntax") {
-      val shape = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
+      import Names.Syntax._
 
-      val r = shape.transpose(Names >< "c")
+      val shape = Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")
+
+      val r = shape.transpose("c" >< "b" >< "a")
+
+      r.toString.shouldBe(
+        """
+          |Eye ><
+          |  3:Derived :<<- c ><
+          |  2:Derived :<<- b ><
+          |  1:Derived :<<- a
+          |""".stripMargin
+      )
     }
   }
 }
