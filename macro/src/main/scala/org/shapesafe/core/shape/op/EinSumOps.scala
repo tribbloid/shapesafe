@@ -19,7 +19,7 @@ case class EinSumOps[I <: EinSumIndexed.Proto](
   def -->[H_OUT <: HList](names: Names.Impl)(
       implicit
       mapper: Mapper.Aux[GetField.type, names.Static, H_OUT],
-      toShape: Shape.FromIndex.Spec[H_OUT]
+      toShape: Shape.FromIndex.Case[H_OUT]
   ): toShape.Out = {
 
     val projected = names.static.map(GetField)

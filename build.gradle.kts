@@ -59,9 +59,16 @@ allprojects {
     // resolving jar hells
     configurations.all {
         resolutionStrategy.dependencySubstitution {
-            substitute(module("com.chuusai:shapeless_${vs.scalaBinaryV}")).apply {
+            substitute(
+                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+            ).apply {
                 with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
+//            substitute( // TODO: not working!
+//                module("${vs.scalaGroup}:scala-library")
+//            ).apply {
+//                with(module("${vs.scalaGroup}:scala-library:${vs.scalaV}"))
+//            }
         }
     }
 
@@ -212,7 +219,6 @@ allprojects {
 //        this.zincVersion
 //    }
 
-
     publishing {
         val moduleID = if (project.name.startsWith(rootID)) project.name
         else rootID + "-" + project.name
@@ -239,23 +245,23 @@ allprojects {
         module {
 
             excludeDirs = excludeDirs + listOf(
-                        file(".gradle"),
-                        file(".github"),
+                file(".gradle"),
+                file(".github"),
 
-                        file ("target"),
+                file ("target"),
 //                        file ("out"),
 
-                        file(".idea"),
-                        file(".vscode"),
-                        file(".bloop"),
-                        file(".bsp"),
-                        file(".metals"),
+                file(".idea"),
+                file(".vscode"),
+                file(".bloop"),
+                file(".bsp"),
+                file(".metals"),
 
-                        file("logs"),
+                file("logs"),
 
-                        // apache spark
-                        file("warehouse")
-                    )
+                // apache spark
+                file("warehouse")
+            )
 
             isDownloadJavadoc = true
             isDownloadSources = true

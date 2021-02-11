@@ -5,7 +5,7 @@ package org.shapesafe.core
 // TODO: merge into shapeless Poly1
 trait Poly1Base[IUB, OUB] {
 
-  trait Spec[-I <: IUB] {
+  trait Case[-I <: IUB] {
 
     type Out <: OUB
 
@@ -13,19 +13,27 @@ trait Poly1Base[IUB, OUB] {
 
   }
 
-  trait =:=>[
+  object Case {
+
+    type Aux[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] { type Out = O }
+
+    // only use as an implicit type parameter if Output type doesn't depends on O!
+    type Lt[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] { type Out <: O }
+  }
+
+  trait ==>[
       -I <: IUB,
       O <: OUB
-  ] extends Spec[I] {
+  ] extends Case[I] {
 
     final type Out = O
   }
-
-  // only use as an implicit type parameter if Output type doesn't depends on O!
-  type ==>[
-      -I <: IUB,
-      +O <: OUB
-  ] = Spec[I] { type Out <: O }
 
 //  case class FromFn[
 //      -I <: IUB,
@@ -41,15 +49,24 @@ trait Poly1Base[IUB, OUB] {
 
   protected class Builder[I <: IUB]() {
 
-    def to[O <: OUB](fn: I => O): I =:=> O = new (I =:=> O) {
+    def to[O <: OUB](fn: I => O): I ==> O = new (I ==> O) {
 
       final override def apply(v: I): O = fn(v)
     }
   }
 
-  def summon[I <: IUB](implicit ev: Spec[I]): ev.type = ev
+  def summon[I <: IUB](
+      implicit
+      ev: Case[I]
+  ): ev.type = ev
 
-  def peek[I <: IUB](v: I)(implicit ev: Spec[I]): ev.type = ev
+  def peek[I <: IUB](v: I)(
+      implicit
+      ev: Case[I]
+  ): ev.type = ev
 
-  def apply[I <: IUB](v: I)(implicit ev: Spec[I]): ev.Out = ev.apply(v)
+  def apply[I <: IUB](v: I)(
+      implicit
+      ev: Case[I]
+  ): ev.Out = ev.apply(v)
 }

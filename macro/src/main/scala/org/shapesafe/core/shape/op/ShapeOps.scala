@@ -41,7 +41,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   )(
       implicit
       toConcat: Prepend.Aux[that.Static, Static, H_OUT],
-      toShape: Shape.FromStatic.=:=>[H_OUT, OUT]
+      toShape: Shape.FromStatic.==>[H_OUT, OUT]
   ): OUT = {
 
     val concat: H_OUT = that.static ++ static
@@ -58,7 +58,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   )(
       implicit
       toConcat: Prepend.Aux[that.Static, Static, H_OUT],
-      toShape: Shape.FromStatic.=:=>[H_OUT, OUT]
+      toShape: Shape.FromStatic.==>[H_OUT, OUT]
   ): OUT = ><(that)
 
   def transpose[
@@ -69,8 +69,8 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   )(
       implicit
       mapper: Mapper.Aux[self.GetField.type, names.Static, O],
-      fromIndex: Shape.FromIndex.Spec[O]
-  ): Shape.FromIndex.Spec[O]#Out = {
+      fromIndex: Shape.FromIndex.Case[O]
+  ): Shape.FromIndex.Case[O]#Out = {
 
     val newIndex: O = names.static.map(self.GetField)(mapper)
     Shape.FromIndex.apply(newIndex)

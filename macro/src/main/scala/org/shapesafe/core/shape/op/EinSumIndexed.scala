@@ -41,7 +41,7 @@ object EinSumIndexed extends TupleSystem with CanInfix_>< with CanFromStatic {
       D <: Arity
   ](
       implicit
-      condition: EinSumCondition.Spec[(H_TAIL, N ->> D)]
+      condition: EinSumCondition.Case[(H_TAIL, N ->> D)]
   ): Cons.FromFn[EinSumIndexed[H_TAIL], N ->> D, H_TAIL >< (N ->> D)] = {
 
     Cons[EinSumIndexed[H_TAIL], N ->> D].to { (tail, head) =>

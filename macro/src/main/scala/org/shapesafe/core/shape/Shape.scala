@@ -43,7 +43,7 @@ trait Shape extends Shape.Proto {
   ](newNames: Names.Impl)(
       implicit
       zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: Shape.FromIndex.=:=>[ZZ, O]
+      prove: Shape.FromIndex.==>[ZZ, O]
   ): O = {
 
     val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
@@ -135,9 +135,9 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         D <: Arity
     ](
         implicit
-        forTail: H_TAIL =:=> TAIL,
+        forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[N]
-    ): ((N ->> D) :: H_TAIL) =:=> (TAIL >< (D :<<- N)) = {
+    ): ((N ->> D) :: H_TAIL) ==> (TAIL >< (D :<<- N)) = {
 
       buildFrom[(N ->> D) :: H_TAIL].to { v =>
         val prev = apply(v.tail)
@@ -168,7 +168,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       S <: Shape
   ](self: S)(
       implicit
-      checkThis: EinSumIndexed.FromStatic.Spec[self.Index]
+      checkThis: EinSumIndexed.FromStatic.Case[self.Index]
   ) = {
 
     val indexed = EinSumIndexed.FromStatic.apply(self.index)
@@ -185,9 +185,9 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         HEAD <: Int
     ](
         implicit
-        forTail: H_TAIL =:=> TAIL,
+        forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Leaf.Literal[w.T] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, Leaf.Literal[w.T] :<<- Axis.emptyName.type] = {
 
       buildFrom[w.T :: H_TAIL].to { v =>
         val prev = apply(v.tail)
@@ -211,9 +211,9 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         HEAD <: Nat
     ](
         implicit
-        forTail: H_TAIL =:=> TAIL,
+        forTail: H_TAIL ==> TAIL,
         ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) =:=> ><[TAIL, Leaf.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, Leaf.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
       buildFrom[(HEAD :: H_TAIL)].to { v =>
         val prev = apply(v.tail)
@@ -231,7 +231,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   )(
       implicit
       reverse: Reverse.Aux[H1, H2],
-      ev: FromNats.Spec[H2]
+      ev: FromNats.Case[H2]
   ): ev.Out = {
     FromNats.apply(v.reverse)
   }

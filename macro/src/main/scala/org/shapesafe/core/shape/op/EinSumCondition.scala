@@ -22,7 +22,7 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
       name: Witness.Aux[N],
       selector: Selector.Aux[OLD, N, D1],
       lemma: AssertEqual[D1, D2] ~~> Proof.Aux[O]
-  ): =:=>[(OLD, N ->> D2), (N ->> O) :: OLD] = {
+  ): ==>[(OLD, N ->> D2), (N ->> O) :: OLD] = {
 
     buildFrom[(OLD, N ->> D2)].to {
 
@@ -53,7 +53,7 @@ object EinSumCondition extends EinSumCondition {
       name: Witness.Aux[N],
       keys: Keys.Aux[OLD, OLDNS],
       NotContainsConstraint: NotContainsConstraint[OLDNS, N]
-  ): =:=>[(OLD, N ->> D), (N ->> D) :: OLD] = {
+  ): ==>[(OLD, N ->> D), (N ->> D) :: OLD] = {
 
     buildFrom[(OLD, N ->> D)].to {
       case (old, field) =>

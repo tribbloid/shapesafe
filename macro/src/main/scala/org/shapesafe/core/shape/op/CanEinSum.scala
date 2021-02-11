@@ -16,13 +16,11 @@ trait CanEinSum[I <: EinSumIndexed.Proto] {
   def einSum[
       THAT <: Shape,
       H_OUT <: HList
-//      OUT <: Shape
   ](that: THAT)(
       implicit
-      checkThat: EinSumIndexed.FromStatic.Spec[that.Index], // just for detecting low-level mistakes
+      checkThat: EinSumIndexed.FromStatic.Case[that.Index], // just for detecting low-level mistakes
       toConcat: Prepend.Aux[that.Index, Index, H_OUT],
-      checkConcat: EinSumIndexed.FromStatic.Spec[H_OUT],
-      //      toShape: Shape.FromStatic.==>[H_OUT, OUT]
+      checkConcat: EinSumIndexed.FromStatic.Case[H_OUT]
   ) = {
 
     val concat: H_OUT = that.index ++ index
