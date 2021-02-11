@@ -13,7 +13,10 @@ trait Arity {
   final def proveLeaf[
       T >: this.type <: Arity,
       O <: ProveArity.OfLeaf
-  ](implicit prove: T ~~> O): O = prove.apply(this)
+  ](
+      implicit
+      prove: T ~~> O
+  ): O = prove.apply(this)
 
   final override def toString: String = {
 
@@ -38,7 +41,10 @@ object Arity {
 
   implicit class NameOps[T <: Arity](self: T) {
 
-    def withNameT(implicit name: Witness.Lt[String]) = Axis(self, name)
+    def withNameT(
+        implicit
+        name: Witness.Lt[String]
+    ) = Axis(self, name)
 
     def withName(name: Witness.Lt[NameWide]) = {
 

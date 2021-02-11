@@ -70,7 +70,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
       implicit
       mapper: Mapper.Aux[self.GetField.type, names.Static, O],
       fromIndex: Shape.FromIndex.Spec[O]
-  ) = {
+  ): Shape.FromIndex.Spec[O]#Out = {
 
     val newIndex: O = names.static.map(self.GetField)(mapper)
     Shape.FromIndex.apply(newIndex)

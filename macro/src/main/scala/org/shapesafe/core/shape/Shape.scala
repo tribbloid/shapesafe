@@ -6,12 +6,12 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
+import org.shapesafe.core.util.RecordUtils
 import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
 
 import scala.language.implicitConversions
-import org.shapesafe.core.util.RecordUtils
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included
@@ -19,8 +19,8 @@ import org.shapesafe.core.util.RecordUtils
   */
 trait Shape extends Shape.Proto {
 
-  type IndexToFields <: HList // name: String -> axis: Axis
-  def indexToFields: IndexToFields
+  type IndexToAxis <: HList // name: String -> axis: Axis
+  def indexToAxis: IndexToAxis
 
   type Index <: HList // name: String -> dim: arity.Expression
   def index: Index
@@ -64,12 +64,12 @@ trait Shape extends Shape.Proto {
 
     def get(name: Witness.Lt[String])(
         implicit
-        selector: Selector[IndexToFields, name.T]
+        selector: Selector[IndexToAxis, name.T]
     ): selector.Out = {
 
       import shapeless.record._
 
-      indexToFields.apply(name)(selector)
+      indexToAxis.apply(name)(selector)
     }
 
   }
@@ -88,8 +88,8 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   // Cartesian product doesn't have eye but whatever
   object eye extends Proto.EyeLike with Shape {
 
-    final type IndexToFields = HNil
-    override def indexToFields: IndexToFields = HNil
+    final type IndexToAxis = HNil
+    override def indexToAxis: IndexToAxis = HNil
 
     final type Index = HNil
     override def index: Index = HNil
@@ -112,8 +112,8 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       with Shape {
 
     final type AxisField = head.AxisField
-    final override type IndexToFields = AxisField :: tail.IndexToFields
-    lazy val indexToFields: IndexToFields = head.asAxisField :: tail.indexToFields
+    final override type IndexToAxis = AxisField :: tail.IndexToAxis
+    lazy val indexToAxis: IndexToAxis = head.asAxisField :: tail.indexToAxis
 
     final type Field = head.Field
     final override type Index = Field :: tail.Index
@@ -142,7 +142,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       buildFrom[(N ->> D) :: H_TAIL].to { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
-        val head = vHead :<<- w
+        val head: D :<<- N = vHead :<<- w
 
         prev >< head
       }

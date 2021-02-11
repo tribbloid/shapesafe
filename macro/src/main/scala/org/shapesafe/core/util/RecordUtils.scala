@@ -2,11 +2,9 @@ package org.shapesafe.core.util
 
 import shapeless.labelled.FieldType
 import shapeless.ops.record.Selector
-import shapeless.{HList, Poly1, Witness}
+import shapeless.{HList, Poly1}
 
 object RecordUtils {
-
-  import shapeless.record._
 
   //https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
   case class GetV[H <: HList](hh: H) extends Poly1 {
