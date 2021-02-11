@@ -18,8 +18,8 @@ import scala.language.implicitConversions
   */
 trait Shape extends Shape.Proto {
 
-  type NamedIndex <: HList // name: String -> axis: Axis
-  def namedIndex: NamedIndex
+  type IndexToFields <: HList // name: String -> axis: Axis
+  def indexToFields: IndexToFields
 
   type Index <: HList // name: String -> dim: arity.Expression
   def index: Index
@@ -56,11 +56,11 @@ trait Shape extends Shape.Proto {
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[NamedIndex, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(implicit selector: Selector[IndexToFields, name.T]): selector.Out = {
 
       import shapeless.record._
 
-      namedIndex.apply(name)(selector)
+      indexToFields.apply(name)(selector)
     }
   }
 
@@ -78,8 +78,8 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   // Cartesian product doesn't have eye but whatever
   object eye extends Proto.EyeLike with Impl {
 
-    type NamedIndex = HNil
-    override def namedIndex: HNil = HNil
+    type IndexToFields = HNil
+    override def indexToFields: HNil = HNil
 
     type Index = HNil
     override def index: Index = HNil
@@ -102,8 +102,8 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       with Impl {
 
     final type AxisField = head.AxisField
-    override type NamedIndex = AxisField :: tail.NamedIndex
-    lazy val namedIndex: NamedIndex = head.asAxisField :: tail.namedIndex
+    override type IndexToFields = AxisField :: tail.IndexToFields
+    lazy val indexToFields: IndexToFields = head.asAxisField :: tail.indexToFields
 
     final type Field = head.Field
     override type Index = head.Field :: tail.Index

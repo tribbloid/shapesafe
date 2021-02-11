@@ -57,7 +57,7 @@ class ShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.namedIndex.apply("x").dimension.number == 2)
+      assert(shape.indexToFields.apply("x").dimension.number == 2)
     }
 
     it("nameless") {
@@ -81,8 +81,8 @@ class ShapeSpec extends BaseSpec {
         Leaf.Literal(3) cross
         Leaf.Literal(4) :<<- "z"
 
-      assert(shape.namedIndex.apply("x").dimension.number == 2)
-      assert(shape.namedIndex.apply("z").dimension.number == 4)
+      assert(shape.indexToFields.apply("x").dimension.number == 2)
+      assert(shape.indexToFields.apply("z").dimension.number == 4)
 
       typeInferShort(shape).shouldBe(
         """
@@ -196,7 +196,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         Leaf.Literal(2) :<<- "x"
 
-      val record = shape.namedIndex
+      val record = shape.indexToFields
 
 //      VizType.infer(record).treeString.shouldBe()
 
@@ -217,7 +217,7 @@ class ShapeSpec extends BaseSpec {
         Leaf.Literal(2) :<<- "x" ><
         Leaf.Literal(3) :<<- "y"
 
-      val record = shape.namedIndex
+      val record = shape.indexToFields
 
       //      VizType.infer(static).treeString.shouldBe()
 
