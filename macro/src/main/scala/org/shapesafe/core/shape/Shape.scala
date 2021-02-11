@@ -11,6 +11,7 @@ import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
 
 import scala.language.implicitConversions
+import org.shapesafe.core.util.RecordUtils
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included
@@ -23,6 +24,8 @@ trait Shape extends Shape.Proto {
 
   type Index <: HList // name: String -> dim: arity.Expression
   def index: Index
+
+  object GetField extends RecordUtils.GetField(index)
 
   type _Names <: Names.Impl
   val names: _Names
@@ -49,19 +52,26 @@ trait Shape extends Shape.Proto {
 
   object Axes {
 
-    def get(index: Nat)(implicit at: At[Static, index.N]): at.Out = {
+    def get(index: Nat)(
+        implicit
+        at: At[Static, index.N]
+    ): at.Out = {
 
 //      record.reverse TODO: use it later
 
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(implicit selector: Selector[IndexToFields, name.T]): selector.Out = {
+    def get(name: Witness.Lt[String])(
+        implicit
+        selector: Selector[IndexToFields, name.T]
+    ): selector.Out = {
 
       import shapeless.record._
 
       indexToFields.apply(name)(selector)
     }
+
   }
 
 }
@@ -76,12 +86,12 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   final type Impl = Shape
 
   // Cartesian product doesn't have eye but whatever
-  object eye extends Proto.EyeLike with Impl {
+  object eye extends Proto.EyeLike with Shape {
 
-    type IndexToFields = HNil
-    override def indexToFields: HNil = HNil
+    final type IndexToFields = HNil
+    override def indexToFields: IndexToFields = HNil
 
-    type Index = HNil
+    final type Index = HNil
     override def index: Index = HNil
 
     final override type _Names = Names.Eye
@@ -99,14 +109,14 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       override val tail: TAIL,
       override val head: HEAD
   ) extends Proto.><[TAIL, HEAD](tail, head)
-      with Impl {
+      with Shape {
 
     final type AxisField = head.AxisField
-    override type IndexToFields = AxisField :: tail.IndexToFields
+    final override type IndexToFields = AxisField :: tail.IndexToFields
     lazy val indexToFields: IndexToFields = head.asAxisField :: tail.indexToFields
 
     final type Field = head.Field
-    override type Index = head.Field :: tail.Index
+    final override type Index = Field :: tail.Index
     override lazy val index: Index = head.asField :: tail.index
 
     final override type _Names = Names.><[tail._Names, head.Name]
@@ -114,7 +124,6 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Dimension]
     final override val dimensions = new Dimensions.><(tail.dimensions, head.dimension)
-
   }
 
   object FromIndex extends HListConverter {
@@ -138,6 +147,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         prev >< head
       }
     }
+
   }
 
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
@@ -186,6 +196,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         prev >< head
       }
     }
+
   }
 
 //  def applyProduct[T <: HList](v: T)(implicit ev: FromLiterals.Case[T]): ev.Out = {
@@ -211,14 +222,18 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         prev >< head
       }
     }
+
   }
 
   // TODO: should the reverse be justified?
-  def applyNatProduct[H1 <: HList, H2 <: HList](v: H1)(
+  def applyNatProduct[H1 <: HList, H2 <: HList](
+      v: H1
+  )(
       implicit
       reverse: Reverse.Aux[H1, H2],
       ev: FromNats.Spec[H2]
   ): ev.Out = {
     FromNats.apply(v.reverse)
   }
+
 }

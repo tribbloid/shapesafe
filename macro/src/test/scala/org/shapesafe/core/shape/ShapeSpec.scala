@@ -1,10 +1,9 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.ScalaReflection
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Leaf
-import org.shapesafe.core.shape.Shape.FromIndex
+import org.shapesafe.core.shape.Shape.{FromIndex, FromNats, FromStatic}
 import shapeless.HNil
 
 class ShapeSpec extends BaseSpec {
@@ -92,9 +91,7 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe("FromStatic") {
-
-    import shapeless.syntax.singleton.mkSingletonOps
+  describe(FromStatic.getClass.getSimpleName) {
 
     it("from HNil") {
 
@@ -172,7 +169,7 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe("FromNats") {
+  describe(FromNats.getClass.getSimpleName) {
 
     it("1") {
       val ss = Shape(4)
@@ -189,7 +186,56 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe("static") {
+  describe("index") {
+
+    it("1") {
+
+      val shape = Shape ><
+        Leaf.Literal(2) :<<- "x"
+
+      val record = shape.index
+
+      //      VizType.infer(record).treeString.shouldBe()
+
+      typeInferShort(record.keys).shouldBe(
+        """
+          |String("x") :: HNil""".stripMargin
+      )
+
+      typeInferShort(record.values).shouldBe(
+        """
+          |Leaf.Literal[Int(2)] :: HNil""".stripMargin
+      )
+
+      assert(record.get("x") == Leaf.Literal(2))
+    }
+
+    it("2") {
+
+      val shape = Shape ><
+        Leaf.Literal(2) :<<- "x" ><
+        Leaf.Literal(3) :<<- "y"
+
+      val record = shape.index
+
+      //      VizType.infer(static).treeString.shouldBe()
+
+      typeInferShort(record.keys).shouldBe(
+        """
+          |String("y") :: String("x") :: HNil""".stripMargin
+      )
+
+      typeInferShort(record.values).shouldBe(
+        """
+          |Leaf.Literal[Int(3)] :: Leaf.Literal[Int(2)] :: HNil
+          |""".stripMargin
+      )
+
+      assert(record.get("x") == Leaf.Literal(2))
+    }
+  }
+
+  describe("indexToFields") {
 
     it("1") {
 
@@ -209,6 +255,8 @@ class ShapeSpec extends BaseSpec {
         """
           |(Leaf.Literal[Int(2)] :<<- String("x")) :: HNil""".stripMargin
       )
+
+      assert(record.get("x") == Leaf.Literal(2) :<<- "x")
     }
 
     it("2") {
@@ -231,6 +279,8 @@ class ShapeSpec extends BaseSpec {
           |(Leaf.Literal[Int(3)] :<<- String("y")) :: (Leaf.Literal[Int(2)] :<<- String("x")) :: HNil
           |""".stripMargin
       )
+
+      assert(record.get("x") == Leaf.Literal(2) :<<- "x")
     }
   }
 
@@ -386,15 +436,22 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-//  describe("einSum") {
-//
-//    val shape = Shape ><
-//      Arity.FromLiteral(2) :<<- "x" ><
-//      Arity.FromLiteral(3) :<<- "z"
-//
-//    it("asOperand") {
-//
-//      shape.asEinSumOperand(Names >< "i" >< "j")
-//    }
-//  }
+  describe("transpose") {
+
+    it("1") {
+
+      val shape = Shape ><
+        Leaf(1) :<<- "a" ><
+        Leaf(2) :<<- "b" ><
+        Leaf(3) :<<- "c"
+
+      val r = shape.transpose(Names >< "c")
+    }
+
+    it("... alternative syntax") {
+      val shape = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
+
+      val r = shape.transpose(Names >< "c")
+    }
+  }
 }

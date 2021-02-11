@@ -3,9 +3,9 @@ package org.shapesafe.core.shape.op
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.axis.NameWide
-import org.shapesafe.core.shape.Shape
+import org.shapesafe.core.shape.{Names, Shape}
 import shapeless.HList
-import shapeless.ops.hlist.Prepend
+import shapeless.ops.hlist.{Mapper, Prepend}
 
 class ShapeOps[SELF <: Shape](val self: SELF) {
 
@@ -60,4 +60,19 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
       toConcat: Prepend.Aux[that.Static, Static, H_OUT],
       toShape: Shape.FromStatic.=:=>[H_OUT, OUT]
   ): OUT = ><(that)
+
+  def transpose[
+      N <: Names.Impl,
+      O <: HList
+  ](
+      names: N
+  )(
+      implicit
+      mapper: Mapper.Aux[self.GetField.type, names.Static, O],
+      fromIndex: Shape.FromIndex.Spec[O]
+  ) = {
+
+    val newIndex: O = names.static.map(self.GetField)(mapper)
+    Shape.FromIndex.apply(newIndex)
+  }
 }

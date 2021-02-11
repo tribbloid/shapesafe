@@ -71,7 +71,7 @@ class EinSumSpec extends BaseSpec {
       )
     }
 
-    it("2 - alternative syntax") {
+    it("... alternative syntax") {
 
       import Names.Syntax._
 

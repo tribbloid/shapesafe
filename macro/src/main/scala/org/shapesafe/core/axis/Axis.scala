@@ -55,6 +55,7 @@ object Axis {
 
     // TODO: why this can't be simplified?
     final type AxisField = FieldType[N, D :<<- N]
+    final type Field = FieldType[N, D]
 
     // theoretically correct but shapeless recordOps still fumble on it
   }
