@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6") // no support for multi-module
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6")
     }
 }
 
@@ -34,7 +34,9 @@ allprojects {
     apply(plugin = "java-library")
     apply(plugin = "java-test-fixtures")
 
-    apply(plugin = "bloop")
+    // apply(plugin = "bloop")
+    // DO NOT enable! In VSCode it will cause the conflict:
+    // Cannot add extension with name 'bloop', as there is an extension already registered with that name
 
     apply(plugin = "scala")
     apply(plugin = "kotlin")
