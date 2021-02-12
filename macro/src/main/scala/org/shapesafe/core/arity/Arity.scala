@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ProveArity.~~>
+import org.shapesafe.core.arity.ProveArity.=>>
 import org.shapesafe.core.axis.{Axis, NameWide}
 import shapeless.Witness
 
@@ -15,7 +15,7 @@ trait Arity {
       O <: ProveArity.OfLeaf
   ](
       implicit
-      prove: T ~~> O
+      prove: T =>> O
   ): O = prove.apply(this)
 
   final override def toString: String = {

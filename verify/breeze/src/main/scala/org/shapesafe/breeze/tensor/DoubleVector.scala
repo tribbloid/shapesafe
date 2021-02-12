@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.ProveArity.~~>
+import org.shapesafe.core.arity.ProveArity.=>>
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.OfSize
 import org.shapesafe.core.arity.{Leaf, ProveArity}
@@ -28,7 +28,7 @@ class DoubleVector[A1 <: VecShape](
 
   def reify[O <: Leaf](
       implicit
-      prove: A1 ~~> ProveArity.Proof.Lt[O]
+      prove: A1 =>> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val proof = prove(shape)
@@ -38,7 +38,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: Leaf](that: DoubleVector[A2])(
       implicit
-      proof: A1 =!= A2 ~~> ProveArity.Proof
+      proof: A1 =!= A2 =>> ProveArity.Proof
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -48,7 +48,7 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: Leaf](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 `+` A2) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` A2) =>> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -61,7 +61,7 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: Leaf](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 `+` (Literal[padding.T] `*` Leaf._2.value.Out)) ~~> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` (Literal[padding.T] `*` Leaf._2.value.Out)) =>> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _padding = Leaf(padding)
@@ -84,7 +84,7 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Literal[stride.T]) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Literal[stride.T]) =>> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     val _stride: Literal[stride.T] = Leaf(stride)
@@ -112,7 +112,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Leaf._1.value.Out) ~~> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` Leaf._1.value.Out) `/` Leaf._1.value.Out) =>> ProveArity.Proof.Lt[O]
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -183,7 +183,7 @@ object DoubleVector extends ProductArgs {
 
   implicit def asReified[A1 <: VecShape, O <: Leaf](v: DoubleVector[A1])(
       implicit
-      prove: A1 ~~> ProveArity.Proof.Lt[O]
+      prove: A1 =>> ProveArity.Proof.Lt[O]
   ): Reified[O] = {
     Reified(v.reify)
   }

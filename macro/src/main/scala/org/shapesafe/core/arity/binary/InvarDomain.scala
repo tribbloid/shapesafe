@@ -14,8 +14,8 @@ case class InvarDomain[
     S2
 ]()(
     implicit
-    bound1: A1 ~~> OfStaticImpl[S1],
-    bound2: A2 ~~> OfStaticImpl[S2]
+    bound1: A1 =>> OfStaticImpl[S1],
+    bound2: A2 =>> OfStaticImpl[S2]
 ) {
 
   import org.shapesafe.core.arity.Syntax._
@@ -34,7 +34,7 @@ case class InvarDomain[
   case class ForEqual()(
       implicit
       lemma: Require[S1 == S2]
-  ) extends (A1 =!= A2 ~~> OfStaticImpl[S1]) {
+  ) extends (A1 =!= A2 =>> OfStaticImpl[S1]) {
 
     def apply(in: A1 =!= A2): OfStaticImpl[S1] = bound1.apply(in.a1)
   }

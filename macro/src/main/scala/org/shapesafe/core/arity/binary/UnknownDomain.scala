@@ -14,8 +14,8 @@ abstract class UnknownDomain[
 
   import org.shapesafe.core.arity.Syntax._
 
-  def bound1: A1 ~~> Proof
-  def bound2: A2 ~~> Proof
+  def bound1: A1 =>> Proof
+  def bound2: A2 =>> Proof
 
   def selectSafer(a1: A1, a2: A2): O
 
@@ -45,7 +45,7 @@ abstract class UnknownDomain[
     }
   }
 
-  case object ForEqual extends (A1 =!= A2 ~~> O) {
+  case object ForEqual extends (A1 =!= A2 =>> O) {
 
     def apply(in: A1 =!= A2): O = selectSafer(in.a1, in.a2)
   }
@@ -60,8 +60,8 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 ~~> OfUnknown,
-      val bound2: A2 ~~> O
+      val bound1: A1 =>> OfUnknown,
+      val bound2: A2 =>> O
   ) extends UnknownDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
@@ -73,8 +73,8 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 ~~> OfUnknown,
-      bound2: A2 ~~> O
+      bound1: A1 =>> OfUnknown,
+      bound2: A2 =>> O
   ): UnknownDomain[A1, A2, O] = D2()
 }
 
@@ -95,8 +95,8 @@ object UnknownDomain extends UnsafeDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 ~~> O,
-      val bound2: A2 ~~> OfUnknown
+      val bound1: A1 =>> O,
+      val bound2: A2 =>> OfUnknown
   ) extends UnknownDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -108,7 +108,7 @@ object UnknownDomain extends UnsafeDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 ~~> O,
-      bound2: A2 ~~> OfUnknown
+      bound1: A1 =>> O,
+      bound2: A2 =>> OfUnknown
   ): UnknownDomain[A1, A2, O] = D1()
 }

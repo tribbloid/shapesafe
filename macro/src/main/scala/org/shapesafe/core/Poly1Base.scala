@@ -12,7 +12,6 @@ trait Poly1Base[IUB, OUB] {
     type Out <: OUB
 
     protected[Poly1Base] def apply(v: I): Out
-
   }
 
   object Case {
@@ -37,16 +36,16 @@ trait Poly1Base[IUB, OUB] {
     final type Out = O
   }
 
-//  case class FromFn[
-//      -I <: IUB,
-//      O <: OUB
-//  ](fn: I => O)
-//      extends (I ==> O) {
-//
-//    final override def apply(v: I): O = fn(v)
-//  }
+  //  case class FromFn[
+  //      -I <: IUB,
+  //      O <: OUB
+  //  ](fn: I => O)
+  //      extends (I ==> O) {
+  //
+  //    final override def apply(v: I): O = fn(v)
+  //  }
 
-  def apply[I <: IUB] = new Builder[I]()
+  def apply[I <: IUB] = buildFrom[I]
   def buildFrom[I <: IUB] = new Builder[I]() // same as `at` in Poly1?
 
   protected class Builder[I <: IUB]() {

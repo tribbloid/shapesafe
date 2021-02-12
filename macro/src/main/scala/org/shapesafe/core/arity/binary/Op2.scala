@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.ProveArity.~~>
+import org.shapesafe.core.arity.ProveArity.=>>
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
 
@@ -35,7 +35,7 @@ class Op2[
 
 trait Op2_Imp0 {
 
-  implicit def unsafe[
+  implicit def unknown[
       A1 <: Arity,
       A2 <: Arity,
       O <: ProveArity.Proof,
@@ -59,8 +59,8 @@ object Op2 extends Op2_Imp0 {
       ??[X1, X2] <: Op
   ](
       implicit
-      bound1: A1 ~~> ProveArity.OfStaticImpl[S1], // TODO: make it similar to unsafe
-      bound2: A2 ~~> ProveArity.OfStaticImpl[S2],
+      bound1: A1 =>> ProveArity.OfStaticImpl[S1], // TODO: make it similar to unsafe
+      bound2: A2 =>> ProveArity.OfStaticImpl[S2],
       lemma: S1 ?? S2
   ): InvarDomain[A1, A2, S1, S2]#ForOp2[??] = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
