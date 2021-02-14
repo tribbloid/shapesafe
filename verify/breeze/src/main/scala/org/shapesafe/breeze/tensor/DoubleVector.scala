@@ -2,17 +2,16 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.tensor.Const.VecShape
+import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.binary.AssertEqual
 import org.shapesafe.core.arity.nullary.OfSize
 import org.shapesafe.core.arity.{Leaf, ProveArity}
+import org.shapesafe.core.tensor.Const.VecShape
 import org.shapesafe.core.util.Constraint.ElementOfType
-import org.shapesafe.core.arity.ProveArity.~~>
 import shapeless.{HList, ProductArgs, Witness}
 
-import scala.util.Random
 import scala.language.implicitConversions
+import scala.util.Random
 
 class DoubleVector[A1 <: VecShape](
     val shape: A1,
@@ -27,7 +26,10 @@ class DoubleVector[A1 <: VecShape](
     s"${shape.valueStr} \u00d7 1: Double"
   }
 
-  def reify[O <: Leaf](implicit prove: A1 ~~> ProveArity.Proof.Lt[O]): DoubleVector[O] = {
+  def reify[O <: Leaf](
+      implicit
+      prove: A1 ~~> ProveArity.Proof.Lt[O]
+  ): DoubleVector[O] = {
 
     val proof = prove(shape)
     val out = proof.out
@@ -36,7 +38,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: Leaf](that: DoubleVector[A2])(
       implicit
-      proof: A1 AssertEqual A2 ~~> ProveArity.Proof
+      proof: A1 =!= A2 ~~> ProveArity.Proof
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -137,7 +139,8 @@ object DoubleVector extends ProductArgs {
   @transient object from {
 
     def hList[D <: HList, S <: NatAsOp[_]](data: D)(
-        implicit proofOfSize: D OfSize S,
+        implicit
+        proofOfSize: D OfSize S,
         proofOfType: D ElementOfType Double
     ): DoubleVector[proofOfSize.Out] = {
 
@@ -179,7 +182,8 @@ object DoubleVector extends ProductArgs {
   }
 
   implicit def asReified[A1 <: VecShape, O <: Leaf](v: DoubleVector[A1])(
-      implicit prove: A1 ~~> ProveArity.Proof.Lt[O]
+      implicit
+      prove: A1 ~~> ProveArity.Proof.Lt[O]
   ): Reified[O] = {
     Reified(v.reify)
   }

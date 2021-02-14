@@ -6,8 +6,10 @@ buildscript {
         mavenCentral()
     }
 
+    val vs = versions()
+
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.6")
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.7") // suffix is always 2.12, weird
     }
 }
 

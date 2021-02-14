@@ -3,17 +3,18 @@ package org.shapesafe.core.util;
 import org.shapesafe.BaseSpec
 import shapeless.{::, HNil, Witness};
 
-class RecordUtilsSpec extends BaseSpec {
+class RecordViewSpec extends BaseSpec {
 
   import shapeless.syntax.singleton._
 
   val record = ("a" ->> 1) ::
     ("b" ->> "x") ::
     HNil
+  val view = RecordView(record)
 
   it("getV") {
 
-    object get extends RecordUtils.GetV(record)
+    object get extends view.GetV
 //    val get = RecordUtils.GetV(record)
     // https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
 
@@ -28,7 +29,7 @@ class RecordUtilsSpec extends BaseSpec {
 
   it("getField") {
 
-    object get extends RecordUtils.GetField(record)
+    object get extends view.GetField
 
     assert(get.apply("a".narrow) == "a" ->> 1)
     assert(get.apply("b".narrow) == "b" ->> "x")
@@ -36,8 +37,8 @@ class RecordUtilsSpec extends BaseSpec {
     assert(
       ("b".narrow :: "a".narrow :: HNil).map(get) ==
         ("b" ->> "x") ::
-          ("a" ->> 1) ::
-          HNil
+        ("a" ->> 1) ::
+        HNil
     )
   }
 }

@@ -10,21 +10,22 @@ import shapeless.{::, HList, NotContainsConstraint, Witness}
 trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList] {
 
   import org.shapesafe.core.arity.ProveArity._
+  import org.shapesafe.core.arity.Syntax._
 
   implicit def IfExistingName[
       OLD <: HList,
       N <: String,
-      D1 <: Arity,
-      D2 <: Arity,
+      A1 <: Arity,
+      A2 <: Arity,
       O <: Leaf
   ](
       implicit
       name: Witness.Aux[N],
-      selector: Selector.Aux[OLD, N, D1],
-      lemma: AssertEqual[D1, D2] ~~> Proof.Aux[O]
-  ): ==>[(OLD, N ->> D2), (N ->> O) :: OLD] = {
+      selector: Selector.Aux[OLD, N, A1],
+      lemma: A1 =!= A2 ~~> Proof.Aux[O]
+  ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
 
-    buildFrom[(OLD, N ->> D2)].to {
+    buildFrom[(OLD, N ->> A2)].to {
 
       case (old, field) =>
         import shapeless.record._

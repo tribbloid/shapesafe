@@ -6,7 +6,7 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
-import org.shapesafe.core.util.RecordUtils
+import org.shapesafe.core.util.RecordView
 import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
@@ -24,8 +24,9 @@ trait Shape extends Shape.Proto {
 
   type Index <: HList // name: String -> dim: arity.Expression
   def index: Index
+  lazy val indexView = RecordView(index)
 
-  object GetField extends RecordUtils.GetField(index)
+  lazy val getField = indexView.GetField
 
   type _Names <: Names.Impl
   val names: _Names

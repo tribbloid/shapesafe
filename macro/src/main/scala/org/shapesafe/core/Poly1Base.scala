@@ -1,5 +1,7 @@
 package org.shapesafe.core
 
+import shapeless.Poly1
+
 // TODO: compiler bug?
 //  https://stackoverflow.com/questions/65944627/in-scala-how-could-a-covariant-type-parameter-be-an-upper-bound-of-an-abstract
 // TODO: merge into shapeless Poly1
@@ -60,7 +62,7 @@ trait Poly1Base[IUB, OUB] {
       ev: Case[I]
   ): ev.type = ev
 
-  def peek[I <: IUB](v: I)(
+  def summonFor[I <: IUB](v: I)(
       implicit
       ev: Case[I]
   ): ev.type = ev
@@ -69,4 +71,18 @@ trait Poly1Base[IUB, OUB] {
       implicit
       ev: Case[I]
   ): ev.Out = ev.apply(v)
+
+  case class AsShapelessPoly1() extends Poly1 {
+
+    val outer: Poly1Base[IUB, OUB] = Poly1Base.this
+
+    implicit def delegate[I <: IUB, O <: OUB](
+        implicit
+        from: I ==> O
+    ): Case.Aux[I, O] = at[I].apply { ii =>
+      from.apply(ii)
+    }
+  }
+
+//  case class AsShapelessPoly2() extends Poly2 { TODO
 }

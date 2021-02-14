@@ -2,6 +2,8 @@ package org.shapesafe.core.arity
 
 import shapeless.Nat
 import singleton.ops.ToInt
+import singleton.ops.impl.std
+import singleton.twoface.impl.TwoFaceAny
 
 import scala.language.higherKinds
 
@@ -27,4 +29,6 @@ object Utils {
   //
   //    new major.Op2Impl[Fr]()
   //  }
+
+  type IntSh[??[_, _] <: Op] = TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
 }

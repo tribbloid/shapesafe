@@ -1,6 +1,7 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.IDMixin
+import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil}
 
 import scala.language.implicitConversions
@@ -13,6 +14,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     type Static <: HList
     def static: Static
+    lazy val staticView: RecordView[Static] = RecordView(static)
 
     def asList: List[UB]
 

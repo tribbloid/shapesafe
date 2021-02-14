@@ -1,10 +1,8 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, Leaf}
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
-import singleton.ops.impl.std
-import singleton.twoface.impl.TwoFaceAny
+import org.shapesafe.core.arity.{Arity, Leaf, Utils}
 
 import scala.language.{existentials, higherKinds}
 
@@ -14,16 +12,19 @@ abstract class UnknownDomain[
     O <: Proof
 ] {
 
+  import org.shapesafe.core.arity.Syntax._
+
   def bound1: A1 ~~> Proof
   def bound2: A2 ~~> Proof
 
   def selectSafer(a1: A1, a2: A2): O
 
   case class ForOp2[??[X1, X2] <: Op]()(
-      implicit tfs: TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
-  ) extends (Op2[A1, A2, ??] ForAll OfUnknownImpl) {
+      implicit
+      tfs: Utils.IntSh[??]
+  ) extends (Op2[??]#On[A1, A2] ForAll OfUnknownImpl) {
 
-    case class prove(in: Op2[A1, A2, ??]) extends OfUnknownImpl {
+    case class prove(in: Op2[??]#On[A1, A2]) extends OfUnknownImpl {
 
       override def out = {
 
@@ -44,9 +45,9 @@ abstract class UnknownDomain[
     }
   }
 
-  case object ForEqual extends (AssertEqual[A1, A2] ~~> O) {
+  case object ForEqual extends (A1 =!= A2 ~~> O) {
 
-    def apply(in: AssertEqual[A1, A2]): O = selectSafer(in.a1, in.a2)
+    def apply(in: A1 =!= A2): O = selectSafer(in.a1, in.a2)
   }
   type ForEqual = ForEqual.type
 }

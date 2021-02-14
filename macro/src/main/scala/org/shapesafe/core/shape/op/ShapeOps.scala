@@ -4,8 +4,8 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.axis.NameWide
 import org.shapesafe.core.shape.{Names, Shape}
-import shapeless.HList
-import shapeless.ops.hlist.{Mapper, Prepend}
+import shapeless.{::, HList, HNil, Poly2}
+import shapeless.ops.hlist.{Mapper, Prepend, Zip, ZipWith}
 
 class ShapeOps[SELF <: Shape](val self: SELF) {
 
@@ -68,11 +68,35 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
       names: N
   )(
       implicit
-      mapper: Mapper.Aux[self.GetField.type, names.Static, O],
+      mapper: Mapper.Aux[self.getField.type, names.Static, O],
       fromIndex: Shape.FromIndex.Case[O]
   ): Shape.FromIndex.Case[O]#Out = {
 
-    val newIndex: O = names.static.map(self.GetField)(mapper)
+    val newIndex: O = names.static.map(self.getField)(mapper)
     Shape.FromIndex.apply(newIndex)
   }
+
+//  object Sum extends Poly2 {
+//
+//    implicit def plus[
+//        D1 <: Arity,
+//        D2 <: Arity,
+//        O <: Arity
+//    ]: Case[D1, D2] = new Case.Aux[D1, D2, O] {}
+//  }
+//
+//  def elementWiseSum[
+//      THAT <: Shape
+//  ](
+//      that: THAT
+//  )(
+//      implicit
+//      zipWith: ZipWith[self.dimensions.Static :: that.dimensions.Static :: HNil]
+//  ) = {
+//    val thisD = self.dimensions.static
+//    val thatD = that.dimensions.static
+//
+//    val zipped = thisD.zipWith(thatD) {}
+//
+//  }
 }
