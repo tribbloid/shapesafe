@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.LeafArity
+import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.SizeOf
@@ -64,7 +64,7 @@ class DoubleVector[A1 <: VecShape](
       lemma: (A1 `+` (Literal[padding.T] `*` LeafArity.Wide._2.Wide)) ~~> O
   ): DoubleVector[O] = {
 
-    val _padding = LeafArity(padding)
+    val _padding = Arity(padding)
     val op = this.shape + (_padding * LeafArity._2)
     val proof = lemma(op)
     val out = proof.out
@@ -87,7 +87,7 @@ class DoubleVector[A1 <: VecShape](
       lemma: ((A1 `-` A2 `+` LeafArity.Wide._1.Wide) `/` Literal[stride.T]) ~~> O
   ): DoubleVector[O] = {
 
-    val _stride: Literal[stride.T] = LeafArity(stride)
+    val _stride: Literal[stride.T] = Arity(stride)
 
     val op = (this.shape - kernel.shape + LeafArity._1) / _stride
     val proof = lemma(op)
@@ -151,7 +151,7 @@ object DoubleVector extends ProductArgs {
 
   def zeros(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
 
-    new DoubleVector(LeafArity(lit), DenseVector.fill(lit.value)(0.0))
+    new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
   }
 
   def random(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
@@ -159,7 +159,7 @@ object DoubleVector extends ProductArgs {
       Random.nextDouble()
     }
 
-    new DoubleVector(LeafArity(lit), list)
+    new DoubleVector(Arity(lit), list)
   }
 
   @transient object unsafe {

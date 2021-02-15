@@ -100,28 +100,24 @@ object LeafArity {
     }
   }
 
-  def apply(w: Witness.Lt[Int]): Literal[w.T] = {
-    Literal.apply(w)
-  }
+  lazy val _0 = Arity(0)
 
-  lazy val _0 = LeafArity(0)
+  lazy val _1 = Arity(1)
 
-  lazy val _1 = LeafArity(1)
+  lazy val _2 = Arity(2)
 
-  lazy val _2 = LeafArity(2)
-
-  lazy val _3 = LeafArity(3)
+  lazy val _3 = Arity(3)
 
   case object Wide {
     //TODO: redundant, should be merged into above
     // TODO: use a third-party library or selectDynamic to widen this.type
-    lazy val _0 = WideTyped(LeafArity(0))
+    lazy val _0 = WideTyped(Arity(0))
 
-    lazy val _1 = WideTyped(LeafArity(1))
+    lazy val _1 = WideTyped(Arity(1))
 
-    lazy val _2 = WideTyped(LeafArity(2))
+    lazy val _2 = WideTyped(Arity(2))
 
-    lazy val _3 = WideTyped(LeafArity(3))
+    lazy val _3 = WideTyped(Arity(3))
   }
 
   case class Var(runtime: Int) extends LeafArity {

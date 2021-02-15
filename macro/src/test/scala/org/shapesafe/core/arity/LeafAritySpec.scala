@@ -47,7 +47,7 @@ class LeafAritySpec extends BaseSpec {
     it("FromLiteral") {
 
       {
-        val v = LeafArity(100)
+        val v = Arity(100)
         validate(v, 100)
       }
 
@@ -60,7 +60,7 @@ class LeafAritySpec extends BaseSpec {
   // doesn't work at the moment
   it("OfIntLike") {
 
-    val v1 = LeafArity(3)
+    val v1 = Arity(3)
     v1.toString.shouldBe("3:Literal")
   }
 }

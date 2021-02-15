@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.op
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.LeafArity
+import org.shapesafe.core.arity.Arity
 import shapeless.HNil
 
 class EinSumConditionSpec extends BaseSpec {
@@ -9,7 +9,7 @@ class EinSumConditionSpec extends BaseSpec {
   import shapeless.syntax.singleton.mkSingletonOps
   import shapeless.record._
 
-  val ii = "i" ->> LeafArity(3)
+  val ii = "i" ->> Arity(3)
 
   describe("can append") {
 
@@ -24,7 +24,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it("1") {
 
-        val existing = ("a" ->> LeafArity(4)) :: HNil
+        val existing = ("a" ->> Arity(4)) :: HNil
 
         val out = EinSumCondition.apply(existing -> ii)
 
@@ -33,7 +33,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it("2") {
 
-        val existing = ("a" ->> LeafArity(4)) :: ("b" ->> LeafArity(5)) :: HNil
+        val existing = ("a" ->> Arity(4)) :: ("b" ->> Arity(5)) :: HNil
 
         val out = EinSumCondition.apply(existing -> ii)
 
@@ -45,7 +45,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it(" 1") {
 
-        val existing = ("i" ->> LeafArity(3)) :: HNil
+        val existing = ("i" ->> Arity(3)) :: HNil
 
         val out = EinSumCondition.apply(existing -> ii)
 
@@ -54,7 +54,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it("2") {
 
-        val existing = ("i" ->> LeafArity(3)) :: ("j" ->> LeafArity(4)) :: HNil
+        val existing = ("i" ->> Arity(3)) :: ("j" ->> Arity(4)) :: HNil
 
         val out = EinSumCondition.apply(existing -> ii)
 
@@ -70,7 +70,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it(" 1") {
 
-        val existing = ("i" ->> LeafArity(4)) :: HNil
+        val existing = ("i" ->> Arity(4)) :: HNil
 
         shouldNotCompile(
           """EinSumCondition.apply(existing -> ii)"""
@@ -80,7 +80,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it("2") {
 
-        val existing = ("i" ->> LeafArity(4)) :: ("j" ->> LeafArity(3)) :: HNil
+        val existing = ("i" ->> Arity(4)) :: ("j" ->> Arity(3)) :: HNil
 
         shouldNotCompile(
           """val out = EinSumCondition.apply(existing -> ii)"""
@@ -89,7 +89,7 @@ class EinSumConditionSpec extends BaseSpec {
 
       it("3") {
 
-        val existing = ("j" ->> LeafArity(3)) :: ("i" ->> LeafArity(4)) :: HNil
+        val existing = ("j" ->> Arity(3)) :: ("i" ->> Arity(4)) :: HNil
 
         shouldNotCompile(
           """EinSumCondition.apply(existing -> ii)"""

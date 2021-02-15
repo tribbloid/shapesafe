@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.LeafArity
+import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.shape.Shape.{FromIndex, FromNats, FromStatic}
 import shapeless.HNil
 
@@ -104,7 +104,7 @@ class ShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = (LeafArity(3) :<<- "x") ::
+      val hh = (Arity(3) :<<- "x") ::
         HNil
 
       val shape = Shape.FromStatic(hh)
@@ -116,8 +116,8 @@ class ShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = (LeafArity(3) :<<- "x") ::
-        (LeafArity(4) :<<- "y") ::
+      val hh = (Arity(3) :<<- "x") ::
+        (Arity(4) :<<- "y") ::
         HNil
 
       val shape = Shape.FromStatic(hh)
@@ -125,7 +125,7 @@ class ShapeSpec extends BaseSpec {
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.static == hh)
-      assert(shape.static.head.dimension == LeafArity(3))
+      assert(shape.static.head.dimension == Arity(3))
     }
   }
 
@@ -144,7 +144,7 @@ class ShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = ("x" ->> LeafArity(3)) ::
+      val hh = ("x" ->> Arity(3)) ::
         HNil
 
       val shape = Shape.FromIndex(hh)
@@ -156,8 +156,8 @@ class ShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = ("x" ->> LeafArity(3)) ::
-        ("y" ->> LeafArity(4)) ::
+      val hh = ("x" ->> Arity(3)) ::
+        ("y" ->> Arity(4)) ::
         HNil
 
       val shape = Shape.FromIndex(hh)
@@ -165,7 +165,7 @@ class ShapeSpec extends BaseSpec {
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.dimensions.static == hh)
-      assert(shape.static.head.dimension == LeafArity(3))
+      assert(shape.static.head.dimension == Arity(3))
     }
   }
 
@@ -318,7 +318,7 @@ class ShapeSpec extends BaseSpec {
 //          VizType.infer(vvGT).toString
 //        )
 
-      assert(vv.head == LeafArity(3))
+      assert(vv.head == Arity(3))
 
 //      vv.head.toString.shouldBe("FromLiteral: 3")
 
@@ -441,9 +441,9 @@ class ShapeSpec extends BaseSpec {
     it("1") {
 
       val shape = Shape ><
-        LeafArity(1) :<<- "a" ><
-        LeafArity(2) :<<- "b" ><
-        LeafArity(3) :<<- "c"
+        Arity(1) :<<- "a" ><
+        Arity(2) :<<- "b" ><
+        Arity(3) :<<- "c"
 
       val r = shape.transpose(Names >< "c")
 
