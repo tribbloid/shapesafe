@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ProveArity.=>>
+import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.axis.{Axis, NameWide}
 import shapeless.Witness
 
@@ -9,13 +9,21 @@ import scala.util.Try
 
 trait Arity {
 
-  final def proveLeaf[
+  final def verify[
       SELF >: this.type <: Arity,
-      O <: ProveArity.Proof.Lt[LeafArity]
+      O <: Arity
   ](
       implicit
-      prove: SELF =>> O
-  ): O = prove.apply(this)
+      prove: SELF ~~> O
+  ): O = prove.apply(this).out
+
+  final def proveLeaf[
+      SELF >: this.type <: Arity,
+      O <: LeafArity
+  ](
+      implicit
+      prove: SELF ~~> O
+  ): O = prove.apply(this).out
 
   final override def toString: String = {
 

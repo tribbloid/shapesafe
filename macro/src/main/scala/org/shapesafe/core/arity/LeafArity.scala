@@ -10,19 +10,15 @@ import scala.language.implicitConversions
 /**
   * Irreducible
   */
-trait LeafArity extends Proven {
-
-  override type Out >: this.type <: LeafArity // how about =?
-
-  override def out: this.type = this
-}
+trait LeafArity extends Proven {}
 
 object LeafArity {
 
   import Witness._
 
-  trait Const[S] extends LeafArity with ProveArity.OfStatic[S] with IDMixin {
+  trait Const[S] extends LeafArity with IDMixin {
 
+    type SS = S
     def singleton: S
 
     override def _id: S = singleton
@@ -32,17 +28,17 @@ object LeafArity {
       // for test only
       def _can_+(w: Lt[Int])(
           implicit
-          proof: SS + w.T
+          proof: S + w.T
       ): Unit = {}
 
       def proveSameType[N2](
           implicit
-          proof: SS =:= N2
+          proof: S =:= N2
       ): Unit = {}
 
       def proveEqualType[N2](
           implicit
-          proof: Require[SS == N2]
+          proof: Require[S == N2]
       ): Unit = {}
 
       // TODO: should be named proofEqual, require should do everything in runtime?
@@ -108,24 +104,24 @@ object LeafArity {
     Literal.apply(w)
   }
 
-  // TODO: should use a third-party library or selectDynamic to remove boilerplate
-  lazy val _0 = WideTyped(LeafArity(0))
+  lazy val _0 = LeafArity(0)
 
-  lazy val _1 = WideTyped(LeafArity(1))
+  lazy val _1 = LeafArity(1)
 
-  lazy val _2 = WideTyped(LeafArity(2))
+  lazy val _2 = LeafArity(2)
 
-  lazy val _3 = WideTyped(LeafArity(3))
+  lazy val _3 = LeafArity(3)
 
-  case object Narrow { //TODO: experimental, should be merged into above
+  case object Wide {
+    //TODO: redundant, should be merged into above
+    // TODO: use a third-party library or selectDynamic to widen this.type
+    lazy val _0 = WideTyped(LeafArity(0))
 
-    lazy val _0 = LeafArity(0)
+    lazy val _1 = WideTyped(LeafArity(1))
 
-    lazy val _1 = LeafArity(1)
+    lazy val _2 = WideTyped(LeafArity(2))
 
-    lazy val _2 = LeafArity(2)
-
-    lazy val _3 = LeafArity(3)
+    lazy val _3 = WideTyped(LeafArity(3))
   }
 
   case class Var(runtime: Int) extends LeafArity {

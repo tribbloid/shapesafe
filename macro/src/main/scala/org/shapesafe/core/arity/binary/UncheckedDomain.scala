@@ -3,7 +3,7 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.LeafArity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, LeafArity, Utils}
+import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
 
 import scala.language.{existentials, higherKinds}
 
@@ -15,30 +15,21 @@ abstract class UncheckedDomain[
 
   import org.shapesafe.core.arity.Syntax._
 
-  def bound1: A1 =>> Proof
-  def bound2: A2 =>> Proof
+  def bound1: A1 CanProve Proof
+  def bound2: A2 CanProve Proof
 
   def selectSafer(a1: A1, a2: A2): O
 
-  case class ForOp2[??[X1, X2] <: Op]()(
+  def forOp2[??[X1, X2] <: Op](
       implicit
       sh: Utils.IntSh[??]
-  ) extends (Op2[??]#On[A1, A2] =>> OfUnchecked) {
-
-    implicit class apply(in: Op2[??]#On[A1, A2]) extends OfUnchecked {
-
-      override def out = {
-
-        LeafArity.Unchecked
-      }
-    }
+  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.from[Op2[??]#On[A1, A2]].out { _ =>
+    Unchecked
   }
 
-  case object ForEqual extends (A1 =!= A2 =>> O) {
-
-    def apply(in: A1 =!= A2): O = selectSafer(in.a1, in.a2)
+  val froEqual: A1 =!= A2 =>>^^ O = ProveArity.from[A1 =!= A2].to { v =>
+    selectSafer(v.a1, v.a2)
   }
-  type ForEqual = ForEqual.type
 }
 
 trait UncheckedDomain_Imp0 {
@@ -50,7 +41,7 @@ trait UncheckedDomain_Imp0 {
   ]()(
       implicit
       val bound1: A1 ~~> Unchecked,
-      val bound2: A2 =>> O
+      val bound2: A2 CanProve O
   ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
@@ -63,7 +54,7 @@ trait UncheckedDomain_Imp0 {
   ](
       implicit
       bound1: A1 ~~> Unchecked,
-      bound2: A2 =>> O
+      bound2: A2 CanProve O
   ): UncheckedDomain[A1, A2, O] = D2()
 }
 
@@ -84,7 +75,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 =>> O,
+      val bound1: A1 CanProve O,
       val bound2: A2 ~~> Unchecked
   ) extends UncheckedDomain[A1, A2, O] {
 
@@ -97,7 +88,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 =>> O,
+      bound1: A1 CanProve O,
       bound2: A2 ~~> Unchecked
   ): UncheckedDomain[A1, A2, O] = D1()
 }

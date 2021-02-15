@@ -1,8 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import com.tribbloids.graph.commons.util.viz.VizType
-import org.shapesafe.core.arity
-import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
+import org.shapesafe.core.arity.{ArityFixture, LeafArity}
 
 import scala.language.existentials
 
@@ -17,19 +15,19 @@ class AssertEqualSpec extends ArityFixture {
       it("a") {
 
         val op = AssertEqual(a, a)
-        op.proveLeaf.out.internal.requireEqual(3)
+        op.proveLeaf.internal.requireEqual(3)
       }
 
       it("a + b") {
 
         val op = AssertEqual(a + b, ab)
-        op.proveLeaf.out.internal.requireEqual(7)
+        op.proveLeaf.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
         val op = AssertEqual(a + b + c, abc)
-        op.proveLeaf.out.internal.requireEqual(12)
+        op.proveLeaf.internal.requireEqual(12)
       }
     }
 
@@ -38,7 +36,7 @@ class AssertEqualSpec extends ArityFixture {
       it("a + b + c") {
 
         val op = AssertEqual(a + b + c, ab + c)
-        op.proveLeaf.out.internal.requireEqual(12)
+        op.proveLeaf.internal.requireEqual(12)
       }
     }
 
@@ -48,7 +46,7 @@ class AssertEqualSpec extends ArityFixture {
 
         val op = AssertEqual(LeafArity.Unchecked, a)
 
-        val out = op.proveLeaf.out
+        val out = op.proveLeaf
         assert(out.runtimeOpt.contains(3))
 
 //        op.asProof.out.internal.requireEqual(3)
@@ -58,7 +56,7 @@ class AssertEqualSpec extends ArityFixture {
 
         val op = AssertEqual(a + b, LeafArity.Unchecked)
 
-        val out = op.proveLeaf.out
+        val out = op.proveLeaf
         assert(out.runtimeOpt.contains(7))
       }
     }

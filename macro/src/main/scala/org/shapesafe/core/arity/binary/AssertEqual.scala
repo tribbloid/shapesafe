@@ -2,7 +2,8 @@ package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.{Arity, ProveArity}
-import org.shapesafe.core.arity.ProveArity.{=>>, ~~>}
+import org.shapesafe.core.arity.ProveArity.{=>>^^, ~~>}
+import org.shapesafe.core.arity.Syntax.=!=
 import singleton.ops.{==, Require}
 
 trait AssertEqual_Imp0 {
@@ -14,8 +15,8 @@ trait AssertEqual_Imp0 {
   ](
       implicit
       domain: UncheckedDomain[A1, A2, O]
-  ): UncheckedDomain[A1, A2, O]#ForEqual = {
-    domain.ForEqual
+  ): A1 =!= A2 =>>^^ O = {
+    domain.froEqual
   }
 }
 
@@ -48,11 +49,11 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       bound1: A1 ~~> Const[S1],
       bound2: A2 ~~> Const[S2],
       lemma: Require[S1 == S2]
-  ): InvarDomain[A1, A2, S1, S2]#ForEqual = {
+  ) = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    domain.ForEqual()
+    domain.forEqual
   }
 
   override def apply[

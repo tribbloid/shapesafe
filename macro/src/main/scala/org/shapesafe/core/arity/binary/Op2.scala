@@ -45,8 +45,8 @@ trait Op2_Imp0 {
       implicit
       domain: UncheckedDomain[A1, A2, O],
       sh: Utils.IntSh[??]
-  ): domain.ForOp2[??] = {
-    domain.ForOp2[??]()
+  ) = {
+    domain.forOp2[??]
   }
 }
 
@@ -63,10 +63,10 @@ object Op2 extends Op2_Imp0 {
       bound1: A1 ~~> Const[S1], // TODO: make it similar to unsafe
       bound2: A2 ~~> Const[S2],
       lemma: S1 ?? S2
-  ): InvarDomain[A1, A2, S1, S2]#ForOp2[??] = {
+  ) = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
-    domain.ForOp2[??]()(lemma)
+    domain.forOp2[??]
   }
 
   def apply[

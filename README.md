@@ -1,4 +1,4 @@
-# The missing type-level verifier for linear algebra
+# The missing compile-time verifier for linear algebra
 
 shapeless is a Scala library that aims to capture obviously incorrect tensor operations at compile-time.
 
@@ -26,8 +26,8 @@ shapeless is a Scala library that aims to capture obviously incorrect tensor ope
 Most features in shapeless & singleton-ops are taken over by native compiler features:
 
 - shapeless.Witness ==> singleton type
+- singleton.ops.== ==> inline conditions & matches
 - singleton.ops._ ==> scala.compiletime.ops
-- singleton.ops.== ==> inline if & matches
 - shapeless.HList ==> Tuple
 
 ... but some are still missing:

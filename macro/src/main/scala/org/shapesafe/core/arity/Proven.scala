@@ -1,16 +1,20 @@
 package org.shapesafe.core.arity
 
-trait Proven extends Arity with ProveArity.Proof {
+import ProveArity.=>>
+
+trait Proven extends Arity {
 
 //  final def in: this.type = this
 }
 
 object Proven {
 
-  abstract class ProvenAs[O <: LeafArity]()(
-      implicit
-      val out: O
-  ) extends Proven
-      with ProveArity.Of[O] {}
+  implicit def trivial[T <: Proven]: T =>> T = ProveArity.from[T].out(identity[T])
+
+//  abstract class ProvenAs[O <: LeafArity]()(
+//      implicit
+//      val out: O
+//  ) extends Proven
+//      with ProveArity.Of[O] {}
 
 }

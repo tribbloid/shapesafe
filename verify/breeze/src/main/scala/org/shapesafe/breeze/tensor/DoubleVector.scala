@@ -2,10 +2,10 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.ProveArity.=>>
+import org.shapesafe.core.arity.LeafArity
+import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.nullary.OfSize
-import org.shapesafe.core.arity.{LeafArity, ProveArity}
+import org.shapesafe.core.arity.nullary.SizeOf
 import org.shapesafe.core.tensor.Const.VecShape
 import org.shapesafe.core.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
@@ -28,7 +28,7 @@ class DoubleVector[A1 <: VecShape](
 
   def reify[O <: LeafArity](
       implicit
-      prove: A1 =>> ProveArity.Proof.Lt[O]
+      prove: A1 ~~> O
   ): DoubleVector[O] = {
 
     val proof = prove(shape)
@@ -38,7 +38,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: LeafArity](that: DoubleVector[A2])(
       implicit
-      proof: A1 =!= A2 =>> ProveArity.Proof
+      proof: A1 =!= A2 ~~> _
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -48,7 +48,7 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: LeafArity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 `+` A2) =>> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` A2) ~~> O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape + that.shape
@@ -61,11 +61,11 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 `+` (Literal[padding.T] `*` LeafArity._2.value.Out)) =>> ProveArity.Proof.Lt[O]
+      lemma: (A1 `+` (Literal[padding.T] `*` LeafArity.Wide._2.Wide)) ~~> O
   ): DoubleVector[O] = {
 
     val _padding = LeafArity(padding)
-    val op = this.shape + (_padding * LeafArity._2.value)
+    val op = this.shape + (_padding * LeafArity._2)
     val proof = lemma(op)
     val out = proof.out
 
@@ -84,12 +84,12 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` LeafArity._1.value.Out) `/` Literal[stride.T]) =>> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` LeafArity.Wide._1.Wide) `/` Literal[stride.T]) ~~> O
   ): DoubleVector[O] = {
 
     val _stride: Literal[stride.T] = LeafArity(stride)
 
-    val op = (this.shape - kernel.shape + LeafArity._1.value) / _stride
+    val op = (this.shape - kernel.shape + LeafArity._1) / _stride
     val proof = lemma(op)
     val out = proof.out
 
@@ -112,7 +112,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` LeafArity._1.value.Out) `/` LeafArity._1.value.Out) =>> ProveArity.Proof.Lt[O]
+      lemma: ((A1 `-` A2 `+` LeafArity.Wide._1.Wide) `/` LeafArity.Wide._1.Wide) ~~> O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -123,26 +123,27 @@ object DoubleVector extends ProductArgs {
 
   import LeafArity._
 
-  def applyProduct[D <: HList, S <: NatAsOp[_]](data: D)(
+  def applyProduct[D <: HList, S](data: D)(
       implicit
-      proofOfSize: D OfSize S,
+      proofOfSize: SizeOf[D] ~~> Const[S],
       proofOfType: D ElementOfType Double
-  ): DoubleVector[proofOfSize.Out] = {
+  ): DoubleVector[Const[S]] = {
 
     val list = data.runtimeList.map { v =>
       v.asInstanceOf[Double]
     }
 
-    new DoubleVector(proofOfSize.out, Vec.apply(list.toArray))
+    val size = SizeOf(data)
+    new DoubleVector(proofOfSize.valueOf(size), Vec.apply(list.toArray))
   }
 
   @transient object from {
 
     def hList[D <: HList, S <: NatAsOp[_]](data: D)(
         implicit
-        proofOfSize: D OfSize S,
+        proofOfSize: SizeOf[D] ~~> Const[S],
         proofOfType: D ElementOfType Double
-    ): DoubleVector[proofOfSize.Out] = {
+    ): DoubleVector[Const[S]] = {
 
       applyProduct(data)(proofOfSize, proofOfType)
     }
@@ -183,7 +184,7 @@ object DoubleVector extends ProductArgs {
 
   implicit def asReified[A1 <: VecShape, O <: LeafArity](v: DoubleVector[A1])(
       implicit
-      prove: A1 =>> ProveArity.Proof.Lt[O]
+      prove: A1 ~~> O
   ): Reified[O] = {
     Reified(v.reify)
   }

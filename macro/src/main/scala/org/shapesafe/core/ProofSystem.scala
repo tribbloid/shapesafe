@@ -30,8 +30,24 @@ trait ProofSystem[OUB] { // TODO: no IUB?
     final type Out = O
   }
 
+  case class ToBe[O <: OUB](override val out: O) extends Of[O]
+
   // doesn't extend T => R intentionally
   // each ProofSystem use a different one to alleviate search burden of compiler (or is it redundant?)
+
+  trait CanProve[-I, +P <: Proof] {
+    def apply(v: I): P
+
+    final def valueOf(v: I): P#Out = apply(v).out
+  }
+
+  object CanProve {
+
+    implicit def summonFor[I, P <: Proof](v: I)(
+        implicit
+        bound: CanProve[I, P]
+    ): P = bound.apply(v)
+  }
 
   /**
     * representing 2 morphism:
@@ -44,21 +60,26 @@ trait ProofSystem[OUB] { // TODO: no IUB?
     * @tparam I src type
     * @tparam P tgt type
     */
-  trait =>>[-I, +P <: Proof] {
-    def apply(v: I): P
+  class =>>^^[-I, P <: Proof](
+      val toProof: I => P
+  ) extends CanProve[I, P] {
 
-    def valueOf(v: I): P#Out = apply(v).out
+    override def apply(v: I): P = toProof(v)
   }
 
-  object =>> {
+  type ~~>[-I, +O <: OUB] = CanProve[I, Proof.Lt[O]]
 
-    implicit def summonFor[I, P <: Proof](v: I)(
-        implicit
-        bound: I =>> P
-    ): P = bound.apply(v)
+  class =>>[-I, O <: OUB](
+      val toOut: I => O
+  ) extends =>>^^[I, ToBe[O]](v => ToBe(toOut(v)))
 
-    implicit def trivial[I <: Proof]: I =>> I = identity
+  def from[I]: Factory[I] = Factory[I]()
+
+  case class Factory[I]() {
+
+    def to[P <: Proof](fn: I => P) = new (I =>>^^ P)(fn)
+
+    def out[O <: OUB](fn: I => O) = new (I =>> O)(fn)
   }
 
-  type ~~>[-I, +Out <: OUB] = I =>> Proof.Lt[Out]
 }

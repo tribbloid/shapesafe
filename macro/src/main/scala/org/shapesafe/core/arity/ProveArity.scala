@@ -7,11 +7,4 @@ import scala.language.higherKinds
 /**
   * Represents a reified Arity
   */
-object ProveArity extends ProofSystem[Arity] {
-
-  trait OfUnchecked extends Of[LeafArity.Unchecked]
-
-  trait OfStatic[S] extends Of[LeafArity.Const[S]] {
-    type SS = S
-  }
-}
+object ProveArity extends ProofSystem[Arity] {}

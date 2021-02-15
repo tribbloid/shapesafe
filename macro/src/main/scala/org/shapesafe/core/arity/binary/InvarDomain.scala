@@ -2,7 +2,7 @@ package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, LeafArity}
+import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
 import org.shapesafe.core.arity.ProveArity._
 import singleton.ops.{==, Require}
 
@@ -21,22 +21,17 @@ case class InvarDomain[
 
   import org.shapesafe.core.arity.Syntax._
 
-  case class ForOp2[??[X1, X2] <: Op]()(
+  def forOp2[??[X1, X2] <: Op](
       implicit
       lemma: S1 ?? S2
-  ) extends (Op2[??]#On[A1, A2] =>> OfStatic[S1 ?? S2]) {
-
-    implicit class apply(in: Op2[??]#On[A1, A2]) extends OfStatic[S1 ?? S2] {
-
-      override def out: Out = LeafArity.Derived.summon[S1 ?? S2](lemma)
-    }
+  ): Op2[??]#On[A1, A2] =>> LeafArity.Derived[S1 ?? S2] = ProveArity.from[Op2[??]#On[A1, A2]].out { v =>
+    LeafArity.Derived.summon[S1 ?? S2](lemma)
   }
 
-  case class ForEqual()(
+  def forEqual(
       implicit
       lemma: Require[S1 == S2]
-  ) extends (A1 =!= A2 ~~> Const[S1]) {
-
-    def apply(in: A1 =!= A2) = bound1.apply(in.a1)
+  ): A1 =!= A2 =>>^^ ProveArity.Proof.Lt[Const[S1]] = ProveArity.from[A1 =!= A2].to { v =>
+    bound1.apply(v.a1)
   }
 }

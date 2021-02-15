@@ -15,7 +15,7 @@ trait Syntax {
 
   type =!=[X <: Arity, Y <: Arity] = AssertEqual.On[X, Y]
 
-  implicit class ArityInfix[X <: Arity](self: X) {
+  implicit class ArityOps[X <: Arity](self: X) {
 
     def +[Y <: Arity](that: Y): X + Y = {
 
@@ -37,6 +37,33 @@ trait Syntax {
       Op2(self, that)
     }
   }
+
+  // TODO: this should be more accurate
+//  implicit class ArityOps[X <: Arity](val x: X) {
+//
+//    type THIS = x.type
+//    val self: THIS = x: THIS
+//
+//    def +[Y <: Arity](that: Y): THIS + that.type = {
+//
+//      Op2(self, that)
+//    }
+//
+//    def -[Y <: Arity](that: Y): THIS - that.type = {
+//
+//      Op2(self, that)
+//    }
+//
+//    def *[Y <: Arity](that: Y): THIS * that.type = {
+//
+//      Op2(self, that)
+//    }
+//
+//    def /[Y <: Arity](that: Y): THIS / that.type = {
+//
+//      Op2(self, that)
+//    }
+//  }
 }
 
 object Syntax extends Syntax

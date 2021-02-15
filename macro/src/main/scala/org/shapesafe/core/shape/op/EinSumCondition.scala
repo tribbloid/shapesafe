@@ -22,7 +22,7 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
       implicit
       name: Witness.Aux[N],
       selector: Selector.Aux[OLD, N, A1],
-      lemma: A1 =!= A2 =>> Proof.Aux[O]
+      lemma: A1 =!= A2 =>>^^ Proof.Aux[O]
   ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
 
     from[(OLD, N ->> A2)].to {

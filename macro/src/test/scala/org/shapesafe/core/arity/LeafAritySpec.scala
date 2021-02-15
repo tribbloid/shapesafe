@@ -16,8 +16,8 @@ class LeafAritySpec extends BaseSpec {
         plus: S + w.T
     ): Unit = {
 
-      val out = subject.out
-      val out2 = subject.out.out
+      val out = subject
+      val out2 = subject
 
       subject.internal.requireEqual(w)(proof)
       out.internal.requireEqual(w)(proof) // scala compiler may fumble on this one
