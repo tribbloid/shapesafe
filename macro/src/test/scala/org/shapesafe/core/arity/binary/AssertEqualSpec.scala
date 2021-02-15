@@ -42,15 +42,11 @@ class AssertEqualSpec extends ArityFixture {
       }
     }
 
-    describe("Arity.Unknown ==") {
+    describe("Arity.Unchecked ==") {
 
       it("a") {
 
-        val op = AssertEqual(LeafArity.Unknown, a)
-
-//        val impl = Implies.summon[a.type, Proof.Invar[a.SS]] _
-//
-//        UnsafeDomain.summon[Arity.Unknown.type, a.type]
+        val op = AssertEqual(LeafArity.Unchecked, a)
 
         val out = op.proveLeaf.out
         assert(out.runtimeOpt.contains(3))
@@ -60,7 +56,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(a + b, LeafArity.Unknown)
+        val op = AssertEqual(a + b, LeafArity.Unchecked)
 
         val out = op.proveLeaf.out
         assert(out.runtimeOpt.contains(7))
@@ -74,7 +70,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual(LeafArity.Unknown, a)
+        val op = AssertEqual(LeafArity.Unchecked, a)
 
         shouldNotCompile(
           "op.asProof"
@@ -83,7 +79,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(LeafArity.Unknown, a + b)
+        val op = AssertEqual(LeafArity.Unchecked, a + b)
 
         shouldNotCompile(
           "op.asProof"

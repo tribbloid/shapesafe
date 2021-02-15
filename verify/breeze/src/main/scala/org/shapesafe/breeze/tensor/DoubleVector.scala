@@ -163,9 +163,9 @@ object DoubleVector extends ProductArgs {
 
   @transient object unsafe {
 
-    def zeros(number: Int): DoubleVector[Dynamic] = {
+    def zeros(number: Int): DoubleVector[Var] = {
 
-      new DoubleVector(Dynamic(number), DenseVector.fill(number)(0.0))
+      new DoubleVector(Var(number), DenseVector.fill(number)(0.0))
     }
   }
 

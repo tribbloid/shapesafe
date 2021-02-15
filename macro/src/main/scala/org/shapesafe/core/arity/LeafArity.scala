@@ -21,7 +21,7 @@ object LeafArity {
 
   import Witness._
 
-  trait Static[S] extends LeafArity with ProveArity.OfStatic[S] with IDMixin {
+  trait Const[S] extends LeafArity with ProveArity.OfStatic[S] with IDMixin {
 
     def singleton: S
 
@@ -58,9 +58,9 @@ object LeafArity {
     }
   }
 
-  object Static {}
+  object Const {}
 
-  class Derived[S <: Op](override val singleton: S) extends Static[S] {
+  class Derived[S <: Op](override val singleton: S) extends Const[S] {
     override lazy val runtime: Int = singleton.value.asInstanceOf[Int]
   }
 
@@ -73,7 +73,7 @@ object LeafArity {
   }
 
   // this makes it impossible to construct directly from Int type
-  class Literal[S <: Int](val singleton: S) extends Static[S] {
+  class Literal[S <: Int](val singleton: S) extends Const[S] {
 
     override def runtime: Int = singleton
   }
@@ -128,17 +128,17 @@ object LeafArity {
     lazy val _3 = LeafArity(3)
   }
 
-  case class Dynamic(runtime: Int) extends LeafArity {
+  case class Var(runtime: Int) extends LeafArity {
 
-    final type Out = Dynamic
+    final type Out = Var
   }
 
-  trait Unknown extends LeafArity {
+  trait Unchecked extends LeafArity {
 
-    final type Out = Unknown
+    final type Out = Unchecked
   }
 
-  case object Unknown extends Unknown {
+  case object Unchecked extends Unchecked {
     override def runtime: Int = throw new UnsupportedOperationException("<no runtime value>")
   }
 }

@@ -1,13 +1,13 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.LeafArity.Unknown
+import org.shapesafe.core.arity.LeafArity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, LeafArity, Utils}
 
 import scala.language.{existentials, higherKinds}
 
-abstract class UnknownDomain[
+abstract class UncheckedDomain[
     A1 <: Arity,
     A2 <: Arity,
     O <: Proof
@@ -23,25 +23,13 @@ abstract class UnknownDomain[
   case class ForOp2[??[X1, X2] <: Op]()(
       implicit
       sh: Utils.IntSh[??]
-  ) extends (Op2[??]#On[A1, A2] =>> OfUnknown) {
+  ) extends (Op2[??]#On[A1, A2] =>> OfUnchecked) {
 
-    implicit class apply(in: Op2[??]#On[A1, A2]) extends OfUnknown {
+    implicit class apply(in: Op2[??]#On[A1, A2]) extends OfUnchecked {
 
       override def out = {
 
-//        val n1 = bound1.apply(in.a1).out.numberOpt
-//        val n2 = bound2.apply(in.a2).out.numberOpt
-//
-//        (n1, n2) match {
-//
-//          case (Some(_1), Some(_2)) =>
-//            val nOut = tfs.apply(n1.get, n2.get).getValue
-//            Known.Dynamic(nOut)
-//          case _ =>
-//            Known.Unknown
-//        }
-
-        LeafArity.Unknown
+        LeafArity.Unchecked
       }
     }
   }
@@ -53,7 +41,7 @@ abstract class UnknownDomain[
   type ForEqual = ForEqual.type
 }
 
-trait UnknownDomain_Imp0 {
+trait UncheckedDomain_Imp0 {
 
   case class D2[
       A1 <: Arity,
@@ -61,9 +49,9 @@ trait UnknownDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 ~~> Unknown,
+      val bound1: A1 ~~> Unchecked,
       val bound2: A2 =>> O
-  ) extends UnknownDomain[A1, A2, O] {
+  ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
   }
@@ -74,12 +62,12 @@ trait UnknownDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 ~~> Unknown,
+      bound1: A1 ~~> Unchecked,
       bound2: A2 =>> O
-  ): UnknownDomain[A1, A2, O] = D2()
+  ): UncheckedDomain[A1, A2, O] = D2()
 }
 
-object UnknownDomain extends UnknownDomain_Imp0 {
+object UncheckedDomain extends UncheckedDomain_Imp0 {
 
   def summon[
       A1 <: Arity,
@@ -87,8 +75,8 @@ object UnknownDomain extends UnknownDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      self: UnknownDomain[A1, A2, O]
-  ): UnknownDomain[A1, A2, O] = self
+      self: UncheckedDomain[A1, A2, O]
+  ): UncheckedDomain[A1, A2, O] = self
 
   case class D1[
       A1 <: Arity,
@@ -97,8 +85,8 @@ object UnknownDomain extends UnknownDomain_Imp0 {
   ]()(
       implicit
       val bound1: A1 =>> O,
-      val bound2: A2 ~~> Unknown
-  ) extends UnknownDomain[A1, A2, O] {
+      val bound2: A2 ~~> Unchecked
+  ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
   }
@@ -110,6 +98,6 @@ object UnknownDomain extends UnknownDomain_Imp0 {
   ](
       implicit
       bound1: A1 =>> O,
-      bound2: A2 ~~> Unknown
-  ): UnknownDomain[A1, A2, O] = D1()
+      bound2: A2 ~~> Unchecked
+  ): UncheckedDomain[A1, A2, O] = D1()
 }

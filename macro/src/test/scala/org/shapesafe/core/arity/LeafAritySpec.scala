@@ -10,7 +10,7 @@ class LeafAritySpec extends BaseSpec {
 
   describe("big") {
 
-    def validate[S](subject: LeafArity.Static[S], w: Lt[Int])(
+    def validate[S](subject: LeafArity.Const[S], w: Lt[Int])(
         implicit
         proof: Require[S == w.T],
         plus: S + w.T

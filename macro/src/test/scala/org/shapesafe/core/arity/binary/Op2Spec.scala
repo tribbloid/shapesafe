@@ -79,7 +79,7 @@ class Op2Spec extends ArityFixture {
 
       it("a") {
 
-        val op = LeafArity.Unknown + a
+        val op = LeafArity.Unchecked + a
 
         shouldNotCompile(
           "op.asProof"
@@ -88,7 +88,7 @@ class Op2Spec extends ArityFixture {
 
       it("a + b") {
 
-        val op = LeafArity.Unknown + (a + b)
+        val op = LeafArity.Unchecked + (a + b)
 
         shouldNotCompile(
           "op.asProof"

@@ -9,9 +9,9 @@ import scala.language.higherKinds
   */
 object ProveArity extends ProofSystem[Arity] {
 
-  trait OfUnknown extends Of[LeafArity.Unknown]
+  trait OfUnchecked extends Of[LeafArity.Unchecked]
 
-  trait OfStatic[S] extends Of[LeafArity.Static[S]] {
+  trait OfStatic[S] extends Of[LeafArity.Const[S]] {
     type SS = S
   }
 }

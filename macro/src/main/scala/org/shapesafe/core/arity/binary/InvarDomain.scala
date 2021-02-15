@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.LeafArity.Static
+import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.arity.ProveArity._
@@ -15,8 +15,8 @@ case class InvarDomain[
     S2
 ]()(
     implicit
-    bound1: A1 ~~> Static[S1],
-    bound2: A2 ~~> Static[S2]
+    bound1: A1 ~~> Const[S1],
+    bound2: A2 ~~> Const[S2]
 ) {
 
   import org.shapesafe.core.arity.Syntax._
@@ -35,7 +35,7 @@ case class InvarDomain[
   case class ForEqual()(
       implicit
       lemma: Require[S1 == S2]
-  ) extends (A1 =!= A2 ~~> Static[S1]) {
+  ) extends (A1 =!= A2 ~~> Const[S1]) {
 
     def apply(in: A1 =!= A2) = bound1.apply(in.a1)
   }
