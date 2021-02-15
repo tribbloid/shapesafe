@@ -4,9 +4,10 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
+import org.shapesafe.core.shape.binary.{EinSumIndexed, EinSumOps}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
+import shapeless.Witness.Lt
 import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
@@ -19,14 +20,11 @@ import scala.language.implicitConversions
   */
 trait Shape extends Shape.Proto {
 
-  type IndexToAxis <: HList // name: String -> axis: Axis
-  def indexToAxis: IndexToAxis
+  type Record <: HList // name: String -> dim: arity.Expression
+  def record: Record
+  lazy val recordView = RecordView(record)
 
-  type Index <: HList // name: String -> dim: arity.Expression
-  def index: Index
-  lazy val indexView = RecordView(index)
-
-  lazy val getField = indexView.GetField
+  lazy val getField = recordView.GetField
 
   type _Names <: Names.Impl
   val names: _Names
@@ -51,6 +49,9 @@ trait Shape extends Shape.Proto {
     Shape.FromIndex(zipped)
   }
 
+  case class Sub(
+  )
+
   object Axes {
 
     def get(index: Nat)(
@@ -63,16 +64,19 @@ trait Shape extends Shape.Proto {
       static.apply(index)(at)
     }
 
-    def get(name: Witness.Lt[String])(
+    def get[
+        D <: Arity
+    ](name: Witness.Lt[String])(
         implicit
-        selector: Selector[IndexToAxis, name.T]
-    ): selector.Out = {
+        selector: Selector.Aux[Record, name.T, D]
+    ): D :<<- name.T = {
 
       import shapeless.record._
 
-      indexToAxis.apply(name)(selector)
+      val d = record.get(name)
+      val axis = d :<<- name
+      axis
     }
-
   }
 
 }
@@ -89,11 +93,8 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   // Cartesian product doesn't have eye but whatever
   object eye extends Proto.EyeLike with Shape {
 
-    final type IndexToAxis = HNil
-    override def indexToAxis: IndexToAxis = HNil
-
-    final type Index = HNil
-    override def index: Index = HNil
+    final type Record = HNil
+    override def record: Record = HNil
 
     final override type _Names = Names.Eye
     final override val names = Names.Eye
@@ -112,13 +113,9 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   ) extends Proto.><[TAIL, HEAD](tail, head)
       with Shape {
 
-    final type AxisField = head.AxisField
-    final override type IndexToAxis = AxisField :: tail.IndexToAxis
-    lazy val indexToAxis: IndexToAxis = head.asAxisField :: tail.indexToAxis
-
     final type Field = head.Field
-    final override type Index = Field :: tail.Index
-    override lazy val index: Index = head.asField :: tail.index
+    final override type Record = Field :: tail.Record
+    override lazy val record: Record = head.asField :: tail.record
 
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
@@ -190,10 +187,10 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
       S <: Shape
   ](self: S)(
       implicit
-      checkThis: EinSumIndexed.FromStatic.Case[self.Index]
+      checkThis: EinSumIndexed.FromStatic.Case[self.Record]
   ) = {
 
-    val indexed = EinSumIndexed.FromStatic.apply(self.index)
+    val indexed = EinSumIndexed.FromStatic.apply(self.record)
 
     EinSumOps(Seq(self))(indexed)
   }

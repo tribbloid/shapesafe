@@ -56,7 +56,7 @@ class ShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.indexToAxis.apply("x").dimension.runtime == 2)
+      assert(shape.record.apply("x").runtime == 2)
     }
 
     it("nameless") {
@@ -80,8 +80,8 @@ class ShapeSpec extends BaseSpec {
         LeafArity.Literal(3) cross
         LeafArity.Literal(4) :<<- "z"
 
-      assert(shape.indexToAxis.apply("x").dimension.runtime == 2)
-      assert(shape.indexToAxis.apply("z").dimension.runtime == 4)
+      assert(shape.record.apply("x").runtime == 2)
+      assert(shape.record.apply("z").runtime == 4)
 
       typeInferShort(shape).shouldBe(
         """
@@ -193,7 +193,7 @@ class ShapeSpec extends BaseSpec {
       val shape = Shape ><
         LeafArity.Literal(2) :<<- "x"
 
-      val record = shape.index
+      val record = shape.record
 
       //      VizType.infer(record).treeString.shouldBe()
 
@@ -216,7 +216,7 @@ class ShapeSpec extends BaseSpec {
         LeafArity.Literal(2) :<<- "x" ><
         LeafArity.Literal(3) :<<- "y"
 
-      val record = shape.index
+      val record = shape.record
 
       //      VizType.infer(static).treeString.shouldBe()
 
@@ -235,14 +235,14 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe("indexToAxis") {
+  describe("record") {
 
     it("1") {
 
       val shape = Shape ><
         LeafArity.Literal(2) :<<- "x"
 
-      val record = shape.indexToAxis
+      val record = shape.record
 
 //      VizType.infer(record).treeString.shouldBe()
 
@@ -253,10 +253,10 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |(LeafArity.Literal[Int(2)] :<<- String("x")) :: HNil""".stripMargin
+          |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2) :<<- "x")
+      assert(record.get("x") == LeafArity.Literal(2))
     }
 
     it("2") {
@@ -265,7 +265,7 @@ class ShapeSpec extends BaseSpec {
         LeafArity.Literal(2) :<<- "x" ><
         LeafArity.Literal(3) :<<- "y"
 
-      val record = shape.indexToAxis
+      val record = shape.record
 
       //      VizType.infer(static).treeString.shouldBe()
 
@@ -276,11 +276,11 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |(LeafArity.Literal[Int(3)] :<<- String("y")) :: (LeafArity.Literal[Int(2)] :<<- String("x")) :: HNil
+          |LeafArity.Literal[Int(3)] :: LeafArity.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2) :<<- "x")
+      assert(record.get("x") == LeafArity.Literal(2))
     }
   }
 

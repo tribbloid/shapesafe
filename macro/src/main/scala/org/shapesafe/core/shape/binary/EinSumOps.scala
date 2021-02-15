@@ -1,4 +1,4 @@
-package org.shapesafe.core.shape.op
+package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.shape.{Names, Shape}
 import org.shapesafe.core.util.RecordView

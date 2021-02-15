@@ -1,9 +1,8 @@
-package org.shapesafe.core.shape.op
+package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.axis.NameWide
-import org.shapesafe.core.shape.{Names, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.{Mapper, Prepend}
 

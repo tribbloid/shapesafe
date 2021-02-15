@@ -1,8 +1,9 @@
 package org.shapesafe.core.util
 
 import shapeless.labelled.FieldType
+import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
-import shapeless.{HList, Poly1}
+import shapeless.{HList, Nat, Poly1}
 
 case class RecordView[H <: HList](hh: H) {
 
@@ -28,6 +29,23 @@ case class RecordView[H <: HList](hh: H) {
     }
   }
   object GetField extends GetField
+
+  trait FindField extends Poly1 {
+
+    implicit def byKey[S, BY <: Finder.ByName[S]](
+        implicit
+        ev: Selector[H, S]
+    ): Case.Aux[BY, ev.Out] = at[BY] { _ =>
+      ev(hh).asInstanceOf[FieldType[S, ev.Out]]
+    }
+
+    implicit def byOrdinal[N <: Nat, BY <: Finder.ByOrdinal[N]](
+        implicit
+        ev: At[H, N]
+    ): Case.Aux[BY, ev.Out] = at[BY] { _ =>
+      ev(hh)
+    }
+  }
 }
 
 object RecordView {}
