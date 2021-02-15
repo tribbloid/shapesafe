@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, Leaf}
+import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.op.{EinSumIndexed, EinSumOps, ShapeOps}
@@ -127,7 +127,28 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
     final override val dimensions = new Dimensions.><(tail.dimensions, head.dimension)
   }
 
-  object FromIndex extends HListConverter {
+  trait FromIndex_Imp0 extends AbstractFromHList {
+
+    implicit def namelessInductive[
+        H_TAIL <: HList,
+        TAIL <: Impl,
+        D <: Arity
+    ](
+        implicit
+        forTail: H_TAIL ==> TAIL
+    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.emptyName.type)) = {
+
+      from[D :: H_TAIL].to { v =>
+        val prev = apply(v.tail)
+        val vHead = v.head: D
+        val head = vHead :<<- Axis.emptyName
+
+        prev >< head
+      }
+    }
+  }
+
+  object FromIndex extends FromIndex_Imp0 {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -140,7 +161,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         w: Witness.Aux[N]
     ): ((N ->> D) :: H_TAIL) ==> (TAIL >< (D :<<- N)) = {
 
-      buildFrom[(N ->> D) :: H_TAIL].to { v =>
+      from[(N ->> D) :: H_TAIL].to { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
         val head: D :<<- N = vHead :<<- w
@@ -178,7 +199,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
   }
 
   //TODO: doesn't work, blocked by https://github.com/milessabin/shapeless/issues/1072
-  object FromLiterals extends HListConverter {
+  object FromLiterals extends AbstractFromHList {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -188,11 +209,11 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, Leaf.Literal[w.T] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.emptyName.type] = {
 
-      buildFrom[w.T :: H_TAIL].to { v =>
+      from[w.T :: H_TAIL].to { v =>
         val prev = apply(v.tail)
-        val head = Leaf.Literal(w) :<<- Axis.emptyName
+        val head = LeafArity.Literal(w) :<<- Axis.emptyName
 
         prev >< head
       }
@@ -204,7 +225,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
 //    ev.apply(v)
 //  }
 
-  object FromNats extends HListConverter {
+  object FromNats extends AbstractFromHList {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -214,11 +235,11 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
         implicit
         forTail: H_TAIL ==> TAIL,
         ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, Leaf.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
-      buildFrom[(HEAD :: H_TAIL)].to { v =>
+      from[(HEAD :: H_TAIL)].to { v =>
         val prev = apply(v.tail)
-        val head = Leaf.FromNat(v.head) :<<- Axis.emptyName
+        val head = LeafArity.FromNat(v.head) :<<- Axis.emptyName
 
         prev >< head
       }

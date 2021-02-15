@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Leaf
+import org.shapesafe.core.arity.LeafArity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -106,10 +106,10 @@ class DoubleVectorSpec extends BaseSpec {
 
     it("type manually defined") {
       val w3 = Witness(3)
-      type A3 = Leaf.Literal[w3.T]
+      type A3 = LeafArity.Literal[w3.T]
 
       val w4 = Witness(4)
-      type A4 = Leaf.Literal[w4.T]
+      type A4 = LeafArity.Literal[w4.T]
 
       val v1: DoubleVector[A3] = DoubleVector.zeros(3)
       val v2: DoubleVector[A3] = DoubleVector.zeros(3)
@@ -303,7 +303,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.shape.number == 3)
+      assert(v.shape.runtime == 3)
     }
   }
 }

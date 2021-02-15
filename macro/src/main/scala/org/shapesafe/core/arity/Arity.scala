@@ -7,15 +7,14 @@ import shapeless.Witness
 import scala.language.implicitConversions
 import scala.util.Try
 
-// formerly "Expression"
 trait Arity {
 
   final def proveLeaf[
-      T >: this.type <: Arity,
-      O <: ProveArity.OfLeaf
+      SELF >: this.type <: Arity,
+      O <: ProveArity.Proof.Lt[LeafArity]
   ](
       implicit
-      prove: T =>> O
+      prove: SELF =>> O
   ): O = prove.apply(this)
 
   final override def toString: String = {
@@ -23,12 +22,12 @@ trait Arity {
     valueStr + ":" + this.getClass.getSimpleName
   }
 
-  def number: Int // run-time
+  def runtime: Int
 
-  final lazy val tryNumber = Try(number)
-  final def numberOpt: Option[Int] = tryNumber.toOption
+  final lazy val runtimeTry = Try(runtime)
+  final def runtimeOpt: Option[Int] = runtimeTry.toOption
 
-  lazy val valueStr: String = tryNumber
+  lazy val valueStr: String = runtimeTry
     .map(_.toString)
     .recover {
       case ee: Exception =>

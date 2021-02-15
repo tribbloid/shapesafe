@@ -13,9 +13,9 @@ trait CanCons {
 
   object Cons {
 
-    def apply[TAIL <: Impl, HEAD <: UpperBound] = new Builder[TAIL, HEAD]
+    def apply[TAIL <: Impl, HEAD <: UpperBound] = new Factory[TAIL, HEAD]
 
-    class Builder[TAIL <: Impl, HEAD <: UpperBound] {
+    class Factory[TAIL <: Impl, HEAD <: UpperBound] {
 
       def to[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn[TAIL, HEAD, O](fn)
     }
@@ -29,7 +29,10 @@ trait CanCons {
       final override def apply(tail: TAIL, head: HEAD): Out = fn(tail, head)
     }
 
-    def peek[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(implicit ev: Cons[TAIL, HEAD]): ev.type = ev
+    def peek[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
+        implicit
+        ev: Cons[TAIL, HEAD]
+    ): ev.type = ev
   }
 
   //  object Cons extends ProofSystem[(Impl, UpperBound)] {}

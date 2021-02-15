@@ -3,7 +3,7 @@ package org.shapesafe.core
 import scala.language.implicitConversions
 
 /**
-  * If Poly1 works smoothly there will be no point in defining it, too bad the assumed compiler bug make it necessary
+  * If Poly1 works smoothly there will be no point in defining it, too bad the assumed compiler bug made it necessary
   * @tparam OUB upper bound of output
   */
 trait ProofSystem[OUB] { // TODO: no IUB?
@@ -20,7 +20,7 @@ trait ProofSystem[OUB] { // TODO: no IUB?
       type Out = O
     }
 
-    type Lt[O <: OUB] = Proof {
+    type Lt[+O <: OUB] = Proof {
       type Out <: O
     }
   }
@@ -34,31 +34,31 @@ trait ProofSystem[OUB] { // TODO: no IUB?
   // each ProofSystem use a different one to alleviate search burden of compiler (or is it redundant?)
 
   /**
-    * representing 2 morphism from:
-    * - value v to value apply(v)
-    * - type I to type O
-    * which is why it uses =>> instead of ==>
-    * @tparam I from type
-    * @tparam O to type
+    * representing 2 morphism:
+    *
+    * - value v --> value apply(v)
+    *
+    * - type I --> type O
+    *
+    * which is why it uses =>>
+    * @tparam I src type
+    * @tparam P tgt type
     */
-  trait =>>[-I, +O <: Proof] {
-    def apply(v: I): O
+  trait =>>[-I, +P <: Proof] {
+    def apply(v: I): P
+
+    def valueOf(v: I): P#Out = apply(v).out
   }
 
   object =>> {
 
-    implicit def summon[I, O <: Proof](v: I)(
+    implicit def summonFor[I, P <: Proof](v: I)(
         implicit
-        bound: I =>> O
-    ): O = bound.apply(v)
+        bound: I =>> P
+    ): P = bound.apply(v)
 
     implicit def trivial[I <: Proof]: I =>> I = identity
   }
 
-  trait ForAll[-I, +O <: Proof] extends (I =>> O) {
-
-    def prove: I => O
-
-    final override def apply(in: I): O = prove(in)
-  }
+  type ~~>[-I, +Out <: OUB] = I =>> Proof.Lt[Out]
 }

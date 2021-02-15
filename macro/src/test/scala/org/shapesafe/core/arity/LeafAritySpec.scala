@@ -4,14 +4,15 @@ import org.shapesafe.BaseSpec
 import shapeless.Witness.Lt
 import singleton.ops.{+, ==, Require, ToInt}
 
-class LeafSpec extends BaseSpec {
+class LeafAritySpec extends BaseSpec {
 
-  import Leaf._
+  import LeafArity._
 
   describe("big") {
 
-    def validate[S](subject: Leaf.Static[S], w: Lt[Int])(
-        implicit proof: Require[S == w.T],
+    def validate[S](subject: LeafArity.Static[S], w: Lt[Int])(
+        implicit
+        proof: Require[S == w.T],
         plus: S + w.T
     ): Unit = {
 
@@ -46,7 +47,7 @@ class LeafSpec extends BaseSpec {
     it("FromLiteral") {
 
       {
-        val v = Leaf(100)
+        val v = LeafArity(100)
         validate(v, 100)
       }
 
@@ -59,7 +60,7 @@ class LeafSpec extends BaseSpec {
   // doesn't work at the moment
   it("OfIntLike") {
 
-    val v1 = Leaf(3)
+    val v1 = LeafArity(3)
     v1.toString.shouldBe("3:Literal")
   }
 }

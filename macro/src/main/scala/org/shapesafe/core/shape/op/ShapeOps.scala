@@ -4,8 +4,8 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.axis.NameWide
 import org.shapesafe.core.shape.{Names, Shape}
-import shapeless.{::, HList, HNil, Poly2}
-import shapeless.ops.hlist.{Mapper, Prepend, Zip, ZipWith}
+import shapeless.HList
+import shapeless.ops.hlist.{Mapper, Prepend}
 
 class ShapeOps[SELF <: Shape](val self: SELF) {
 
@@ -75,6 +75,24 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
     val newIndex: O = names.static.map(self.getField)(mapper)
     Shape.FromIndex.apply(newIndex)
   }
+
+//  object ElementWise {
+//
+//    def +[
+//        THAT <: Shape,
+//        H_OUT <: HList
+//    ](that: THAT)(
+//        implicit
+//        zipWith: ZipWith.Aux[self.dimensions.Static, that.dimensions.Static, op.AsShapelessPoly2.type, H_OUT],
+//        fromIndex: Shape.FromIndex.Case[H_OUT]
+//    ) = {
+//
+//      val op2 = Op2[ops.+]()
+//      val factory = ElementWiseFactory(op2)
+//
+//      factory.apply(self, that)
+//    }
+//  }
 
 //  object Sum extends Poly2 {
 //

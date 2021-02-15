@@ -1,8 +1,9 @@
 package org.shapesafe.core.arity.binary
 
+import org.shapesafe.core.arity.LeafArity.Unknown
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, Leaf, Utils}
+import org.shapesafe.core.arity.{Arity, LeafArity, Utils}
 
 import scala.language.{existentials, higherKinds}
 
@@ -21,10 +22,10 @@ abstract class UnknownDomain[
 
   case class ForOp2[??[X1, X2] <: Op]()(
       implicit
-      tfs: Utils.IntSh[??]
-  ) extends (Op2[??]#On[A1, A2] ForAll OfUnknownImpl) {
+      sh: Utils.IntSh[??]
+  ) extends (Op2[??]#On[A1, A2] =>> OfUnknown) {
 
-    case class prove(in: Op2[??]#On[A1, A2]) extends OfUnknownImpl {
+    implicit class apply(in: Op2[??]#On[A1, A2]) extends OfUnknown {
 
       override def out = {
 
@@ -40,7 +41,7 @@ abstract class UnknownDomain[
 //            Known.Unknown
 //        }
 
-        Leaf.Unknown
+        LeafArity.Unknown
       }
     }
   }
@@ -52,7 +53,7 @@ abstract class UnknownDomain[
   type ForEqual = ForEqual.type
 }
 
-trait UnsafeDomain_Imp0 {
+trait UnknownDomain_Imp0 {
 
   case class D2[
       A1 <: Arity,
@@ -60,7 +61,7 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ]()(
       implicit
-      val bound1: A1 =>> OfUnknown,
+      val bound1: A1 ~~> Unknown,
       val bound2: A2 =>> O
   ) extends UnknownDomain[A1, A2, O] {
 
@@ -73,12 +74,12 @@ trait UnsafeDomain_Imp0 {
       O <: Proof
   ](
       implicit
-      bound1: A1 =>> OfUnknown,
+      bound1: A1 ~~> Unknown,
       bound2: A2 =>> O
   ): UnknownDomain[A1, A2, O] = D2()
 }
 
-object UnknownDomain extends UnsafeDomain_Imp0 {
+object UnknownDomain extends UnknownDomain_Imp0 {
 
   def summon[
       A1 <: Arity,
@@ -96,7 +97,7 @@ object UnknownDomain extends UnsafeDomain_Imp0 {
   ]()(
       implicit
       val bound1: A1 =>> O,
-      val bound2: A2 =>> OfUnknown
+      val bound2: A2 ~~> Unknown
   ) extends UnknownDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -109,6 +110,6 @@ object UnknownDomain extends UnsafeDomain_Imp0 {
   ](
       implicit
       bound1: A1 =>> O,
-      bound2: A2 =>> OfUnknown
+      bound2: A2 ~~> Unknown
   ): UnknownDomain[A1, A2, O] = D1()
 }

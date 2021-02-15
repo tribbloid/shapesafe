@@ -6,16 +6,16 @@ import shapeless.{::, HList, HNil}
 trait CanFromStatic extends CanCons {
   _self: TupleSystem =>
 
-  trait HListConverter extends Poly1Base[HList, Impl] {
+  trait AbstractFromHList extends Poly1Base[HList, Impl] {
 
     implicit val toEye: HNil ==> Eye = {
-      buildFrom[HNil].to { _ =>
+      from[HNil].to { _ =>
         Eye
       }
     }
   }
 
-  object FromStatic extends HListConverter {
+  object FromStatic extends AbstractFromHList {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -27,7 +27,7 @@ trait CanFromStatic extends CanCons {
         cons: Cons[TAIL, HEAD]
     ): (HEAD :: H_TAIL) ==> cons.Out = {
 
-      buildFrom[HEAD :: H_TAIL].to { v =>
+      from[HEAD :: H_TAIL].to { v =>
         val prev = apply(v.tail)
 
         cons(prev, v.head)

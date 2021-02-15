@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.op
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.binary.AssertEqual
-import org.shapesafe.core.arity.{Arity, Leaf}
+import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Keys, Selector}
 import shapeless.{::, HList, NotContainsConstraint, Witness}
@@ -17,7 +17,7 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
       N <: String,
       A1 <: Arity,
       A2 <: Arity,
-      O <: Leaf
+      O <: LeafArity
   ](
       implicit
       name: Witness.Aux[N],
@@ -25,7 +25,7 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
       lemma: A1 =!= A2 =>> Proof.Aux[O]
   ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
 
-    buildFrom[(OLD, N ->> A2)].to {
+    from[(OLD, N ->> A2)].to {
 
       case (old, field) =>
         import shapeless.record._
@@ -56,7 +56,7 @@ object EinSumCondition extends EinSumCondition {
       NotContainsConstraint: NotContainsConstraint[OLDNS, N]
   ): ==>[(OLD, N ->> D), (N ->> D) :: OLD] = {
 
-    buildFrom[(OLD, N ->> D)].to {
+    from[(OLD, N ->> D)].to {
       case (old, field) =>
         field.asInstanceOf[N ->> D] :: old
     }

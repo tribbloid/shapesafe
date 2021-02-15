@@ -7,6 +7,10 @@ trait Proven extends Arity with ProveArity.Proof {
 
 object Proven {
 
-  abstract class ProvenAs[O <: Leaf]()(implicit val out: O) extends Proven with ProveArity.Of[O] {}
+  abstract class ProvenAs[O <: LeafArity]()(
+      implicit
+      val out: O
+  ) extends Proven
+      with ProveArity.Of[O] {}
 
 }

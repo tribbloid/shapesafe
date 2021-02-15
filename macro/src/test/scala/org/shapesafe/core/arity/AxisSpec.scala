@@ -6,14 +6,14 @@ class AxisSpec extends BaseSpec {
 
   it("correct type") {
 
-    val arity = Leaf.Literal(3)
+    val arity = LeafArity.Literal(3)
 
     val dim = arity :<<- "abc"
 
     typeInferShort(dim)
       .shouldBe(
         """
-          |Leaf.Literal[Int(3)] :<<- String("abc")""".stripMargin
+          |LeafArity.Literal[Int(3)] :<<- String("abc")""".stripMargin
       )
   }
 }

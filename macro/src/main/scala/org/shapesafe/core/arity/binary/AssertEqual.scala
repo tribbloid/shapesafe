@@ -1,7 +1,8 @@
 package org.shapesafe.core.arity.binary
 
+import org.shapesafe.core.arity.LeafArity.Static
 import org.shapesafe.core.arity.{Arity, ProveArity}
-import org.shapesafe.core.arity.ProveArity.=>>
+import org.shapesafe.core.arity.ProveArity.{=>>, ~~>}
 import singleton.ops.{==, Require}
 
 trait AssertEqual_Imp0 {
@@ -28,9 +29,9 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       a2: A2
   ) extends Arity {
 
-    override lazy val number: Int = {
-      val v1 = a1.number
-      val v2 = a2.number
+    override lazy val runtime: Int = {
+      val v1 = a1.runtime
+      val v2 = a2.runtime
 
       require(v1 == v2)
       v1
@@ -44,8 +45,8 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       S2
   ](
       implicit
-      bound1: A1 =>> ProveArity.OfStaticImpl[S1],
-      bound2: A2 =>> ProveArity.OfStaticImpl[S2],
+      bound1: A1 ~~> Static[S1],
+      bound2: A2 ~~> Static[S2],
       lemma: Require[S1 == S2]
   ): InvarDomain[A1, A2, S1, S2]#ForEqual = {
 

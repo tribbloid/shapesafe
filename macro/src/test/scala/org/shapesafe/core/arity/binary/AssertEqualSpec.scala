@@ -2,8 +2,7 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.core.arity
-import org.shapesafe.core.arity.ProveArity.OfUnknown
-import org.shapesafe.core.arity.{Arity, ArityFixture, Leaf}
+import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
 
 import scala.language.existentials
 
@@ -47,24 +46,24 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual(Leaf.Unknown, a)
+        val op = AssertEqual(LeafArity.Unknown, a)
 
 //        val impl = Implies.summon[a.type, Proof.Invar[a.SS]] _
 //
 //        UnsafeDomain.summon[Arity.Unknown.type, a.type]
 
         val out = op.proveLeaf.out
-        assert(out.numberOpt.contains(3))
+        assert(out.runtimeOpt.contains(3))
 
 //        op.asProof.out.internal.requireEqual(3)
       }
 
       it("a + b") {
 
-        val op = AssertEqual(a + b, Leaf.Unknown)
+        val op = AssertEqual(a + b, LeafArity.Unknown)
 
         val out = op.proveLeaf.out
-        assert(out.numberOpt.contains(7))
+        assert(out.runtimeOpt.contains(7))
       }
     }
   }
@@ -75,7 +74,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual(Leaf.Unknown, a)
+        val op = AssertEqual(LeafArity.Unknown, a)
 
         shouldNotCompile(
           "op.asProof"
@@ -84,7 +83,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(Leaf.Unknown, a + b)
+        val op = AssertEqual(LeafArity.Unknown, a + b)
 
         shouldNotCompile(
           "op.asProof"

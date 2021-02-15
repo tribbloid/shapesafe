@@ -45,10 +45,10 @@ trait Poly1Base[IUB, OUB] {
   //    final override def apply(v: I): O = fn(v)
   //  }
 
-  def apply[I <: IUB] = buildFrom[I]
-  def buildFrom[I <: IUB] = new Builder[I]() // same as `at` in Poly1?
+  def apply[I <: IUB] = from[I]
+  def from[I <: IUB] = new Factory[I]() // same as `at` in Poly1?
 
-  protected class Builder[I <: IUB]() {
+  protected class Factory[I <: IUB]() {
 
     def to[O <: OUB](fn: I => O): I ==> O = new (I ==> O) {
 
@@ -58,20 +58,20 @@ trait Poly1Base[IUB, OUB] {
 
   def summon[I <: IUB](
       implicit
-      ev: Case[I]
-  ): ev.type = ev
+      adhoc: Case[I]
+  ): adhoc.type = adhoc
 
   def summonFor[I <: IUB](v: I)(
       implicit
-      ev: Case[I]
-  ): ev.type = ev
+      adhoc: Case[I]
+  ): adhoc.type = adhoc
 
   def apply[I <: IUB](v: I)(
       implicit
-      ev: Case[I]
-  ): ev.Out = ev.apply(v)
+      adhoc: Case[I]
+  ): adhoc.Out = adhoc.apply(v)
 
-  case class AsShapelessPoly1() extends Poly1 {
+  object AsShapelessPoly1 extends Poly1 {
 
     val outer: Poly1Base[IUB, OUB] = Poly1Base.this
 
@@ -83,5 +83,5 @@ trait Poly1Base[IUB, OUB] {
     }
   }
 
-//  case class AsShapelessPoly2() extends Poly2 { TODO
+//  object AsShapelessPoly2 extends Poly2 { TODO
 }
