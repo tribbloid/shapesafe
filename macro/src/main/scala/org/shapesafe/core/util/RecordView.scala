@@ -32,7 +32,7 @@ case class RecordView[H <: HList](hh: H) {
 
   trait FindField extends Poly1 {
 
-    implicit def byKey[S, BY <: Finder.ByName[S]](
+    implicit def byKey[S, BY <: Finder.ByKey[S]](
         implicit
         ev: Selector[H, S]
     ): Case.Aux[BY, ev.Out] = at[BY] { _ =>

@@ -3,7 +3,7 @@ package org.shapesafe.core.shape
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.core.shape.Shape.{FromIndex, FromNats, FromStatic}
+import org.shapesafe.core.shape.Shape.{FromNats, FromRecord, FromStatic}
 import shapeless.HNil
 
 class ShapeSpec extends BaseSpec {
@@ -129,7 +129,7 @@ class ShapeSpec extends BaseSpec {
     }
   }
 
-  describe(FromIndex.getClass.getSimpleName) {
+  describe(FromRecord.getClass.getSimpleName) {
 
     import shapeless.syntax.singleton.mkSingletonOps
 
@@ -137,7 +137,7 @@ class ShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = Shape.FromIndex(hh)
+      val shape = Shape.FromRecord(hh)
 
       assert(shape == Shape.Eye)
     }
@@ -147,7 +147,7 @@ class ShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3)) ::
         HNil
 
-      val shape = Shape.FromIndex(hh)
+      val shape = Shape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -160,7 +160,7 @@ class ShapeSpec extends BaseSpec {
         ("y" ->> Arity(4)) ::
         HNil
 
-      val shape = Shape.FromIndex(hh)
+      val shape = Shape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -294,7 +294,7 @@ class ShapeSpec extends BaseSpec {
 
       val nn = shape.names
 
-      assert(nn.head == "y")
+      assert(nn.headName == "y")
     }
   }
 
@@ -381,14 +381,14 @@ class ShapeSpec extends BaseSpec {
 
     it("getByIndex") {
 
-      val v = shape.Axes.get(0)
+      val v = shape.Sub1.apply(0)
 
       assert(v == LeafArity.Literal(4) :<<- "z") // HList is of inverse order
     }
 
     it("getByName") {
 
-      val v = shape.Axes.get("y")
+      val v = shape.Sub1.apply("y")
 
       assert(v == LeafArity.Literal(3) :<<- "y")
     }

@@ -61,18 +61,18 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   ): OUT = ><(that)
 
   def transpose[
-      N <: Names.Impl,
+      N <: Names,
       O <: HList
   ](
       names: N
   )(
       implicit
-      mapper: Mapper.Aux[self.getField.type, names.Static, O],
-      fromIndex: Shape.FromIndex.Case[O]
-  ): Shape.FromIndex.Case[O]#Out = {
+      mapper: Mapper.Aux[self.getField.type, names.Keys, O],
+      fromIndex: Shape.FromRecord.Case[O]
+  ): Shape.FromRecord.Case[O]#Out = {
 
-    val newIndex: O = names.static.map(self.getField)(mapper)
-    Shape.FromIndex.apply(newIndex)
+    val newIndex: O = names.keys.map(self.getField)(mapper)
+    Shape.FromRecord.apply(newIndex)
   }
 
 //  object ElementWise {

@@ -14,14 +14,14 @@ case class EinSumOps[I <: EinSumIndexed.Proto](
 
   lazy val getField = indexed.staticView.GetField
 
-  def -->[H_OUT <: HList](names: Names.Impl)(
+  def -->[H_OUT <: HList](names: Names)(
       implicit
-      mapper: Mapper.Aux[getField.type, names.Static, H_OUT],
-      toShape: Shape.FromIndex.Case[H_OUT]
+      mapper: Mapper.Aux[getField.type, names.Keys, H_OUT],
+      toShape: Shape.FromRecord.Case[H_OUT]
   ): toShape.Out = {
 
-    val projected = names.static.map(getField)
+    val projected = names.keys.map(getField)
 
-    Shape.FromIndex(projected)
+    Shape.FromRecord(projected)
   }
 }

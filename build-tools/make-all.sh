@@ -10,9 +10,7 @@ mkdir -p ${FWDIR}/logs
 
 ${FWDIR}/gradlew -q dependencyTree "${@}" >${FWDIR}/logs/dependencyTree_"$DATE".out
 
-#${FWDIR}/gradlew clean testClasses "${@}"
-
-${FWDIR}/gradlew clean publishToMavenLocal "${@}"
+${FWDIR}/gradlew clean testClasses publishToMavenLocal "${@}"
 
 #CD ${FWDIR}/shapeshape-demo/
 #

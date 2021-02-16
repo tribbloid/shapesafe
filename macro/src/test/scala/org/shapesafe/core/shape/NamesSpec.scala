@@ -14,9 +14,9 @@ class NamesSpec extends BaseSpec {
 
   it("create") {
 
-    require(names.static == hList)
+    require(names.keys == hList)
 
-    val t1 = VizType.infer(names.static)
+    val t1 = VizType.infer(names.keys)
     val t2 = VizType.infer(hList)
 
     assert(t1.tt =:= t2.tt)

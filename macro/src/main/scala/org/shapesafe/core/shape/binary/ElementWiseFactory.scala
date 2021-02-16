@@ -23,13 +23,13 @@ case class ElementWiseFactory[
   )(
       implicit
       zipWith: ZipWith.Aux[left.dimensions.Static, right.dimensions.Static, op.AsShapelessPoly2.type, H_OUT],
-      fromIndex: Shape.FromIndex.Case[H_OUT]
-  ): Shape.FromIndex.Case[H_OUT]#Out = {
+      fromIndex: Shape.FromRecord.Case[H_OUT]
+  ): Shape.FromRecord.Case[H_OUT]#Out = {
 
     val zipped = left.dimensions.static.zipWith(right.dimensions.static) {
       poly2
     }
 
-    Shape.FromIndex.apply(zipped)
+    Shape.FromRecord.apply(zipped)
   }
 }

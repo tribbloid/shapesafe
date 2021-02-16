@@ -21,7 +21,7 @@ class Spike extends BaseSpec {
     VizType.infer(v2).shouldBe()
 
 //    Names.Cons.summon(Names.Eye, v1) // breaks
-    Names.Cons.peek(Names.Eye, v2)
+    Names.Cons.summonFor(Names.Eye, v2)
 
     {
       val hh = v1 :: HNil

@@ -29,7 +29,7 @@ trait CanCons {
       final override def apply(tail: TAIL, head: HEAD): Out = fn(tail, head)
     }
 
-    def peek[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
+    def summonFor[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
         implicit
         ev: Cons[TAIL, HEAD]
     ): ev.type = ev

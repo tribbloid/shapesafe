@@ -35,7 +35,7 @@ object EinSumIndexed extends TupleSystem with CanInfix_>< with CanFromStatic {
       )
       with EinSumIndexed[HEAD :: H_TAIL]
 
-  implicit def consIfNoConflict[
+  implicit def conditionalCons[
       H_TAIL <: HList,
       N <: String,
       D <: Arity

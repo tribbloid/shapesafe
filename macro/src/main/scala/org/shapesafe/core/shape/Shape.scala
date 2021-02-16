@@ -7,7 +7,6 @@ import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.binary.{EinSumIndexed, EinSumOps}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
-import shapeless.Witness.Lt
 import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
 import shapeless.ops.record.Selector
 import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
@@ -26,7 +25,7 @@ trait Shape extends Shape.Proto {
 
   lazy val getField = recordView.GetField
 
-  type _Names <: Names.Impl
+  type _Names <: Names
   val names: _Names
 
   type _Dimensions <: Dimensions.Impl
@@ -39,22 +38,22 @@ trait Shape extends Shape.Proto {
   def |<<-[
       ZZ <: HList,
       O <: Shape
-  ](newNames: Names.Impl)(
+  ](newNames: Names)(
       implicit
-      zipping: ZipWithKeys.Aux[newNames.Static, dimensions.Static, ZZ],
-      prove: Shape.FromIndex.==>[ZZ, O]
+      zipping: ZipWithKeys.Aux[newNames.Keys, dimensions.Static, ZZ],
+      prove: Shape.FromRecord.==>[ZZ, O]
   ): O = {
 
-    val zipped: ZZ = dimensions.static.zipWithKeys(newNames.static)
-    Shape.FromIndex(zipped)
+    val zipped: ZZ = dimensions.static.zipWithKeys(newNames.keys)
+    Shape.FromRecord(zipped)
   }
 
   case class Sub(
   )
 
-  object Axes {
+  object Sub1 {
 
-    def get(index: Nat)(
+    def apply(index: Nat)(
         implicit
         at: At[Static, index.N]
     ): at.Out = {
@@ -64,7 +63,7 @@ trait Shape extends Shape.Proto {
       static.apply(index)(at)
     }
 
-    def get[
+    def apply[
         D <: Arity
     ](name: Witness.Lt[String])(
         implicit
@@ -78,7 +77,6 @@ trait Shape extends Shape.Proto {
       axis
     }
   }
-
 }
 
 object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
@@ -124,7 +122,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
     final override val dimensions = new Dimensions.><(tail.dimensions, head.dimension)
   }
 
-  trait FromIndex_Imp0 extends AbstractFromHList {
+  trait FromRecord_Imp0 extends AbstractFromHList {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
@@ -145,7 +143,7 @@ object Shape extends TupleSystem with CanFromStatic with NatProductArgs {
     }
   }
 
-  object FromIndex extends FromIndex_Imp0 {
+  object FromRecord extends FromRecord_Imp0 {
 
     implicit def inductive[
         H_TAIL <: HList,
