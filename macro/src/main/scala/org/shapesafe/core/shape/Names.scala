@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.shape.FieldIndex.Named
 import org.shapesafe.core.tuple.{CanCons, CanFromStatic, TupleSystem}
-import org.shapesafe.core.util.Finder.ByKey
 import shapeless.{::, HList, HNil, Witness}
 
 import scala.language.implicitConversions
@@ -32,19 +32,21 @@ object Names extends TupleSystem with CanCons with CanFromStatic {
       HEAD <: String
   ](
       override val tail: TAIL,
-      val headName: HEAD
-  ) extends proto.><[TAIL, ByKey[HEAD]](tail, new ByKey(headName))
+      val headW: Witness.Aux[HEAD]
+  ) extends proto.><[TAIL, Named[HEAD]](tail, new Named(headW))
       with Names {
+
+    def headName: HEAD = headW.value
 
     override type Keys = HEAD :: tail.Keys
 
-    override def keys: Keys = headName :: tail.keys
+    override def keys: Keys = headW.value :: tail.keys
   }
 
-  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
 
     Cons[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
+      new ><(tail, Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]])
     }
   }
 
@@ -52,7 +54,7 @@ object Names extends TupleSystem with CanCons with CanFromStatic {
 
     def ><(name: Witness.Lt[String]): SELF >< name.T = {
 
-      new ><(self, name.value)
+      new ><(self, name)
     }
   }
 

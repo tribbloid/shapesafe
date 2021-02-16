@@ -8,8 +8,9 @@ import org.shapesafe.core.shape.binary.{EinSumIndexed, EinSumOps}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
 import shapeless.ops.hlist.{At, Reverse, ZipWithKeys}
+import shapeless.ops.nat.ToInt
 import shapeless.ops.record.Selector
-import shapeless.{::, HList, HNil, Nat, NatProductArgs, Witness}
+import shapeless.{::, HList, HNil, Nat, NatProductArgs, Poly1, Witness}
 
 import scala.language.implicitConversions
 
@@ -21,9 +22,9 @@ trait Shape extends Shape.Proto {
 
   type Record <: HList // name: String -> dim: arity.Expression
   def record: Record
-  lazy val recordView = RecordView(record)
+  lazy val recordView: RecordView[Record] = RecordView(record)
 
-  lazy val getField = recordView.GetField
+  lazy val getField: recordView.GetField.type = recordView.GetField
 
   type _Names <: Names
   val names: _Names
@@ -48,33 +49,56 @@ trait Shape extends Shape.Proto {
     Shape.FromRecord(zipped)
   }
 
-  case class Sub(
-  )
+  object IndexToAxis extends Poly1 {
 
-  object Sub1 {
-
-    def apply(index: Nat)(
+    implicit def name[S <: String](
         implicit
-        at: At[Static, index.N]
-    ): at.Out = {
-
-//      record.reverse TODO: use it later
-
-      static.apply(index)(at)
+        _selector: Selector[Record, S] { type Out <: Arity }
+    ): Case[FieldIndex.Named[S]] {
+      type Result = _selector.Out :<<- S
+    } = at[FieldIndex.Named[S]] { name =>
+      val arity = _selector(record)
+      arity :<<- name.w
     }
 
-    def apply[
-        D <: Arity
-    ](name: Witness.Lt[String])(
+    implicit def ii[N <: Nat](
         implicit
-        selector: Selector.Aux[Record, name.T, D]
-    ): D :<<- name.T = {
+        _at: At[Static, N] { type Out <: Axis }
+    ): Case[FieldIndex.N_th[N]] {
+      type Result = _at.Out
+    } = at[FieldIndex.N_th[N]] { index =>
+      _at(static)
+    }
+  }
 
-      import shapeless.record._
+  object Sub {
 
-      val d = record.get(name)
-      val axis = d :<<- name
-      axis
+    def apply[T <: FieldIndex](v: T): Sub1[T] = {
+
+      Sub1(v)
+    }
+
+    def apply(i: Nat)(
+        implicit
+        toIntN: ToInt[i.N]
+    ): Sub1[FieldIndex.N_th[i.N]] = {
+
+      apply(FieldIndex.N_th(i))
+    }
+
+    def apply(w: Witness.Lt[String]): Sub1[FieldIndex.Named[w.T]] = {
+
+      apply(FieldIndex.Named(w))
+    }
+  }
+
+  case class Sub1[T <: FieldIndex](index: T) {
+
+    def axis(
+        implicit
+        byIndex: IndexToAxis.Case[T]
+    ): byIndex.Result = {
+      byIndex.apply(index)
     }
   }
 }

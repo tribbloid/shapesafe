@@ -381,14 +381,14 @@ class ShapeSpec extends BaseSpec {
 
     it("getByIndex") {
 
-      val v = shape.Sub1.apply(0)
+      val v = shape.Sub(0).axis
 
       assert(v == LeafArity.Literal(4) :<<- "z") // HList is of inverse order
     }
 
     it("getByName") {
 
-      val v = shape.Sub1.apply("y")
+      val v = shape.Sub.apply("y").axis
 
       assert(v == LeafArity.Literal(3) :<<- "y")
     }

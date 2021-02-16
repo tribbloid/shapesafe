@@ -58,18 +58,18 @@ trait Poly1Base[IUB, OUB] {
 
   def summon[I <: IUB](
       implicit
-      adhoc: Case[I]
-  ): adhoc.type = adhoc
+      _case: Case[I]
+  ): _case.type = _case
 
   def summonFor[I <: IUB](v: I)(
       implicit
-      adhoc: Case[I]
-  ): adhoc.type = adhoc
+      _case: Case[I]
+  ): _case.type = _case
 
   def apply[I <: IUB](v: I)(
       implicit
-      adhoc: Case[I]
-  ): adhoc.Out = adhoc.apply(v)
+      _case: Case[I]
+  ): _case.Out = _case.apply(v)
 
   object AsShapelessPoly1 extends Poly1 {
 

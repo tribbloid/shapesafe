@@ -2,7 +2,6 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.axis.NameWide
 import shapeless.HList
 import shapeless.ops.hlist.{Mapper, Prepend}
 
@@ -15,7 +14,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
 
   def ><[
       D <: Arity,
-      N <: NameWide
+      N <: String
   ](
       axis: D :<<- N
   ): ><[SELF, D :<<- N] = {
@@ -25,7 +24,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
 
   def cross[
       D <: Arity,
-      N <: NameWide
+      N <: String
   ](
       axis: D :<<- N
   ): SELF >< (D :<<- N) = ><(axis)

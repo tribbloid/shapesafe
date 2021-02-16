@@ -1,7 +1,7 @@
 package org.shapesafe.core.util;
 
 import org.shapesafe.BaseSpec
-import shapeless.{::, HNil, Witness};
+import shapeless.HNil;
 
 class RecordViewSpec extends BaseSpec {
 
@@ -12,30 +12,31 @@ class RecordViewSpec extends BaseSpec {
     HNil
   val view = RecordView(record)
 
-  it("getV") {
+  it(classOf[view.GetV].getSimpleName) {
 
-    object get extends view.GetV
+    object poly extends view.GetV
 //    val get = RecordUtils.GetV(record)
     // https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
 
-    assert(get.apply("a".narrow) == 1)
-    assert(get("b".narrow) == "x")
+    assert(poly.apply("a".narrow) == 1)
+    assert(poly("b".narrow) == "x")
 
     assert(
-      ("b".narrow :: "a".narrow :: HNil).map(get) ==
+      ("b".narrow :: "a".narrow :: HNil).map(poly) ==
         ("x" :: 1 :: HNil)
     )
   }
 
-  it("getField") {
+  it(classOf[view.GetField].getSimpleName) {
 
-    object get extends view.GetField
+    object poly extends view.GetField
 
-    assert(get.apply("a".narrow) == "a" ->> 1)
-    assert(get.apply("b".narrow) == "b" ->> "x")
+    // TODO: need type check
+    assert(poly.apply("a".narrow) == "a" ->> 1)
+    assert(poly.apply("b".narrow) == "b" ->> "x")
 
     assert(
-      ("b".narrow :: "a".narrow :: HNil).map(get) ==
+      ("b".narrow :: "a".narrow :: HNil).map(poly) ==
         ("b" ->> "x") ::
         ("a" ->> 1) ::
         HNil

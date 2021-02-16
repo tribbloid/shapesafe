@@ -15,7 +15,7 @@ trait Axis extends IDMixin {
   type Dimension <: Arity
   def dimension: Dimension
 
-  type Name <: NameWide
+  type Name <: String
   def nameSingleton: Witness.Aux[Name]
 
   final def name: Name = nameSingleton.value
@@ -41,7 +41,7 @@ object Axis {
   // TODO: N can be eliminated
   class :<<-[
       D <: Arity,
-      N <: NameWide
+      N <: String
   ](
       val dimension: D,
       val nameSingleton: Witness.Aux[N]
@@ -60,7 +60,7 @@ object Axis {
     // theoretically correct but shapeless recordOps still fumble on it
   }
 
-  type ->>[N <: NameWide, D] = FieldType[N, D]
+  type ->>[N <: String, D] = FieldType[N, D]
 
   def apply[
       V <: Arity

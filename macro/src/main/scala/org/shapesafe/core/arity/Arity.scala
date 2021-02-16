@@ -2,7 +2,7 @@ package org.shapesafe.core.arity
 
 import org.shapesafe.core.arity.LeafArity.Literal
 import org.shapesafe.core.arity.ProveArity.~~>
-import org.shapesafe.core.axis.{Axis, NameWide}
+import org.shapesafe.core.axis.Axis
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -49,17 +49,17 @@ object Arity {
 
   implicit class NameOps[T <: Arity](self: T) {
 
-    def withNameT(
+    def withNameT[S <: String](
         implicit
-        name: Witness.Lt[String]
+        name: Witness.Aux[S]
     ) = Axis(self, name)
 
-    def withName(name: Witness.Lt[NameWide]) = {
+    def withName(name: Witness.Lt[String]) = {
 
       :<<-(name)
     }
 
-    def :<<-(name: Witness.Lt[NameWide]) = withNameT(name)
+    def :<<-(name: Witness.Lt[String]) = withNameT(name)
   }
 
   def apply(w: Witness.Lt[Int]): Literal[w.T] = {

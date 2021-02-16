@@ -1,5 +1,6 @@
 package org.shapesafe.core.util
 
+import org.shapesafe.core.shape.FieldIndex
 import shapeless.labelled.FieldType
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
@@ -12,9 +13,9 @@ case class RecordView[H <: HList](hh: H) {
 
     implicit def getter[S](
         implicit
-        ev: Selector[H, S]
-    ): Case.Aux[S, ev.Out] = at[S] { _ =>
-      ev(hh)
+        _selector: Selector[H, S]
+    ): Case.Aux[S, _selector.Out] = at[S] { _ =>
+      _selector(hh)
     }
   }
   object GetV extends GetV
@@ -23,29 +24,13 @@ case class RecordView[H <: HList](hh: H) {
 
     implicit def getter[S](
         implicit
-        ev: Selector[H, S]
-    ): Case.Aux[S, FieldType[S, ev.Out]] = at[S] { _ =>
-      ev(hh).asInstanceOf[FieldType[S, ev.Out]]
+        _selector: Selector[H, S]
+    ): Case.Aux[S, FieldType[S, _selector.Out]] = at[S] { _ =>
+      _selector(hh).asInstanceOf[FieldType[S, _selector.Out]]
     }
   }
   object GetField extends GetField
 
-  trait FindField extends Poly1 {
-
-    implicit def byKey[S, BY <: Finder.ByKey[S]](
-        implicit
-        ev: Selector[H, S]
-    ): Case.Aux[BY, ev.Out] = at[BY] { _ =>
-      ev(hh).asInstanceOf[FieldType[S, ev.Out]]
-    }
-
-    implicit def byOrdinal[N <: Nat, BY <: Finder.ByOrdinal[N]](
-        implicit
-        ev: At[H, N]
-    ): Case.Aux[BY, ev.Out] = at[BY] { _ =>
-      ev(hh)
-    }
-  }
 }
 
 object RecordView {}
