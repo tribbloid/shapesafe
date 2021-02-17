@@ -11,7 +11,7 @@ class SizeOfSpec extends ArityFixture {
     it("small") {
 
       val op0 = SizeOf(1 :: 2 :: 3 :: HNil)
-      val proven = op0.proveLeaf
+      val proven = op0.eval
 
       proven.internal.requireEqual(3)
 

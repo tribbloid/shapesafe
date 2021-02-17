@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.arity.binary.Op2Like
-import org.shapesafe.core.shape.Shape
+import org.shapesafe.core.shape.LeafShape
 import shapeless.HList
 import shapeless.ops.hlist.ZipWith
 
@@ -14,8 +14,8 @@ case class ElementWiseFactory[
   val poly2: op.AsShapelessPoly2.type = op.AsShapelessPoly2
 
   def apply[
-      LL <: Shape,
-      RR <: Shape,
+      LL <: LeafShape,
+      RR <: LeafShape,
       H_OUT <: HList
   ](
       left: LL,
@@ -23,13 +23,13 @@ case class ElementWiseFactory[
   )(
       implicit
       zipWith: ZipWith.Aux[left.dimensions.Static, right.dimensions.Static, op.AsShapelessPoly2.type, H_OUT],
-      fromIndex: Shape.FromRecord.Case[H_OUT]
-  ): Shape.FromRecord.Case[H_OUT]#Out = {
+      fromIndex: LeafShape.FromRecord.Case[H_OUT]
+  ): LeafShape.FromRecord.Case[H_OUT]#Out = {
 
     val zipped = left.dimensions.static.zipWith(right.dimensions.static) {
       poly2
     }
 
-    Shape.FromRecord.apply(zipped)
+    LeafShape.FromRecord.apply(zipped)
   }
 }

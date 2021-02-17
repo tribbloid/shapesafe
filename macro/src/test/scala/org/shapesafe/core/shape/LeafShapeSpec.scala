@@ -3,10 +3,10 @@ package org.shapesafe.core.shape
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.core.shape.Shape.{FromNats, FromRecord, FromStatic}
+import org.shapesafe.core.shape.LeafShape.{FromNats, FromRecord, FromStatic}
 import shapeless.HNil
 
-class ShapeSpec extends BaseSpec {
+class LeafShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
@@ -50,7 +50,7 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(shape).shouldBe(
         """
-          |Shape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y"))
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
       )
 
@@ -67,7 +67,7 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(shape).shouldBe(
         """
-          |Shape.Eye >< (LeafArity.Literal[Int(2)] :<<- Axis.emptyName.type) >< (LeafArity.Literal[Int(3)] :<<- Axis.emptyName.type)
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- Axis.emptyName.type) >< (LeafArity.Literal[Int(3)] :<<- Axis.emptyName.type)
           |""".stripMargin
       )
 
@@ -85,7 +85,7 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(shape).shouldBe(
         """
-          |Shape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- Axis.emptyName.type) >< (LeafArity.Literal[Int(4)] :<<- String("z"))
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- Axis.emptyName.type) >< (LeafArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -97,9 +97,9 @@ class ShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = Shape.FromStatic(hh)
+      val shape = LeafShape.FromStatic(hh)
 
-      assert(shape == Shape.Eye)
+      assert(shape == LeafShape.Eye)
     }
 
     it("1") {
@@ -107,7 +107,7 @@ class ShapeSpec extends BaseSpec {
       val hh = (Arity(3) :<<- "x") ::
         HNil
 
-      val shape = Shape.FromStatic(hh)
+      val shape = LeafShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -120,7 +120,7 @@ class ShapeSpec extends BaseSpec {
         (Arity(4) :<<- "y") ::
         HNil
 
-      val shape = Shape.FromStatic(hh)
+      val shape = LeafShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -137,9 +137,9 @@ class ShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = LeafShape.FromRecord(hh)
 
-      assert(shape == Shape.Eye)
+      assert(shape == LeafShape.Eye)
     }
 
     it("1") {
@@ -147,7 +147,7 @@ class ShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3)) ::
         HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = LeafShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -160,7 +160,7 @@ class ShapeSpec extends BaseSpec {
         ("y" ->> Arity(4)) ::
         HNil
 
-      val shape = Shape.FromRecord(hh)
+      val shape = LeafShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -346,7 +346,7 @@ class ShapeSpec extends BaseSpec {
 
 //      inferShort(names1).shouldBe()
 
-      val shape2 = shape |<<- ab
+      val shape2 = (shape |<<- ab).eval
 
 //      VizType.infer(shape2).toString.shouldBe()
 
@@ -357,7 +357,7 @@ class ShapeSpec extends BaseSpec {
 
       val shape1 = shape |<<- ij
 
-      val shape2 = shape1 |<<- Names >< "a" >< "b"
+      val shape2 = (shape1 |<<- Names >< "a" >< "b").eval
 
 //      VizType.infer(shape2).toString.shouldBe()
 
@@ -410,7 +410,7 @@ class ShapeSpec extends BaseSpec {
 
       typeInferShort(r).shouldBe(
         """
-          |Shape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
+          |LeafShape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
     }
 
@@ -429,7 +429,7 @@ class ShapeSpec extends BaseSpec {
       typeInferShort(r).shouldBe(
         """
           |
-          |Shape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
+          |LeafShape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
           | (LeafArity.Literal[Int(2)] :<<- String("i")) >< (LeafArity.Literal[Int(3)] :<<- String("j"))
           |""".stripMargin.split('\n').mkString
       )
@@ -460,7 +460,7 @@ class ShapeSpec extends BaseSpec {
     it("... alternative syntax") {
       import Names.Syntax._
 
-      val shape = Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")
+      val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
 
       val r = shape.transpose("c" >< "b" >< "a")
 

@@ -1,12 +1,12 @@
 package org.shapesafe.core.shape.binary
 
-import org.shapesafe.core.shape.Shape
+import org.shapesafe.core.shape.LeafShape
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
 trait CanEinSum[I <: EinSumIndexed.Proto] {
 
-  def children: Seq[Shape]
+  def children: Seq[LeafShape]
 
   val indexed: I
 
@@ -14,7 +14,7 @@ trait CanEinSum[I <: EinSumIndexed.Proto] {
   val index: Index = indexed.static
 
   def einSum[
-      THAT <: Shape,
+      THAT <: LeafShape,
       H_OUT <: HList
   ](that: THAT)(
       implicit

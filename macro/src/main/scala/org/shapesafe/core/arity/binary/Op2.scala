@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.ProveArity.{=>>, ~~>}
+import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
 

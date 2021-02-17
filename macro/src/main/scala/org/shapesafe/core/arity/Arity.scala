@@ -18,7 +18,7 @@ trait Arity {
       prove: SELF ~~> O
   ): O = prove.apply(this).out
 
-  final def proveLeaf[
+  final def eval[
       SELF >: this.type <: Arity,
       O <: LeafArity
   ](

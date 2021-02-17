@@ -10,7 +10,7 @@ class Op2Spec extends ArityFixture {
 
     it("arity trivially") {
 
-      val p = a.proveLeaf
+      val p = a.eval
       p.internal.requireEqual(3)
     }
 
@@ -18,7 +18,7 @@ class Op2Spec extends ArityFixture {
 
       val op = a + b
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(7)
     }
 
@@ -27,7 +27,7 @@ class Op2Spec extends ArityFixture {
       val op0 = a + b
       val op = op0 + c
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(12)
     }
 
@@ -35,7 +35,7 @@ class Op2Spec extends ArityFixture {
 
       val op = a + b + c
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(12)
     }
 
@@ -43,7 +43,7 @@ class Op2Spec extends ArityFixture {
 
       val op = a + b + c + LeafArity._1
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(13)
     }
 
@@ -51,7 +51,7 @@ class Op2Spec extends ArityFixture {
 
       val op = b / a
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(1)
     }
 
@@ -68,7 +68,7 @@ class Op2Spec extends ArityFixture {
 
       val op = (a + b - c) / LeafArity._1
 
-      val p = op.proveLeaf
+      val p = op.eval
       p.internal.requireEqual(2)
     }
   }

@@ -10,7 +10,7 @@ import scala.language.implicitConversions
 /**
   * Irreducible
   */
-trait LeafArity extends Proven {}
+trait LeafArity extends VerifiedArity {}
 
 object LeafArity {
 

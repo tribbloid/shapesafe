@@ -8,7 +8,7 @@ import org.scalatest.Ignore
 import shapeless.{HNil, Witness}
 
 @Ignore
-class ShapeSpike extends BaseSpec {
+class LeafShapeSpike extends BaseSpec {
 
   import shapeless.record._
   import shapeless.syntax.singleton.mkSingletonOps
