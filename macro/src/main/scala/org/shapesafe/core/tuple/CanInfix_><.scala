@@ -14,19 +14,9 @@ trait CanInfix_>< extends CanCons {
     ](
         head: HEAD
     )(
-        implicit cons: Cons[SELF, HEAD]
+        implicit
+        cons: Cons[SELF, HEAD]
     ): cons.Out = cons(self, head)
-
-    def cross[
-        HEAD <: UpperBound
-    ](
-        head: HEAD
-    )(
-        implicit cons: Cons[SELF, HEAD]
-    ) = {
-
-      ><(head)
-    }
   }
 
   implicit class Infix[SELF <: Impl](val self: SELF) extends InfixMixin[SELF] {}

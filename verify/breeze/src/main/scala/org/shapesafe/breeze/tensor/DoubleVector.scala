@@ -2,11 +2,11 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.SizeOf
-import org.shapesafe.core.tensor.Const.VecShape
+import org.shapesafe.core.arity.{Arity, LeafArity}
+import org.shapesafe.djl.tensor.Const.VecShape
 import org.shapesafe.core.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
@@ -19,7 +19,7 @@ class DoubleVector[A1 <: VecShape](
 ) extends Serializable {
 
   import LeafArity._
-  import org.shapesafe.core.arity.Syntax._
+  import org.shapesafe.core.arity.ops.ArityOps._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
@@ -48,10 +48,10 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: LeafArity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 `+` A2) ~~> O
+      lemma: (A1 :+ A2) ~~> O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
-    val op = this.shape + that.shape
+    val op = this.shape :+ that.shape
     val proof = lemma(op)
 
     val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
@@ -61,11 +61,11 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 `+` (Literal[padding.T] `*` LeafArity.Wide._2.Wide)) ~~> O
+      lemma: (A1 :+ (Literal[padding.T] :* LeafArity.Wide._2.Wide)) ~~> O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
-    val op = this.shape + (_padding * LeafArity._2)
+    val op = this.shape :+ (_padding :* LeafArity._2)
     val proof = lemma(op)
     val out = proof.out
 
@@ -84,12 +84,12 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` LeafArity.Wide._1.Wide) `/` Literal[stride.T]) ~~> O
+      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ Literal[stride.T]) ~~> O
   ): DoubleVector[O] = {
 
     val _stride: Literal[stride.T] = Arity(stride)
 
-    val op = (this.shape - kernel.shape + LeafArity._1) / _stride
+    val op = (this.shape :- kernel.shape :+ LeafArity._1) :/ _stride
     val proof = lemma(op)
     val out = proof.out
 
@@ -112,7 +112,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 `-` A2 `+` LeafArity.Wide._1.Wide) `/` LeafArity.Wide._1.Wide) ~~> O
+      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ LeafArity.Wide._1.Wide) ~~> O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)

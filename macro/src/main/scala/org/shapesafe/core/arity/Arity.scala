@@ -2,13 +2,15 @@ package org.shapesafe.core.arity
 
 import org.shapesafe.core.arity.LeafArity.Literal
 import org.shapesafe.core.arity.ProveArity.~~>
+import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.axis.Axis.emptyW
 import shapeless.Witness
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity {
+trait Arity extends Axis.Nameless {
 
   final def verify[
       SELF >: this.type <: Arity,
@@ -26,7 +28,7 @@ trait Arity {
       prove: SELF ~~> O
   ): O = prove.apply(this).out
 
-  final override def toString: String = {
+  override lazy val toString: String = {
 
     valueStr + ":" + this.getClass.getSimpleName
   }
@@ -43,6 +45,9 @@ trait Arity {
         ee.getMessage
     }
     .get
+
+  override type Dimension = this.type
+  override def dimension: this.type = this
 }
 
 object Arity {
@@ -65,4 +70,8 @@ object Arity {
   def apply(w: Witness.Lt[Int]): Literal[w.T] = {
     Literal.apply(w)
   }
+
+  implicit def toOps[T <: Arity](v: T): ArityOps[T] = ArityOps[T](v)
+
+  implicit def nameless[V <: Arity](self: V) = Axis(self, emptyW)
 }

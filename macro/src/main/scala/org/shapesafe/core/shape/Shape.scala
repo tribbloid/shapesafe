@@ -1,7 +1,9 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.shape.LeafShape.{ops, Eye}
+import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.shape.LeafShape.{><, toOps, Eye}
 import org.shapesafe.core.shape.ProveShape.~~>
+import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, NatProductArgs}
 
@@ -17,7 +19,7 @@ trait Shape {
       prove: SELF ~~> O
   ): O = prove.apply(this).out
 
-  final def eval[
+  final def simplify[
       SELF >: this.type <: Shape,
       O <: LeafShape
   ](
@@ -25,13 +27,20 @@ trait Shape {
       prove: SELF ~~> O
   ): O = prove.apply(this).out
 
+  final def eval[ // TODO: eval each member!
+      SELF >: this.type <: Shape,
+      O <: LeafShape
+  ](
+      implicit
+      prove: SELF ~~> O
+  ): O = simplify(prove)
 }
 
 object Shape extends NatProductArgs {
 
-  implicit def toEyeOps(v: this.type): LeafShapeOps[Eye] = ops[Eye](Eye)
+  implicit def toEyeOps(v: this.type): LeafShapeOps[Eye] = LeafShape.toOps[Eye](Eye)
 
-  implicit def toOps[T <: Shape](v: T): ShapeOps[T] = ShapeOps(v)
+  implicit def toOps[T <: Shape](v: T): ShapeOps[T] = new ShapeOps(v)
 
   // TODO: should the reverse be justified?
   def applyNatProduct[H1 <: HList, H2 <: HList](
@@ -44,4 +53,7 @@ object Shape extends NatProductArgs {
     LeafShape.FromNats.apply(v.reverse)
   }
 
+  type Vector[T <: Axis] = Eye >< T
+
+  type Matrix[T1 <: Axis, T2 <: Axis] = Eye >< T1 >< T2
 }

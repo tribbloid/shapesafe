@@ -1,63 +1,29 @@
-package org.shapesafe.core.shape
+package org.shapesafe.core.shape.ops
 
-import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.axis.Axis.:<<-
+import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.shape.{LeafShape, Names}
 import shapeless.HList
-import shapeless.ops.hlist.{Mapper, Prepend}
+import shapeless.ops.hlist.Mapper
 
 class LeafShapeOps[SELF <: LeafShape](val self: SELF) {
 
   type Static = self.Static
   def static: Static = self.static
 
-  import LeafShape.><
-
-  def ><[
-      D <: Arity,
-      N <: String
-  ](
-      axis: D :<<- N
-  ): ><[SELF, D :<<- N] = {
+  def >|<[THAT <: Axis](
+      axis: THAT
+  ): ><[SELF, THAT] = {
 
     new LeafShape.><(self, axis)
   }
 
-  def cross[
-      D <: Arity,
-      N <: String
-  ](
-      axis: D :<<- N
-  ): SELF >< (D :<<- N) = ><(axis)
-
-  def ><[
-      // TODO : not sure if overloading >< is a good idea
-      THAT <: LeafShape,
-      H_OUT <: HList,
-      OUT <: LeafShape
-  ](
+  def append[THAT <: Axis](
       that: THAT
-  )(
-      implicit
-      toConcat: Prepend.Aux[that.Static, Static, H_OUT],
-      toShape: LeafShape.FromStatic.==>[H_OUT, OUT]
-  ): OUT = {
+  ): ><[SELF, THAT] = {
 
-    val concat: H_OUT = that.static ++ static
-
-    LeafShape.FromStatic(concat)
+    >|<(that)
   }
-
-  def concat[
-      THAT <: LeafShape,
-      H_OUT <: HList,
-      OUT <: LeafShape
-  ](
-      that: THAT
-  )(
-      implicit
-      toConcat: Prepend.Aux[that.Static, Static, H_OUT],
-      toShape: LeafShape.FromStatic.==>[H_OUT, OUT]
-  ): OUT = ><(that)
 
   def transpose[
       N <: Names,

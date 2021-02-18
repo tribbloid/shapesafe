@@ -6,8 +6,6 @@ import scala.language.existentials
 
 class AssertEqualSpec extends ArityFixture {
 
-  import org.shapesafe.core.arity.Syntax._
-
   describe("can prove") {
 
     describe("Arity.Const ==") {
@@ -20,13 +18,13 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(a + b, ab)
+        val op = AssertEqual(a :+ b, ab)
         op.eval.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
-        val op = AssertEqual(a + b + c, abc)
+        val op = AssertEqual(a :+ b :+ c, abc)
         op.eval.internal.requireEqual(12)
       }
     }
@@ -35,7 +33,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b + c") {
 
-        val op = AssertEqual(a + b + c, ab + c)
+        val op = AssertEqual(a :+ b :+ c, ab :+ c)
         op.eval.internal.requireEqual(12)
       }
     }
@@ -54,7 +52,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(a + b, LeafArity.Unchecked)
+        val op = AssertEqual(a :+ b, LeafArity.Unchecked)
 
         val out = op.eval
         assert(out.runtimeOpt.contains(7))
@@ -77,7 +75,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual(LeafArity.Unchecked, a + b)
+        val op = AssertEqual(LeafArity.Unchecked, a :+ b)
 
         shouldNotCompile(
           "op.asProof"

@@ -3,6 +3,7 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.LeafArity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
+import org.shapesafe.core.arity.ops.ArityOps.=!=
 import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
 
 import scala.language.{existentials, higherKinds}
@@ -12,8 +13,6 @@ abstract class UncheckedDomain[
     A2 <: Arity,
     O <: Proof
 ] {
-
-  import org.shapesafe.core.arity.Syntax._
 
   def bound1: A1 CanProve Proof
   def bound2: A2 CanProve Proof

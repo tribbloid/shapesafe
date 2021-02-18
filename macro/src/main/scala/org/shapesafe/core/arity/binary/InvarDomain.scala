@@ -1,9 +1,10 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
 import org.shapesafe.core.arity.ProveArity._
+import org.shapesafe.core.arity.Utils.Op
+import org.shapesafe.core.arity.ops.ArityOps.=!=
+import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
 import singleton.ops.{==, Require}
 
 import scala.language.higherKinds
@@ -18,8 +19,6 @@ case class InvarDomain[
     bound1: A1 ~~> Const[S1],
     bound2: A2 ~~> Const[S2]
 ) {
-
-  import org.shapesafe.core.arity.Syntax._
 
   def forOp2[??[X1, X2] <: Op](
       implicit

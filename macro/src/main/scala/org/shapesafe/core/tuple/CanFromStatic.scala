@@ -13,6 +13,8 @@ trait CanFromStatic extends CanCons {
         Eye
       }
     }
+
+    trait From2 {}
   }
 
   object FromStatic extends AbstractFromHList {

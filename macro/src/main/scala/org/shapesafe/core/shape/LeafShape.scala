@@ -5,6 +5,7 @@ import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.binary.{EinSumIndexed, EinSumOps}
+import org.shapesafe.core.shape.ops.LeafShapeOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
 import shapeless.ops.hlist.At
@@ -145,7 +146,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val vHead = v.head: D
         val head = vHead :<<- Axis.emptyName
 
-        prev >< head
+        prev >|< head
       }
     }
   }
@@ -168,7 +169,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val vHead = v.head: D
         val head: D :<<- N = vHead :<<- w
 
-        prev >< head
+        prev >|< head
       }
     }
 
@@ -181,10 +182,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def ops[SELF <: LeafShape](self: SELF): LeafShapeOps[SELF] = {
-
-    new LeafShapeOps(self)
-  }
+  implicit def toOps[SELF <: LeafShape](self: SELF): LeafShapeOps[SELF] = new LeafShapeOps(self)
 
   implicit def einSumOps[
       S <: LeafShape
@@ -215,7 +213,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = apply(v.tail)
         val head = LeafArity.Literal(w) :<<- Axis.emptyName
 
-        prev >< head
+        prev >|< head
       }
     }
 
@@ -241,10 +239,9 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = apply(v.tail)
         val head = LeafArity.FromNat(v.head) :<<- Axis.emptyName
 
-        prev >< head
+        prev >|< head
       }
     }
 
   }
-
 }

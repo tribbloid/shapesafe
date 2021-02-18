@@ -81,5 +81,4 @@ trait ProofSystem[OUB] { // TODO: no IUB?
 
     def out[O <: OUB](fn: I => O) = new (I =>> O)(fn)
   }
-
 }

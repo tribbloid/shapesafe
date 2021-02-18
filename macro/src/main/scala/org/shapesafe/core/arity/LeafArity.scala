@@ -21,7 +21,7 @@ object LeafArity {
     type SS = S
     def singleton: S
 
-    override def _id: S = singleton
+    override lazy val _id: S = singleton
 
     @transient case object internal {
 

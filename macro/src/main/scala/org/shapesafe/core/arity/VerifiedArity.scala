@@ -9,7 +9,7 @@ trait VerifiedArity extends Arity {
 
 object VerifiedArity {
 
-  implicit def trivial[T <: VerifiedArity]: T =>> T = ProveArity.from[T].out(identity[T])
+  implicit def endo[T <: VerifiedArity]: T =>> T = ProveArity.from[T].out(identity[T])
 
 //  abstract class ProvenAs[O <: LeafArity]()(
 //      implicit

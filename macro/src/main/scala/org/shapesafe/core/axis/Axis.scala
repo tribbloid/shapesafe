@@ -2,15 +2,15 @@ package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, VerifiedShape}
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
-trait Axis extends IDMixin {
+trait Axis extends VerifiedShape with IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
-
-  import Axis._
 
   type Dimension <: Arity
   def dimension: Dimension
@@ -20,15 +20,10 @@ trait Axis extends IDMixin {
 
   final def name: Name = nameSingleton.value
 
-  type AxisField <: Name ->> Axis
-  final def asAxisField: AxisField = this.asInstanceOf[AxisField]
-
-  type Field <: Name ->> Dimension
+  final type Field = FieldType[Name, Dimension]
   final def asField: Field = dimension.asInstanceOf[Field]
 
   override protected lazy val _id: Any = (dimension, name)
-
-  override lazy val toString = s"$dimension :<<- $name"
 
 //  final type Field = FieldType[Name, Dimension]
 //  final def asField: Field = dimension.asInstanceOf[Field]
@@ -36,7 +31,12 @@ trait Axis extends IDMixin {
 
 object Axis {
 
+  import ProveShape._
+
+  type ->>[N <: String, D] = FieldType[N, D]
+
   val emptyName = ""
+  val emptyW = Witness(emptyName)
 
   // TODO: N can be eliminated
   class :<<-[
@@ -53,14 +53,15 @@ object Axis {
     type Name = N
     type Dimension = D
 
-    // TODO: why this can't be simplified?
-    final type AxisField = FieldType[N, D :<<- N]
-    final type Field = FieldType[N, D]
+    override lazy val toString = s"$dimension :<<- $name"
 
-    // theoretically correct but shapeless recordOps still fumble on it
   }
 
-  type ->>[N <: String, D] = FieldType[N, D]
+  trait Nameless extends Axis {
+
+    override type Name = emptyName.type
+    override def nameSingleton = Witness(emptyName)
+  }
 
   def apply[
       V <: Arity
@@ -72,7 +73,10 @@ object Axis {
     new :<<-(value, name)
   }
 
-  implicit def nameless[V <: Arity](self: V) = apply(self, emptyName)
+  implicit def asLeaf[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
 
-  implicit class AxisOps[SELF <: Axis](self: SELF) {}
+    from[A].out { axis =>
+      Shape >|< axis
+    }
+  }
 }

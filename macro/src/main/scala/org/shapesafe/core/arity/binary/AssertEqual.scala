@@ -1,9 +1,9 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.{Arity, ProveArity}
 import org.shapesafe.core.arity.ProveArity.{=>>^^, ~~>}
-import org.shapesafe.core.arity.Syntax.=!=
+import org.shapesafe.core.arity.ops.ArityOps.=!=
+import org.shapesafe.core.arity.{Arity, ProveArity}
 import singleton.ops.{==, Require}
 
 trait AssertEqual_Imp0 {

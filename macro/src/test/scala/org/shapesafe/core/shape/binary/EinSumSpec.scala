@@ -17,7 +17,7 @@ class EinSumSpec extends BaseSpec {
 
     it("1") {
 
-      val s1 = Shape ><
+      val s1 = Shape >|<
         (Arity(1) :<<- "x")
 
       val ops = LeafShape.einSumOps(s1)
@@ -25,9 +25,9 @@ class EinSumSpec extends BaseSpec {
 
     it("2") {
 
-      val s1 = Shape ><
-        (Arity(1) :<<- "x") ><
-        (Arity(2) :<<- "y") ><
+      val s1 = Shape >|<
+        (Arity(1) :<<- "x") >|<
+        (Arity(2) :<<- "y") >|<
         (Arity(1) :<<- "x")
 
       val ops = LeafShape.einSumOps(s1)
@@ -42,7 +42,7 @@ class EinSumSpec extends BaseSpec {
       val s1 = LeafShape.Eye
 
       val ops = s1.einSum(
-        Shape ><
+        Shape >|<
           (Arity(1) :<<- "i")
       )
 
@@ -57,13 +57,13 @@ class EinSumSpec extends BaseSpec {
     }
 
     it("2") {
-      val s1 = Shape ><
-        (Arity(1) :<<- "x") ><
+      val s1 = Shape >|<
+        (Arity(1) :<<- "x") >|<
         Arity(2) :<<- "y"
 
       val ops = s1.einSum(
-        Shape ><
-          (Arity(3) :<<- "i") ><
+        Shape >|<
+          (Arity(3) :<<- "i") >|<
           Arity(4) :<<- "j"
       )
 
