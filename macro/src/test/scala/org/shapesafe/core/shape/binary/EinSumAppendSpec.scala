@@ -4,7 +4,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import shapeless.HNil
 
-class EinSumConditionSpec extends BaseSpec {
+class EinSumAppendSpec extends BaseSpec {
 
   import shapeless.syntax.singleton.mkSingletonOps
   import shapeless.record._
@@ -15,7 +15,7 @@ class EinSumConditionSpec extends BaseSpec {
 
     it("HNil") {
 
-      val out = EinSumCondition.apply(HNil -> ii)
+      val out = EinSumAppender.apply(HNil -> ii)
 
       out.fields.toString.shouldBe("(i,3:Literal) :: HNil")
     }
@@ -26,7 +26,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val existing = ("a" ->> Arity(4)) :: HNil
 
-        val out = EinSumCondition.apply(existing -> ii)
+        val out = EinSumAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: HNil")
       }
@@ -35,7 +35,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val existing = ("a" ->> Arity(4)) :: ("b" ->> Arity(5)) :: HNil
 
-        val out = EinSumCondition.apply(existing -> ii)
+        val out = EinSumAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: (b,5:Literal) :: HNil")
       }
@@ -47,7 +47,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val existing = ("i" ->> Arity(3)) :: HNil
 
-        val out = EinSumCondition.apply(existing -> ii)
+        val out = EinSumAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: HNil")
       }
@@ -56,7 +56,7 @@ class EinSumConditionSpec extends BaseSpec {
 
         val existing = ("i" ->> Arity(3)) :: ("j" ->> Arity(4)) :: HNil
 
-        val out = EinSumCondition.apply(existing -> ii)
+        val out = EinSumAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: (j,4:Literal) :: HNil")
       }

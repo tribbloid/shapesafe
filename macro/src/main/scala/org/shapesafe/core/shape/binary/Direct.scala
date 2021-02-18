@@ -33,7 +33,7 @@ trait Direct_Imp0 {
       toShape: LeafShape.FromStatic.==>[HO, O]
   ): Direct[S1, S2] =>> O = {
 
-    from[Direct[S1, S2]].out { direct =>
+    from[Direct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
 
@@ -44,7 +44,7 @@ trait Direct_Imp0 {
 
 object Direct extends Direct_Imp0 {
 
-  // shortcut for trivial P1 + 1 case
+  // shortcut for trivial D + 1 case
   implicit def append[
       S1 <: Shape,
       P1 <: LeafShape,
@@ -57,7 +57,7 @@ object Direct extends Direct_Imp0 {
       lemma2: S2 ~~> P2
   ): Direct[S1, S2] =>> (P1 >< A2) = {
 
-    from[Direct[S1, S2]].out { direct =>
+    from[Direct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head

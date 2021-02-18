@@ -23,14 +23,14 @@ case class InvarDomain[
   def forOp2[??[X1, X2] <: Op](
       implicit
       lemma: S1 ?? S2
-  ): Op2[??]#On[A1, A2] =>> LeafArity.Derived[S1 ?? S2] = ProveArity.from[Op2[??]#On[A1, A2]].out { v =>
+  ): Op2[??]#On[A1, A2] =>> LeafArity.Derived[S1 ?? S2] = ProveArity.from[Op2[??]#On[A1, A2]].=>> { v =>
     LeafArity.Derived.summon[S1 ?? S2](lemma)
   }
 
   def forEqual(
       implicit
       lemma: Require[S1 == S2]
-  ): A1 =!= A2 =>>^^ ProveArity.Proof.Lt[Const[S1]] = ProveArity.from[A1 =!= A2].to { v =>
+  ): A1 =!= A2 =>>^^ ProveArity.Proof.Lt[Const[S1]] = ProveArity.from[A1 =!= A2].=>>^^ { v =>
     bound1.apply(v.a1)
   }
 }

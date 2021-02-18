@@ -30,9 +30,9 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       a2: A2
   ) extends Arity {
 
-    override lazy val runtime: Int = {
-      val v1 = a1.runtime
-      val v2 = a2.runtime
+    override lazy val runtimeArity: Int = {
+      val v1 = a1.runtimeArity
+      val v2 = a2.runtimeArity
 
       require(v1 == v2)
       v1

@@ -49,7 +49,7 @@ object LeafArity {
 
         proveEqualType[w.T]
 
-        require(w.value == runtime)
+        require(w.value == runtimeArity)
       }
     }
   }
@@ -57,7 +57,7 @@ object LeafArity {
   object Const {}
 
   class Derived[S <: Op](override val singleton: S) extends Const[S] {
-    override lazy val runtime: Int = singleton.value.asInstanceOf[Int]
+    override lazy val runtimeArity: Int = singleton.value.asInstanceOf[Int]
   }
 
   object Derived {
@@ -71,7 +71,7 @@ object LeafArity {
   // this makes it impossible to construct directly from Int type
   class Literal[S <: Int](val singleton: S) extends Const[S] {
 
-    override def runtime: Int = singleton
+    override def runtimeArity: Int = singleton
   }
 
   object Literal {
@@ -120,7 +120,7 @@ object LeafArity {
     lazy val _3 = WideTyped(Arity(3))
   }
 
-  case class Var(runtime: Int) extends LeafArity {
+  case class Var(runtimeArity: Int) extends LeafArity {
 
     final type Out = Var
   }
@@ -131,6 +131,6 @@ object LeafArity {
   }
 
   case object Unchecked extends Unchecked {
-    override def runtime: Int = throw new UnsupportedOperationException("<no runtime value>")
+    override def runtimeArity: Int = throw new UnsupportedOperationException("<no runtime value>")
   }
 }

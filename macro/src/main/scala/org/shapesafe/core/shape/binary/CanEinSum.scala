@@ -4,7 +4,7 @@ import org.shapesafe.core.shape.LeafShape
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
-trait CanEinSum[I <: EinSumIndexed.Proto] {
+trait CanEinSum[I <: EinSumIndexed] {
 
   def children: Seq[LeafShape]
 

@@ -3,7 +3,7 @@ package org.shapesafe.core.tuple
 trait CanCons {
   _self: TupleSystem =>
 
-  // TODO:too cumbersome to define impl, switch to ~~> Proof pattern or Poly1Group?
+  // TODO:too much boilerplate, switch to ~~> Proof pattern or Poly1/Poly2?
   trait Cons[-TAIL <: Impl, -HEAD <: UpperBound] {
 
     type Out <: Impl
@@ -13,14 +13,14 @@ trait CanCons {
 
   object Cons {
 
-    def apply[TAIL <: Impl, HEAD <: UpperBound] = new Factory[TAIL, HEAD]
+    def from[TAIL <: Impl, HEAD <: UpperBound] = new Factory[TAIL, HEAD]
 
     class Factory[TAIL <: Impl, HEAD <: UpperBound] {
 
-      def to[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn[TAIL, HEAD, O](fn)
+      def to[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn2[TAIL, HEAD, O](fn)
     }
 
-    case class FromFn[-TAIL <: Impl, -HEAD <: UpperBound, O <: Impl](
+    case class FromFn2[-TAIL <: Impl, -HEAD <: UpperBound, O <: Impl](
         fn: (TAIL, HEAD) => O
     ) extends Cons[TAIL, HEAD] {
 
@@ -33,10 +33,13 @@ trait CanCons {
         implicit
         ev: Cons[TAIL, HEAD]
     ): ev.type = ev
-  }
 
-  //  object Cons extends ProofSystem[(Impl, UpperBound)] {}
-  //  import Cons._
-  //
-  //  type Cons[-TAIL <: Impl, -HEAD <: UpperBound] = (TAIL, HEAD) ~~> Cons.Proof
+    def apply[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
+        implicit
+        ev: Cons[TAIL, HEAD]
+    ): ev.Out = {
+
+      ev.apply(tail, head)
+    }
+  }
 }

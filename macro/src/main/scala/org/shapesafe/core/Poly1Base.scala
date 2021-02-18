@@ -48,12 +48,11 @@ trait Poly1Base[IUB, OUB] {
   //    final override def apply(v: I): O = fn(v)
   //  }
 
-  def apply[I <: IUB]: Factory[I] = from[I]
   def from[I <: IUB] = new Factory[I]() // same as `at` in Poly1?
 
   protected class Factory[I <: IUB]() {
 
-    def to[O <: OUB](fn: I => O): I ==> O = new (I ==> O)(fn)
+    def ==>[O <: OUB](fn: I => O): I ==> O = new (I ==> O)(fn)
   }
 
   def summon[I <: IUB](

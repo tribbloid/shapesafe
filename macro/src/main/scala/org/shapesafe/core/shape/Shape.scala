@@ -1,7 +1,6 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.shape.LeafShape.{><, toOps, Eye}
 import org.shapesafe.core.shape.ProveShape.~~>
 import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
 import shapeless.ops.hlist.Reverse
@@ -38,9 +37,11 @@ trait Shape {
 
 object Shape extends NatProductArgs {
 
+  import LeafShape._
+
   implicit def toEyeOps(v: this.type): LeafShapeOps[Eye] = LeafShape.toOps[Eye](Eye)
 
-  implicit def toOps[T <: Shape](v: T): ShapeOps[T] = new ShapeOps(v)
+  implicit def toOps[T <: Shape](self: T): ShapeOps[T] = new ShapeOps(self)
 
   // TODO: should the reverse be justified?
   def applyNatProduct[H1 <: HList, H2 <: HList](
@@ -48,9 +49,9 @@ object Shape extends NatProductArgs {
   )(
       implicit
       reverse: Reverse.Aux[H1, H2],
-      ev: LeafShape.FromNats.Case[H2]
+      ev: FromNats.Case[H2]
   ): ev.Out = {
-    LeafShape.FromNats.apply(v.reverse)
+    FromNats.apply(v.reverse)
   }
 
   type Vector[T <: Axis] = Eye >< T

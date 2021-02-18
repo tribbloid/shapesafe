@@ -4,7 +4,6 @@ import org.shapesafe.core.arity.LeafArity.Literal
 import org.shapesafe.core.arity.ProveArity.~~>
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.axis.Axis.emptyW
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -33,9 +32,9 @@ trait Arity extends Axis.Nameless {
     valueStr + ":" + this.getClass.getSimpleName
   }
 
-  def runtime: Int
+  def runtimeArity: Int
 
-  final lazy val runtimeTry = Try(runtime)
+  final lazy val runtimeTry = Try(runtimeArity)
   final def runtimeOpt: Option[Int] = runtimeTry.toOption
 
   lazy val valueStr: String = runtimeTry
@@ -73,5 +72,5 @@ object Arity {
 
   implicit def toOps[T <: Arity](v: T): ArityOps[T] = ArityOps[T](v)
 
-  implicit def nameless[V <: Arity](self: V) = Axis(self, emptyW)
+  implicit def nameless[V <: Arity](self: V) = Axis(self, Axis.emptyName)
 }

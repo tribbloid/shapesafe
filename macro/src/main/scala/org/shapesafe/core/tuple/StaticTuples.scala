@@ -60,9 +60,9 @@ object StaticTuples {
 
   trait Total[UB] extends StaticTuples[UB] {
 
-    implicit def consAlways[TAIL <: Impl, HEAD <: UB]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
+    implicit def consAlways[TAIL <: Impl, HEAD <: UB]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-      Cons[TAIL, HEAD].to { (tail, head) =>
+      Cons.from[TAIL, HEAD].to { (tail, head) =>
         new ><(tail, head)
       }
     }

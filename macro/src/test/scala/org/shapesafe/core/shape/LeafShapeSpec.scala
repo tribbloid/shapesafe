@@ -56,7 +56,7 @@ class LeafShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.record.apply("x").runtime == 2)
+      assert(shape.record.apply("x").runtimeArity == 2)
     }
 
     it("nameless") {
@@ -82,8 +82,8 @@ class LeafShapeSpec extends BaseSpec {
         LeafArity.Literal(3) append
         LeafArity.Literal(4) :<<- "z"
 
-      assert(shape.record.apply("x").runtime == 2)
-      assert(shape.record.apply("z").runtime == 4)
+      assert(shape.record.apply("x").runtimeArity == 2)
+      assert(shape.record.apply("z").runtimeArity == 4)
 
       typeInferShort(shape).shouldBe(
         """

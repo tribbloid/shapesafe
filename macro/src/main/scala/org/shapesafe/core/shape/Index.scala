@@ -6,14 +6,14 @@ import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
 
-trait FieldIndex extends IDMixin {
+trait Index extends IDMixin {
 
   override lazy val toString: String = s"${_id}:${getClass.getSimpleName}"
 }
 
-object FieldIndex {
+object Index {
 
-  trait Key_<:[+KUB] extends FieldIndex {}
+  trait Key_<:[+KUB] extends Index {}
   type Str = Key_<:[String]
 
   class Named[S <: String](val w: Witness.Aux[S]) extends Key_<:[S] {
@@ -29,17 +29,17 @@ object FieldIndex {
     def apply[S <: String](w: Witness.Aux[S]): Named[S] = new Named(w)
   }
 
-  class N_th[N <: Nat](val index: N, indexInt: Int) extends Key_<:[Nothing] {
+  class I_th[N <: Nat](val index: N, indexInt: Int) extends Key_<:[Nothing] {
     type Ordinal = N
 
     override protected def _id = indexInt
   }
 
-  object N_th {
+  object I_th {
 
     def apply(i: Nat)(
         implicit
         toIntN: ToInt[i.N]
-    ) = new N_th[i.N](i.asInstanceOf[i.N], toIntN.apply())
+    ) = new I_th[i.N](i.asInstanceOf[i.N], toIntN.apply())
   }
 }

@@ -5,7 +5,7 @@ import org.shapesafe.core.util.RecordView
 import shapeless.HList
 import shapeless.ops.hlist.Mapper
 
-case class EinSumOps[I <: EinSumIndexed.Proto](
+case class EinSumOps[I <: EinSumIndexed](
     children: Seq[LeafShape]
 )(
     implicit

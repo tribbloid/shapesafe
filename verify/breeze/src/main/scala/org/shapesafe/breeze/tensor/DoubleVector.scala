@@ -69,7 +69,7 @@ class DoubleVector[A1 <: VecShape](
     val proof = lemma(op)
     val out = proof.out
 
-    val fill = DenseVector.fill(out.runtime)(0.0)
+    val fill = DenseVector.fill(out.runtimeArity)(0.0)
 
     val dOut = DenseVector.vertcat(fill, this.data.toDenseVector, fill)
 
@@ -176,7 +176,7 @@ object DoubleVector extends ProductArgs {
 
     def crossValidate(): Unit = {
 
-      arity.runtimeOpt foreach { n =>
+      arity.runtimeTry foreach { n =>
         n == self.data.size
       }
     }

@@ -27,7 +27,7 @@ object WithNames {
       zip: ZipWithKeys.Aux[N#Keys, P1#_Dimensions#Static, HO],
       toShape: LeafShape.FromRecord.==>[HO, O]
   ): WithNames[S1, N] =>> O = {
-    from[WithNames[S1, N]].out { src =>
+    from[WithNames[S1, N]].=>> { src =>
       val keys: N#Keys = src.newNames.keys
       val p1: P1 = lemma(src.s1).out
 

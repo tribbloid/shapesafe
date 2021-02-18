@@ -2,6 +2,7 @@ package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.axis.Axis.->>
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, VerifiedShape}
 import shapeless.Witness
@@ -34,9 +35,10 @@ object Axis {
   import ProveShape._
 
   type ->>[N <: String, D] = FieldType[N, D]
+  type UB_->> = (_ <: String) ->> Arity
 
   val emptyName = ""
-  val emptyW = Witness(emptyName)
+//  val emptyW = Witness(emptyName) // for singleton String, can cast from emptyName automatically
 
   // TODO: N can be eliminated
   class :<<-[
@@ -75,7 +77,7 @@ object Axis {
 
   implicit def asLeaf[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
 
-    from[A].out { axis =>
+    from[A].=>> { axis =>
       Shape >|< axis
     }
   }

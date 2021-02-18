@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.shape.FieldIndex.Named
+import org.shapesafe.core.shape.Index.Named
 import org.shapesafe.core.tuple.{CanCons, CanFromStatic, TupleSystem}
 import shapeless.{::, HList, HNil, Witness}
 
@@ -43,9 +43,9 @@ object Names extends TupleSystem with CanCons with CanFromStatic {
     override def keys: Keys = headW.value :: tail.keys
   }
 
-  implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-    Cons[TAIL, HEAD].to { (tail, head) =>
+    Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]])
     }
   }

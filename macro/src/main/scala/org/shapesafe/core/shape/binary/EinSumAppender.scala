@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape.binary
 
-import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.binary.AssertEqual
 import org.shapesafe.core.arity.ops.ArityOps.=!=
 import org.shapesafe.core.arity.{Arity, LeafArity}
@@ -8,11 +7,13 @@ import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Keys, Selector}
 import shapeless.{::, HList, NotContainsConstraint, Witness}
 
-trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList] {
+trait EinSumAppender_Imp0 extends FieldAppender {
+  // TODO: should be a Poly2?
+  // TODO: merge into EinSumIndexed.Cons
 
   import org.shapesafe.core.arity.ProveArity._
 
-  implicit def IfExistingName[
+  implicit def ifOldName[
       OLD <: HList,
       N <: String,
       A1 <: Arity,
@@ -25,7 +26,7 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
       lemma: A1 =!= A2 =>>^^ Proof.Aux[O]
   ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
 
-    from[(OLD, N ->> A2)].to {
+    from[(OLD, N ->> A2)].==> {
 
       case (old, field) =>
         import shapeless.record._
@@ -37,28 +38,8 @@ trait EinSumCondition extends Poly1Base[(HList, (_ <: String) ->> Arity), HList]
 
         d_new.asInstanceOf[N ->> O] :: old
     }
-
-  }
-
-}
-
-object EinSumCondition extends EinSumCondition {
-
-  implicit def IfNewName[
-      OLD <: HList,
-      N <: String,
-      D <: Arity,
-      OLDNS <: HList
-  ](
-      implicit
-      name: Witness.Aux[N],
-      keys: Keys.Aux[OLD, OLDNS],
-      NotContainsConstraint: NotContainsConstraint[OLDNS, N]
-  ): ==>[(OLD, N ->> D), (N ->> D) :: OLD] = {
-
-    from[(OLD, N ->> D)].to {
-      case (old, field) =>
-        field.asInstanceOf[N ->> D] :: old
-    }
   }
 }
+
+trait EinSumAppender extends EinSumAppender_Imp0 with DistinctAppender {}
+object EinSumAppender extends EinSumAppender

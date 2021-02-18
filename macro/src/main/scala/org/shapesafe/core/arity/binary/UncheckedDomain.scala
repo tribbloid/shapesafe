@@ -22,11 +22,11 @@ abstract class UncheckedDomain[
   def forOp2[??[X1, X2] <: Op](
       implicit
       sh: Utils.IntSh[??]
-  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.from[Op2[??]#On[A1, A2]].out { _ =>
+  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.from[Op2[??]#On[A1, A2]].=>> { _ =>
     Unchecked
   }
 
-  val froEqual: A1 =!= A2 =>>^^ O = ProveArity.from[A1 =!= A2].to { v =>
+  val froEqual: A1 =!= A2 =>>^^ O = ProveArity.from[A1 =!= A2].=>>^^ { v =>
     selectSafer(v.a1, v.a2)
   }
 }

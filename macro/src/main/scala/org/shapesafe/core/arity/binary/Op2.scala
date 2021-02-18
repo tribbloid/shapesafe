@@ -30,7 +30,7 @@ class Op2[
       a2: A2
   ) extends Arity {
 
-    override lazy val runtime: Int = sh.apply(a1.runtime, a2.runtime).getValue
+    override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }
 }
 

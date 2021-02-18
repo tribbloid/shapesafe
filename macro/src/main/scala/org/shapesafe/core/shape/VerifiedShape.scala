@@ -6,7 +6,7 @@ trait VerifiedShape extends Shape {}
 
 object VerifiedShape {
 
-  implicit def endo[T <: VerifiedShape]: T =>> T = ProveShape.from[T].out(identity[T])
+  implicit def endo[T <: VerifiedShape]: T =>> T = ProveShape.from[T].=>>(identity[T])
 
   //  abstract class ProvenAs[O <: LeafArity]()(
   //      implicit

@@ -9,7 +9,7 @@ import shapeless.{HList, Nat}
 // TODO: should not carry the proof
 case class SizeOf[D <: HList](data: D) extends Arity {
 
-  override def runtime: Int = data.runtimeLength
+  override def runtimeArity: Int = data.runtimeLength
 }
 
 object SizeOf {
@@ -20,7 +20,7 @@ object SizeOf {
       simplify: NatAsOp[N]
   ): SizeOf[D] =>> LeafArity.Derived[NatAsOp[N]] = {
 
-    ProveArity.from[SizeOf[D]].out { v =>
+    ProveArity.from[SizeOf[D]].=>> { v =>
       new LeafArity.Derived(simplify)
     }
   }

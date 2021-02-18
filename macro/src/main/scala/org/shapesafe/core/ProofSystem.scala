@@ -38,7 +38,7 @@ trait ProofSystem[OUB] { // TODO: no IUB?
   trait CanProve[-I, +P <: Proof] {
     def apply(v: I): P
 
-    final def valueOf(v: I): P#Out = apply(v).out
+    final def valueOf(v: I): P#Out = apply(v).out // TODO: this should be real apply? The above should be 'prove'
   }
 
   object CanProve {
@@ -77,8 +77,8 @@ trait ProofSystem[OUB] { // TODO: no IUB?
 
   case class Factory[I]() {
 
-    def to[P <: Proof](fn: I => P) = new (I =>>^^ P)(fn)
+    def =>>^^[P <: Proof](fn: I => P) = new (I =>>^^ P)(fn)
 
-    def out[O <: OUB](fn: I => O) = new (I =>> O)(fn)
+    def =>>[O <: OUB](fn: I => O) = new (I =>> O)(fn)
   }
 }

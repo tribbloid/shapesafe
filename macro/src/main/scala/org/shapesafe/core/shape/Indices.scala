@@ -4,11 +4,11 @@ import org.shapesafe.core.tuple.StaticTuples
 
 import scala.language.implicitConversions
 
-object Indices extends StaticTuples.Total[FieldIndex.Key_<:[String]] { // collection of Finder
+object Indices extends StaticTuples.Total[Index.Key_<:[String]] { // collection of Finder
 
   implicit class Infix[SELF <: Impl](self: SELF) {
 
-    def ><[T <: FieldIndex.Str](neo: T): SELF >< T = {
+    def ><[T <: Index.Str](neo: T): SELF >< T = {
 
       new ><(self, neo)
     }

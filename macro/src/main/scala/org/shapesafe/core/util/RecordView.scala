@@ -1,6 +1,6 @@
 package org.shapesafe.core.util
 
-import org.shapesafe.core.shape.FieldIndex
+import org.shapesafe.core.shape.Index
 import shapeless.labelled.FieldType
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector

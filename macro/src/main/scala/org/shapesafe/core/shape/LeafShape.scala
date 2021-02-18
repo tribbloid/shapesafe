@@ -33,14 +33,16 @@ trait LeafShape extends VerifiedShape with LeafShape.Proto {
   type _Dimensions <: Dimensions.Impl
   val dimensions: _Dimensions
 
-  object IndexToAxis extends Poly1 {
+  lazy val runtimeShape: List[Axis] = asList
+
+  object IndexLookup extends Poly1 {
 
     implicit def name[S <: String](
         implicit
         _selector: Selector[Record, S] { type Out <: Arity }
-    ): Case[FieldIndex.Named[S]] {
+    ): Case[Index.Named[S]] {
       type Result = _selector.Out :<<- S
-    } = at[FieldIndex.Named[S]] { name =>
+    } = at[Index.Named[S]] { name =>
       val arity = _selector(record)
       arity :<<- name.w
     }
@@ -48,16 +50,17 @@ trait LeafShape extends VerifiedShape with LeafShape.Proto {
     implicit def ii[N <: Nat](
         implicit
         _at: At[Static, N] { type Out <: Axis }
-    ): Case[FieldIndex.N_th[N]] {
+    ): Case[Index.I_th[N]] {
       type Result = _at.Out
-    } = at[FieldIndex.N_th[N]] { index =>
+    } = at[Index.I_th[N]] { index =>
       _at(static)
     }
   }
+  type IndexLookup = IndexLookup.type
 
   object Sub {
 
-    def apply[T <: FieldIndex](v: T): Sub1[T] = {
+    def apply[T <: Index](v: T): Sub1[T] = {
 
       Sub1(v)
     }
@@ -65,22 +68,22 @@ trait LeafShape extends VerifiedShape with LeafShape.Proto {
     def apply(i: Nat)(
         implicit
         toIntN: ToInt[i.N]
-    ): Sub1[FieldIndex.N_th[i.N]] = {
+    ): Sub1[Index.I_th[i.N]] = {
 
-      apply(FieldIndex.N_th(i))
+      apply(Index.I_th(i))
     }
 
-    def apply(w: Witness.Lt[String]): Sub1[FieldIndex.Named[w.T]] = {
+    def apply(w: Witness.Lt[String]): Sub1[Index.Named[w.T]] = {
 
-      apply(FieldIndex.Named(w))
+      apply(Index.Named(w))
     }
   }
 
-  case class Sub1[T <: FieldIndex](index: T) {
+  case class Sub1[T <: Index](index: T) {
 
     def axis(
         implicit
-        byIndex: IndexToAxis.Case[T]
+        byIndex: IndexLookup.Case[T]
     ): byIndex.Result = {
       byIndex.apply(index)
     }
@@ -141,7 +144,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         forTail: H_TAIL ==> TAIL
     ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.emptyName.type)) = {
 
-      from[D :: H_TAIL].to { v =>
+      from[D :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
         val head = vHead :<<- Axis.emptyName
@@ -164,7 +167,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         w: Witness.Aux[N]
     ): ((N ->> D) :: H_TAIL) ==> (TAIL >< (D :<<- N)) = {
 
-      from[(N ->> D) :: H_TAIL].to { v =>
+      from[(N ->> D) :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
         val head: D :<<- N = vHead :<<- w
@@ -175,14 +178,14 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
   }
 
-  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-    Cons[TAIL, HEAD].to { (tail, head) =>
+    Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }
 
-  implicit def toOps[SELF <: LeafShape](self: SELF): LeafShapeOps[SELF] = new LeafShapeOps(self)
+  implicit def toOps[T <: LeafShape](self: T): LeafShapeOps[T] = new LeafShapeOps(self)
 
   implicit def einSumOps[
       S <: LeafShape
@@ -209,7 +212,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         w: Witness.Aux[HEAD]
     ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.emptyName.type] = {
 
-      from[w.T :: H_TAIL].to { v =>
+      from[w.T :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val head = LeafArity.Literal(w) :<<- Axis.emptyName
 
@@ -235,7 +238,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         ev: NatAsOp[HEAD]
     ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
-      from[(HEAD :: H_TAIL)].to { v =>
+      from[(HEAD :: H_TAIL)].==> { v =>
         val prev = apply(v.tail)
         val head = LeafArity.FromNat(v.head) :<<- Axis.emptyName
 
