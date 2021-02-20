@@ -23,7 +23,7 @@ trait EinSumAppender_Imp0 extends FieldAppender {
       implicit
       name: Witness.Aux[N],
       selector: Selector.Aux[OLD, N, A1],
-      lemma: A1 =!= A2 =>>^^ Proof.Aux[O]
+      lemma: A1 =!= A2 =>>^^ Proposition.Aux[O]
   ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
 
     from[(OLD, N ->> A2)].==> {
@@ -34,7 +34,7 @@ trait EinSumAppender_Imp0 extends FieldAppender {
         val d1 = old.apply(name)
         val d2 = field
 
-        val d_new: O = lemma.apply(AssertEqual(d1, d2)).out
+        val d_new: O = lemma.apply(AssertEqual(d1, d2)).value
 
         d_new.asInstanceOf[N ->> O] :: old
     }

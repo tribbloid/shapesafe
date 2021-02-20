@@ -36,6 +36,6 @@ object SizeOf {
       self: SizeOf[D] ~~> LeafArity.Const[NatAsOp[N]]
   ) = {
     val raw = SizeOf[D](data)
-    self.apply(raw).out
+    self.apply(raw).value
   }
 }

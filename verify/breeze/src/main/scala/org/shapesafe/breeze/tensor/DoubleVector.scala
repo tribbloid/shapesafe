@@ -32,7 +32,7 @@ class DoubleVector[A1 <: VecShape](
   ): DoubleVector[O] = {
 
     val proof = prove(shape)
-    val out = proof.out
+    val out = proof.value
     new DoubleVector(out, data)
   }
 
@@ -56,7 +56,7 @@ class DoubleVector[A1 <: VecShape](
 
     val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
 
-    new DoubleVector(proof.out, data)
+    new DoubleVector(proof.value, data)
   }
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
@@ -67,7 +67,7 @@ class DoubleVector[A1 <: VecShape](
     val _padding = Arity(padding)
     val op = this.shape :+ (_padding :* LeafArity._2)
     val proof = lemma(op)
-    val out = proof.out
+    val out = proof.value
 
     val fill = DenseVector.fill(out.runtimeArity)(0.0)
 
@@ -91,7 +91,7 @@ class DoubleVector[A1 <: VecShape](
 
     val op = (this.shape :- kernel.shape :+ LeafArity._1) :/ _stride
     val proof = lemma(op)
-    val out = proof.out
+    val out = proof.value
 
     val range = 0.to(this.data.size - kernel.data.size, stride.value)
 

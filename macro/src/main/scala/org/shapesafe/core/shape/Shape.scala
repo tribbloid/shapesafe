@@ -16,7 +16,7 @@ trait Shape {
   ](
       implicit
       prove: SELF ~~> O
-  ): O = prove.apply(this).out
+  ): O = prove.apply(this).value
 
   final def simplify[
       SELF >: this.type <: Shape,
@@ -24,7 +24,7 @@ trait Shape {
   ](
       implicit
       prove: SELF ~~> O
-  ): O = prove.apply(this).out
+  ): O = prove.apply(this).value
 
   final def eval[ // TODO: eval each member!
       SELF >: this.type <: Shape,

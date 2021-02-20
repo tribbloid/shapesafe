@@ -11,11 +11,11 @@ import scala.language.{existentials, higherKinds}
 abstract class UncheckedDomain[
     A1 <: Arity,
     A2 <: Arity,
-    O <: Proof
+    O <: Proposition
 ] {
 
-  def bound1: A1 CanProve Proof
-  def bound2: A2 CanProve Proof
+  def bound1: A1 CanProve Proposition
+  def bound2: A2 CanProve Proposition
 
   def selectSafer(a1: A1, a2: A2): O
 
@@ -36,7 +36,7 @@ trait UncheckedDomain_Imp0 {
   case class D2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proof
+      O <: Proposition
   ]()(
       implicit
       val bound1: A1 ~~> Unchecked,
@@ -49,7 +49,7 @@ trait UncheckedDomain_Imp0 {
   implicit def d2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proof
+      O <: Proposition
   ](
       implicit
       bound1: A1 ~~> Unchecked,
@@ -62,7 +62,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   def summon[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proof
+      O <: Proposition
   ](
       implicit
       self: UncheckedDomain[A1, A2, O]
@@ -71,7 +71,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   case class D1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proof
+      O <: Proposition
   ]()(
       implicit
       val bound1: A1 CanProve O,
@@ -84,7 +84,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   implicit def d1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proof
+      O <: Proposition
   ](
       implicit
       bound1: A1 CanProve O,

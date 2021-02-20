@@ -17,7 +17,7 @@ trait Arity extends Axis.Nameless {
   ](
       implicit
       prove: SELF ~~> O
-  ): O = prove.apply(this).out
+  ): O = prove.apply(this).value
 
   final def eval[
       SELF >: this.type <: Arity,
@@ -25,7 +25,7 @@ trait Arity extends Axis.Nameless {
   ](
       implicit
       prove: SELF ~~> O
-  ): O = prove.apply(this).out
+  ): O = prove.apply(this).value
 
   override lazy val toString: String = {
 

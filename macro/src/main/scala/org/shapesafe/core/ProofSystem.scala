@@ -8,46 +8,40 @@ import scala.language.implicitConversions
   */
 trait ProofSystem[OUB] { // TODO: no IUB?
 
-  trait Proof extends Serializable {
+  trait Proposition extends Serializable {
 
-    type Out <: OUB
-    def out: Out
+    type Codomain <: OUB
+    def value: Codomain
   }
 
-  case object Proof {
+  case object Proposition {
 
-    type Aux[O <: OUB] = Proof {
-      type Out = O
+    type Aux[O <: OUB] = Proposition {
+      type Codomain = O
     }
 
-    type Lt[+O <: OUB] = Proof {
-      type Out <: O
+    type Lt[+O <: OUB] = Proposition {
+      type Codomain <: O
     }
-  }
 
-  // Can't use Aux, syntax not supported by scala
-  trait Of[O <: OUB] extends Proof {
-    final type Out = O
-  }
+    // Can't use Aux, syntax not supported by scala
+    trait Of[O <: OUB] extends Proposition {
+      final type Codomain = O
+    }
 
-  case class ToBe[O <: OUB](override val out: O) extends Of[O]
+    case class ToBe[O <: OUB](override val value: O) extends Of[O]
+  }
 
   // doesn't extend T => R intentionally
   // each ProofSystem use a different one to alleviate search burden of compiler (or is it redundant?)
 
-  trait CanProve[-I, +P <: Proof] {
+  trait CanProve[-I, +P <: Proposition] {
     def apply(v: I): P
 
-    final def valueOf(v: I): P#Out = apply(v).out // TODO: this should be real apply? The above should be 'prove'
+    final def valueOf(v: I): P#Codomain = apply(v).value // TODO: this should be real apply? The above should be 'prove'
   }
 
-  object CanProve {
-
-    implicit def summonFor[I, P <: Proof](v: I)(
-        implicit
-        bound: CanProve[I, P]
-    ): P = bound.apply(v)
-  }
+  object CanProve {}
 
   /**
     * representing 2 morphism:
@@ -60,25 +54,42 @@ trait ProofSystem[OUB] { // TODO: no IUB?
     * @tparam I src type
     * @tparam P tgt type
     */
-  class =>>^^[-I, P <: Proof](
+  class =>>^^[-I, P <: Proposition](
       val toProof: I => P
   ) extends CanProve[I, P] {
 
     override def apply(v: I): P = toProof(v)
   }
 
-  type ~~>[-I, +O <: OUB] = CanProve[I, Proof.Lt[O]]
+  type -->[-I, O <: OUB] = CanProve[I, Proposition.Aux[O]]
+  type ~~>[-I, +O <: OUB] = CanProve[I, Proposition.Lt[O]]
 
   class =>>[-I, O <: OUB](
       val toOut: I => O
-  ) extends =>>^^[I, ToBe[O]](v => ToBe(toOut(v)))
+  ) extends =>>^^[I, Proposition.ToBe[O]](v => Proposition.ToBe(toOut(v)))
 
-  def from[I]: Factory[I] = Factory[I]()
+  def from[I]: Factory[I] = new Factory[I]()
 
-  case class Factory[I]() {
+  class Factory[I]() {
 
-    def =>>^^[P <: Proof](fn: I => P) = new (I =>>^^ P)(fn)
+    def =>>^^[P <: Proposition](fn: I => P) = new (I =>>^^ P)(fn)
 
     def =>>[O <: OUB](fn: I => O) = new (I =>> O)(fn)
+
+  }
+
+  def at[I](v: I) = new Summoner[I](v)
+
+  class Summoner[I](v: I) extends Factory[I] {
+
+    implicit def summon[P <: Proposition](
+        implicit
+        ev: CanProve[I, P]
+    ): P = ev.apply(v)
+
+    implicit def summonValue[P <: Proposition](
+        implicit
+        ev: CanProve[I, P]
+    ): P#Codomain = summon(ev).value
   }
 }

@@ -11,7 +11,7 @@ trait AssertEqual_Imp0 {
   implicit def unchecked[
       A1 <: Arity,
       A2 <: Arity,
-      O <: ProveArity.Proof
+      O <: ProveArity.Proposition
   ](
       implicit
       domain: UncheckedDomain[A1, A2, O]

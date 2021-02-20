@@ -30,7 +30,7 @@ case class InvarDomain[
   def forEqual(
       implicit
       lemma: Require[S1 == S2]
-  ): A1 =!= A2 =>>^^ ProveArity.Proof.Lt[Const[S1]] = ProveArity.from[A1 =!= A2].=>>^^ { v =>
+  ): A1 =!= A2 =>>^^ ProveArity.Proposition.Lt[Const[S1]] = ProveArity.from[A1 =!= A2].=>>^^ { v =>
     bound1.apply(v.a1)
   }
 }
