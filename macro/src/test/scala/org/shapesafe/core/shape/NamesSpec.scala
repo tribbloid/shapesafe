@@ -2,7 +2,9 @@ package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
-import shapeless.{::, HNil, Witness}
+import org.shapesafe.core.shape.Index.Name
+import org.shapesafe.core.shape.Indices.Infix
+import shapeless.{HNil, Witness}
 
 class NamesSpec extends BaseSpec {
 
@@ -14,9 +16,9 @@ class NamesSpec extends BaseSpec {
 
   it("create") {
 
-    require(names.keys == hList)
+    require(names.static == hList)
 
-    val t1 = VizType.infer(names.keys)
+    val t1 = VizType.infer(names.static)
     val t2 = VizType.infer(hList)
 
     assert(t1.tt =:= t2.tt)
@@ -41,13 +43,16 @@ class NamesSpec extends BaseSpec {
 //    )
 
     val w = Witness("a")
-    implicitly[Names.Cons[Names.Eye, w.T]]
+    val hh = implicitly[Names.Cons[Names.Eye, w.T]]
 
-    val hh = "a".narrow :: HNil
-
-    Names.FromStatic.apply(hh)
-
-//    Names.FromStatic.apply("a" :: HNil)
+    hh.apply(Names.Eye, w.value)
+      .toString
+      .shouldBe(
+        """
+        |Eye ><
+        |  a
+        |""".stripMargin
+      )
   }
 
   it("FromStatic") {
@@ -60,5 +65,28 @@ class NamesSpec extends BaseSpec {
     val t2 = VizType.infer(names2)
 
     t1.shouldBe(t2)
+  }
+
+  it("as Indices") {
+
+    VizType[Names.Eye.Canonical].shouldBe(VizType[Indices.Eye])
+
+    val ii = Indices >< Name("x") >< Name("y") >< Name("z")
+
+    VizType.infer(names.canonical).shouldBe(VizType.infer(ii))
+
+//    implicitly[Names.Eye <:< Indices.Eye]
+//
+////    val namesT = WideTyped(names)
+//    val namesT = WideTyped(Names >< "x")
+//
+//    implicitly[namesT.Wide <:< Indices.Impl]
+//
+////    val indicesT = WideTyped(Indices >< Name("x") >< Name("y") >< Name("z"))
+//    val indicesT = WideTyped(Indices >< Name("x"))
+//
+//    VizType[indicesT.Wide].shouldBe()
+//
+//    implicitly[namesT.Wide <:< indicesT.Wide]
   }
 }

@@ -1,10 +1,10 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.axis
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import shapeless.HNil
 
-class EinSumAppendSpec extends BaseSpec {
+class ExistingKVAppenderSpec extends BaseSpec {
 
   import shapeless.syntax.singleton.mkSingletonOps
   import shapeless.record._
@@ -13,41 +13,13 @@ class EinSumAppendSpec extends BaseSpec {
 
   describe("can append") {
 
-    it("HNil") {
-
-      val out = EinSumAppender.apply(HNil -> ii)
-
-      out.fields.toString.shouldBe("(i,3:Literal) :: HNil")
-    }
-
-    describe("new name to a Record") {
-
-      it("1") {
-
-        val existing = ("a" ->> Arity(4)) :: HNil
-
-        val out = EinSumAppender.apply(existing -> ii)
-
-        out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: HNil")
-      }
-
-      it("2") {
-
-        val existing = ("a" ->> Arity(4)) :: ("b" ->> Arity(5)) :: HNil
-
-        val out = EinSumAppender.apply(existing -> ii)
-
-        out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: (b,5:Literal) :: HNil")
-      }
-    }
-
     describe("old name to a Record that contains identical pair") {
 
       it(" 1") {
 
         val existing = ("i" ->> Arity(3)) :: HNil
 
-        val out = EinSumAppender.apply(existing -> ii)
+        val out = ExistingKVAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: HNil")
       }
@@ -56,7 +28,7 @@ class EinSumAppendSpec extends BaseSpec {
 
         val existing = ("i" ->> Arity(3)) :: ("j" ->> Arity(4)) :: HNil
 
-        val out = EinSumAppender.apply(existing -> ii)
+        val out = ExistingKVAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (i,3:Literal) :: (j,4:Literal) :: HNil")
       }

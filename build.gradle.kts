@@ -9,7 +9,7 @@ buildscript {
     val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.7") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.8") // suffix is always 2.12, weird
     }
 }
 
@@ -262,7 +262,9 @@ allprojects {
                 file("logs"),
 
                 // apache spark
-                file("warehouse")
+                file("warehouse"),
+
+                file("spike")
             )
 
             isDownloadJavadoc = true

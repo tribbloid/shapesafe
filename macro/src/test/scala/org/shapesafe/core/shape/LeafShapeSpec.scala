@@ -296,7 +296,7 @@ class LeafShapeSpec extends BaseSpec {
 
       val nn = shape.names
 
-      assert(nn.headName == "y")
+      assert(nn.head == "y")
     }
   }
 
@@ -410,11 +410,9 @@ class LeafShapeSpec extends BaseSpec {
 
       val r = (s1 >< s2).eval
 
-      VizType.infer(r).shouldBe()
-
       typeInferShort(r).shouldBe(
         """
-          |LeafShape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
     }
 
@@ -432,7 +430,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(r).shouldBe(
         """
-          |LeafShape.eye.type >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
           | (LeafArity.Literal[Int(2)] :<<- String("i")) >< (LeafArity.Literal[Int(3)] :<<- String("j"))
           |""".stripMargin.split('\n').mkString
       )

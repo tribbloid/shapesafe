@@ -1,4 +1,4 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.shape.unary
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
@@ -28,7 +28,7 @@ class EinSumIndexedSpec extends BaseSpec {
         ("k" ->> Arity(5))
     }
 
-    it("if name-dimension is a map") {
+    it("if name -> dimension has no conflict") {
 
       val op = EinSumIndexed ><
         ("i" ->> Arity(3)) ><
@@ -48,7 +48,7 @@ class EinSumIndexedSpec extends BaseSpec {
 
   describe("CANNOT create") {
 
-    it("if name-dimension mapping is NOT a map") {
+    it("if name -> dimension has conflict") {
 
       val op = EinSumIndexed ><
         ("i" ->> Arity(3)) ><

@@ -120,15 +120,9 @@ object LeafArity {
     lazy val _3 = WideTyped(Arity(3))
   }
 
-  case class Var(runtimeArity: Int) extends LeafArity {
+  case class Var(runtimeArity: Int) extends LeafArity {}
 
-    final type Out = Var
-  }
-
-  trait Unchecked extends LeafArity {
-
-    final type Out = Unchecked
-  }
+  trait Unchecked extends LeafArity {}
 
   case object Unchecked extends Unchecked {
     override def runtimeArity: Int = throw new UnsupportedOperationException("<no runtime value>")

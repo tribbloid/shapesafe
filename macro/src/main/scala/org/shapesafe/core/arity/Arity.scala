@@ -1,9 +1,10 @@
 package org.shapesafe.core.arity
 
 import org.shapesafe.core.arity.LeafArity.Literal
-import org.shapesafe.core.arity.ProveArity.~~>
+import org.shapesafe.core.arity.ProveArity.|--
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.axis.Axis.:<<-
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -16,7 +17,7 @@ trait Arity extends Axis.Nameless {
       O <: Arity
   ](
       implicit
-      prove: SELF ~~> O
+      prove: SELF |-- O
   ): O = prove.apply(this).value
 
   final def eval[
@@ -24,7 +25,7 @@ trait Arity extends Axis.Nameless {
       O <: LeafArity
   ](
       implicit
-      prove: SELF ~~> O
+      prove: SELF |-- O
   ): O = prove.apply(this).value
 
   override lazy val toString: String = {
@@ -56,14 +57,14 @@ object Arity {
     def withNameT[S <: String](
         implicit
         name: Witness.Aux[S]
-    ) = Axis(self, name)
+    ): T :<<- S = Axis(self, name)
 
-    def withName(name: Witness.Lt[String]) = {
+    def withName(name: Witness.Lt[String]): T :<<- name.T = {
 
       :<<-(name)
     }
 
-    def :<<-(name: Witness.Lt[String]) = withNameT(name)
+    def :<<-(name: Witness.Lt[String]): T :<<- name.T = withNameT(name)
   }
 
   def apply(w: Witness.Lt[Int]): Literal[w.T] = {

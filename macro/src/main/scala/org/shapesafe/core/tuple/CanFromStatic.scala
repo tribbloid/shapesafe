@@ -9,7 +9,7 @@ trait CanFromStatic extends CanCons {
   trait AbstractFromHList extends Poly1Base[HList, Impl] {
 
     implicit val toEye: HNil ==> Eye = {
-      from[HNil].==> { _ =>
+      forAll[HNil].==> { _ =>
         Eye
       }
     }
@@ -27,9 +27,9 @@ trait CanFromStatic extends CanCons {
         implicit
         forTail: H_TAIL ==> TAIL,
         cons: Cons[TAIL, HEAD]
-    ): (HEAD :: H_TAIL) ==> cons.Out = {
+    ): (HEAD :: H_TAIL) ==> cons.ConsResult = {
 
-      from[HEAD :: H_TAIL].==> { v =>
+      forAll[HEAD :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
 
         cons(prev, v.head)

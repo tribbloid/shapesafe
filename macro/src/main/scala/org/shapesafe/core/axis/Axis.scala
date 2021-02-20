@@ -2,15 +2,14 @@ package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.axis.Axis.->>
 import org.shapesafe.core.shape.LeafShape.><
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, VerifiedShape}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
-trait Axis extends VerifiedShape with IDMixin {
+trait Axis extends IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
 
   type Dimension <: Arity
@@ -75,9 +74,10 @@ object Axis {
     new :<<-(value, name)
   }
 
-  implicit def asLeaf[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
+  // TODO: alternatively: make Axis extending LeafShape directly?
+  implicit def axisAsLeaf[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
 
-    from[A].=>> { axis =>
+    forAll[A].=>> { axis =>
       Shape >|< axis
     }
   }

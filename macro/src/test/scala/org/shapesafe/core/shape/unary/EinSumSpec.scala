@@ -1,4 +1,4 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.shape.unary
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
@@ -12,7 +12,7 @@ class EinSumSpec extends BaseSpec {
 
       val s1 = LeafShape.Eye
 
-      val ops = LeafShape.einSumOps(s1)
+      val ops = s1.einSum.eval
     }
 
     it("1") {
@@ -20,7 +20,7 @@ class EinSumSpec extends BaseSpec {
       val s1 = Shape >|<
         (Arity(1) :<<- "x")
 
-      val ops = LeafShape.einSumOps(s1)
+      val ops = s1.einSum.eval
     }
 
     it("2") {
@@ -30,7 +30,7 @@ class EinSumSpec extends BaseSpec {
         (Arity(2) :<<- "y") >|<
         (Arity(1) :<<- "x")
 
-      val ops = LeafShape.einSumOps(s1)
+      val ops = s1.einSum.eval
     }
 
   }
@@ -46,9 +46,9 @@ class EinSumSpec extends BaseSpec {
           (Arity(1) :<<- "i")
       )
 
-      val r = ops --> (Names >< "i")
+      val r = ops -> (Names >< "i")
 
-      r.toString.shouldBe(
+      r.eval.toString.shouldBe(
         """
           |Eye ><
           |  1:Literal :<<- i
@@ -67,9 +67,9 @@ class EinSumSpec extends BaseSpec {
           Arity(4) :<<- "j"
       )
 
-      val r = ops --> (Names >< "x" >< "i")
+      val r = ops -> (Names >< "x" >< "i")
 
-      r.toString.shouldBe(
+      r.eval.toString.shouldBe(
         """
           |Eye ><
           |  1:Literal :<<- x ><
@@ -90,9 +90,9 @@ class EinSumSpec extends BaseSpec {
         Shape(3, 4) |<<- ("i" >< "j")
       ).eval
 
-      val r = (s1 einSum s2) --> ("x" >< "i")
+      val r = (s1 einSum s2) -> ("x" >< "i")
 
-      r.toString.shouldBe(
+      r.eval.toString.shouldBe(
         """
           |Eye ><
           |  1:Derived :<<- x ><
@@ -109,11 +109,11 @@ class EinSumSpec extends BaseSpec {
       import Names.Syntax._
 
       val s1 = Shape(1, 2, 3) |<<- ("x" >< "y" >< "y")
-
       val s2 = Shape(3, 4) |<<- ("i" >< "j")
+      val r = s1 einSum s2
 
       shouldNotCompile(
-        """s1 einSum s2"""
+        """r.eval"""
       )
     }
 
@@ -123,12 +123,12 @@ class EinSumSpec extends BaseSpec {
 
       val s1 = Shape(1, 2) |<<-
         ("x" >< "y")
-
       val s2 = Shape(3, 4) |<<-
         ("i" >< "i")
+      val r = s1 einSum s2
 
       shouldNotCompile(
-        """s1 einSum s2"""
+        """r.eval"""
       )
     }
 
@@ -138,12 +138,12 @@ class EinSumSpec extends BaseSpec {
 
       val s1 = Shape(1, 2) |<<-
         ("x" >< "y")
-
       val s2 = Shape(3, 4) |<<-
         ("y" >< "z")
+      val r = s1 einSum s2
 
       shouldNotCompile(
-        """s1 einSum s2"""
+        """r.eval"""
       )
     }
 

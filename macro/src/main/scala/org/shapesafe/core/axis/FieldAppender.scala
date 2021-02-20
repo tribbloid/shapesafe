@@ -1,4 +1,4 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.axis
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis.UB_->>

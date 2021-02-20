@@ -1,20 +1,21 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.{->>, UB_->>}
+import org.shapesafe.core.axis.DistinctNameAppender
 import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples}
 
 import scala.language.implicitConversions
 
-object EinSumIndexed extends StaticTuples[UB_->>] with CanInfix_>< {
+trait DistinctIndexedLike extends StaticTuples[UB_->>] with CanInfix_>< {
 
-  implicit def consIfCondition[
-      TAIL <: EinSumIndexed.Impl,
+  implicit def consIfNewName[
+      TAIL <: Impl,
       N <: String,
       D <: Arity
   ](
       implicit
-      condition: EinSumAppender.Case[(TAIL#Static, N ->> D)]
+      condition: DistinctNameAppender.Case[(TAIL#Static, N ->> D)]
   ): Cons.FromFn2[TAIL, N ->> D, TAIL >< (N ->> D)] = {
 
     Cons.from[TAIL, N ->> D].to { (tail, head) =>

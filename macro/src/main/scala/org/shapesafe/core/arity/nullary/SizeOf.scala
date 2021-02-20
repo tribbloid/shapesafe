@@ -20,7 +20,7 @@ object SizeOf {
       simplify: NatAsOp[N]
   ): SizeOf[D] =>> LeafArity.Derived[NatAsOp[N]] = {
 
-    ProveArity.from[SizeOf[D]].=>> { v =>
+    ProveArity.forAll[SizeOf[D]].=>> { v =>
       new LeafArity.Derived(simplify)
     }
   }
@@ -33,7 +33,7 @@ object SizeOf {
 
   def getConst[D <: HList, N <: Nat](data: D)(
       implicit
-      self: SizeOf[D] ~~> LeafArity.Const[NatAsOp[N]]
+      self: SizeOf[D] |~~ LeafArity.Const[NatAsOp[N]]
   ) = {
     val raw = SizeOf[D](data)
     self.apply(raw).value

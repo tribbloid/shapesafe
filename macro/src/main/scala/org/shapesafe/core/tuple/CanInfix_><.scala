@@ -16,7 +16,7 @@ trait CanInfix_>< extends CanCons {
     )(
         implicit
         cons: Cons[SELF, HEAD]
-    ): cons.Out = cons(self, head)
+    ): cons.ConsResult = cons(self, head)
   }
 
   implicit class Infix[SELF <: Impl](val self: SELF) extends InfixMixin[SELF] {}

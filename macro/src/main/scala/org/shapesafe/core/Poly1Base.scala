@@ -19,13 +19,17 @@ trait Poly1Base[IUB, OUB] {
     type Aux[
         I <: IUB,
         O <: OUB
-    ] = Case[I] { type Out = O }
+    ] = Case[I] {
+      type Out = O
+    }
 
     // only use as an implicit type parameter if Output type doesn't depends on O!
     type Lt[
         I <: IUB,
         O <: OUB
-    ] = Case[I] { type Out <: O }
+    ] = Case[I] {
+      type Out <: O
+    }
   }
 
   class ==>[
@@ -39,16 +43,7 @@ trait Poly1Base[IUB, OUB] {
     override def apply(v: I): O = toOut(v)
   }
 
-  //  case class FromFn[
-  //      -I <: IUB,
-  //      O <: OUB
-  //  ](fn: I => O)
-  //      extends (I ==> O) {
-  //
-  //    final override def apply(v: I): O = fn(v)
-  //  }
-
-  def from[I <: IUB] = new Factory[I]() // same as `at` in Poly1?
+  def forAll[I <: IUB] = new Factory[I]() // same as `at` in Poly1?
 
   protected class Factory[I <: IUB]() {
 
@@ -115,3 +110,5 @@ trait Poly1Base[IUB, OUB] {
 //    }
 //  }
 }
+
+object Poly1Base {}

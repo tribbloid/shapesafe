@@ -3,93 +3,78 @@ package org.shapesafe.core
 import scala.language.implicitConversions
 
 /**
-  * If Poly1 works smoothly there will be no point in defining it, too bad the assumed compiler bug made it necessary
-  * @tparam OUB upper bound of output
+  * This trait forms the backbone of compile-time reasoning and should reflect our best effort in reproducing
+  * Curry-Howard isomorphism with scala compiler (regardless of how ill-suited it is), expecting drastic changes in case
+  * the implicit search algorithm was improved
+  * @tparam O upper bound of output
   */
-trait ProofSystem[OUB] { // TODO: no IUB?
+// TODO: If Poly1 works smoothly it could totally supersedes this class, too bad the assumed compiler bug made it necessary
+trait ProofSystem[O] extends Propositional[O] with ProofScope { // TODO: no IUB?
 
-  trait Proposition extends Serializable {
+  type OUB = O
 
-    type Codomain <: OUB
-    def value: Codomain
-  }
+  final val root: this.type = this
 
-  case object Proposition {
-
-    type Aux[O <: OUB] = Proposition {
-      type Codomain = O
-    }
-
-    type Lt[+O <: OUB] = Proposition {
-      type Codomain <: O
-    }
-
-    // Can't use Aux, syntax not supported by scala
-    trait Of[O <: OUB] extends Proposition {
-      final type Codomain = O
-    }
-
-    case class ToBe[O <: OUB](override val value: O) extends Of[O]
-  }
-
-  // doesn't extend T => R intentionally
-  // each ProofSystem use a different one to alleviate search burden of compiler (or is it redundant?)
-
-  trait CanProve[-I, +P <: Proposition] {
+  trait =>>^^[-I, +P <: Consequent] {
     def apply(v: I): P
 
-    final def valueOf(v: I): P#Codomain = apply(v).value // TODO: this should be real apply? The above should be 'prove'
+    final def valueOf(v: I): P#Domain = apply(v).value
   }
 
-  object CanProve {}
-
   /**
-    * representing 2 morphism:
+    * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
+    * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
+    *
+    * In fact, any [[Arity]] or [[Shape]] that cannot be refuted at compile-time should subclass [[VerifiedArity]]
+    * or [[VerifiedShape]], which implies itself
+    *
+    * Programmer must ensure that no implicit subclass is defined for immediately refutable conjectures
+    *
+    * the symbol =>> is there to stress that it is a functor representing 2 morphism:
     *
     * - value v --> value apply(v)
     *
-    * - type I --> type O
-    *
-    * which is why it uses =>>
+    * - domain I --> domain O
     * @tparam I src type
-    * @tparam P tgt type
+    * @tparam O tgt type
     */
-  class =>>^^[-I, P <: Proposition](
-      val toProof: I => P
-  ) extends CanProve[I, P] {
-
-    override def apply(v: I): P = toProof(v)
+  trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.ToBe[O]] {
+//    def valueOf(V: I): O
+//
+//    final def apply(v: I): root.Term.ToBe[O] = root.Term.ToBe(valueOf(v))
   }
 
-  type -->[-I, O <: OUB] = CanProve[I, Proposition.Aux[O]]
-  type ~~>[-I, +O <: OUB] = CanProve[I, Proposition.Lt[O]]
+  def forAll[I]: Factory[I] = new Factory[I] {}
 
-  class =>>[-I, O <: OUB](
-      val toOut: I => O
-  ) extends =>>^^[I, Proposition.ToBe[O]](v => Proposition.ToBe(toOut(v)))
+  final def fromValue[I](v: I): Factory[I] = forAll[I]
 
-  def from[I]: Factory[I] = new Factory[I]()
+  trait Factory[I] {
 
-  class Factory[I]() {
+    def =>>^^[P <: Consequent](_fn: I => P) = new (I =>>^^ P) {
+      override def apply(v: I): P = _fn(v)
+    }
 
-    def =>>^^[P <: Proposition](fn: I => P) = new (I =>>^^ P)(fn)
+    def =>>[O <: OUB](_fn: I => O) = new (I =>> O) {
+//      override def valueOf(v: I): O = _fn(v)
 
-    def =>>[O <: OUB](fn: I => O) = new (I =>> O)(fn)
+      override def apply(v: I): root.Term.ToBe[O] = root.Term.ToBe[O](_fn(v))
+    }
 
+    def to[O <: OUB] = new To[O]
+
+    class To[OB <: OUB] {
+
+      def entails[O <: OB](v: I)(
+          implicit
+          prove: I |-- O
+      ): Term.Aux[O] = prove.apply(v)
+
+      def entailsValue[O <: OB](v: I)(
+          implicit
+          prove: I |-- O
+      ): O = prove.apply(v).value
+    }
   }
 
-  def at[I](v: I) = new Summoner[I](v)
-
-  class Summoner[I](v: I) extends Factory[I] {
-
-    implicit def summon[P <: Proposition](
-        implicit
-        ev: CanProve[I, P]
-    ): P = ev.apply(v)
-
-    implicit def summonValue[P <: Proposition](
-        implicit
-        ev: CanProve[I, P]
-    ): P#Codomain = summon(ev).value
-  }
+  class SubScope extends ProofScope.Child(this)
 }

@@ -1,18 +1,39 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.tuple.StaticTuples
+import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
 
 import scala.language.implicitConversions
 
-object Indices extends StaticTuples.Total[Index.Key_<:[String]] { // collection of Finder
+trait Indices extends IndicesLike with Indices.proto.Impl {
 
-  implicit class Infix[SELF <: Impl](self: SELF) {
+  final override type Canonical = this.type
 
-    def ><[T <: Index.Str](neo: T): SELF >< T = {
+  final override def canonical: Indices.this.type = this
+}
 
-      new ><(self, neo)
+object Indices extends TupleSystem with CanInfix_>< {
+
+  object proto extends StaticTuples.Total[Index] with CanInfix_>< {}
+
+  type Impl = Indices
+  type UpperBound = proto.UpperBound
+
+  class Eye extends proto.Eye with Indices
+  lazy val Eye = new Eye
+
+  class ><[
+      TAIL <: Indices,
+      HEAD <: UpperBound
+  ](
+      override val tail: TAIL,
+      override val head: HEAD
+  ) extends proto.><[TAIL, HEAD](tail, head)
+      with Impl {}
+
+  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {
+
+    Cons.from[TAIL, HEAD].to { (tail, head) =>
+      new ><(tail, head)
     }
   }
-
-  implicit def toEyeInfix(s: Indices.type): Infix[s.Eye] = Infix(Eye)
 }

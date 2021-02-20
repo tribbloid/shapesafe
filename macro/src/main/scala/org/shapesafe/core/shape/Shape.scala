@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.shape.ProveShape.~~>
+import org.shapesafe.core.shape.ProveShape.|--
 import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, NatProductArgs}
@@ -15,7 +15,7 @@ trait Shape {
       O <: Shape
   ](
       implicit
-      prove: SELF ~~> O
+      prove: SELF |-- O
   ): O = prove.apply(this).value
 
   final def simplify[
@@ -23,7 +23,7 @@ trait Shape {
       O <: LeafShape
   ](
       implicit
-      prove: SELF ~~> O
+      prove: SELF |-- O
   ): O = prove.apply(this).value
 
   final def eval[ // TODO: eval each member!
@@ -31,7 +31,7 @@ trait Shape {
       O <: LeafShape
   ](
       implicit
-      prove: SELF ~~> O
+      prove: SELF |-- O
   ): O = simplify(prove)
 }
 

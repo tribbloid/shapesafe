@@ -16,7 +16,7 @@ object Index {
   trait Key_<:[+KUB] extends Index {}
   type Str = Key_<:[String]
 
-  class Named[S <: String](val w: Witness.Aux[S]) extends Key_<:[S] {
+  class Name[S <: String](val w: Witness.Aux[S]) extends Key_<:[S] {
     def name: S = w.value
     type Name = S
 
@@ -24,9 +24,9 @@ object Index {
 
   }
 
-  object Named {
+  object Name {
 
-    def apply[S <: String](w: Witness.Aux[S]): Named[S] = new Named(w)
+    def apply[S <: String](w: Witness.Aux[S]): Name[S] = new Name(w)
   }
 
   class I_th[N <: Nat](val index: N, indexInt: Int) extends Key_<:[Nothing] {

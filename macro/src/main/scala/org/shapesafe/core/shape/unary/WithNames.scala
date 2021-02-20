@@ -23,12 +23,12 @@ object WithNames {
       O <: LeafShape
   ](
       implicit
-      lemma: S1 ~~> P1,
-      zip: ZipWithKeys.Aux[N#Keys, P1#_Dimensions#Static, HO],
+      lemma: S1 |~~ P1,
+      zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
       toShape: LeafShape.FromRecord.==>[HO, O]
   ): WithNames[S1, N] =>> O = {
-    from[WithNames[S1, N]].=>> { src =>
-      val keys: N#Keys = src.newNames.keys
+    forAll[WithNames[S1, N]].=>> { src =>
+      val keys: N#Static = src.newNames.static
       val p1: P1 = lemma.valueOf(src.s1)
 
       val values: P1#_Dimensions#Static = p1.dimensions.static

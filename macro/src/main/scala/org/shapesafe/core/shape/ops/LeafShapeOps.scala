@@ -32,11 +32,11 @@ class LeafShapeOps[SELF <: LeafShape](val self: SELF) {
       names: N
   )(
       implicit
-      mapper: Mapper.Aux[self.getField.type, names.Keys, O],
+      mapper: Mapper.Aux[self.getField.type, names.Static, O],
       fromIndex: LeafShape.FromRecord.Case[O]
   ): LeafShape.FromRecord.Case[O]#Out = {
 
-    val newIndex: O = names.keys.map(self.getField)(mapper)
+    val newIndex: O = names.static.map(self.getField)(mapper)
     LeafShape.FromRecord.apply(newIndex)
   }
 

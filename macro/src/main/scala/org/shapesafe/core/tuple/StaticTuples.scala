@@ -19,9 +19,11 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     def asList: List[UB]
 
     override protected def _id: Any = asList
+
+    type ><[HEAD <: UB] = StaticTuples.this.><[this.type, UB]
   }
 
-  trait EyeLike extends Impl {
+  class Eye extends Impl {
 
     override type Static = HNil
     override def static: HNil = HNil
@@ -30,7 +32,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override lazy val toString = "Eye"
   }
-  final object eye extends EyeLike
+  override lazy val Eye = new Eye
 
   // cartesian product symbol
   class ><[

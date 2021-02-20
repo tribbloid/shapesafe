@@ -6,9 +6,9 @@ trait CanCons {
   // TODO:too much boilerplate, switch to ~~> Proof pattern or Poly1/Poly2?
   trait Cons[-TAIL <: Impl, -HEAD <: UpperBound] {
 
-    type Out <: Impl
+    type ConsResult <: Impl
 
-    def apply(tail: TAIL, head: HEAD): Out
+    def apply(tail: TAIL, head: HEAD): ConsResult
   }
 
   object Cons {
@@ -24,9 +24,9 @@ trait CanCons {
         fn: (TAIL, HEAD) => O
     ) extends Cons[TAIL, HEAD] {
 
-      final type Out = O
+      final type ConsResult = O
 
-      final override def apply(tail: TAIL, head: HEAD): Out = fn(tail, head)
+      final override def apply(tail: TAIL, head: HEAD): ConsResult = fn(tail, head)
     }
 
     def summonFor[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
@@ -37,7 +37,7 @@ trait CanCons {
     def apply[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
         implicit
         ev: Cons[TAIL, HEAD]
-    ): ev.Out = {
+    ): ev.ConsResult = {
 
       ev.apply(tail, head)
     }

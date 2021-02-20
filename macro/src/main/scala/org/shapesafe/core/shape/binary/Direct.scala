@@ -4,7 +4,7 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.ops.LeafShapeOps
-import org.shapesafe.core.shape.{LeafShape, Shape, VerifiedShape}
+import org.shapesafe.core.shape.{LeafShape, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -14,11 +14,11 @@ case class Direct[
 ](
     s1: S1,
     s2: S2
-) extends VerifiedShape {}
+) extends Shape {}
 
 trait Direct_Imp0 {
 
-  implicit def fold[
+  implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape,
       S2 <: Shape,
@@ -27,13 +27,13 @@ trait Direct_Imp0 {
       O <: LeafShape
   ](
       implicit
-      lemma1: S1 ~~> P1,
-      lemma2: S2 ~~> P2,
+      lemma1: S1 |~~ P1,
+      lemma2: S2 |~~ P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
       toShape: LeafShape.FromStatic.==>[HO, O]
   ): Direct[S1, S2] =>> O = {
 
-    from[Direct[S1, S2]].=>> { direct =>
+    forAll[Direct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
 
@@ -53,11 +53,11 @@ object Direct extends Direct_Imp0 {
       P2 <: Shape.Vector[A2]
   ](
       implicit
-      lemma1: S1 ~~> P1,
-      lemma2: S2 ~~> P2
+      lemma1: S1 |~~ P1,
+      lemma2: S2 |~~ P2
   ): Direct[S1, S2] =>> (P1 >< A2) = {
 
-    from[Direct[S1, S2]].=>> { direct =>
+    forAll[Direct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head

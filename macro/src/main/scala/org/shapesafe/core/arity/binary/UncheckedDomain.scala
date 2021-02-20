@@ -11,22 +11,22 @@ import scala.language.{existentials, higherKinds}
 abstract class UncheckedDomain[
     A1 <: Arity,
     A2 <: Arity,
-    O <: Proposition
+    O <: Term
 ] {
 
-  def bound1: A1 CanProve Proposition
-  def bound2: A2 CanProve Proposition
+  def bound1: A1 =>>^^ Term
+  def bound2: A2 =>>^^ Term
 
   def selectSafer(a1: A1, a2: A2): O
 
   def forOp2[??[X1, X2] <: Op](
       implicit
       sh: Utils.IntSh[??]
-  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.from[Op2[??]#On[A1, A2]].=>> { _ =>
+  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.forAll[Op2[??]#On[A1, A2]].=>> { _ =>
     Unchecked
   }
 
-  val froEqual: A1 =!= A2 =>>^^ O = ProveArity.from[A1 =!= A2].=>>^^ { v =>
+  val forEqual: A1 =!= A2 =>>^^ O = ProveArity.forAll[A1 =!= A2].=>>^^ { v =>
     selectSafer(v.a1, v.a2)
   }
 }
@@ -36,11 +36,11 @@ trait UncheckedDomain_Imp0 {
   case class D2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proposition
+      O <: Term
   ]()(
       implicit
-      val bound1: A1 ~~> Unchecked,
-      val bound2: A2 CanProve O
+      val bound1: A1 |~~ Unchecked,
+      val bound2: A2 =>>^^ O
   ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
@@ -49,11 +49,11 @@ trait UncheckedDomain_Imp0 {
   implicit def d2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proposition
+      O <: Term
   ](
       implicit
-      bound1: A1 ~~> Unchecked,
-      bound2: A2 CanProve O
+      bound1: A1 |~~ Unchecked,
+      bound2: A2 =>>^^ O
   ): UncheckedDomain[A1, A2, O] = D2()
 }
 
@@ -62,7 +62,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   def summon[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proposition
+      O <: Term
   ](
       implicit
       self: UncheckedDomain[A1, A2, O]
@@ -71,11 +71,11 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   case class D1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proposition
+      O <: Term
   ]()(
       implicit
-      val bound1: A1 CanProve O,
-      val bound2: A2 ~~> Unchecked
+      val bound1: A1 =>>^^ O,
+      val bound2: A2 |~~ Unchecked
   ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -84,10 +84,10 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   implicit def d1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Proposition
+      O <: Term
   ](
       implicit
-      bound1: A1 CanProve O,
-      bound2: A2 ~~> Unchecked
+      bound1: A1 =>>^^ O,
+      bound2: A2 |~~ Unchecked
   ): UncheckedDomain[A1, A2, O] = D1()
 }

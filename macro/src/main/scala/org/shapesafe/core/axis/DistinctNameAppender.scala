@@ -1,28 +1,28 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.axis
 
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.Keys
 import shapeless.{::, HList, NotContainsConstraint, Witness}
 
-trait DistinctAppender extends FieldAppender {
+trait DistinctNameAppender extends FieldAppender {
 
   implicit def ifNewName[
       OLD <: HList,
       N <: String,
-      D <: Arity,
+      A1 <: Arity,
       OLDNS <: HList
   ](
       implicit
       name: Witness.Aux[N],
       keys: Keys.Aux[OLD, OLDNS],
       isNew: NotContainsConstraint[OLDNS, N]
-  ): ==>[(OLD, N ->> D), (N ->> D) :: OLD] = {
+  ): (OLD, N ->> A1) ==> ((N ->> A1) :: OLD) = {
 
-    from[(OLD, N ->> D)].==> {
+    forAll[(OLD, N ->> A1)].==> {
       case (old, field) =>
-        field.asInstanceOf[N ->> D] :: old
+        field.asInstanceOf[N ->> A1] :: old
     }
   }
 }
-object DistinctAppender extends DistinctAppender
+object DistinctNameAppender extends DistinctNameAppender

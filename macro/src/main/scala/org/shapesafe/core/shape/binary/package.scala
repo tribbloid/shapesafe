@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape
 
-package object binary {
+import org.shapesafe.core.shape.unary.EinSumIndexed
 
-  type EinSumIndexed = EinSumIndexed.Impl
-}
+package object binary {}

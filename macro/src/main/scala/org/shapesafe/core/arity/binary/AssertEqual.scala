@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.ProveArity.{=>>^^, ~~>}
+import org.shapesafe.core.arity.ProveArity.{=>>^^, |~~}
 import org.shapesafe.core.arity.ops.ArityOps.=!=
 import org.shapesafe.core.arity.{Arity, ProveArity}
 import singleton.ops.{==, Require}
@@ -11,12 +11,12 @@ trait AssertEqual_Imp0 {
   implicit def unchecked[
       A1 <: Arity,
       A2 <: Arity,
-      O <: ProveArity.Proposition
+      O <: ProveArity.Term
   ](
       implicit
       domain: UncheckedDomain[A1, A2, O]
   ): A1 =!= A2 =>>^^ O = {
-    domain.froEqual
+    domain.forEqual
   }
 }
 
@@ -46,8 +46,8 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       S2
   ](
       implicit
-      bound1: A1 ~~> Const[S1],
-      bound2: A2 ~~> Const[S2],
+      bound1: A1 |~~ Const[S1],
+      bound2: A2 |~~ Const[S2],
       lemma: Require[S1 == S2]
   ) = {
 

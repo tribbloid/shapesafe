@@ -1,10 +1,10 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.shape.ProveShape.=>>
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.shape.binary.{EinSumIndexed, EinSumOps}
 import org.shapesafe.core.shape.ops.LeafShapeOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
@@ -19,7 +19,7 @@ import scala.language.implicitConversions
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait LeafShape extends VerifiedShape with LeafShape.Proto {
+trait LeafShape extends Shape with LeafShape.Proto {
 
   type Record <: HList // name: String -> dim: arity.Expression
   def record: Record
@@ -40,9 +40,9 @@ trait LeafShape extends VerifiedShape with LeafShape.Proto {
     implicit def name[S <: String](
         implicit
         _selector: Selector[Record, S] { type Out <: Arity }
-    ): Case[Index.Named[S]] {
+    ): Case[Index.Name[S]] {
       type Result = _selector.Out :<<- S
-    } = at[Index.Named[S]] { name =>
+    } = at[Index.Name[S]] { name =>
       val arity = _selector(record)
       arity :<<- name.w
     }
@@ -73,9 +73,9 @@ trait LeafShape extends VerifiedShape with LeafShape.Proto {
       apply(Index.I_th(i))
     }
 
-    def apply(w: Witness.Lt[String]): Sub1[Index.Named[w.T]] = {
+    def apply(w: Witness.Lt[String]): Sub1[Index.Name[w.T]] = {
 
-      apply(Index.Named(w))
+      apply(Index.Name(w))
     }
   }
 
@@ -100,7 +100,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
   final type Impl = LeafShape
 
   // Cartesian product doesn't have eye but whatever
-  object eye extends Proto.EyeLike with LeafShape {
+  class Eye extends Proto.Eye with LeafShape {
 
     final type Record = HNil
     override def record: Record = HNil
@@ -111,6 +111,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
   }
+  override lazy val Eye = new Eye
 
   // cartesian product symbol
   class ><[
@@ -144,7 +145,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         forTail: H_TAIL ==> TAIL
     ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.emptyName.type)) = {
 
-      from[D :: H_TAIL].==> { v =>
+      forAll[D :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
         val head = vHead :<<- Axis.emptyName
@@ -167,7 +168,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         w: Witness.Aux[N]
     ): ((N ->> D) :: H_TAIL) ==> (TAIL >< (D :<<- N)) = {
 
-      from[(N ->> D) :: H_TAIL].==> { v =>
+      forAll[(N ->> D) :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
         val head: D :<<- N = vHead :<<- w
@@ -187,18 +188,6 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
   implicit def toOps[T <: LeafShape](self: T): LeafShapeOps[T] = new LeafShapeOps(self)
 
-  implicit def einSumOps[
-      S <: LeafShape
-  ](self: S)(
-      implicit
-      checkThis: EinSumIndexed.FromStatic.Case[self.Record]
-  ) = {
-
-    val indexed = EinSumIndexed.FromStatic.apply(self.record)
-
-    EinSumOps(Seq(self))(indexed)
-  }
-
   //TODO: doesn't work, blocked by https://github.com/milessabin/shapeless/issues/1072
   object FromLiterals extends AbstractFromHList {
 
@@ -212,19 +201,14 @@ object LeafShape extends TupleSystem with CanFromStatic {
         w: Witness.Aux[HEAD]
     ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.emptyName.type] = {
 
-      from[w.T :: H_TAIL].==> { v =>
+      forAll[w.T :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val head = LeafArity.Literal(w) :<<- Axis.emptyName
 
         prev >|< head
       }
     }
-
   }
-
-//  def applyProduct[T <: HList](v: T)(implicit ev: FromLiterals.Case[T]): ev.Out = {
-//    ev.apply(v)
-//  }
 
   object FromNats extends AbstractFromHList {
 
@@ -238,13 +222,14 @@ object LeafShape extends TupleSystem with CanFromStatic {
         ev: NatAsOp[HEAD]
     ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
 
-      from[(HEAD :: H_TAIL)].==> { v =>
+      forAll[(HEAD :: H_TAIL)].==> { v =>
         val prev = apply(v.tail)
         val head = LeafArity.FromNat(v.head) :<<- Axis.emptyName
 
         prev >|< head
       }
     }
-
   }
+
+  implicit def endo[T <: LeafShape]: T =>> T = ProveShape.forAll[T].=>>(identity[T])
 }

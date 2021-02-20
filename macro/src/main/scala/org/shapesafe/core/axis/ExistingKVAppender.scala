@@ -1,13 +1,13 @@
-package org.shapesafe.core.shape.binary
+package org.shapesafe.core.axis
 
 import org.shapesafe.core.arity.binary.AssertEqual
 import org.shapesafe.core.arity.ops.ArityOps.=!=
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis.->>
-import shapeless.ops.record.{Keys, Selector}
-import shapeless.{::, HList, NotContainsConstraint, Witness}
+import shapeless.ops.record.Selector
+import shapeless.{::, HList, Witness}
 
-trait EinSumAppender_Imp0 extends FieldAppender {
+trait ExistingKVAppender extends FieldAppender {
   // TODO: should be a Poly2?
   // TODO: merge into EinSumIndexed.Cons
 
@@ -23,10 +23,10 @@ trait EinSumAppender_Imp0 extends FieldAppender {
       implicit
       name: Witness.Aux[N],
       selector: Selector.Aux[OLD, N, A1],
-      lemma: A1 =!= A2 =>>^^ Proposition.Aux[O]
-  ): ==>[(OLD, N ->> A2), (N ->> O) :: OLD] = {
+      lemma: A1 =!= A2 |-- O
+  ): (OLD, N ->> A2) ==> ((N ->> O) :: OLD) = {
 
-    from[(OLD, N ->> A2)].==> {
+    forAll[(OLD, N ->> A2)].==> {
 
       case (old, field) =>
         import shapeless.record._
@@ -41,5 +41,4 @@ trait EinSumAppender_Imp0 extends FieldAppender {
   }
 }
 
-trait EinSumAppender extends EinSumAppender_Imp0 with DistinctAppender {}
-object EinSumAppender extends EinSumAppender
+object ExistingKVAppender extends ExistingKVAppender
