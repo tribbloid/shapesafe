@@ -4,15 +4,15 @@ import org.shapesafe.BaseSpec
 
 object ProofSystemTest {
 
-  trait Term
+  trait Conj
 
-  case class Simple(name: String) extends Term
+  case class Simple(name: String) extends Conj
 
-  object Sys extends ProofSystem[Term]
+  object Sys extends ProofSystem[Conj]
 
   import Sys._
 
-  case class P0() extends Term
+  case class P0() extends Conj
 
   object P0 {
 
@@ -21,7 +21,7 @@ object ProofSystemTest {
     }
   }
 
-  case class P1[T <: Term, M](child: T, meta: M)
+  case class P1[T <: Conj, M](child: T, meta: M)
 
   object P1 {
 
@@ -30,10 +30,10 @@ object ProofSystemTest {
     }
 
     implicit def theorem[
-        T <: Term,
+        T <: Conj,
         S <: Simple,
         M,
-        O <: Term
+        O <: Conj
     ](
         implicit
         lemma1: T |~~ S,

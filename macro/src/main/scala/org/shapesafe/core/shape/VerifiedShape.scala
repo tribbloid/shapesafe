@@ -4,7 +4,7 @@
 //
 //trait VerifiedShape extends Shape {}
 //
-//object VerifiedShape {
+//object VerifiedShape { // TODO: remove, none of the shape can be verified unless their underlying arities are
 //
 //  implicit def endo[T <: VerifiedShape]: T =>> T = ProveShape.forAll[T].=>>(identity[T])
 //

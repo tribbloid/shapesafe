@@ -15,18 +15,17 @@ case class WithNames[
 
 object WithNames {
 
-  implicit def asLeaf[
+  implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape,
       N <: Names,
-      HO <: HList,
-      O <: LeafShape
+      HO <: HList
   ](
       implicit
       lemma: S1 |~~ P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-      toShape: LeafShape.FromRecord.==>[HO, O]
-  ): WithNames[S1, N] =>> O = {
+      toShape: LeafShape.FromRecord.Case[HO]
+  ): WithNames[S1, N] =>> toShape.Out = {
     forAll[WithNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
       val p1: P1 = lemma.valueOf(src.s1)

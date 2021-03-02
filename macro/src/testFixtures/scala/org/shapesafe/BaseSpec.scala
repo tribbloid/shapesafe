@@ -8,13 +8,6 @@ import shapeless.{HList, Nat, Witness}
 
 trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
-  /**
-    * ScalaTest assertDoesNotCompile sometimes malfunction (due to unwashed execution order?)
-    * & doesn't perform literal check
-    * if the code compiles successfully, the project compilation will fail
-    */
-  val shouldNotCompile: illTyped.type = illTyped
-
   val small = BaseSpec.small
   val big = BaseSpec.big
 

@@ -10,7 +10,7 @@ trait Op2Like extends Operator {
       A2 <: Arity
   ]
 
-  def apply[
+  def on[
       A1 <: Arity,
       A2 <: Arity
   ](
@@ -25,8 +25,9 @@ trait Op2Like extends Operator {
         A2 <: Arity
     ]: Case.Aux[A1, A2, On[A1, A2]] = {
       at[A1, A2].apply { (a1, a2) =>
-        Op2Like.this.apply(a1, a2)
+        Op2Like.this.on(a1, a2)
       }
     }
   }
+  type AsShapelessPoly2 = AsShapelessPoly2.type
 }

@@ -8,7 +8,7 @@ import org.shapesafe.core.shape.{LeafShape, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
-case class Direct[
+case class OuterProduct[
     S1 <: Shape,
     S2 <: Shape
 ](
@@ -16,24 +16,24 @@ case class Direct[
     s2: S2
 ) extends Shape {}
 
-trait Direct_Imp0 {
+trait OuterProduct_Imp0 {
 
+  //TODO: should leverage append, if the deadlock problem has been solved
   implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape,
       S2 <: Shape,
       P2 <: LeafShape,
-      HO <: HList,
-      O <: LeafShape
+      HO <: HList
   ](
       implicit
       lemma1: S1 |~~ P1,
       lemma2: S2 |~~ P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
-      toShape: LeafShape.FromStatic.==>[HO, O]
-  ): Direct[S1, S2] =>> O = {
+      toShape: LeafShape.FromStatic.Case[HO]
+  ): OuterProduct[S1, S2] =>> toShape.Out = {
 
-    forAll[Direct[S1, S2]].=>> { direct =>
+    forAll[OuterProduct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
 
@@ -42,7 +42,7 @@ trait Direct_Imp0 {
   }
 }
 
-object Direct extends Direct_Imp0 {
+object OuterProduct extends OuterProduct_Imp0 {
 
   // shortcut for trivial D + 1 case
   implicit def append[
@@ -55,9 +55,9 @@ object Direct extends Direct_Imp0 {
       implicit
       lemma1: S1 |~~ P1,
       lemma2: S2 |~~ P2
-  ): Direct[S1, S2] =>> (P1 >< A2) = {
+  ): OuterProduct[S1, S2] =>> (P1 >< A2) = {
 
-    forAll[Direct[S1, S2]].=>> { direct =>
+    forAll[OuterProduct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head

@@ -57,6 +57,12 @@ class ReorderSpec extends BaseSpec {
 
     val r = Reorder(s1, Names >< "z" >< "y")
 
-    r.eval.toString.shouldBe()
+    r.eval.toString.shouldBe(
+      """
+        |Eye ><
+        |  3:Literal :<<- z ><
+        |  2:Literal :<<- y
+        |""".stripMargin
+    )
   }
 }

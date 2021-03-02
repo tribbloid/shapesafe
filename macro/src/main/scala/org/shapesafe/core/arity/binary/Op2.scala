@@ -14,7 +14,7 @@ class Op2[
     sh: Utils.IntSh[??]
 ) extends Op2Like {
 
-  override def apply[
+  override def on[
       A1 <: Arity,
       A2 <: Arity
   ](

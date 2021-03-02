@@ -5,7 +5,7 @@ import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.Keys
 import shapeless.{::, HList, NotContainsConstraint, Witness}
 
-trait DistinctNameAppender extends FieldAppender {
+trait NewNameAppender extends RecordUpdater {
 
   implicit def ifNewName[
       OLD <: HList,
@@ -25,4 +25,4 @@ trait DistinctNameAppender extends FieldAppender {
     }
   }
 }
-object DistinctNameAppender extends DistinctNameAppender
+object NewNameAppender extends NewNameAppender

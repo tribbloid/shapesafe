@@ -426,7 +426,7 @@ class LeafShapeSpec extends BaseSpec {
         LeafArity.Literal(2) :<<- "i" >|<
         LeafArity.Literal(3) :<<- "j"
 
-      val r = (s1 direct s2).eval
+      val r = (s1 outer s2).eval
 
       typeInferShort(r).shouldBe(
         """

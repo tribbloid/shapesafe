@@ -20,13 +20,12 @@ object Reorder {
   implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape,
-      II <: IndicesLike,
-      O <: LeafShape
+      II <: IndicesLike
   ](
       implicit
       lemma1: |~~[S1, P1],
-      lemma2: Premise.==>[Reorder[P1, II#Canonical], O]
-  ): Reorder[S1, II] =>> O = {
+      lemma2: Premise.Case[Reorder[P1, II#Canonical]]
+  ): Reorder[S1, II] =>> lemma2.Out = {
 
     forAll[Reorder[S1, II]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)

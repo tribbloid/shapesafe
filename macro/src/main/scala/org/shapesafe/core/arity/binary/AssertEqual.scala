@@ -15,7 +15,7 @@ trait AssertEqual_Imp0 {
   ](
       implicit
       domain: UncheckedDomain[A1, A2, O]
-  ): A1 =!= A2 =>>^^ O = {
+  ): AssertEqual.On[A1, A2] =>>^^ O = {
     domain.forEqual
   }
 }
@@ -56,7 +56,7 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
     domain.forEqual
   }
 
-  override def apply[
+  override def on[
       A1 <: Arity,
       A2 <: Arity
   ](a1: A1, a2: A2): On[A1, A2] = {

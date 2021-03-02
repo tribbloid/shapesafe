@@ -10,7 +10,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   final type UpperBound = UB
 
-  trait Impl extends IDMixin {
+  trait Impl extends IDMixin { // TODO: rename to `Tuple`
 
     type Static <: HList
     def static: Static
@@ -42,6 +42,10 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
       val tail: TAIL,
       val head: HEAD
   ) extends Impl {
+
+    // in scala 3 these will be gone
+    type Tail = TAIL
+    type Head = HEAD
 
     override type Static = HEAD :: tail.Static
     override def static: Static = head :: tail.static

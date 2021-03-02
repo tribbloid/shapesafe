@@ -12,19 +12,20 @@ case class CheckDistinct[
 
 object CheckDistinct {
 
-  implicit def asLeaf[
+  implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape
   ](
       implicit
       lemma: S1 =>> P1,
-      // TODO: if the compiler works properly this could be S1 --> P1
-      //  too bad at this moment the VerifiedShape.endo cannot be successfully summoned
-      indexing: DistinctIndexed.FromStatic.Case[P1#Record]
+      indexing: _Indexing.Case[P1#Record]
   ): CheckDistinct[S1] =>> P1 = {
 
     ProveShape.forAll[CheckDistinct[S1]].=>> { v =>
       lemma.valueOf(v.s1)
     }
   }
+
+  object _Indexing extends ReIndexing.Distinct
+  type _Indexing = _Indexing.type
 }

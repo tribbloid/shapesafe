@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.ops
 
-import org.shapesafe.core.shape.binary.Direct
+import org.shapesafe.core.arity.ops.ArityOps
+import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.unary.{CheckEinSum, Reorder, WithNames}
 import org.shapesafe.core.shape.{Names, Shape}
 
@@ -17,14 +18,14 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
 
   def ><[THAT <: Shape](
       that: THAT
-  ): Direct[SELF, THAT] = {
+  ): OuterProduct[SELF, THAT] = {
 
-    Direct(self, that)
+    OuterProduct(self, that)
   }
 
-  def direct[THAT <: Shape](
+  def outer[THAT <: Shape](
       that: THAT
-  ): Direct[SELF, THAT] = {
+  ): OuterProduct[SELF, THAT] = {
 
     ><(that)
   }
@@ -36,4 +37,19 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
     einSum.->(names)
   }
 
+  def reduceByName[THAT <: Shape](
+      infix: ArityOps.Infix,
+      that: THAT
+  ): infix.SquashByName[OuterProduct[SELF, THAT]] = {
+
+    val outered: OuterProduct[SELF, THAT] = self.outer(that)
+    infix.SquashByName.On(outered)
+  }
+
+  def reduceByName(
+      infix: ArityOps.Infix
+  ): infix.SquashByName[SELF] = {
+
+    infix.SquashByName.On(self)
+  }
 }

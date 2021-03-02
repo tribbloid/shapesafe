@@ -4,7 +4,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import shapeless.HNil
 
-class DistinctNameAppenderSpec extends BaseSpec {
+class NewNameAppenderSpec extends BaseSpec {
 
   import shapeless.syntax.singleton.mkSingletonOps
   import shapeless.record._
@@ -15,7 +15,7 @@ class DistinctNameAppenderSpec extends BaseSpec {
 
     it("HNil") {
 
-      val out = DistinctNameAppender.apply(HNil -> ii)
+      val out = NewNameAppender.apply(HNil -> ii)
 
       out.fields.toString.shouldBe("(i,3:Literal) :: HNil")
     }
@@ -26,7 +26,7 @@ class DistinctNameAppenderSpec extends BaseSpec {
 
         val existing = ("a" ->> Arity(4)) :: HNil
 
-        val out = DistinctNameAppender.apply(existing -> ii)
+        val out = NewNameAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: HNil")
       }
@@ -35,7 +35,7 @@ class DistinctNameAppenderSpec extends BaseSpec {
 
         val existing = ("a" ->> Arity(4)) :: ("b" ->> Arity(5)) :: HNil
 
-        val out = DistinctNameAppender.apply(existing -> ii)
+        val out = NewNameAppender.apply(existing -> ii)
 
         out.fields.toString.shouldBe("(i,3:Literal) :: (a,4:Literal) :: (b,5:Literal) :: HNil")
       }
