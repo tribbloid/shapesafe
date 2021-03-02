@@ -4,3 +4,6 @@
 [submodule "shapesafe-demo"]
 	path = shapesafe-demo
 	url = https://github.com/tribbloid/shapesafe-demo
+[submodule "splain"]
+	path = splain
+	url = https://github.com/tek/splain

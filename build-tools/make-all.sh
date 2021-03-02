@@ -6,6 +6,11 @@ FWDIR="$(
 )"
 DATE=$(date --iso-8601=second)
 
+echo "[SUBMODULE(S)]" && \
+cd splain && \
+sbt compile && \
+cd ..
+
 mkdir -p ${FWDIR}/logs
 
 ${FWDIR}/gradlew -q dependencyTree "${@}" >${FWDIR}/logs/dependencyTree_"$DATE".out

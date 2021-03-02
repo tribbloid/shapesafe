@@ -5,12 +5,6 @@ CRDIR="$(
   pwd
 )"
 
-git submodule foreach git fetch
-git submodule update --init --recursive
+ARGS=("-PscalaVersion=2.12.13" ${@})
 
-PP=("-PscalaVersion=2.12.13" "${@}")
-
-echo "[COMPILING]" && \
-"${CRDIR}"/make-all.sh "${PP}" && \
-echo "[RUNNING TESTS]" && \
-"${CRDIR}"/test.sh "${PP}"
+exec "${CRDIR}"/.CI.sh ${ARGS}

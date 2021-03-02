@@ -264,7 +264,9 @@ allprojects {
                 // apache spark
                 file("warehouse"),
 
-                file("spike")
+                file("spike"),
+
+                file("splain")
             )
 
             isDownloadJavadoc = true
