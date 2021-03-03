@@ -37,7 +37,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
     einSum.->(names)
   }
 
-  def reduceByName[THAT <: Shape](
+  def flattenWith[THAT <: Shape](
       infix: ArityOps.Infix,
       that: THAT
   ): infix.SquashByName[OuterProduct[SELF, THAT]] = {
@@ -46,7 +46,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
     infix.SquashByName.On(outered)
   }
 
-  def reduceByName(
+  def flatten(
       infix: ArityOps.Infix
   ): infix.SquashByName[SELF] = {
 

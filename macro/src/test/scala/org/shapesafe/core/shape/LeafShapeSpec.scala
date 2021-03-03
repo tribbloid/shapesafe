@@ -93,6 +93,22 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
+  it("toString") {
+    val shape = Shape >|<
+      Arity(2) :<<- "x" >|<
+      Arity(3) append
+      Arity(4) :<<- "z"
+
+    shape.toString.shouldBe(
+      """
+        |Eye ><
+        |  2:Literal :<<- x ><
+        |  3:Literal ><
+        |  4:Literal :<<- z
+        |""".stripMargin
+    )
+  }
+
   describe(FromStatic.getClass.getSimpleName) {
 
     it("from HNil") {

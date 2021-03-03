@@ -36,9 +36,6 @@ object Axis {
   type ->>[N <: String, D] = FieldType[N, D]
   type UB_->> = (_ <: String) ->> Arity
 
-  val emptyName = ""
-//  val emptyW = Witness(emptyName) // for singleton String, can cast from emptyName automatically
-
   // TODO: N can be eliminated
   class :<<-[
       D <: Arity,
@@ -55,9 +52,12 @@ object Axis {
     type Dimension = D
 
     override lazy val toString = s"$dimension :<<- $name"
-
   }
 
+  val emptyName = ""
+  val unknownName = "??"
+
+  //  val emptyW = Witness(emptyName) // for singleton String, can cast from emptyName automatically
   trait Nameless extends Axis {
 
     override type Name = emptyName.type

@@ -3,19 +3,19 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeExpr}
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
 
-trait OpByName {
+trait Op2ByName {
 
   val oldNameUpdater: RecordUpdater
 
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: Shape
-  ] extends Shape {
+  ] extends ShapeExpr {
 
     val s1: S1
   }

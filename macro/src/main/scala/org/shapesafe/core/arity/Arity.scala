@@ -72,6 +72,4 @@ object Arity {
   }
 
   implicit def toOps[T <: Arity](v: T): ArityOps[T] = ArityOps[T](v)
-
-  implicit def nameless[V <: Arity](self: V) = Axis(self, Axis.emptyName)
 }

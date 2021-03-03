@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeExpr}
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 
@@ -11,7 +11,7 @@ case class WithNames[
 ](
     s1: S1,
     newNames: N
-) extends Shape {}
+) extends ShapeExpr {}
 
 object WithNames {
 

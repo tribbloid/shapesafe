@@ -88,6 +88,8 @@ trait LeafShape extends Shape with LeafShape.Proto {
       byIndex.apply(index)
     }
   }
+
+  final override def nodeString: String = this.toString
 }
 
 object LeafShape extends TupleSystem with CanFromStatic {
@@ -143,12 +145,12 @@ object LeafShape extends TupleSystem with CanFromStatic {
     ](
         implicit
         forTail: H_TAIL ==> TAIL
-    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.emptyName.type)) = {
+    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.unknownName.type)) = {
 
       forAll[D :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
-        val head = vHead :<<- Axis.emptyName
+        val head = vHead :<<- Axis.unknownName
 
         prev >|< head
       }
@@ -199,11 +201,11 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.unknownName.type] = {
 
       forAll[w.T :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
-        val head = LeafArity.Literal(w) :<<- Axis.emptyName
+        val head = LeafArity.Literal(w) :<<- Axis.unknownName
 
         prev >|< head
       }
@@ -220,11 +222,11 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.emptyName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.unknownName.type] = {
 
       forAll[(HEAD :: H_TAIL)].==> { v =>
         val prev = apply(v.tail)
-        val head = LeafArity.FromNat(v.head) :<<- Axis.emptyName
+        val head = LeafArity.FromNat(v.head) :<<- Axis.unknownName
 
         prev >|< head
       }

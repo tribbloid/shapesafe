@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import com.tribbloids.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.ProveShape.|--
 import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
@@ -8,7 +9,9 @@ import shapeless.{HList, NatProductArgs}
 
 import scala.language.implicitConversions
 
-trait Shape {
+trait Shape extends TreeLike {
+
+  override lazy val format: TreeFormat = TreeFormat.Indent2Minimal
 
   final def verify[
       SELF >: this.type <: Shape,

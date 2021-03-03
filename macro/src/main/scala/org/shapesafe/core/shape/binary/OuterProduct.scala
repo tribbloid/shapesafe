@@ -4,7 +4,7 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.ops.LeafShapeOps
-import org.shapesafe.core.shape.{LeafShape, Shape}
+import org.shapesafe.core.shape.{LeafShape, Shape, ShapeExpr}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -14,7 +14,7 @@ case class OuterProduct[
 ](
     s1: S1,
     s2: S2
-) extends Shape {}
+) extends ShapeExpr {}
 
 trait OuterProduct_Imp0 {
 

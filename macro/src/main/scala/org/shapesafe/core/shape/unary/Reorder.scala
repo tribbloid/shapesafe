@@ -10,7 +10,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 ](
     s1: S1,
     indices: II
-) extends Shape {}
+) extends ShapeExpr {}
 
 object Reorder {
 

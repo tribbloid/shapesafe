@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
 import org.shapesafe.core.shape.Shape
-import org.shapesafe.core.shape.unary.OpByName
+import org.shapesafe.core.shape.unary.Op2ByName
 import singleton.ops
 
 trait ArityOpsLike[X <: Arity] {
@@ -22,12 +22,12 @@ trait ArityOpsLike[X <: Arity] {
 
     object Updaters extends OldNameUpdaterSystem(op)
 
-    object AppendByName extends OpByName {
+    object AppendByName extends Op2ByName {
       object oldNameUpdater extends Updaters.Appender
     }
     type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
-    object SquashByName extends OpByName {
+    object SquashByName extends Op2ByName {
       object oldNameUpdater extends Updaters.Squasher
     }
     type SquashByName[S1 <: Shape] = SquashByName._On[S1]

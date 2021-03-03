@@ -9,6 +9,42 @@ class EinSumSpec extends BaseSpec {
 
   import shapeless.syntax.singleton.mkSingletonOps
 
+  it("treeString") {
+    import Names.Syntax._
+
+    val s1 =
+      Shape(1, 2) |<<- ("x" >< "y")
+
+    val s2 =
+      Shape(3, 4) |<<- ("i" >< "j")
+
+    val r = (s1 einSum s2) -> ("x" >< "i")
+
+    r.treeString.shouldBe(
+      """
+        |Reorder┏ Eye ><
+        |       ┃   x ><
+        |       ┃   i
+        | ‣ CheckEinSum
+        |    ‣ OuterProduct
+        |       ‣ CheckEinSum
+        |       :  ‣ WithNames┏ Eye ><
+        |       :             ┃   x ><
+        |       :             ┃   y
+        |       :     ‣ Eye ><
+        |       :         1:Derived :<<- ?? ><
+        |       :         2:Derived :<<- ??
+        |       ‣ CheckEinSum
+        |          ‣ WithNames┏ Eye ><
+        |                     ┃   i ><
+        |                     ┃   j
+        |             ‣ Eye ><
+        |                 3:Derived :<<- ?? ><
+        |                 4:Derived :<<- ??
+        |""".stripMargin
+    )
+  }
+
   describe("Indexing") {
 
     val index = CheckEinSum.indexing

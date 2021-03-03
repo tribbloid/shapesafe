@@ -1,6 +1,6 @@
 package org.shapesafe.core.tuple
 
-import com.tribbloids.graph.commons.util.IDMixin
+import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil}
 
@@ -53,10 +53,11 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override def asList: List[UB] = tail.asList ++ Seq(head)
 
 //    override lazy val toString = s"${tail.toString} >< $head"
-    override lazy val toString: String =
+    override lazy val toString: String = {
       s"""${tail.toString} ><
-         |  $head
-         | """.stripMargin.trim
+           |${TextBlock(head.toString).indent("  ").build}
+           | """.stripMargin.trim
+    }
   }
 }
 

@@ -1,14 +1,14 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeExpr}
 
 // all names must be distinctive - no duplication allowed
 case class CheckDistinct[
     S1 <: Shape
 ](
     s1: S1
-) extends Shape {}
+) extends ShapeExpr {}
 
 object CheckDistinct {
 
