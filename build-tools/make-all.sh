@@ -8,7 +8,7 @@ DATE=$(date --iso-8601=second)
 
 echo "[SUBMODULE(S)]" && \
 cd splain && \
-sbt compile && \
+sbt publishM2 && \
 cd ..
 
 mkdir -p ${FWDIR}/logs

@@ -145,14 +145,13 @@ object LeafShape extends TupleSystem with CanFromStatic {
     ](
         implicit
         forTail: H_TAIL ==> TAIL
-    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- Axis.unknownName.type)) = {
+    ): (D :: H_TAIL) ==> (TAIL >< D) = {
 
       forAll[D :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: D
-        val head = vHead :<<- Axis.unknownName
 
-        prev >|< head
+        prev >|< vHead
       }
     }
   }
@@ -201,11 +200,11 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T] :<<- Axis.unknownName.type] = {
+    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T]] = {
 
       forAll[w.T :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
-        val head = LeafArity.Literal(w) :<<- Axis.unknownName
+        val head = LeafArity.Literal(w)
 
         prev >|< head
       }
