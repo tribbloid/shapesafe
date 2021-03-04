@@ -1,16 +1,28 @@
-# The missing compile-time verifier for numerical linear algebra
+# ∀ Linear Algebra ∃ Proof System between Types
 
-shapeless is a Scala library that aims to capture obviously incorrect tensor operations at compile-time.
+**shapesafe** is the missing compile-time verifier for numerical linear algebra, obvious shape and indexing errors in tensor operations are captured by scala compiler.
 
-**It is not a tensor computing library**. Instead, it is designed to latch on existing libraries for proof of correctness (see Roadmap for possible latching)
+shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
 
-#### Build Status
+- static & runtime-dependent tenor shapes of arbitrary rank
+- named tensor: each dimension is indexed by both its name and ordinal number
+- contractions & operations that depends on index equality, generally those representable by einsum notation (dot/cross/matrix/hadamard product)
+- operations that depends on shape arithmetics: convolution, direct sum, kronecker product, flatten/reshape
+
+**It is not a tensor computing library!** Instead, it is designed to augment existing libraries for proof of correctness (see Roadmap for possible augmentations).
+
+shapesafe minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
+
+Support for scala-2.13 is always guaranteed, support for scala-2.12 will only be enforced intermittenly and upon request, please create (or vote for) tickets that target scala-2.12 for a specific major version.
+
+### Build Status
 
 | branch \ profile | scala-2.12 | scala-2.13
 |---|---|---|
 | master | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master) |
+| (latest in-progress) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg) |
 
-#### Roadmap
+### Roadmap
 
 ##### High priority
 
@@ -41,3 +53,11 @@ Most features in shapeless & singleton-ops are taken over by native compiler fea
   - shapeless.NatProductArgs
   - shapeless.SingletonProductArgs
 - ecosystem: Apache Spark, CHISEL, the typelevel cohort, and much more
+
+### Credit
+
+- [Prof. Dmytro Mitin](https://www.researchgate.net/profile/Dmytro-Mitin) at National Taras Shevchenko University of Kyiv
+- All maintainers of [singleton-ops](https://github.com/fthomas/singleton-ops)
+- All maintainers of [shapeless](https://github.com/milessabin/shapeless)
+- All maintainers of [splain](https://github.com/tek/splain)
+- Breandan Considine, lead committer of [Kotlin∇](https://openreview.net/forum?id=SkluMSZ08H)
