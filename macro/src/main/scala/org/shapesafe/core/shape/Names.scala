@@ -5,7 +5,7 @@ import shapeless.Witness
 
 import scala.language.implicitConversions
 
-trait Names extends IndicesLike with Names.proto.Impl {}
+trait Names extends IndicesMagnet with Names.proto.Impl {}
 
 object Names extends TupleSystem with CanCons with CanFromStatic {
 
@@ -35,7 +35,7 @@ object Names extends TupleSystem with CanCons with CanFromStatic {
     override type Canonical = Indices.><[tail.Canonical, Index.Name[HEAD]]
 
     override def canonical: Canonical =
-      tail.canonical >< Index.Name[HEAD](headW)
+      tail.canonical >< Index.Name(headW)
   }
 
   implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {

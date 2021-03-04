@@ -1,5 +1,6 @@
 package org.shapesafe.core.arity.binary
 
+import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.{=>>^^, |~~}
 import org.shapesafe.core.arity.ops.ArityOps.=!=
@@ -28,7 +29,10 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
   ](
       a1: A1,
       a2: A2
-  ) extends Arity {
+  ) extends Arity
+      with HasOuter {
+
+    def outer: AssertEqual.type = AssertEqual.this
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity

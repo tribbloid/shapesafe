@@ -3,14 +3,14 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.LeafArity.Literal
 import org.shapesafe.core.arity.ProveArity.|--
 import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.axis.{Axis, AxisMagnet}
 import org.shapesafe.core.axis.Axis.:<<-
 import shapeless.Witness
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity extends Axis.Nameless {
+trait Arity extends AxisMagnet {
 
   final def verify[
       SELF >: this.type <: Arity,
@@ -46,8 +46,6 @@ trait Arity extends Axis.Nameless {
     }
     .get
 
-  override type Dimension = this.type
-  override def dimension: this.type = this
 }
 
 object Arity {

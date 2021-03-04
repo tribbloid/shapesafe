@@ -1,10 +1,10 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.shape.ProveShape.=>>
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
+import org.shapesafe.core.axis.{noName, Axis}
+import org.shapesafe.core.shape.ProveShape.=>>
 import org.shapesafe.core.shape.ops.LeafShapeOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
@@ -145,7 +145,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
     ](
         implicit
         forTail: H_TAIL ==> TAIL
-    ): (D :: H_TAIL) ==> (TAIL >< D) = {
+    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- noName)) = {
 
       forAll[D :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
@@ -189,21 +189,21 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
   implicit def toOps[T <: LeafShape](self: T): LeafShapeOps[T] = new LeafShapeOps(self)
 
-  //TODO: doesn't work, blocked by https://github.com/milessabin/shapeless/issues/1072
   object FromLiterals extends AbstractFromHList {
 
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Impl,
-        HEAD <: Int
+        HEAD <: Int with Singleton
     ](
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Literal[w.T]] = {
+    ): (HEAD :: H_TAIL) ==> (TAIL >< (LeafArity.Literal[HEAD] :<<- noName)) = {
 
-      forAll[w.T :: H_TAIL].==> { v =>
-        val prev = apply(v.tail)
+      forAll[HEAD :: H_TAIL].==> { v =>
+        val prev = forTail(v.tail)
+//        val vHead: HEAD = v.head
         val head = LeafArity.Literal(w)
 
         prev >|< head
@@ -220,12 +220,12 @@ object LeafShape extends TupleSystem with CanFromStatic {
     ](
         implicit
         forTail: H_TAIL ==> TAIL,
-        ev: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, LeafArity.Derived[NatAsOp[HEAD]] :<<- Axis.unknownName.type] = {
+        asOp: NatAsOp[HEAD]
+    ): (HEAD :: H_TAIL) ==> (TAIL >< (LeafArity.Derived[NatAsOp[HEAD]] :<<- noName)) = {
 
       forAll[(HEAD :: H_TAIL)].==> { v =>
         val prev = apply(v.tail)
-        val head = LeafArity.FromNat(v.head) :<<- Axis.unknownName
+        val head = LeafArity.FromNat(v.head)
 
         prev >|< head
       }

@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape.unary
 
+import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.shape.ProveShape._
@@ -15,7 +16,10 @@ trait Op2ByName {
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: Shape
-  ] extends ShapeExpr {
+  ] extends ShapeExpr
+      with HasOuter {
+
+    override def outer: Op2ByName.this.type = Op2ByName.this
 
     val s1: S1
   }
@@ -23,7 +27,7 @@ trait Op2ByName {
   case class On[
       S1 <: Shape
   ](override val s1: S1)
-      extends _On[S1]
+      extends _On[S1] {}
 
   object _On {
 

@@ -154,7 +154,7 @@ allprojects {
                         listOf(
                             //splain
                             "-P:splain:tree",
-                            "-P:splain:breakinfix:80",
+                            "-P:splain:breakinfix:200",
                             "-P:splain:bounds:true",
                             "-P:splain:boundsimplicits:true",
                             "-P:splain:keepmodules:2"

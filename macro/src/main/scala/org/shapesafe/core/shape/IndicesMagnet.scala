@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-trait IndicesLike {
+trait IndicesMagnet {
 
   type Canonical <: Indices
   def canonical: Canonical

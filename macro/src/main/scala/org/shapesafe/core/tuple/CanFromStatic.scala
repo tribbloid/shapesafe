@@ -1,7 +1,8 @@
 package org.shapesafe.core.tuple
 
 import org.shapesafe.core.Poly1Base
-import shapeless.{::, HList, HNil}
+import shapeless.ops.hlist.Reverse
+import shapeless.{::, HList, HNil, NatProductArgs, SingletonProductArgs}
 
 trait CanFromStatic extends CanCons {
   _self: TupleSystem =>
@@ -14,7 +15,6 @@ trait CanFromStatic extends CanCons {
       }
     }
 
-    trait From2 {}
   }
 
   object FromStatic extends AbstractFromHList {

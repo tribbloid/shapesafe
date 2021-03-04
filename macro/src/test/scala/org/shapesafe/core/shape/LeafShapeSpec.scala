@@ -1,9 +1,10 @@
 package org.shapesafe.core.shape
 
+import com.tribbloids.graph.commons.util.viz
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.core.shape.LeafShape.{FromNats, FromRecord, FromStatic}
+import org.shapesafe.core.shape.LeafShape.{FromLiterals, FromNats, FromRecord, FromStatic}
 import shapeless.HNil
 
 class LeafShapeSpec extends BaseSpec {
@@ -69,7 +70,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape).shouldBe(
         """
-          |LeafShape.Eye >< LeafArity.Literal[Int(2)] >< LeafArity.Literal[Int(3)]
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- noName.type) >< (LeafArity.Literal[Int(3)] :<<- noName.type)
           |""".stripMargin
       )
 
@@ -87,7 +88,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< LeafArity.Literal[Int(3)] >< (LeafArity.Literal[Int(4)] :<<- String("z"))
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- noName.type) >< (LeafArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -187,21 +188,85 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe(FromNats.getClass.getSimpleName) {
+  describe(FromLiterals.getClass.getSimpleName) {
 
     it("1") {
-      val ss = Shape(4)
+      val ss = Shape.Literals(4)
 
       ss.dimensions.static.head.internal.requireEqual(4)
       ss.dimensions.static.last.internal.requireEqual(4)
+
+      val nn = (ss |<<- (Names >< "i")).eval
+
+      nn.toString.shouldBe(
+        """
+          |Eye ><
+          |  4:Literal :<<- i
+          |""".stripMargin
+      )
     }
 
     it("2") {
-      val ss = Shape(4, 3, 2)
+      val ss = Shape.Literals(4, 3, 2)
 
       ss.dimensions.static.head.internal.requireEqual(2)
       ss.dimensions.static.last.internal.requireEqual(4)
+
+      val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
+
+      nn.toString.shouldBe(
+        """
+          |Eye ><
+          |  4:Literal :<<- i ><
+          |  3:Literal :<<- j ><
+          |  2:Literal :<<- k
+          |""".stripMargin
+      )
     }
+  }
+
+  describe(FromNats.getClass.getSimpleName) {
+
+    it("1") {
+      val ss = Shape.Nats(4)
+
+      ss.dimensions.static.head.internal.requireEqual(4)
+      ss.dimensions.static.last.internal.requireEqual(4)
+
+      val nn = (ss |<<- (Names >< "i")).eval
+
+      nn.toString.shouldBe(
+        """
+          |Eye ><
+          |  4:Derived :<<- i
+          |""".stripMargin
+      )
+    }
+
+    it("2") {
+      val ss = Shape.Nats(4, 3, 2)
+
+      ss.dimensions.static.head.internal.requireEqual(2)
+      ss.dimensions.static.last.internal.requireEqual(4)
+
+      val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
+
+      nn.toString.shouldBe(
+        """
+          |Eye ><
+          |  4:Derived :<<- i ><
+          |  3:Derived :<<- j ><
+          |  2:Derived :<<- k
+          |""".stripMargin
+      )
+    }
+
+//    it("3") {
+//      val ss = (Shape.Literals(4, 3, 2) |<<- (Names >< "i" >< "j" >< "k")).eval
+//
+//      ss.dimensions.static.head.internal.requireEqual(2)
+//      ss.dimensions.static.last.internal.requireEqual(4)
+//    }
   }
 
   describe("index") {
@@ -390,7 +455,7 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe("Axes") {
+  describe("Sub") {
 
     val shape = Shape >|<
       LeafArity.Literal(2) :<<- "x" >|<
@@ -412,7 +477,7 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe("direct") {
+  describe("outer") {
 
     it("1") {
 
@@ -484,9 +549,9 @@ class LeafShapeSpec extends BaseSpec {
       r.toString.shouldBe(
         """
           |Eye ><
-          |  3:Derived :<<- c ><
-          |  2:Derived :<<- b ><
-          |  1:Derived :<<- a
+          |  3:Literal :<<- c ><
+          |  2:Literal :<<- b ><
+          |  1:Literal :<<- a
           |""".stripMargin
       )
     }

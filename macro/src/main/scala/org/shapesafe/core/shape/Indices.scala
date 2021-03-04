@@ -4,7 +4,7 @@ import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
 
 import scala.language.implicitConversions
 
-trait Indices extends IndicesLike with Indices.proto.Impl {
+trait Indices extends IndicesMagnet with Indices.proto.Impl {
 
   final override type Canonical = this.type
 

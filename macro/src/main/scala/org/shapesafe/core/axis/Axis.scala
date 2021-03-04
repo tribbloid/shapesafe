@@ -9,7 +9,7 @@ import shapeless.labelled.FieldType
 
 import scala.language.implicitConversions
 
-trait Axis extends IDMixin {
+trait Axis extends AxisMagnet with IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
 
   type Dimension <: Arity
@@ -51,18 +51,30 @@ object Axis {
     type Name = N
     type Dimension = D
 
-    override lazy val toString = s"$dimension :<<- $name"
+    override lazy val toString = {
+      if (name.isEmpty) s"$dimension"
+      else s"$dimension :<<- $name"
+    }
   }
 
-  val emptyName = ""
-  val unknownName = "??"
+  def Nameless[D <: Arity](
+      dimension: D
+  ): D :<<- noName = {
+    dimension :<<- noName
+  }
 
   //  val emptyW = Witness(emptyName) // for singleton String, can cast from emptyName automatically
-  trait Nameless extends Axis {
-
-    override type Name = emptyName.type
-    override def nameSingleton = Witness(emptyName)
-  }
+//  class Nameless[D <: Arity](
+//      val dimension: D
+//  ) extends Axis {
+//
+//    override type Name = emptyName.type
+//    override def nameSingleton = Witness(emptyName)
+//
+//    override type Dimension = D
+//
+//    override lazy val toString = s"$dimension"
+//  }
 
   def apply[
       V <: Arity
@@ -75,7 +87,7 @@ object Axis {
   }
 
   // TODO: alternatively: make Axis extending LeafShape directly?
-  implicit def axisAsLeaf[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
+  implicit def axisAsLeafShape[A <: Axis]: A =>> (LeafShape.Eye >< A) = {
 
     forAll[A].=>> { axis =>
       Shape >|< axis

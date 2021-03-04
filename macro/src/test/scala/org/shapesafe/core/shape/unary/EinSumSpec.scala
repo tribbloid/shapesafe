@@ -32,15 +32,15 @@ class EinSumSpec extends BaseSpec {
         |       :             ┃   x ><
         |       :             ┃   y
         |       :     ‣ Eye ><
-        |       :         1:Derived :<<- ?? ><
-        |       :         2:Derived :<<- ??
+        |       :         1:Literal ><
+        |       :         2:Literal
         |       ‣ CheckEinSum
         |          ‣ WithNames┏ Eye ><
         |                     ┃   i ><
         |                     ┃   j
         |             ‣ Eye ><
-        |                 3:Derived :<<- ?? ><
-        |                 4:Derived :<<- ??
+        |                 3:Literal ><
+        |                 4:Literal
         |""".stripMargin
     )
   }
@@ -203,8 +203,8 @@ class EinSumSpec extends BaseSpec {
       r.eval.toString.shouldBe(
         """
           |Eye ><
-          |  1:Derived :<<- x ><
-          |  3:Derived :<<- i
+          |  1:Literal :<<- x ><
+          |  3:Literal :<<- i
           |""".stripMargin
       )
     }

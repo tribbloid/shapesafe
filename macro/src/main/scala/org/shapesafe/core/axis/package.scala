@@ -1,5 +1,7 @@
 package org.shapesafe.core
 
-import org.shapesafe.core.arity.Arity
+package object axis {
 
-package object axis {}
+  val noName: String with Singleton = ""
+  type noName = noName.type
+}

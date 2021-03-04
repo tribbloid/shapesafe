@@ -26,7 +26,7 @@ object Index {
 
   object Name {
 
-    def apply[S <: String](w: Witness.Aux[S]): Name[S] = new Name(w)
+    def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
   class I_th[N <: Nat](val index: N, indexInt: Int) extends Key_<:[Nothing] {

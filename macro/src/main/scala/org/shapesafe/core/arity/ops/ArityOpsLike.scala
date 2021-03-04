@@ -1,5 +1,6 @@
 package org.shapesafe.core.arity.ops
 
+import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
@@ -22,13 +23,17 @@ trait ArityOpsLike[X <: Arity] {
 
     object Updaters extends OldNameUpdaterSystem(op)
 
-    object AppendByName extends Op2ByName {
+    object AppendByName extends Op2ByName with HasOuter {
       object oldNameUpdater extends Updaters.Appender
+
+      override def outer: AnyRef = Infix.this
     }
     type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
-    object SquashByName extends Op2ByName {
+    object SquashByName extends Op2ByName with HasOuter {
       object oldNameUpdater extends Updaters.Squasher
+
+      override def outer: AnyRef = Infix.this
     }
     type SquashByName[S1 <: Shape] = SquashByName._On[S1]
   }

@@ -16,22 +16,22 @@ class Op2ByNameSpec extends BaseSpec {
 
     val rr = s1.flattenWith(ArityOps.:+, s2)
 
-    rr.toString.shouldBe(
+    rr.treeString.shouldBe(
       """
-        |Op2ByName.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix.SquashByName ‣ Op2ByName.On
         | ‣ OuterProduct
         |    ‣ WithNames┏ Eye ><
         |    :          ┃   x ><
         |    :          ┃   y
         |    :  ‣ Eye ><
-        |    :      2:Derived :<<- ?? ><
-        |    :      3:Derived :<<- ??
+        |    :      2:Literal ><
+        |    :      3:Literal
         |    ‣ WithNames┏ Eye ><
         |               ┃   x ><
         |               ┃   y
         |       ‣ Eye ><
-        |           4:Derived :<<- ?? ><
-        |           5:Derived :<<- ??
+        |           4:Literal ><
+        |           5:Literal
         |""".stripMargin
     )
   }

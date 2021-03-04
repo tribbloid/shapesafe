@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.ops
 
-import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.axis.AxisMagnet
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.{LeafShape, Names}
 import shapeless.HList
@@ -11,19 +11,20 @@ class LeafShapeOps[SELF <: LeafShape](val self: SELF) {
   type Static = self.Static
   def static: Static = self.static
 
-  def >|<[THAT <: Axis](
-      axis: THAT
-  ): ><[SELF, THAT] = {
+  case object >|< {
 
-    new LeafShape.><(self, axis)
+    def apply[THAT <: AxisMagnet](
+        axisLike: THAT
+    )(
+        implicit
+        toAxis: AxisMagnet.Case[THAT]
+    ): ><[SELF, toAxis.Out] = {
+
+      new LeafShape.><(self, toAxis(axisLike))
+    }
   }
 
-  def append[THAT <: Axis](
-      that: THAT
-  ): ><[SELF, THAT] = {
-
-    >|<(that)
-  }
+  lazy val append: >|<.type = >|<
 
   def transpose[
       N <: Names,

@@ -6,7 +6,7 @@ import org.shapesafe.core.shape.{ProveShape, _}
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
     +S1 <: Shape,
-    +II <: IndicesLike
+    +II <: IndicesMagnet
 ](
     s1: S1,
     indices: II
@@ -20,7 +20,7 @@ object Reorder {
   implicit def reduce[
       S1 <: Shape,
       P1 <: LeafShape,
-      II <: IndicesLike
+      II <: IndicesMagnet
   ](
       implicit
       lemma1: |~~[S1, P1],
