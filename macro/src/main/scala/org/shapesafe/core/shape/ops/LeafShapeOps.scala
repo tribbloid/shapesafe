@@ -26,21 +26,6 @@ class LeafShapeOps[SELF <: LeafShape](val self: SELF) {
 
   lazy val append: >|<.type = >|<
 
-  def transpose[
-      N <: Names,
-      O <: HList
-  ](
-      names: N
-  )(
-      implicit
-      mapper: Mapper.Aux[self.getField.type, names.Static, O],
-      fromIndex: LeafShape.FromRecord.Case[O]
-  ): LeafShape.FromRecord.Case[O]#Out = {
-
-    val newIndex: O = names.static.map(self.getField)(mapper)
-    LeafShape.FromRecord.apply(newIndex)
-  }
-
 //  object ElementWise {
 //
 //    def +[

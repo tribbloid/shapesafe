@@ -17,7 +17,7 @@ object Reorder {
   import ProveShape._
 
   //TODO: only 1 in superclass needs to be defined
-  implicit def reduce[
+  implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape,
       II <: IndicesMagnet

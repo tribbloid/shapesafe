@@ -24,7 +24,7 @@ object Get {
   //  import Direct._
   import ProveShape._
 
-  implicit def reduce[
+  implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape,
       I <: Index,

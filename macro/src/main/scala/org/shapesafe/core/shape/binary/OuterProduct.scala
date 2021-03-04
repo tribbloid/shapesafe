@@ -19,7 +19,7 @@ case class OuterProduct[
 trait OuterProduct_Imp0 {
 
   //TODO: should leverage append, if the deadlock problem has been solved
-  implicit def reduce[
+  implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape,
       S2 <: Shape,

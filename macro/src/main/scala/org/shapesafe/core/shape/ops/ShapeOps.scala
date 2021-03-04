@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.ops
 
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.binary.OuterProduct
-import org.shapesafe.core.shape.unary.{CheckEinSum, Reorder, WithNames}
+import org.shapesafe.core.shape.unary.{CheckDistinct, CheckEinSum, Reorder, WithNames}
 import org.shapesafe.core.shape.{Names, Shape}
 
 class ShapeOps[SELF <: Shape](val self: SELF) {
@@ -51,5 +51,10 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   ): infix.SquashByName[SELF] = {
 
     infix.SquashByName.On(self)
+  }
+
+  def transpose[N <: Names](names: N): Reorder[CheckDistinct[SELF], N] = {
+
+    Reorder(CheckDistinct(self), names)
   }
 }

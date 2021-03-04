@@ -12,7 +12,7 @@ case class CheckDistinct[
 
 object CheckDistinct {
 
-  implicit def reduce[
+  implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape
   ](

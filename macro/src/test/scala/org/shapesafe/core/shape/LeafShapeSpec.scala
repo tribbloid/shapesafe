@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.viz
 import com.tribbloids.graph.commons.util.viz.VizType
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, LeafArity}
@@ -10,36 +9,6 @@ import shapeless.HNil
 class LeafShapeSpec extends BaseSpec {
 
   import shapeless.record._
-
-  ignore("spike") {
-
-    it("1") {
-
-      val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x"
-
-      //    VizType.infer(shape).toString.shouldBe()
-
-      //    VizType[shape.Tail].toString.shouldBe()
-//      VizType[shape.Field].toString.shouldBe()
-//      VizType[shape.Tail].toString.shouldBe()
-//      VizType[shape.tail.type].toString.shouldBe()
-//      VizType[shape.Static].toString.shouldBe()
-    }
-
-    it("2") {
-
-      val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x" >|<
-        LeafArity.Literal(3) :<<- "y"
-
-      //    VizType.infer(shape).toString.shouldBe()
-
-      //    VizType[shape.Tail].toString.shouldBe()
-//      VizType[shape.Field].toString.shouldBe()
-//      VizType[shape.Static].toString.shouldBe()
-    }
-  }
 
   describe("create") {
 
@@ -61,8 +30,6 @@ class LeafShapeSpec extends BaseSpec {
     }
 
     it("nameless") {
-
-      import org.shapesafe.core.axis.Axis._
 
       val shape = Shape >|<
         LeafArity.Literal(2) append
@@ -411,50 +378,6 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe("withNames") {
-
-    val shape = Shape >|<
-      LeafArity.Literal(2) :<<- "x" >|<
-      LeafArity.Literal(3) :<<- "y"
-
-    val ab = Names >< "a" >< "b"
-    val ij = Names >< "i" >< "j"
-    val namesTooMany = Names >< "a" >< "b" >< "c"
-
-    val shapeRenamed = Shape >|<
-      LeafArity.Literal(2) :<<- "a" >|<
-      LeafArity.Literal(3) :<<- "b"
-
-    it("1") {
-
-//      inferShort(names1).shouldBe()
-
-      val shape2 = (shape |<<- ab).simplify
-
-//      VizType.infer(shape2).toString.shouldBe()
-
-      VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
-    }
-
-    it("2") {
-
-      val shape1 = shape |<<- ij
-
-      val shape2 = (shape1 |<<- Names >< "a" >< "b").simplify
-
-//      VizType.infer(shape2).toString.shouldBe()
-
-      VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
-    }
-
-    it("should fail if operands are of different dimensions") {
-
-      shouldNotCompile(
-        "shape <<- namesTooMany"
-      )
-    }
-  }
-
   describe("Sub") {
 
     val shape = Shape >|<
@@ -474,86 +397,6 @@ class LeafShapeSpec extends BaseSpec {
       val v = shape.Sub.apply("y").axis
 
       assert(v == LeafArity.Literal(3) :<<- "y")
-    }
-  }
-
-  describe("outer") {
-
-    it("1") {
-
-      val s1 = Shape >|<
-        LeafArity.Literal(2) :<<- "x"
-//        Arity.FromLiteral(3) :<<- "y"
-
-      val s2 = Shape >|<
-        LeafArity.Literal(2) :<<- "i"
-//        Arity.FromLiteral(3) :<<- "j"
-
-      val r = (s1 >< s2).eval
-
-      typeInferShort(r).shouldBe(
-        """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
-      )
-    }
-
-    it("2") {
-
-      val s1 = Shape >|<
-        LeafArity.Literal(2) :<<- "x" >|<
-        LeafArity.Literal(3) :<<- "y"
-
-      val s2 = Shape >|<
-        LeafArity.Literal(2) :<<- "i" >|<
-        LeafArity.Literal(3) :<<- "j"
-
-      val r = (s1 outer s2).eval
-
-      typeInferShort(r).shouldBe(
-        """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
-          | (LeafArity.Literal[Int(2)] :<<- String("i")) >< (LeafArity.Literal[Int(3)] :<<- String("j"))
-          |""".stripMargin.split('\n').mkString
-      )
-    }
-  }
-
-  describe("transpose") {
-
-    it("1") {
-
-      val shape = Shape >|<
-        Arity(1) :<<- "a" >|<
-        Arity(2) :<<- "b" >|<
-        Arity(3) :<<- "c"
-
-      val r = shape.transpose(Names >< "c")
-
-      val cc = r.getClass
-
-      r.toString.shouldBe(
-        """
-          |Eye ><
-          |  3:Literal :<<- c
-          |""".stripMargin
-      )
-    }
-
-    it("... alternative syntax") {
-      import Names.Syntax._
-
-      val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
-
-      val r = shape.transpose("c" >< "b" >< "a")
-
-      r.toString.shouldBe(
-        """
-          |Eye ><
-          |  3:Literal :<<- c ><
-          |  2:Literal :<<- b ><
-          |  1:Literal :<<- a
-          |""".stripMargin
-      )
     }
   }
 }

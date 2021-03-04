@@ -31,7 +31,7 @@ trait Op2ByName {
 
   object _On {
 
-    implicit def reduce[
+    implicit def simplify[
         S1 <: Shape,
         P1 <: LeafShape
     ](

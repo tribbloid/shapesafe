@@ -15,7 +15,7 @@ case class WithNames[
 
 object WithNames {
 
-  implicit def reduce[
+  implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape,
       N <: Names,
