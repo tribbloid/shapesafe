@@ -5,7 +5,7 @@ import shapeless.{HList, SingletonProductArgs}
 
 trait ApplyLiterals extends SingletonProductArgs {
 
-  val fromHList: CanFromStatic#AbstractFromHList
+  val fromHList: TupleSystem#AbstractFromHList
 
   // TODO: should the reverse be justified?
   def applyProduct[H1 <: HList, H2 <: HList](

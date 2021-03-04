@@ -24,12 +24,12 @@ object Reorder {
   ](
       implicit
       lemma1: |~~[S1, P1],
-      lemma2: Premise.Case[Reorder[P1, II#Canonical]]
+      lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
   ): Reorder[S1, II] =>> lemma2.Out = {
 
     forAll[Reorder[S1, II]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)
-      val vv = v.copy(s1 = p1, indices = v.indices.canonical)
+      val vv = v.copy(s1 = p1, indices = v.indices.asIndices)
 
       lemma2.apply(vv)
     }

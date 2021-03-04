@@ -14,26 +14,39 @@ class NamesSpec extends BaseSpec {
 
   val hList = "z".narrow :: "y".narrow :: "x".narrow :: HNil
 
-  it("create") {
+  describe("create") {
 
-    require(names.static == hList)
+    it("1") {
 
-    val t1 = VizType.infer(names.static)
-    val t2 = VizType.infer(hList)
+      require(names.static == hList)
 
-    assert(t1.tt =:= t2.tt)
-  }
+      val t1 = VizType.infer(names.static)
+      val t2 = VizType.infer(hList)
 
-  it("from String literal") {
+      t1.===!===(t2)
+    }
 
-    import Names.Syntax._
+    it("2") {
 
-    val v1 = Names >< "x" >< "y" >< "z"
-    val v2 = literalToInfix("x") >< "y" >< "z"
-    val v3 = "x" >< "y" >< "z"
+      val n2 = Names("x", "y", "z")
 
-    assert(v1 == v2)
-    assert(v2 == v3)
+      val t1 = VizType.infer(names)
+      val t2 = VizType.infer(n2)
+
+      t1.===!===(t2)
+    }
+
+    it("3") {
+
+      import Names.Syntax._
+
+      val n2 = "x" >< "y" >< "z"
+
+      val t1 = VizType.infer(names)
+      val t2 = VizType.infer(n2)
+
+      t1.===!===(t2)
+    }
   }
 
   it("cons") {
@@ -55,25 +68,25 @@ class NamesSpec extends BaseSpec {
       )
   }
 
-  it("FromStatic") {
+  it("FromLiterals") {
 
-    val names2 = Names.FromStatic(hList)
+    val names2 = Names.FromLiterals(hList)
 
     // TODO: runtime assertion?
 
     val t1 = VizType.infer(names)
     val t2 = VizType.infer(names2)
 
-    t1.shouldBe(t2)
+    t1.===!===(t2)
   }
 
   it("as Indices") {
 
-    VizType[Names.Eye.Canonical].shouldBe(VizType[Indices.Eye])
+    VizType[Names.Eye.AsIndices].shouldBe(VizType[Indices.Eye])
 
     val ii = Indices >< Name("x") >< Name("y") >< Name("z")
 
-    VizType.infer(names.canonical).shouldBe(VizType.infer(ii))
+    VizType.infer(names.asIndices).===!===(VizType.infer(ii))
 
 //    implicitly[Names.Eye <:< Indices.Eye]
 //

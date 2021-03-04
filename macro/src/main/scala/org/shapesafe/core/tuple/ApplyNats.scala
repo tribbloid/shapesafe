@@ -5,7 +5,7 @@ import shapeless.{HList, NatProductArgs}
 
 trait ApplyNats extends NatProductArgs {
 
-  val fromHList: CanFromStatic#AbstractFromHList
+  val fromHList: TupleSystem#AbstractFromHList
 
   // TODO: should the reverse be justified?
   def applyNatProduct[H1 <: HList, H2 <: HList](

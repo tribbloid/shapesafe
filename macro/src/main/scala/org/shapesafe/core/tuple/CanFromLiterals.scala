@@ -2,15 +2,15 @@ package org.shapesafe.core.tuple
 
 import shapeless.{::, HList}
 
-trait CanFromStatic extends CanCons {
+trait CanFromLiterals extends CanCons {
   _self: TupleSystem =>
 
-  object FromStatic extends AbstractFromHList {
+  object FromLiterals extends AbstractFromHList {
 
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Impl,
-        HEAD <: UpperBound
+        HEAD <: UpperBound with Singleton
     ](
         implicit
         forTail: H_TAIL ==> TAIL,

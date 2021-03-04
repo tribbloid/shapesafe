@@ -6,9 +6,9 @@ import scala.language.implicitConversions
 
 trait Indices extends IndicesMagnet with Indices.proto.Impl {
 
-  final override type Canonical = this.type
+  final override type AsIndices = this.type
 
-  final override def canonical: Indices.this.type = this
+  final override def asIndices: Indices.this.type = this
 }
 
 object Indices extends TupleSystem with CanInfix_>< {
