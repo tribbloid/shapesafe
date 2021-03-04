@@ -1,26 +1,55 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+val vs = versions()
+
+buildscript {
+    repositories {
+        // Add here whatever repositories you're already using
+        mavenCentral()
+    }
+
+    val vs = versions()
+
+    dependencies {
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.8") // suffix is always 2.12, weird
+    }
+}
 
 plugins {
 //    base
     java
+    `java-test-fixtures`
+
     scala
-    kotlin("jvm") version "1.3.72" // TODO: remove?
+    kotlin("jvm") version "1.4.30" // TODO: remove?
+
     idea
+
+    `maven-publish`
+
+    id("com.github.ben-manes.versions" ) version "0.36.0"
 }
+
+val rootID = vs.projectRootID
 
 allprojects {
 
     apply(plugin = "java")
     apply(plugin = "java-library")
     apply(plugin = "java-test-fixtures")
+
+    // apply(plugin = "bloop")
+    // DO NOT enable! In VSCode it will cause the conflict:
+    // Cannot add extension with name 'bloop', as there is an extension already registered with that name
+
     apply(plugin = "scala")
     apply(plugin = "kotlin")
+
     apply(plugin = "idea")
 
-    val vs = this.versions()
+    apply(plugin = "maven-publish")
 
-    group = "edu.umontreal.shapesafe"
-    version = "0.0.1-SNAPSHOT"
+
+    group = vs.projectGroup
+    version = vs.projectV
 
     repositories {
         mavenLocal()
@@ -32,34 +61,49 @@ allprojects {
     // resolving jar hells
     configurations.all {
         resolutionStrategy.dependencySubstitution {
-            substitute(module("com.chuusai:shapeless_${vs.scalaBinaryV}")).apply {
-                with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:2.3.3"))
+            substitute(
+                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+            ).apply {
+                with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
+//            substitute( // TODO: not working!
+//                module("${vs.scalaGroup}:scala-library")
+//            ).apply {
+//                with(module("${vs.scalaGroup}:scala-library:${vs.scalaV}"))
+//            }
         }
     }
 
     dependencies {
 
-        implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+
+        compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        testFixturesCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        testCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        // This is a dirty hack to circumvent https://youtrack.jetbrains.com/issue/SCL-17284
+
+        compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         //https://github.com/tek/splain
-//        scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:0.5.7")
-        //TODO: incompatible with testFixtures?
+        if (vs.splainV !=null)
+            scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
 
-        implementation(kotlin("stdlib"))
-        implementation(kotlin("stdlib-jdk8"))
+//        compileOnly(kotlin("stdlib"))
+//        compileOnly(kotlin("stdlib-jdk8"))
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
 //        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
 
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:3.0.8")
+        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.3")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.8")
+
+//        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
+
     }
 
     task("dependencyTree") {
@@ -69,10 +113,6 @@ allprojects {
 
     tasks {
         val jvmTarget = JavaVersion.VERSION_1_8.toString()
-
-//        scala {
-//            this.zincVersion
-//        }
 
         withType<ScalaCompile> {
 
@@ -84,7 +124,7 @@ allprojects {
 
                 loggingLevel = "verbose"
 
-                additionalParameters = listOf(
+                val compilerOptions = mutableListOf(
                     "-encoding", "utf8",
                     "-unchecked",
                     "-deprecation",
@@ -98,15 +138,31 @@ allprojects {
                     "-Xlog-implicit-conversions",
 
                     "-Yissue-debug"
-//                        ,
-//                        "-Ytyper-debug"
-//                        "-Vtyper"
+//                    ,
+//                    "-Ytyper-debug",
+//                    "-Vtyper"
 
                     // the following only works on scala 2.13
 //                        ,
 //                        "-Xlint:implicit-not-found",
 //                        "-Xlint:implicit-recursion"
+
                 )
+
+                if (vs.splainV != null) {
+                    compilerOptions.addAll(
+                        listOf(
+                            //splain
+                            "-P:splain:tree",
+                            "-P:splain:breakinfix:200",
+                            "-P:splain:bounds:true",
+                            "-P:splain:boundsimplicits:true",
+                            "-P:splain:keepmodules:2"
+                        )
+                    )
+                }
+
+                additionalParameters = compilerOptions
 
                 forkOptions.apply {
 
@@ -122,14 +178,15 @@ allprojects {
         }
 
 //        kotlin {}
-
-        withType<KotlinCompile> {
-
-
-            kotlinOptions.jvmTarget = jvmTarget
-//            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
-            // TODO: re-enable after kotlin compiler argument being declared safe
-        }
+// TODO: remove, kotlin is not in scope at the moment
+//
+//        withType<KotlinCompile> {
+//
+//
+//            kotlinOptions.jvmTarget = jvmTarget
+////            kotlinOptions.freeCompilerArgs += "-XXLanguage:+NewInference"
+//            // TODO: re-enable after kotlin compiler argument being declared safe
+//        }
 
         test {
 
@@ -156,25 +213,64 @@ allprojects {
         }
     }
 
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+//    scala {
+//        this.zincVersion
+//    }
+
+    publishing {
+        val moduleID = if (project.name.startsWith(rootID)) project.name
+        else rootID + "-" + project.name
+
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = groupId
+                artifactId = moduleID
+                version = version
+
+                from(components["java"])
+
+                suppressPomMetadataWarningsFor("testFixturesApiElements")
+                suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
+            }
+        }
+    }
+
+
     idea {
 
         targetVersion = "2020"
 
-
         module {
 
-            // apache spark
-            excludeDirs.add(file("warehouse"))
-            excludeDirs.add(file("latex"))
+            excludeDirs = excludeDirs + listOf(
+                file(".gradle"),
+                file(".github"),
 
-            // gradle log
-            excludeDirs.add(file("logs"))
-            excludeDirs.add(file("gradle"))
+                file ("target"),
+//                        file ("out"),
+
+                file(".idea"),
+                file(".vscode"),
+                file(".bloop"),
+                file(".bsp"),
+                file(".metals"),
+
+                file("logs"),
+
+                // apache spark
+                file("warehouse"),
+
+                file("spike"),
+
+                file("splain")
+            )
 
             isDownloadJavadoc = true
             isDownloadSources = true
         }
     }
 }
-
-

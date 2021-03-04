@@ -5,10 +5,6 @@ CRDIR="$(
   pwd
 )"
 
-git submodule foreach git fetch
-git submodule update --init --recursive
+ARGS=${@}
 
-echo "[COMPILING]" && \
-"${CRDIR}"/make-all.sh "${@}" && \
-echo "[RUNNING TESTS]" && \
-"${CRDIR}"/test.sh "${@}"
+exec "${CRDIR}"/.CI.sh ${ARGS}
