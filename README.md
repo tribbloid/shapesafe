@@ -4,7 +4,7 @@
 
 shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
 
-- static & runtime-dependent tenor shapes of arbitrary rank
+- static & runtime-dependent tensor shapes of arbitrary rank
 - named tensor: each dimension is indexed by both its name and ordinal number
 - contractions & operations that depends on index equality, generally those representable by einsum notation (dot/cross/matrix/hadamard product)
 - operations that depends on shape arithmetics: convolution, direct sum, kronecker product, flatten/reshape
