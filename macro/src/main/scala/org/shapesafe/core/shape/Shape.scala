@@ -45,10 +45,6 @@ object Shape extends ApplyLiterals {
 
   implicit def toOps[T <: Shape](self: T): ShapeOps[T] = new ShapeOps(self)
 
-  type Vector[T <: Axis] = Eye >< T
-
-  type Matrix[T1 <: Axis, T2 <: Axis] = Eye >< T1 >< T2
-
   object Nats extends ApplyNats {
 
     override val fromHList: LeafShape.FromNats.type = LeafShape.FromNats
@@ -60,4 +56,10 @@ object Shape extends ApplyLiterals {
   }
 
   override val fromHList: LeafShape.FromLiterals.type = LeafShape.FromLiterals
+
+  type Vector[T <: Axis] = Eye >< T
+  type _Vector = Vector[_ <: Axis]
+
+  type Matrix[T1 <: Axis, T2 <: Axis] = Eye >< T1 >< T2
+  type _Matrix = Matrix[_ <: Axis, _ <: Axis]
 }

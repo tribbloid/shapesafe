@@ -5,7 +5,7 @@ import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.unary.{CheckDistinct, CheckEinSum, Reorder, WithNames}
 import org.shapesafe.core.shape.{Names, Shape}
 
-class ShapeOps[SELF <: Shape](val self: SELF) {
+class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorMixin[SELF] with ShapeOps.MatrixMixin[SELF] {
 
   /**
     * assign new names
@@ -56,5 +56,36 @@ class ShapeOps[SELF <: Shape](val self: SELF) {
   def transpose[N <: Names](names: N): Reorder[CheckDistinct[SELF], N] = {
 
     Reorder(CheckDistinct(self), names)
+  }
+
+}
+
+object ShapeOps {
+
+  trait Base[SELF <: Shape] {
+
+    def self: SELF
+  }
+
+  trait VectorMixin[SELF <: Shape] extends Base[SELF] {
+
+    def dot[THAT <: Shape](that: THAT) = {
+      val s1 = self |<<- Names("i")
+      val s2 = that |<<- Names("i")
+
+      s1.einSum(s2) ->
+        Names("i")
+    }
+  }
+
+  trait MatrixMixin[SELF <: Shape] extends Base[SELF] {
+
+    def :*[THAT <: Shape](that: THAT) = {
+      val s1 = self |<<- Names("ij")
+      val s2 = that |<<- Names("jk")
+
+      s1.einSum(s2) ->
+        Names("ik")
+    }
   }
 }

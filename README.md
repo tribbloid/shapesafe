@@ -1,19 +1,19 @@
 # ∀ Linear Algebra ∃ Proof System between Types
 
-**shapesafe** is the missing compile-time verifier for numerical linear algebra, obvious shape and indexing errors in tensor operations are captured by scala compiler.
+**shapesafe** is the missing compile-time verifier for numerical linear algebra in scala, obvious shape and indexing errors in tensor operations are captured by the typing system.
 
 shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
 
 - static & runtime-dependent tensor shapes of arbitrary rank
 - named tensor: each dimension is indexed by both its name and ordinal number
 - contractions & operations that depends on index equality, generally those representable by einsum notation (dot/cross/matrix/hadamard product)
-- operations that depends on shape arithmetics: convolution, direct sum, kronecker product, flatten/reshape
+- operations that depends on shape arithmetics (convolution, direct sum, kronecker product, flatten/reshape)
 
-**It is not a tensor computing library!** Instead, it is designed to augment existing libraries for proof of correctness (see Roadmap for possible augmentations).
+**It is not a tensor computing library!** Instead, it is designed to augment existing libraries for less error-prone prototyping (see Roadmap for possible augmentations).
 
-shapesafe minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
+shapesafe started as an assignment to understand Martin-Löf type theory used by scala compiler, it minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
 
-Support for scala-2.13 is always guaranteed, support for scala-2.12 will only be enforced intermittenly and upon request, please create (or vote for) tickets that target scala-2.12 for a specific major version.
+Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js will only be enforced intermittenly and upon request, please create (or vote for) tickets to backport for a specific major version.
 
 ### Build Status
 
