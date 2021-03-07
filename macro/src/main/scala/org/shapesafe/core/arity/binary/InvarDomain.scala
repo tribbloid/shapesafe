@@ -7,8 +7,6 @@ import org.shapesafe.core.arity.ops.ArityOps.=!=
 import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
 import singleton.ops.{==, Require}
 
-import scala.language.higherKinds
-
 case class InvarDomain[
     A1 <: Arity,
     A2 <: Arity,

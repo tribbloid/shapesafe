@@ -6,7 +6,7 @@ import org.shapesafe.core.arity.ProveArity.|~~
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
 
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op

@@ -125,10 +125,12 @@ allprojects {
                 loggingLevel = "verbose"
 
                 val compilerOptions = mutableListOf(
-                    "-encoding", "utf8",
+                    "-encoding", "UTF-8",
                     "-unchecked",
                     "-deprecation",
                     "-feature",
+
+                    "-language:higherKinds",
 //                            "-Xfatal-warnings",
 
                     "-Xlint:poly-implicit-overload",

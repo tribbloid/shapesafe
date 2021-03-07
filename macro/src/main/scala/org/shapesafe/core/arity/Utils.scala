@@ -5,8 +5,6 @@ import singleton.ops.ToInt
 import singleton.ops.impl.std
 import singleton.twoface.impl.TwoFaceAny
 
-import scala.language.higherKinds
-
 object Utils {
 
   type Op = singleton.ops.impl.Op

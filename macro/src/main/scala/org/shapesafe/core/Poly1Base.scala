@@ -2,11 +2,17 @@ package org.shapesafe.core
 
 import shapeless.{DepFn1, DepFn2, Poly1}
 
+import scala.annotation.implicitNotFound
+
 // TODO: compiler bug?
 //  https://stackoverflow.com/questions/65944627/in-scala-how-could-a-covariant-type-parameter-be-an-upper-bound-of-an-abstract
 // TODO: merge into shapeless Poly1
 trait Poly1Base[IUB, OUB] {
 
+  // TODO: how to override it in subclasses?
+  @implicitNotFound(
+    "[MISSING]:\n    ${I}\n==>\n    ??? <: ${OUB}\n"
+  )
   trait Case[-I <: IUB] {
 
     type Out <: OUB
@@ -32,6 +38,9 @@ trait Poly1Base[IUB, OUB] {
     }
   }
 
+  @implicitNotFound(
+    "[MISSING]:\n    ${I}\n==>\n    ${O}\n"
+  )
   class ==>[
       -I <: IUB,
       O <: OUB

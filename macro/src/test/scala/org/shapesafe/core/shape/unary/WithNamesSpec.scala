@@ -43,6 +43,18 @@ class WithNamesSpec extends BaseSpec {
       VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
     }
 
+    it("3") {
+
+      val shape1 = shape |<<- ij
+
+      val shape2 = (shape1.named("a", "b")).simplify
+
+      //      VizType.infer(shape2).toString.shouldBe()
+
+      VizType.infer(shape2).shouldBe(VizType.infer(shapeRenamed))
+
+    }
+
     it("should fail if operands are of different dimensions") {
 
       shouldNotCompile(

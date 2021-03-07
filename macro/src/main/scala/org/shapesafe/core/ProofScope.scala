@@ -1,5 +1,6 @@
 package org.shapesafe.core
 
+import scala.annotation.implicitNotFound
 import scala.language.implicitConversions
 
 /**
@@ -20,7 +21,15 @@ trait ProofScope { // TODO: no IUB?
   /**
     * entailment, logical implication used only in existential proof summoning
     */
+  // TODO: how to override it in subclasses?
+  @implicitNotFound(
+    "[NO PROOF]\n    ${I}\n|--\n    ??? <: ${O}\n"
+  )
   type |~~[-I, O <: OUB] = =>>^^[I, root.Term.Lt[O]]
+
+  @implicitNotFound(
+    "[NO PROOF]\n    ${I}\n|--\n    ${O}\n"
+  )
   type |--[-I, O <: OUB] = =>>^^[I, root.Term.Aux[O]]
 
   type =>>[-I, O <: OUB] <: root.=>>[I, O]

@@ -21,7 +21,7 @@ trait NewNameAppender extends RecordUpdater {
 
     forAll[(OLD, N ->> A1)].==> {
       case (old, field) =>
-        field.asInstanceOf[N ->> A1] :: old
+        field :: old
     }
   }
 }

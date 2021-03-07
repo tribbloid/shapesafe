@@ -4,16 +4,39 @@ import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.unary.{CheckDistinct, CheckEinSum, Reorder, WithNames}
 import org.shapesafe.core.shape.{Names, Shape}
+import shapeless.{HList, SingletonProductArgs}
+import shapeless.ops.hlist.Reverse
 
-class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorMixin[SELF] with ShapeOps.MatrixMixin[SELF] {
+class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorOps[SELF] with ShapeOps.MatrixOps[SELF] {
 
   /**
     * assign new names
-    * @param newNames a tuple of names
     */
-  def |<<-[N <: Names](newNames: N): WithNames[SELF, N] = {
+  object withNames {
 
-    WithNames[SELF, N](self, newNames)
+    def apply[N <: Names](newNames: N): WithNames[SELF, N] = {
+
+      WithNames[SELF, N](self, newNames)
+    }
+  }
+
+  lazy val |<<- : withNames.type = withNames
+
+  // no need for Names constructor
+  object named extends SingletonProductArgs {
+
+    def applyProduct[H1 <: HList, H2 <: HList](
+        v: H1
+    )(
+        implicit
+        reverse: Reverse.Aux[H1, H2],
+        lemma: Names.FromLiterals.Case[H2]
+    ): WithNames[SELF, lemma.Out] = {
+
+      val out = lemma.apply(reverse(v))
+
+      withNames.apply(out)
+    }
   }
 
   def ><[THAT <: Shape](
@@ -67,7 +90,7 @@ object ShapeOps {
     def self: SELF
   }
 
-  trait VectorMixin[SELF <: Shape] extends Base[SELF] {
+  trait VectorOps[SELF <: Shape] extends Base[SELF] {
 
     def dot[THAT <: Shape](that: THAT) = {
       val s1 = self |<<- Names("i")
@@ -78,7 +101,7 @@ object ShapeOps {
     }
   }
 
-  trait MatrixMixin[SELF <: Shape] extends Base[SELF] {
+  trait MatrixOps[SELF <: Shape] extends Base[SELF] {
 
     def :*[THAT <: Shape](that: THAT) = {
       val s1 = self |<<- Names("ij")
