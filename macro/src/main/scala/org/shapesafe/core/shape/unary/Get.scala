@@ -23,6 +23,7 @@ object Get {
 //  object Direct extends ProveShape.SubScope
   //  import Direct._
   import ProveShape._
+  import Factory._
 
   implicit def simplify[
       S1 <: Shape,
@@ -31,7 +32,7 @@ object Get {
       O <: Axis
   ](
       implicit
-      lemma1: |~~[S1, P1],
+      lemma1: |-<[S1, P1],
       lemma2: Premise.==>[Get[P1, I], O]
   ): Get[S1, I] =>> (LeafShape.Eye >< O) = {
 

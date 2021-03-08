@@ -25,7 +25,7 @@ plugins {
 
     `maven-publish`
 
-    id("com.github.ben-manes.versions" ) version "0.36.0"
+    id("com.github.ben-manes.versions" ) version "0.38.0"
 }
 
 val rootID = vs.projectRootID

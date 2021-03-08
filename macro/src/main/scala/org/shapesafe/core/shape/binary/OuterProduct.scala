@@ -18,6 +18,8 @@ case class OuterProduct[
 
 trait OuterProduct_Imp0 {
 
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
   //TODO: should leverage append, if the deadlock problem has been solved
   implicit def simplify[
       S1 <: Shape,
@@ -27,8 +29,8 @@ trait OuterProduct_Imp0 {
       HO <: HList
   ](
       implicit
-      lemma1: S1 |~~ P1,
-      lemma2: S2 |~~ P2,
+      lemma1: S1 |-< P1,
+      lemma2: S2 |-< P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
       toShape: LeafShape.FromStatic.Case[HO]
   ): OuterProduct[S1, S2] =>> toShape.Out = {
@@ -44,6 +46,8 @@ trait OuterProduct_Imp0 {
 
 object OuterProduct extends OuterProduct_Imp0 {
 
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
   // shortcut for trivial D + 1 case
   implicit def append[
       S1 <: Shape,
@@ -53,8 +57,8 @@ object OuterProduct extends OuterProduct_Imp0 {
       P2 <: Shape.Vector[A2]
   ](
       implicit
-      lemma1: S1 |~~ P1,
-      lemma2: S2 |~~ P2
+      lemma1: S1 |-< P1,
+      lemma2: S2 |-< P2
   ): OuterProduct[S1, S2] =>> (P1 >< A2) = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>

@@ -12,6 +12,8 @@ case class CheckDistinct[
 
 object CheckDistinct {
 
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
   implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape

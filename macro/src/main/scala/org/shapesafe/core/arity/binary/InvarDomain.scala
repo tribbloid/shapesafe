@@ -4,8 +4,8 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.ops.ArityOps.=!=
-import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
-import singleton.ops.{==, Require}
+import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity, Utils}
+import singleton.ops.==
 
 case class InvarDomain[
     A1 <: Arity,
@@ -14,9 +14,11 @@ case class InvarDomain[
     S2
 ]()(
     implicit
-    bound1: A1 |~~ Const[S1],
-    bound2: A2 |~~ Const[S2]
+    bound1: A1 |-< Const[S1],
+    bound2: A2 |-< Const[S2]
 ) {
+
+  import ProveArity.Factory._
 
   def forOp2[??[X1, X2] <: Op](
       implicit
@@ -27,8 +29,10 @@ case class InvarDomain[
 
   def forEqual(
       implicit
-      lemma: Require[S1 == S2]
+      lemma: Utils.RequireLike[S1 == S2]
   ): A1 =!= A2 =>> Const[S1] = ProveArity.forAll[A1 =!= A2].=>> { v =>
     bound1.valueOf(v.a1)
   }
 }
+
+object InvarDomain {}

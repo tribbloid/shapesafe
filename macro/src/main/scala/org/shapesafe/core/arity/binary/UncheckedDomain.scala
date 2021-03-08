@@ -14,8 +14,10 @@ abstract class UncheckedDomain[
     O <: Term
 ] {
 
-  def bound1: A1 =>>^^ Term
-  def bound2: A2 =>>^^ Term
+  import ProveArity.Factory._
+
+  def bound1: A1 Proof Term
+  def bound2: A2 Proof Term
 
   def selectSafer(a1: A1, a2: A2): O
 
@@ -26,7 +28,7 @@ abstract class UncheckedDomain[
     Unchecked
   }
 
-  val forEqual: A1 =!= A2 =>>^^ O = ProveArity.forAll[A1 =!= A2].=>>^^ { v =>
+  val forEqual: A1 =!= A2 Proof O = ProveArity.forAll[A1 =!= A2].=>>^^ { v =>
     selectSafer(v.a1, v.a2)
   }
 }
@@ -39,8 +41,8 @@ trait UncheckedDomain_Imp0 {
       O <: Term
   ]()(
       implicit
-      val bound1: A1 |~~ Unchecked,
-      val bound2: A2 =>>^^ O
+      val bound1: A1 |-< Unchecked,
+      val bound2: A2 Proof O
   ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
@@ -52,8 +54,8 @@ trait UncheckedDomain_Imp0 {
       O <: Term
   ](
       implicit
-      bound1: A1 |~~ Unchecked,
-      bound2: A2 =>>^^ O
+      bound1: A1 |-< Unchecked,
+      bound2: A2 Proof O
   ): UncheckedDomain[A1, A2, O] = D2()
 }
 
@@ -74,8 +76,8 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
       O <: Term
   ]()(
       implicit
-      val bound1: A1 =>>^^ O,
-      val bound2: A2 |~~ Unchecked
+      val bound1: A1 Proof O,
+      val bound2: A2 |-< Unchecked
   ) extends UncheckedDomain[A1, A2, O] {
 
     override def selectSafer(a1: A1, a2: A2): O = bound1(a1)
@@ -87,7 +89,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
       O <: Term
   ](
       implicit
-      bound1: A1 =>>^^ O,
-      bound2: A2 |~~ Unchecked
+      bound1: A1 Proof O,
+      bound2: A2 |-< Unchecked
   ): UncheckedDomain[A1, A2, O] = D1()
 }

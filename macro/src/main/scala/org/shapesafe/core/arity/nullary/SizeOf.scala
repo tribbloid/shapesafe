@@ -14,6 +14,8 @@ case class SizeOf[D <: HList](data: D) extends Arity {
 
 object SizeOf {
 
+  import ProveArity.Factory._
+
   implicit def observe[D <: HList, N <: Nat](
       implicit
       length: hlist.Length.Aux[D, N],
@@ -33,7 +35,7 @@ object SizeOf {
 
   def getConst[D <: HList, N <: Nat](data: D)(
       implicit
-      self: SizeOf[D] |~~ LeafArity.Const[NatAsOp[N]]
+      self: SizeOf[D] |-< LeafArity.Const[NatAsOp[N]]
   ) = {
     val raw = SizeOf[D](data)
     self.apply(raw).value

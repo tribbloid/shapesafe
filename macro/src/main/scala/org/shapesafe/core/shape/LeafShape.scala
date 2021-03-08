@@ -4,7 +4,6 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.axis.{noName, Axis}
-import org.shapesafe.core.shape.ProveShape.=>>
 import org.shapesafe.core.shape.ops.LeafShapeOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import org.shapesafe.core.util.RecordView
@@ -93,6 +92,8 @@ trait LeafShape extends Shape with LeafShape.Proto {
 }
 
 object LeafShape extends TupleSystem with CanFromStatic {
+
+  import org.shapesafe.core.shape.ProveShape.Factory._
 
   final type UpperBound = Axis
 
@@ -222,7 +223,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         asOp: NatAsOp[HEAD]
     ): (HEAD :: H_TAIL) ==> (TAIL >< (LeafArity.Derived[NatAsOp[HEAD]] :<<- noName)) = {
 
-      forAll[(HEAD :: H_TAIL)].==> { v =>
+      forAll[HEAD :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val head = LeafArity.FromNat(v.head)
 

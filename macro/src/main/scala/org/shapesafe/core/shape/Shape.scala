@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.shape.ProveShape.|--
+import org.shapesafe.core.shape.ProveShape.|-
 import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
 import org.shapesafe.core.tuple.{ApplyLiterals, ApplyNats}
 
@@ -17,7 +17,7 @@ trait Shape extends TreeLike {
       O <: Shape
   ](
       implicit
-      prove: SELF |-- O
+      prove: SELF |- O
   ): O = prove.apply(this).value
 
   final def simplify[
@@ -25,15 +25,15 @@ trait Shape extends TreeLike {
       O <: LeafShape
   ](
       implicit
-      prove: SELF |-- O
+      prove: SELF |- O
   ): O = prove.apply(this).value
 
-  final def eval[ // TODO: eval each member!
+  final def eval[ // TODO: eval each member?
       SELF >: this.type <: Shape,
       O <: LeafShape
   ](
       implicit
-      prove: SELF |-- O
+      prove: SELF |- O
   ): O = simplify(prove)
 }
 

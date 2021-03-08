@@ -11,6 +11,7 @@ object ProofSystemTest {
   object Sys extends ProofSystem[Conj]
 
   import Sys._
+  import Factory._
 
   case class P0() extends Conj
 
@@ -36,8 +37,8 @@ object ProofSystemTest {
         O <: Conj
     ](
         implicit
-        lemma1: T |~~ S,
-        lemma2: P1[S, M] |-- O
+        lemma1: T |-< S,
+        lemma2: P1[S, M] |- O
     ): P1[T, M] =>> O = forAll[P1[T, M]].=>> { p =>
       lemma2.valueOf(
         p.copy(lemma1.valueOf(p.child))

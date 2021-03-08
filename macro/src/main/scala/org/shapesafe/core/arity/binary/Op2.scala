@@ -2,9 +2,10 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.ProveArity.|~~
+import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
+import shapeless.Witness
 
 import scala.language.implicitConversions
 
@@ -14,6 +15,9 @@ class Op2[
     implicit
     sh: Utils.IntSh[??]
 ) extends Op2Like {
+
+  val msgInfix = Witness(" ?? ")
+  override type MsgInfix = msgInfix.T // TODO: this should be a constructor argument
 
   override def on[
       A1 <: Arity,
@@ -64,8 +68,8 @@ object Op2 extends Op2_Imp0 {
       ??[X1, X2] <: Op
   ](
       implicit
-      bound1: A1 |~~ Const[S1], // TODO: make it similar to unsafe
-      bound2: A2 |~~ Const[S2],
+      bound1: A1 |-< Const[S1], // TODO: make it similar to unsafe
+      bound2: A2 |-< Const[S2],
       lemma: S1 ?? S2
   ) = {
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)

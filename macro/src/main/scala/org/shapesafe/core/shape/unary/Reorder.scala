@@ -15,6 +15,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 object Reorder {
 
   import ProveShape._
+  import Factory._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
@@ -23,7 +24,7 @@ object Reorder {
       II <: IndicesMagnet
   ](
       implicit
-      lemma1: |~~[S1, P1],
+      lemma1: |-<[S1, P1],
       lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
   ): Reorder[S1, II] =>> lemma2.Out = {
 
@@ -54,7 +55,7 @@ object Reorder {
         O <: Axis
     ](
         implicit
-        forTail: Reorder[P1, II_-] |-- OO_-,
+        forTail: Reorder[P1, II_-] |- OO_-,
         forHead: Get.Premise.Case.Aux[Get[P1, I], O]
     ) = {
       forAll[Reorder[P1, Indices.><[II_-, I]]].==> { v =>

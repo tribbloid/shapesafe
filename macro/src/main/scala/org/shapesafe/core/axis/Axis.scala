@@ -32,6 +32,7 @@ trait Axis extends AxisMagnet with IDMixin {
 object Axis {
 
   import ProveShape._
+  import ProveShape.Factory._
 
   type ->>[N <: String, D] = FieldType[N, D]
   type UB_->> = (_ <: String) ->> Arity

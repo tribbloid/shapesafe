@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.ProveArity.|~~
+import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.SizeOf
 import org.shapesafe.core.arity.{Arity, LeafArity}
@@ -28,7 +28,7 @@ class DoubleVector[A1 <: VecShape](
 
   def reify[O <: LeafArity](
       implicit
-      prove: A1 |~~ O
+      prove: A1 |-< O
   ): DoubleVector[O] = {
 
     val proof = prove(shape)
@@ -38,7 +38,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: LeafArity](that: DoubleVector[A2])(
       implicit
-      proof: A1 =!= A2 |~~ _
+      proof: A1 =!= A2 |-< _
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
@@ -48,7 +48,7 @@ class DoubleVector[A1 <: VecShape](
 
   def concat[A2 <: VecShape, O <: LeafArity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 :+ A2) |~~ O
+      lemma: (A1 :+ A2) |-< O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.shape :+ that.shape
@@ -61,7 +61,7 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 :+ (Literal[padding.T] :* LeafArity.Wide._2.Wide)) |~~ O
+      lemma: (A1 :+ (Literal[padding.T] :* LeafArity.Wide._2.Wide)) |-< O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -84,7 +84,7 @@ class DoubleVector[A1 <: VecShape](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ Literal[stride.T]) |~~ O
+      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ Literal[stride.T]) |-< O
   ): DoubleVector[O] = {
 
     val _stride: Literal[stride.T] = Arity(stride)
@@ -112,7 +112,7 @@ class DoubleVector[A1 <: VecShape](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ LeafArity.Wide._1.Wide) |~~ O
+      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ LeafArity.Wide._1.Wide) |-< O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -125,7 +125,7 @@ object DoubleVector extends ProductArgs {
 
   def applyProduct[D <: HList, S](data: D)(
       implicit
-      proofOfSize: SizeOf[D] |~~ Const[S],
+      proofOfSize: SizeOf[D] |-< Const[S],
       proofOfType: D ElementOfType Double
   ): DoubleVector[Const[S]] = {
 
@@ -141,7 +141,7 @@ object DoubleVector extends ProductArgs {
 
     def hList[D <: HList, S <: NatAsOp[_]](data: D)(
         implicit
-        proofOfSize: SizeOf[D] |~~ Const[S],
+        proofOfSize: SizeOf[D] |-< Const[S],
         proofOfType: D ElementOfType Double
     ): DoubleVector[Const[S]] = {
 
@@ -184,7 +184,7 @@ object DoubleVector extends ProductArgs {
 
   implicit def asReified[A1 <: VecShape, O <: LeafArity](v: DoubleVector[A1])(
       implicit
-      prove: A1 |~~ O
+      prove: A1 |-< O
   ): Reified[O] = {
     Reified(v.reify)
   }

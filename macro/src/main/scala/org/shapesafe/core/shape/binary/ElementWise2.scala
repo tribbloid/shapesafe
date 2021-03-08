@@ -19,6 +19,7 @@ case class ElementWise2[
 object ElementWise2 {
 
   import org.shapesafe.core.shape.ProveShape._
+  import Factory._
 
   implicit def zip[
       OP <: Op2Like,
@@ -29,8 +30,8 @@ object ElementWise2 {
       HO <: HList
   ](
       implicit
-      lemma1: S1 |~~ P1,
-      lemma2: S2 |~~ P2,
+      lemma1: S1 |-< P1,
+      lemma2: S2 |-< P2,
       zip: ZipWith.Aux[P1#_Dimensions#Static, P2#_Dimensions#Static, OP#AsShapelessPoly2, HO],
       toShape: LeafShape.FromRecord.Case[HO]
   ): ElementWise2[OP, S1, S2] =>> toShape.Out = forAll[ElementWise2[OP, S1, S2]].=>> { v =>

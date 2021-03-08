@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity
 
 import org.shapesafe.core.arity.LeafArity.Literal
-import org.shapesafe.core.arity.ProveArity.|--
+import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.axis.{Axis, AxisMagnet}
 import org.shapesafe.core.axis.Axis.:<<-
@@ -17,7 +17,7 @@ trait Arity extends AxisMagnet {
       O <: Arity
   ](
       implicit
-      prove: SELF |-- O
+      prove: SELF |- O
   ): O = prove.apply(this).value
 
   final def eval[
@@ -25,7 +25,7 @@ trait Arity extends AxisMagnet {
       O <: LeafArity
   ](
       implicit
-      prove: SELF |-- O
+      prove: SELF |- O
   ): O = prove.apply(this).value
 
   override lazy val toString: String = {

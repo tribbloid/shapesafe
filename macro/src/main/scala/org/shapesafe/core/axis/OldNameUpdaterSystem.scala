@@ -25,7 +25,7 @@ class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
         implicit
         name: Witness.Aux[N],
         selector: Selector.Aux[OLD, N, A1],
-        lemma: op.On[A1, A2] |-- O
+        lemma: op.On[A1, A2] |- O
     ): (OLD, N ->> A2) ==> ((N ->> O) :: OLD) = {
 
       forAll[(OLD, N ->> A2)].==> {
@@ -60,7 +60,7 @@ class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
         implicit
         name: Witness.Aux[N],
         selector: Selector.Aux[OLD, N, A1],
-        lemma: op.On[A1, A2] |-- O,
+        lemma: op.On[A1, A2] |- O,
         modifier: Modifier[OLD, N, A1, O]
     ): (OLD, N ->> A2) ==> modifier.Out = {
 

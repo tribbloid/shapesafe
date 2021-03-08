@@ -2,7 +2,7 @@ package org.shapesafe.core.arity
 
 import shapeless.Nat
 import singleton.ops.ToInt
-import singleton.ops.impl.std
+import singleton.ops.impl.{std, OpId, OpMacro}
 import singleton.twoface.impl.TwoFaceAny
 
 object Utils {
@@ -14,6 +14,8 @@ object Utils {
   //  type Op = singleton.ops.impl.OpInt[_]
 
   type NatAsOp[N <: Nat] = ToInt[N]
+
+  type RequireLike[S <: Op] = OpMacro[OpId.Require, S, _, _]
 
   //  implicit def const[
   //      N1,

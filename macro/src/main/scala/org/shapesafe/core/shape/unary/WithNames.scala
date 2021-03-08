@@ -15,6 +15,8 @@ case class WithNames[
 
 object WithNames {
 
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
   implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape,
@@ -22,7 +24,7 @@ object WithNames {
       HO <: HList
   ](
       implicit
-      lemma: S1 |~~ P1,
+      lemma: S1 |-< P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
       toShape: LeafShape.FromRecord.Case[HO]
   ): WithNames[S1, N] =>> toShape.Out = {

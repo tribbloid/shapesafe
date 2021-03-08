@@ -16,7 +16,7 @@ trait ProofScope { // TODO: no IUB?
 
   type Consequent = root.Term
 
-  type =>>^^[-I, +P <: Consequent] <: root.=>>^^[I, P]
+  type Proof[-I, +P <: Consequent] <: root.Proof[I, P]
 
   /**
     * entailment, logical implication used only in existential proof summoning
@@ -25,14 +25,12 @@ trait ProofScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n    ${I}\n|--\n    ??? <: ${O}\n"
   )
-  type |~~[-I, O <: OUB] = =>>^^[I, root.Term.Lt[O]]
+  type |-<[-I, O <: OUB] = Proof[I, root.Term.Lt[O]]
 
   @implicitNotFound(
     "[NO PROOF]\n    ${I}\n|--\n    ${O}\n"
   )
-  type |--[-I, O <: OUB] = =>>^^[I, root.Term.Aux[O]]
-
-  type =>>[-I, O <: OUB] <: root.=>>[I, O]
+  type |-[-I, O <: OUB] = Proof[I, root.Term.Aux[O]]
 
   def forAll[I]: root.Factory[I]
 
@@ -44,17 +42,17 @@ trait ProofScope { // TODO: no IUB?
 
       implicit def findProof[O <: OB](
           implicit
-          prove: I |-- O
-      ): I |-- O = prove
+          prove: I |- O
+      ): I |- O = prove
 
       implicit def canProve_^^[O <: OB](
           implicit
-          prove: I |-- O
+          prove: I |- O
       ): root.Term.Aux[O] = prove.apply(v)
 
       implicit def canProve[O <: OB](
           implicit
-          prove: I |-- O
+          prove: I |- O
       ): O = {
 
         canProve_^^(prove).value
@@ -69,13 +67,20 @@ object ProofScope {
 
     type OUB = O
 
-    trait =>>^^[-I, +P <: Consequent] extends root.=>>^^[I, P]
-
-    trait =>>[-I, O <: OUB] extends root.=>>[I, O]
+    trait Proof[-I, +P <: Consequent] extends root.Proof[I, P]
 
     override def forAll[I]: Factory[I] = new Factory[I] {}
 
+    object Factory {
+
+      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.Factory.=>>^^[I, P]
+
+      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.ToBe[O]] with root.Factory.=>>[I, O]
+    }
+
     trait Factory[I] extends root.Factory[I] {
+
+      import Factory._
 
       override def =>>^^[P <: Consequent](_fn: I => P) = new (I =>>^^ P) {
         override def apply(v: I): P = _fn(v)

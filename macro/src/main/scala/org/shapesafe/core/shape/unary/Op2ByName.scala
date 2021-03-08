@@ -11,6 +11,8 @@ import scala.language.implicitConversions
 
 trait Op2ByName {
 
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
   val oldNameUpdater: RecordUpdater
 
   // all names must be distinctive - no duplication allowed

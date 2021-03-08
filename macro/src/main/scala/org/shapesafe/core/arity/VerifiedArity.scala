@@ -1,13 +1,13 @@
 package org.shapesafe.core.arity
 
-import ProveArity.=>>
-
 trait VerifiedArity extends Arity {
 
 //  final def in: this.type = this
 }
 
 object VerifiedArity {
+
+  import ProveArity.Factory._
 
   implicit def endo[T <: VerifiedArity]: T =>> T = ProveArity.forAll[T].=>>(identity[T])
 
