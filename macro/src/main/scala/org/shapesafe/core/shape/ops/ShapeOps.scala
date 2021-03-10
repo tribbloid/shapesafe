@@ -39,6 +39,8 @@ class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorOps[SELF] w
     }
   }
 
+  lazy val |<<-* : named.type = named
+
   def ><[THAT <: Shape](
       that: THAT
   ): OuterProduct[SELF, THAT] = {

@@ -4,6 +4,8 @@ import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.{Names, Shape}
+import shapeless.ops.hlist.Reverse
+import shapeless.{HList, SingletonProductArgs}
 
 import scala.language.implicitConversions
 
@@ -17,6 +19,21 @@ case class CheckEinSum[
   def ->[N <: Names](names: N): Reorder[CheckEinSum[S1], N] = {
 
     Reorder(this, names)
+  }
+
+  object ->* extends SingletonProductArgs {
+
+    def applyProduct[H1 <: HList, H2 <: HList](
+        v: H1
+    )(
+        implicit
+        reverse: Reverse.Aux[H1, H2],
+        lemma: Names.FromLiterals.Case[H2]
+    ): Reorder[CheckEinSum[S1], lemma.Out] = {
+
+      val names = lemma.apply(reverse(v))
+      ->(names)
+    }
   }
 
   def apply[S2 <: Shape](that: CheckEinSum[S2]): CheckEinSum[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
