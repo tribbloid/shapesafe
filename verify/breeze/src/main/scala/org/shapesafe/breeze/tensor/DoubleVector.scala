@@ -38,7 +38,7 @@ class DoubleVector[A1 <: VecShape](
 
   def dot_*[A2 <: LeafArity](that: DoubleVector[A2])(
       implicit
-      proof: A1 =!= A2 |-< _
+      proof: A1 :=!= A2 |-< _
   ): Double = {
 
     val result: Double = this.data.dot(that.data)

@@ -202,7 +202,7 @@ class DoubleVectorSpec extends BaseSpec {
 ////
 ////          print_@(VizType[aa.type])
 ////
-////          import com.tribbloids.graph.commons.util.ScalaReflection.universe
+////          import com.tribbloids.graph.commons.util.reflect.ScalaReflection.universe
 ////
 ////          def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
 ////

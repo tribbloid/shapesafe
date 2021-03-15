@@ -2,8 +2,8 @@ val vs: Versions = versions()
 
 dependencies {
 
-    api(project(":macro"))
-    testFixturesApi(testFixtures(project(":macro")))
+    api(project(":core"))
+    testFixturesApi(testFixtures(project(":core")))
 
     // https://mvnrepository.com/artifact/org.freehep/jas-core
     // TODO: add this library to allow visualization of expressions
