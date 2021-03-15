@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.shape.LeafShape.><
-import org.shapesafe.core.shape.{Index, LeafShape, ProveShape, Shape, ShapeExpr}
+import org.shapesafe.core.shape.{Index, LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
 import shapeless.{Nat, Witness}
@@ -16,7 +16,7 @@ case class Get[ // last step of einsum, contract, transpose, etc.
 ](
     s1: S1,
     index: I
-) extends ShapeExpr {}
+) extends ShapeConjecture {}
 
 object Get {
 

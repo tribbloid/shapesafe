@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
+import org.shapesafe.core.arity.{Arity, ArityConjecture, ProveArity, Utils}
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -33,7 +33,7 @@ class Op2[
   ](
       a1: A1,
       a2: A2
-  ) extends Arity
+  ) extends ArityConjecture // TODO: can this be VerifiedArity?
       with HasOuter {
 
     def outer: Op2.this.type = Op2.this

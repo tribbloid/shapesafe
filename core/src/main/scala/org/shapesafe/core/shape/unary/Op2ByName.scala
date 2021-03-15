@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeExpr}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
@@ -18,7 +18,7 @@ trait Op2ByName {
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: Shape
-  ] extends ShapeExpr
+  ] extends ShapeConjecture
       with HasOuter {
 
     override def outer: Op2ByName.this.type = Op2ByName.this

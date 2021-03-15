@@ -52,7 +52,8 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b") {
 
-        val op = AssertEqual.on(a :+ b, LeafArity.Unchecked)
+        val sum = a :+ b
+        val op = AssertEqual.on(sum, LeafArity.Unchecked)
 
         val out = op.eval
         assert(out.runtimeOpt.contains(7))

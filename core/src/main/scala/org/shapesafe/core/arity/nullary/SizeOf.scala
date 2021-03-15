@@ -2,12 +2,12 @@ package org.shapesafe.core.arity.nullary
 
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity}
+import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity, VerifiedArity}
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
 // TODO: should not carry the proof
-case class SizeOf[D <: HList](data: D) extends Arity {
+case class SizeOf[D <: HList](data: D) extends VerifiedArity {
 
   override def runtimeArity: Int = data.runtimeLength
 }

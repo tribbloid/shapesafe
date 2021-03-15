@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.{|-<, Proof}
 import org.shapesafe.core.arity.ops.ArityOps.:=!=
-import org.shapesafe.core.arity.{Arity, ProveArity}
+import org.shapesafe.core.arity.{Arity, ArityConjecture, ProveArity}
 import shapeless.Witness
 
 trait AssertEqual_Imp0 {
@@ -32,7 +32,7 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
   ](
       a1: A1,
       a2: A2
-  ) extends Arity
+  ) extends ArityConjecture
       with HasOuter {
 
     def outer: AssertEqual.type = AssertEqual.this
