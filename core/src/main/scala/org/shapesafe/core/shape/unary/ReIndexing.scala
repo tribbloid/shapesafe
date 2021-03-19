@@ -6,24 +6,6 @@ import org.shapesafe.core.axis.NewNameAppender
 import org.shapesafe.core.shape.LeafShape
 import shapeless.{::, HList, HNil}
 
-//trait DistinctIndexedLike extends StaticTuples[UB_->>] with CanInfix_>< {
-//
-//  implicit def consIfNewName[
-//      TAIL <: Impl,
-//      N <: String,
-//      D <: Arity
-//  ](
-//      implicit
-//      condition: NewNameAppender.Case[(TAIL#Static, N ->> D)]
-//  ): Cons.FromFn2[TAIL, N ->> D, TAIL >< (N ->> D)] = {
-//
-//    Cons.from[TAIL, N ->> D].to { (tail, head) =>
-//      val result = new ><(tail, head)
-//      result
-//    }
-//  }
-//}
-
 trait ReIndexing extends Poly1Base[HList, HList] {
 
   implicit val nil: HNil ==> HNil = forAll[HNil].==>(v => HNil)
@@ -68,5 +50,4 @@ object ReIndexing {
       }
     }
   }
-
 }

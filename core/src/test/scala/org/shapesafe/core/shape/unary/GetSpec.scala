@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.{Index, Names, Shape}
 
 class GetSpec extends BaseSpec {

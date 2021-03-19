@@ -1,12 +1,11 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
+import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.axis.{noName, Axis}
-import org.shapesafe.core.shape.ops.LeafShapeOps
+import org.shapesafe.core.shape.ops.LeafOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
-import org.shapesafe.core.util.RecordView
 import shapeless.ops.hlist.At
 import shapeless.ops.nat.ToInt
 import shapeless.ops.record.Selector
@@ -20,11 +19,11 @@ import scala.language.implicitConversions
   */
 trait LeafShape extends Shape with LeafShape.Proto {
 
-  type Record <: HList // name: String -> dim: arity.Expression
+  type Record <: HList // name: String -> arityCore: ArityCore
   def record: Record
-  lazy val recordView: RecordView[Record] = RecordView(record)
+//  lazy val recordView: RecordView[Record] = RecordView(record)
 
-  lazy val getField: recordView.GetField.type = recordView.GetField
+//  lazy val getField: recordView.GetField.type = recordView.GetField
 
   type _Names <: Names
   val names: _Names
@@ -39,11 +38,9 @@ trait LeafShape extends Shape with LeafShape.Proto {
     implicit def name[S <: String](
         implicit
         _selector: Selector[Record, S] { type Out <: Arity }
-    ): Case[Index.Name[S]] {
-      type Result = _selector.Out :<<- S
-    } = at[Index.Name[S]] { name =>
-      val arity = _selector(record)
-      arity :<<- name.w
+    ) = at[Index.Name[S]] { name =>
+      val core = _selector(record)
+      core.^ :<<- name.w
     }
 
     implicit def ii[N <: Nat](
@@ -133,52 +130,57 @@ object LeafShape extends TupleSystem with CanFromStatic {
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
 
-    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Dimension]
-    final override val dimensions = new Dimensions.><(tail.dimensions, head.dimension)
+    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Internal]
+    final override val dimensions = new Dimensions.><(tail.dimensions, head.internal)
   }
 
-  trait FromRecord_Imp0 extends AbstractFromHList {
+  final type ><^[
+      TAIL <: Impl,
+      HEAD <: Arity
+  ] = ><[TAIL, ArityAPI.^[HEAD]]
+
+  trait FromArityCore extends AbstractFromHList {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
         TAIL <: Impl,
-        D <: Arity
+        C <: Arity
     ](
         implicit
         forTail: H_TAIL ==> TAIL
-    ): (D :: H_TAIL) ==> (TAIL >< (D :<<- noName)) = {
+    ): (C :: H_TAIL) ==> (TAIL ><^ C) = {
 
-      forAll[D :: H_TAIL].==> { v =>
+      forAll[C :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
-        val vHead = v.head: D
+        val vHead = v.head: C
+        val head = vHead.^
 
-        prev >|< vHead
+        prev >|< head
       }
     }
   }
 
-  object FromRecord extends FromRecord_Imp0 {
+  object FromRecord extends FromArityCore {
 
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Impl,
         N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
-        D <: Arity
+        C <: Arity
     ](
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[N]
-    ): ((N ->> D) :: H_TAIL) ==> (TAIL >< (D :<<- N)) = {
+    ): ((N ->> C) :: H_TAIL) ==> (TAIL >< (C :<<- N)) = {
 
-      forAll[(N ->> D) :: H_TAIL].==> { v =>
+      forAll[(N ->> C) :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
-        val vHead = v.head: D
-        val head: D :<<- N = vHead :<<- w
+        val vHead: C = v.head
+        val head: C :<<- N = vHead.^ :<<- w
 
         prev >|< head
       }
     }
-
   }
 
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
@@ -188,7 +190,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def toOps[T <: LeafShape](self: T): LeafShapeOps[T] = new LeafShapeOps(self)
+  implicit def toOps[T <: LeafShape](self: T): LeafOps[T] = new LeafOps(self)
 
   object FromLiterals extends AbstractFromHList {
 
@@ -200,11 +202,11 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> (TAIL >< (LeafArity.Literal[HEAD] :<<- noName)) = {
+    ): (HEAD :: H_TAIL) ==> (TAIL ><^ LeafArity.Literal[HEAD]) = {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = forTail(v.tail)
-        val head = LeafArity.Literal(w)
+        val head = Arity(w) //  Arity.Impl(LeafArity.Literal(w))
 
         prev >|< head
       }
@@ -221,11 +223,11 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         asOp: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) ==> (TAIL >< (LeafArity.Derived[NatAsOp[HEAD]] :<<- noName)) = {
+    ): (HEAD :: H_TAIL) ==> (TAIL ><^ LeafArity.Derived[NatAsOp[HEAD]]) = {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
-        val head = LeafArity.FromNat(v.head)
+        val head = Arity.FromNat(v.head)
 
         prev >|< head
       }

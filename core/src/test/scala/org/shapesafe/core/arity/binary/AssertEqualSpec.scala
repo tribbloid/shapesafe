@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{ArityFixture, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
 
 import scala.language.existentials
 
@@ -12,19 +12,19 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual.on(a, a)
+        val op = AssertEqual.on(a, a).^
         op.eval.internal.requireEqual(3)
       }
 
       it("a + b") {
 
-        val op = AssertEqual.on(a :+ b, ab)
+        val op = AssertEqual.on(a :+ b, ab).^
         op.eval.internal.requireEqual(7)
       }
 
       it("a + b + c") {
 
-        val op = AssertEqual.on(a :+ b :+ c, abc)
+        val op = AssertEqual.on(a :+ b :+ c, abc).^
         op.eval.internal.requireEqual(12)
       }
     }
@@ -33,7 +33,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b + c") {
 
-        val op = AssertEqual.on(a :+ b :+ c, ab :+ c)
+        val op = AssertEqual.on(a :+ b :+ c, ab :+ c).^
         op.eval.internal.requireEqual(12)
       }
     }
@@ -42,21 +42,21 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual.on(LeafArity.Unchecked, a)
+        val op = AssertEqual.on(LeafArity.Unchecked.^, a).^
 
         val out = op.eval
-        assert(out.runtimeOpt.contains(3))
+        out.internal.requireEqual(3)
 
-//        op.asProof.out.internal.requireEqual(3)
+//        op.asProof.out.core.requireEqual(3)
       }
 
       it("a + b") {
 
         val sum = a :+ b
-        val op = AssertEqual.on(sum, LeafArity.Unchecked)
+        val op = AssertEqual.on(sum, LeafArity.Unchecked.^).^
 
         val out = op.eval
-        assert(out.runtimeOpt.contains(7))
+        out.internal.requireEqual(7)
       }
     }
   }
@@ -67,19 +67,19 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual.on(LeafArity.Unchecked, a)
+        val op = AssertEqual.on(Arity.Unprovable.^, a).^
 
         shouldNotCompile(
-          "op.asProof"
+          "op.eval"
         )
       }
 
       it("a + b") {
 
-        val op = AssertEqual.on(LeafArity.Unchecked, a :+ b)
+        val op = AssertEqual.on(Arity.Unprovable.^, a :+ b).^
 
         shouldNotCompile(
-          "op.asProof"
+          "op.eval"
         )
       }
     }

@@ -3,7 +3,7 @@ package org.shapesafe.core.shape
 import com.tribbloids.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.ProveShape.|-
-import org.shapesafe.core.shape.ops.{LeafShapeOps, ShapeOps}
+import org.shapesafe.core.shape.ops.{LeafOps, ShapeOps}
 import org.shapesafe.core.tuple.{ApplyLiterals, ApplyNats}
 
 import scala.language.implicitConversions
@@ -41,7 +41,7 @@ object Shape extends ApplyLiterals {
 
   import LeafShape._
 
-  implicit def toEyeOps(v: this.type): LeafShapeOps[Eye] = LeafShape.toOps[Eye](Eye)
+  implicit def toEyeOps(v: this.type): LeafOps[Eye] = LeafShape.toOps[Eye](Eye)
 
   implicit def toOps[T <: Shape](self: T): ShapeOps[T] = new ShapeOps(self)
 
@@ -57,9 +57,24 @@ object Shape extends ApplyLiterals {
 
   override val fromHList: LeafShape.FromLiterals.type = LeafShape.FromLiterals
 
-  type Vector[T <: Axis] = Eye >< T
-  type _Vector = Vector[_ <: Axis]
+  object Vector {
 
-  type Matrix[T1 <: Axis, T2 <: Axis] = Eye >< T1 >< T2
-  type _Matrix = Matrix[_ <: Axis, _ <: Axis]
+    type Aux[T <: Axis] = Eye >< T
+  }
+  type Vector = Vector.Aux[_]
+
+  object Matrix {
+
+    type Aux[T1 <: Axis, T2 <: Axis] = Eye >< T1 >< T2
+  }
+  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
+
+//  implicit def fromSInt[T <: Int with Singleton](v: T)(
+//      implicit
+//      toW: Witness.Aux[T]
+//  ): Eye ><^ LeafArity.Literal[T] = {
+//
+//    // TODO: this is not working so far
+//    Shape >|< Arity(toW)
+//  }
 }

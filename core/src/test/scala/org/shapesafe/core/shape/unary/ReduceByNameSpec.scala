@@ -4,7 +4,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.{Names, Shape}
 
-class Op2ByNameSpec extends BaseSpec {
+class ReduceByNameSpec extends BaseSpec {
 
   it("treeString") {
 
@@ -18,17 +18,17 @@ class Op2ByNameSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix.SquashByName ‣ Op2ByName.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix.SquashByName ‣ ReduceByName.On
         | ‣ OuterProduct
-        |    ‣ WithNames┏ Eye ><
-        |    :          ┃   x ><
-        |    :          ┃   y
+        |    ‣ |<<-┏ Eye ><
+        |    :     ┃   x ><
+        |    :     ┃   y
         |    :  ‣ Eye ><
         |    :      2:Literal ><
         |    :      3:Literal
-        |    ‣ WithNames┏ Eye ><
-        |               ┃   x ><
-        |               ┃   y
+        |    ‣ |<<-┏ Eye ><
+        |          ┃   x ><
+        |          ┃   y
         |       ‣ Eye ><
         |           4:Literal ><
         |           5:Literal

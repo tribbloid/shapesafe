@@ -25,4 +25,5 @@ trait NewNameAppender extends RecordUpdater {
     }
   }
 }
+
 object NewNameAppender extends NewNameAppender

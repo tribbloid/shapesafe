@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.shape.LeafShape.><
-import org.shapesafe.core.shape.{Index, LeafShape, ProveShape, Shape, ShapeConjecture}
+import org.shapesafe.core.shape._
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
 import shapeless.{Nat, Witness}
@@ -57,9 +57,9 @@ object Get {
       forAll[Get[P1, Index.Name[N]]].==> { v =>
         val p1: P1 = v.s1
 
-        val arity = _selector(p1.record)
+        val arityCore: A = _selector(p1.record)
         val w: Witness.Aux[N] = v.index.w
-        arity :<<- w
+        (arityCore.^ :<<- w)
       }
     }
 

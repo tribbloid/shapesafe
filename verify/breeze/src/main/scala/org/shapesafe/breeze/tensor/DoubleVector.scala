@@ -2,19 +2,18 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.ProveArity.|-<
+import org.shapesafe.core.arity.ProveArity.{|-, |-<}
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.SizeOf
-import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.djl.tensor.Const.VecShape
+import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
 import org.shapesafe.core.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.language.implicitConversions
 import scala.util.Random
 
-class DoubleVector[A1 <: VecShape](
-    val shape: A1,
+class DoubleVector[A1 <: Arity](
+    val arity: ArityAPI.^[A1],
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
@@ -23,35 +22,33 @@ class DoubleVector[A1 <: VecShape](
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
-    s"${shape.valueStr} \u00d7 1: Double"
+    s"${arity.toString} \u00d7 1: Double"
   }
 
   def reify[O <: LeafArity](
       implicit
-      prove: A1 |-< O
+      prove: A1 |- O
   ): DoubleVector[O] = {
 
-    val proof = prove(shape)
-    val out = proof.value
-    new DoubleVector(out, data)
+    val evaled = arity.eval
+    new DoubleVector(evaled, data)
   }
 
-  def dot_*[A2 <: LeafArity](that: DoubleVector[A2])(
+  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
       implicit
-      proof: A1 :=!= A2 |-< _
+      proof: A1 :==! A2 |-< _
   ): Double = {
 
     val result: Double = this.data.dot(that.data)
-
     result
   }
 
-  def concat[A2 <: VecShape, O <: LeafArity](that: DoubleVector[A2])(
+  def concat[A2 <: Arity, O <: LeafArity](that: DoubleVector[A2])(
       implicit
       lemma: (A1 :+ A2) |-< O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
-    val op = this.shape :+ that.shape
+    val op = this.arity :+ that.arity
     val proof = lemma(op)
 
     val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
@@ -61,11 +58,11 @@ class DoubleVector[A1 <: VecShape](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 :+ (Literal[padding.T] :* LeafArity.Wide._2.Wide)) |-< O
+      lemma: (A1 :+ (Literal[padding.T] :* Arity._2.Internal)) |-< O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
-    val op = this.shape :+ (_padding :* LeafArity._2)
+    val op = this.arity :+ (_padding :* Arity._2)
     val proof = lemma(op)
     val out = proof.value
 
@@ -77,19 +74,19 @@ class DoubleVector[A1 <: VecShape](
   }
 
   def conv[
-      A2 <: VecShape,
+      A2 <: Arity,
       O <: LeafArity
   ](
       kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ Literal[stride.T]) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1.Internal) :/ Literal[stride.T]) |-< O
   ): DoubleVector[O] = {
 
-    val _stride: Literal[stride.T] = Arity(stride)
+    val _stride = Arity(stride)
 
-    val op = (this.shape :- kernel.shape :+ LeafArity._1) :/ _stride
+    val op = (this.arity :- kernel.arity :+ Arity._1) :/ _stride
     val proof = lemma(op)
     val out = proof.value
 
@@ -106,13 +103,13 @@ class DoubleVector[A1 <: VecShape](
   }
 
   def conv[
-      A2 <: VecShape,
+      A2 <: Arity,
       O <: LeafArity
   ](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ LeafArity.Wide._1.Wide) :/ LeafArity.Wide._1.Wide) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1.Internal) :/ Arity._1.Internal) |-< O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -172,7 +169,7 @@ object DoubleVector extends ProductArgs {
 
   case class Reified[A1 <: LeafArity](self: DoubleVector[A1]) {
 
-    val arity: A1 = self.shape
+    val arity = self.arity
 
     def crossValidate(): Unit = {
 
@@ -182,9 +179,9 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit def asReified[A1 <: VecShape, O <: LeafArity](v: DoubleVector[A1])(
+  implicit def asReified[A1 <: Arity, O <: LeafArity](v: DoubleVector[A1])(
       implicit
-      prove: A1 |-< O
+      prove: A1 |- O
   ): Reified[O] = {
     Reified(v.reify)
   }

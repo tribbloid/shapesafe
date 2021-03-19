@@ -23,7 +23,7 @@ class NamesSpec extends BaseSpec {
       val t1 = TypeViz.infer(names.static)
       val t2 = TypeViz.infer(hList)
 
-      t1.===!===(t2)
+      t1.===!(t2)
     }
 
     it("2") {
@@ -33,7 +33,7 @@ class NamesSpec extends BaseSpec {
       val t1 = TypeViz.infer(names)
       val t2 = TypeViz.infer(n2)
 
-      t1.===!===(t2)
+      t1.===!(t2)
     }
 
     it("3") {
@@ -45,7 +45,7 @@ class NamesSpec extends BaseSpec {
       val t1 = TypeViz.infer(names)
       val t2 = TypeViz.infer(n2)
 
-      t1.===!===(t2)
+      t1.===!(t2)
     }
   }
 
@@ -77,7 +77,7 @@ class NamesSpec extends BaseSpec {
     val t1 = TypeViz.infer(names)
     val t2 = TypeViz.infer(names2)
 
-    t1.===!===(t2)
+    t1.===!(t2)
   }
 
   it("as Indices") {
@@ -86,7 +86,7 @@ class NamesSpec extends BaseSpec {
 
     val ii = Indices >< Name("x") >< Name("y") >< Name("z")
 
-    TypeViz.infer(names.asIndices).===!===(TypeViz.infer(ii))
+    TypeViz.infer(names.asIndices).===!(TypeViz.infer(ii))
 
 //    implicitly[Names.Eye <:< Indices.Eye]
 //

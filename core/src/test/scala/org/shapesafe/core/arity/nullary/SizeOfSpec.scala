@@ -10,13 +10,13 @@ class SizeOfSpec extends ArityFixture {
 
     it("small") {
 
-      val op0 = SizeOf(1 :: 2 :: 3 :: HNil)
+      val op0 = SizeOf(1 :: 2 :: 3 :: HNil).^
       val proven = op0.eval
 
       proven.internal.requireEqual(3)
 
       val hList = 0 :: 1 :: 2 :: HNil
-      val op1 = SizeOf.getConst(hList)
+      val op1 = SizeOf.getConst(hList).^
       op1.internal.requireEqual(3)
     }
 
@@ -24,7 +24,7 @@ class SizeOfSpec extends ArityFixture {
 
       implicitly[Require[big.nat.N == big.w.T]] // just a sanity check
 
-      val op1 = SizeOf.getConst(big.hList)
+      val op1 = SizeOf.getConst(big.hList).^
       op1.internal.requireEqual(100)
     }
   }

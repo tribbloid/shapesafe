@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{ArityFixture, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityAPI, ArityFixture, LeafArity}
 
 class Op2Spec extends ArityFixture {
 
@@ -39,7 +39,7 @@ class Op2Spec extends ArityFixture {
 
     it("a + b + c + d") {
 
-      val op = a :+ b :+ c :+ LeafArity._1
+      val op = a :+ b :+ c :+ Arity._1
 
       val p = op.eval
       p.internal.requireEqual(13)
@@ -55,7 +55,7 @@ class Op2Spec extends ArityFixture {
 
     it("... NOT if b == 0") {
 
-      val op = a :/ LeafArity._0
+      val op = a :/ Arity._0
 
       shouldNotCompile {
         "val p = op.asProof"
@@ -64,7 +64,7 @@ class Op2Spec extends ArityFixture {
 
     it("(a + b - c) / d") {
 
-      val op = (a :+ b :- c) :/ LeafArity._1
+      val op = (a :+ b :- c) :/ Arity._1
 
       val p = op.eval
       p.internal.requireEqual(2)
@@ -77,7 +77,7 @@ class Op2Spec extends ArityFixture {
 
       it("a") {
 
-        val op = LeafArity.Unchecked :+ a
+        val op = LeafArity.Unchecked.^ :+ a
 
         shouldNotCompile(
           "op.asProof"
@@ -86,7 +86,7 @@ class Op2Spec extends ArityFixture {
 
       it("a + b") {
 
-        val op = LeafArity.Unchecked :+ (a :+ b)
+        val op = LeafArity.Unchecked.^ :+ (a :+ b)
 
         shouldNotCompile(
           "op.asProof"

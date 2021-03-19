@@ -6,7 +6,7 @@ class AxisSpec extends BaseSpec {
 
   it("correct type") {
 
-    val arity = LeafArity.Literal(3)
+    val arity = Arity(3)
 
     val dim = arity :<<- "abc"
 

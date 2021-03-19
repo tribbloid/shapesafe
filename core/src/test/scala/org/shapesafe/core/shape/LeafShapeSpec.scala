@@ -1,9 +1,8 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, LeafArity}
-import org.shapesafe.core.shape.LeafShape.{FromLiterals, FromNats, FromRecord, FromStatic}
+import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.shape.LeafShape.{FromRecord, FromStatic}
 import shapeless.HNil
 
 class LeafShapeSpec extends BaseSpec {
@@ -15,8 +14,8 @@ class LeafShapeSpec extends BaseSpec {
     it("named") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x" append
-        LeafArity.Literal(3) :<<- "y"
+        Arity(2) :<<- "x" append
+        Arity(3) :<<- "y"
 
       typeInferShort(shape).shouldBe(
         """
@@ -32,12 +31,12 @@ class LeafShapeSpec extends BaseSpec {
     it("nameless") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) append
-        LeafArity.Literal(3)
+        Arity(2) append
+        Arity(3)
 
       typeInferShort(shape).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- noName.type) >< (LeafArity.Literal[Int(3)] :<<- noName.type)
+          |LeafShape.Eye >< ArityAPI.^[LeafArity.Literal[Int(2)]] >< ArityAPI.^[LeafArity.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -46,16 +45,16 @@ class LeafShapeSpec extends BaseSpec {
     it("mixed") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x" >|<
-        LeafArity.Literal(3) append
-        LeafArity.Literal(4) :<<- "z"
+        Arity(2) :<<- "x" >|<
+        Arity(3) append
+        Arity(4) :<<- "z"
 
       assert(shape.record.apply("x").runtimeArity == 2)
       assert(shape.record.apply("z").runtimeArity == 4)
 
       typeInferShort(shape).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- noName.type) >< (LeafArity.Literal[Int(4)] :<<- String("z"))
+          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[LeafArity.Literal[Int(3)]] >< (LeafArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -111,7 +110,7 @@ class LeafShapeSpec extends BaseSpec {
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.static == hh)
-      assert(shape.static.head.dimension == Arity(3))
+      assert(shape.static.head.nameless == Arity(3))
     }
   }
 
@@ -130,7 +129,7 @@ class LeafShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = ("x" ->> Arity(3)) ::
+      val hh = ("x" ->> Arity(3).internal) ::
         HNil
 
       val shape = LeafShape.FromRecord(hh)
@@ -142,8 +141,8 @@ class LeafShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = ("x" ->> Arity(3)) ::
-        ("y" ->> Arity(4)) ::
+      val hh = ("x" ->> Arity(3).internal) ::
+        ("y" ->> Arity(4).internal) ::
         HNil
 
       val shape = LeafShape.FromRecord(hh)
@@ -151,17 +150,19 @@ class LeafShapeSpec extends BaseSpec {
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.dimensions.static == hh)
-      assert(shape.static.head.dimension == Arity(3))
+      assert(shape.static.head.nameless == Arity(3))
     }
   }
 
-  describe(FromLiterals.getClass.getSimpleName) {
+  describe(Shape.Literals.getClass.getSimpleName) {
 
     it("1") {
       val ss = Shape.Literals(4)
 
-      ss.dimensions.static.head.internal.requireEqual(4)
-      ss.dimensions.static.last.internal.requireEqual(4)
+//      Should_=:=[ss.type]
+
+      ss.dimensions.static.head.requireEqual(4)
+      ss.dimensions.static.last.requireEqual(4)
 
       val nn = (ss |<<- (Names >< "i")).eval
 
@@ -176,8 +177,8 @@ class LeafShapeSpec extends BaseSpec {
     it("2") {
       val ss = Shape.Literals(4, 3, 2)
 
-      ss.dimensions.static.head.internal.requireEqual(2)
-      ss.dimensions.static.last.internal.requireEqual(4)
+      ss.dimensions.static.head.requireEqual(2)
+      ss.dimensions.static.last.requireEqual(4)
 
       val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
 
@@ -192,13 +193,13 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe(FromNats.getClass.getSimpleName) {
+  describe(Shape.Nats.getClass.getSimpleName) {
 
     it("1") {
       val ss = Shape.Nats(4)
 
-      ss.dimensions.static.head.internal.requireEqual(4)
-      ss.dimensions.static.last.internal.requireEqual(4)
+      ss.dimensions.static.head.requireEqual(4)
+      ss.dimensions.static.last.requireEqual(4)
 
       val nn = (ss |<<- (Names >< "i")).eval
 
@@ -213,8 +214,8 @@ class LeafShapeSpec extends BaseSpec {
     it("2") {
       val ss = Shape.Nats(4, 3, 2)
 
-      ss.dimensions.static.head.internal.requireEqual(2)
-      ss.dimensions.static.last.internal.requireEqual(4)
+      ss.dimensions.static.head.requireEqual(2)
+      ss.dimensions.static.last.requireEqual(4)
 
       val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
 
@@ -231,8 +232,8 @@ class LeafShapeSpec extends BaseSpec {
 //    it("3") {
 //      val ss = (Shape.Literals(4, 3, 2) |<<- (Names >< "i" >< "j" >< "k")).eval
 //
-//      ss.dimensions.static.head.internal.requireEqual(2)
-//      ss.dimensions.static.last.internal.requireEqual(4)
+//      ss.dimensions.static.head.core.requireEqual(2)
+//      ss.dimensions.static.last.core.requireEqual(4)
 //    }
   }
 
@@ -241,7 +242,7 @@ class LeafShapeSpec extends BaseSpec {
     it("1") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x"
+        Arity(2) :<<- "x"
 
       val record = shape.record
 
@@ -257,14 +258,14 @@ class LeafShapeSpec extends BaseSpec {
           |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2))
+      assert(record.get("x") == Arity(2).internal)
     }
 
     it("2") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x" >|<
-        LeafArity.Literal(3) :<<- "y"
+        Arity(2) :<<- "x" >|<
+        Arity(3) :<<- "y"
 
       val record = shape.record
 
@@ -281,7 +282,7 @@ class LeafShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2))
+      assert(record.get("x").nameless == Arity(2))
     }
   }
 
@@ -290,7 +291,7 @@ class LeafShapeSpec extends BaseSpec {
     it("1") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x"
+        Arity(2) :<<- "x"
 
       val record = shape.record
 
@@ -306,14 +307,14 @@ class LeafShapeSpec extends BaseSpec {
           |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2))
+      assert(record.get("x") == Arity(2).internal)
     }
 
     it("2") {
 
       val shape = Shape >|<
-        LeafArity.Literal(2) :<<- "x" >|<
-        LeafArity.Literal(3) :<<- "y"
+        Arity(2) :<<- "x" >|<
+        Arity(3) :<<- "y"
 
       val record = shape.record
 
@@ -330,15 +331,15 @@ class LeafShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x") == LeafArity.Literal(2))
+      assert(record.get("x") == Arity(2).internal)
     }
   }
 
   describe("names") {
 
     val shape = Shape >|<
-      LeafArity.Literal(2) :<<- "x" append
-      LeafArity.Literal(3) :<<- "y"
+      Arity(2) :<<- "x" append
+      Arity(3) :<<- "y"
 
     it("1") {
 
@@ -351,8 +352,8 @@ class LeafShapeSpec extends BaseSpec {
   describe("values") {
 
     val shape = Shape >|<
-      LeafArity.Literal(2) :<<- "x" >|<
-      LeafArity.Literal(3) :<<- "y"
+      Arity(2) :<<- "x" >|<
+      Arity(3) :<<- "y"
 
     it("1") {
 
@@ -368,7 +369,7 @@ class LeafShapeSpec extends BaseSpec {
 //          VizType.infer(vvGT).toString
 //        )
 
-      assert(vv.head == Arity(3))
+      assert(vv.head == Arity(3).internal)
 
 //      vv.head.toString.shouldBe("FromLiteral: 3")
 
@@ -381,22 +382,22 @@ class LeafShapeSpec extends BaseSpec {
   describe("Sub") {
 
     val shape = Shape >|<
-      LeafArity.Literal(2) :<<- "x" >|<
-      LeafArity.Literal(3) :<<- "y" >|<
-      LeafArity.Literal(4) :<<- "z"
+      Arity(2) :<<- "x" >|<
+      Arity(3) :<<- "y" >|<
+      Arity(4) :<<- "z"
 
     it("getByIndex") {
 
       val v = shape.Sub(0).axis
 
-      assert(v == LeafArity.Literal(4) :<<- "z") // HList is of inverse order
+      assert(v == Arity(4) :<<- "z") // HList is of inverse order
     }
 
     it("getByName") {
 
       val v = shape.Sub.apply("y").axis
 
-      assert(v == LeafArity.Literal(3) :<<- "y")
+      assert(v == Arity(3) :<<- "y")
     }
   }
 }

@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.ops
 
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.binary.OuterProduct
-import org.shapesafe.core.shape.unary.{CheckDistinct, CheckEinSum, Reorder, WithNames}
+import org.shapesafe.core.shape.unary.{|<<-, CheckDistinct, CheckEinSum, Reorder}
 import org.shapesafe.core.shape.{Names, Shape}
 import shapeless.{HList, SingletonProductArgs}
 import shapeless.ops.hlist.Reverse
@@ -14,9 +14,9 @@ class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorOps[SELF] w
     */
   object withNames {
 
-    def apply[N <: Names](newNames: N): WithNames[SELF, N] = {
+    def apply[N <: Names](newNames: N): |<<-[SELF, N] = {
 
-      WithNames[SELF, N](self, newNames)
+      new |<<-[SELF, N](self, newNames)
     }
   }
 
@@ -31,7 +31,7 @@ class ShapeOps[SELF <: Shape](val self: SELF) extends ShapeOps.VectorOps[SELF] w
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): WithNames[SELF, lemma.Out] = {
+    ): |<<-[SELF, lemma.Out] = {
 
       val out = lemma.apply(reverse(v))
 

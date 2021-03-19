@@ -10,13 +10,52 @@ class CheckDistinctSpec extends BaseSpec {
 
   describe("can verify if") {
 
-    it("shape has distinct names") {
+    describe("singleton") {
 
-      val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
+      it("1") {
 
-      val rr = CheckDistinct(ss)
+        val ss = Shape >|< Arity(1) :<<- "a"
 
-      assert(ss.eval == rr.eval)
+        val rr = CheckDistinct(ss)
+        assert(ss.eval == rr.eval)
+      }
+
+      it("2") {
+
+        val ss = Shape(1) |<<- (Names >< "a")
+
+        val rr = CheckDistinct(ss)
+        assert(ss.eval == rr.eval)
+      }
+    }
+
+    describe("shape has distinct names") {
+
+      it("1") {
+
+        val ss = Shape >|< Arity(1) :<<- "a" >|< Arity(2) :<<- "b"
+
+        val rr = CheckDistinct(ss)
+        assert(ss.eval == rr.eval)
+      }
+
+      it("2") {
+
+        val ss = Shape(1, 2) |<<- (Names >< "a" >< "b")
+
+        val sse = ss.eval
+
+        val rr = CheckDistinct(ss)
+        assert(ss.eval == rr.eval)
+      }
+
+      it("3") {
+
+        val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
+
+        val rr = CheckDistinct(ss)
+        assert(ss.eval == rr.eval)
+      }
     }
   }
 

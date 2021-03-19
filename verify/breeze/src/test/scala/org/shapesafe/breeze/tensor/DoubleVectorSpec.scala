@@ -2,7 +2,6 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.LeafArity
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -11,7 +10,7 @@ class DoubleVectorSpec extends BaseSpec {
 
     val v = DoubleVector(1.0, 2.0, 3.0)
 
-    v.shape.internal.requireEqual(3)
+    v.arity.internal.requireEqual(3)
   }
 
   it("... with YUUGE number of args!") {
@@ -24,7 +23,7 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     )
 
-    v.shape.internal.requireEqual(50)
+    v.arity.internal.requireEqual(50)
   }
 
   it(
@@ -41,7 +40,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.from.hList(1.0 :: 2.0 :: 3.0 :: HNil)
 
-      v.shape.internal.requireEqual(3)
+      v.arity.internal.requireEqual(3)
     }
   }
 
@@ -59,9 +58,9 @@ class DoubleVectorSpec extends BaseSpec {
       //    val v0type = ScalaReflection.universe.typeOf[v0.arity.type ].finalResultType
       //    println(v0type)
 
-      v0.shape.internal.proveSameType[Witness.`3`.T]
-      v0.shape.internal.proveEqualType[Witness.`3`.T]
-      v0.shape.internal.requireEqual(3)
+      v0.arity.internal.proveSameType[Witness.`3`.T]
+      v0.arity.internal.proveEqualType[Witness.`3`.T]
+      v0.arity.internal.requireEqual(3)
 
       //    v0.arity.internal.proveSame[Witness.`4`.T]
       //    v0.arity.internal.proveEqual[Witness.`4`.T]
@@ -106,14 +105,12 @@ class DoubleVectorSpec extends BaseSpec {
 
     it("type manually defined") {
       val w3 = Witness(3)
-      type A3 = LeafArity.Literal[w3.T]
 
       val w4 = Witness(4)
-      type A4 = LeafArity.Literal[w4.T]
 
-      val v1: DoubleVector[A3] = DoubleVector.zeros(3)
-      val v2: DoubleVector[A3] = DoubleVector.zeros(3)
-      val v3: DoubleVector[A4] = DoubleVector.zeros(4)
+      val v1 = DoubleVector.zeros(3)
+      val v2 = DoubleVector.zeros(3)
+      val v3 = DoubleVector.zeros(4)
 
       assert((v1 dot_* v2) == 0.0)
 
@@ -148,7 +145,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0 concat v1
       assert(result.data == DenseVector(1.0, 2.0, 0.0, 0.0, 0.0))
-      result.shape.internal.requireEqual(5)
+      result.arity.internal.requireEqual(5)
 
       val v2 = DoubleVector.zeros(5)
       val v3 = DoubleVector.zeros(6)
@@ -173,7 +170,7 @@ class DoubleVectorSpec extends BaseSpec {
       aa.internal.proveEqualType[Witness.`6`.T]
       aa.internal.requireEqual(6)
 
-      aa.internal._can_+(3)
+//      aa.internal._can_+(3)
     }
 
     it("crossValidate") {
@@ -303,7 +300,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.shape.runtimeArity == 3)
+      assert(v.arity.runtimeArity == 3)
     }
   }
 }

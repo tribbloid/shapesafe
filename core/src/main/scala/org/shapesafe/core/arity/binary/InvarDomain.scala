@@ -3,7 +3,7 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.ops.ArityOps.:=!=
+import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity, Utils}
 import singleton.ops.==
 
@@ -30,7 +30,7 @@ case class InvarDomain[
   def forEqual(
       implicit
       lemma: Utils.RequireLike[S1 == S2]
-  ): A1 :=!= A2 =>> Const[S1] = ProveArity.forAll[A1 :=!= A2].=>> { v =>
+  ): A1 :==! A2 =>> Const[S1] = ProveArity.forAll[A1 :==! A2].=>> { v =>
     bound1.valueOf(v.a1)
   }
 }

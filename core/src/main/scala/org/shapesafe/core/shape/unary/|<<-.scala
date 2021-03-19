@@ -5,7 +5,7 @@ import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 
-case class WithNames[
+case class |<<-[
     S1 <: Shape,
     N <: Names
 ](
@@ -13,7 +13,7 @@ case class WithNames[
     newNames: N
 ) extends ShapeConjecture {}
 
-object WithNames {
+object |<<- {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
@@ -27,8 +27,8 @@ object WithNames {
       lemma: S1 |-< P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
       toShape: LeafShape.FromRecord.Case[HO]
-  ): WithNames[S1, N] =>> toShape.Out = {
-    forAll[WithNames[S1, N]].=>> { src =>
+  ): |<<-[S1, N] =>> toShape.Out = {
+    forAll[|<<-[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
       val p1: P1 = lemma.valueOf(src.s1)
 

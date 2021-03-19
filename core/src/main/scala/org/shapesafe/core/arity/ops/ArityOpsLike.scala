@@ -1,17 +1,15 @@
 package org.shapesafe.core.arity.ops
 
 import com.tribbloids.graph.commons.util.HasOuter
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.{Arity, ArityAPI, HasArity}
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
 import org.shapesafe.core.shape.Shape
-import org.shapesafe.core.shape.unary.Op2ByName
+import org.shapesafe.core.shape.unary.ReduceByName
 import singleton.ops
 
-trait ArityOpsLike[A <: Arity] {
+trait ArityOpsLike extends HasArity {
   // this allows all subclasses of Op2 to be defined once
-
-  def self: A
 
   trait Infix {
     type Op <: Op2Like
@@ -19,18 +17,18 @@ trait ArityOpsLike[A <: Arity] {
 
     type On[A1 <: Arity, A2 <: Arity] = Op#On[A1, A2]
 
-    def apply[Y <: Arity](that: Y): On[A, Y] = op.on(self, that)
+    def apply(that: ArityAPI): ArityAPI.^[On[Internal, that.Internal]] = op.on(internal.^, that).^
 
     object Updaters extends OldNameUpdaterSystem(op)
 
-    object AppendByName extends Op2ByName with HasOuter {
+    object AppendByName extends ReduceByName with HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
       override def outer: AnyRef = Infix.this
     }
     type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
-    object SquashByName extends Op2ByName with HasOuter {
+    object SquashByName extends ReduceByName with HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
       override def outer: AnyRef = Infix.this
@@ -56,6 +54,6 @@ trait ArityOpsLike[A <: Arity] {
   object :/ extends InfixImpl(new Op2[ops./])
   type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
 
-  object :=!= extends InfixImpl(AssertEqual)
-  type :=!=[X <: Arity, Y <: Arity] = :=!=.On[X, Y]
+  object :==! extends InfixImpl(AssertEqual)
+  type :==![X <: Arity, Y <: Arity] = :==!.On[X, Y]
 }

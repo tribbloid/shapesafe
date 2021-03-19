@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.binary
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.ops.LeafShapeOps
+import org.shapesafe.core.shape.ops.LeafOps
 import org.shapesafe.core.shape.{LeafShape, Shape, ShapeConjecture}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
@@ -54,7 +54,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       P1 <: LeafShape,
       S2 <: Shape,
       A2 <: Axis,
-      P2 <: Shape.Vector[A2]
+      P2 <: Shape.Vector.Aux[A2]
   ](
       implicit
       lemma1: S1 |-< P1,
@@ -66,7 +66,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head
 
-      new LeafShapeOps[P1](p1) >|< a2
+      new LeafOps[P1](p1) >|< a2
     }
   }
 

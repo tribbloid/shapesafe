@@ -34,10 +34,11 @@ class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
           import shapeless.record._
 
           val d1 = old.apply(name)
-          val d2 = field
+          val d2 = field: A2
 
-          val d_new: O = lemma.apply(op.on(d1, d2)).value
+          val oped = op.on(d1.^, d2.^)
 
+          val d_new: O = lemma.apply(oped).value
           d_new.asInstanceOf[N ->> O] :: old
       }
     }
@@ -69,10 +70,10 @@ class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
         case (old, field) =>
           val oldView: RecordOps[OLD] = new RecordOps(old)
 
-          val d1 = oldView.apply(name)
-          val d2 = field
+          val d1 = oldView.apply(name): A1
+          val d2 = field: A2
 
-          val d_new: O = lemma.apply(op.on(d1, d2)).value
+          val d_new: O = lemma.apply(op.on(d1.^, d2.^)).value
 
           val result = modifier.apply(old, _ => d_new)
 

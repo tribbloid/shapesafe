@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, ArityConjecture, ProveArity, Utils}
+import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity, Utils}
 import shapeless.Witness
 
 import scala.language.implicitConversions
@@ -19,13 +19,7 @@ class Op2[
   val msgInfix = Witness(" ?? ")
   override type MsgInfix = msgInfix.T // TODO: this should be a constructor argument
 
-  override def on[
-      A1 <: Arity,
-      A2 <: Arity
-  ](
-      a1: A1,
-      a2: A2
-  ): On[A1, A2] = On(a1, a2)
+  override def on(a1: ArityAPI, a2: ArityAPI): On[a1.Internal, a2.Internal] = On(a1.internal, a2.internal)
 
   case class On[
       +A1 <: Arity,
@@ -77,20 +71,20 @@ object Op2 extends Op2_Imp0 {
     domain.forOp2[??]
   }
 
-  def apply[
-      ??[X1, X2] <: Op,
-      A1 <: Arity,
-      A2 <: Arity
-  ](
-      a1: A1,
-      a2: A2
-  )(
-      implicit
-      sh: Utils.IntSh[??]
-  ): Op2[??]#On[A1, A2] = {
-
-    val op2 = new Op2[??] // TODO: should be cached
-
-    op2.On(a1, a2)
-  }
+//  def apply[
+//      ??[X1, X2] <: Op,
+//      A1 <: ArityCore,
+//      A2 <: ArityCore
+//  ](
+//      a1: A1,
+//      a2: A2
+//  )(
+//      implicit
+//      sh: Utils.IntSh[??]
+//  ): Op2[??]#On[A1, A2] = {
+//
+//    val op2 = new Op2[??] // TODO: should be cached
+//
+//    op2.On(a1, a2)
+//  }
 }

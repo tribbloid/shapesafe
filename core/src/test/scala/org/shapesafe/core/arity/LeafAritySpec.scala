@@ -21,9 +21,9 @@ class LeafAritySpec extends BaseSpec {
       val out = subject
       val out2 = subject
 
-      subject.internal.requireEqual(w)(proof)
-      out.internal.requireEqual(w)(proof) // scala compiler may fumble on this one
-      out2.internal.requireEqual(w)(proof)
+      subject.requireEqual(w)(proof)
+      out.requireEqual(w)(proof) // scala compiler may fumble on this one
+      out2.requireEqual(w)(proof)
 
       implicitly[subject.SS + w.T]
       implicitly[out.SS + w.T]
@@ -33,7 +33,7 @@ class LeafAritySpec extends BaseSpec {
     it("FromOp") {
 
       //    val v1 = implicitly[FromSize[SafeInt[big.nat.N]]]
-      //    v1.internal.requireEqual(100)
+      //    v1.core.requireEqual(100)
 
       {
         val v = implicitly[Derived[ToInt[big.nat.N]]]
@@ -49,7 +49,7 @@ class LeafAritySpec extends BaseSpec {
     it("FromLiteral") {
 
       {
-        val v = Arity(100)
+        val v = Literal(100)
         validate(v, 100)
       }
 
@@ -63,13 +63,13 @@ class LeafAritySpec extends BaseSpec {
   it("eval") {
 
     val v = Arity(3)
-    TypeViz.infer(v.eval) ===!=== TypeViz.infer(v)
+    TypeViz.infer(v.eval) ===! TypeViz.infer(v)
   }
 
   it("verify") {
 
     val v = Arity(3)
-    TypeViz.infer(v.verify) ===!=== TypeViz.infer(v)
+    TypeViz.infer(v.verify) ===! TypeViz.infer(v)
   }
 
   describe("has NonSingletonTUB") {

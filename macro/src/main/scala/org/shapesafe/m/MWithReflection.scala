@@ -9,8 +9,8 @@ trait MWithReflection {
 
   val c: blackbox.Context
 
-  val refl = MacroReflection[c.universe.type](c.universe)
-  val viz = TypeViz(refl)
+  lazy val refl = MacroReflection[c.universe.type](c.universe)
+  lazy val viz = TypeViz(refl)
 
-  case class MacroError(message: String) extends Exception(message)
+//  case class MacroError(message: String) extends Exception(message)
 }

@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 
 // all names must be distinctive - no duplication allowed

@@ -1,37 +1,34 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, Operator}
-import shapeless.{Poly2, Witness}
+import org.shapesafe.core.arity.{Arity, ArityAPI, Operator}
+import shapeless.Witness
 
 trait Op2Like extends Operator {
 
   import singleton.ops._
 
   type On[
-      A1 <: Arity,
-      A2 <: Arity
-  ]
+      +A1 <: Arity,
+      +A2 <: Arity
+  ] <: Arity
 
-  def on[
-      A1 <: Arity,
-      A2 <: Arity
-  ](
-      a1: A1,
-      a2: A2
-  ): On[A1, A2]
+  def on(
+      a1: ArityAPI,
+      a2: ArityAPI
+  ): On[a1.Internal, a2.Internal]
 
-  object AsShapelessPoly2 extends Poly2 {
-
-    implicit def trivial[
-        A1 <: Arity,
-        A2 <: Arity
-    ]: Case.Aux[A1, A2, On[A1, A2]] = {
-      at[A1, A2].apply { (a1, a2) =>
-        Op2Like.this.on(a1, a2)
-      }
-    }
-  }
-  type AsShapelessPoly2 = AsShapelessPoly2.type
+//  object AsShapelessPoly2 extends Poly2 {
+//
+//    implicit def trivial[
+//        A1 <: ArityCore,
+//        A2 <: ArityCore
+//    ]: Case.Aux[A1, A2, On[A1, A2]] = {
+//      at[A1, A2].apply { (a1, a2) =>
+//        Op2Like.this.on(a1, a2)
+//      }
+//    }
+//  }
+//  type AsShapelessPoly2 = AsShapelessPoly2.type
 
   type MsgTitle = Op2Like.msgTitle.T
   type MsgInfix
