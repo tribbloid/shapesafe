@@ -32,17 +32,9 @@ trait Arity {
 
 object Arity {
 
-  trait HasArity {
-
-    type ArityInner <: Arity
-    def arityInner: ArityInner
-  }
-
   object Unprovable extends Arity {
     override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
   }
-
-//  implicit def toAPI[SELF <: Arity](self: SELF): ArityAPI.^[SELF] = ArityAPI.^(self)
 
   implicit class Converters[A <: Arity](self: A) {
 
@@ -52,6 +44,14 @@ object Arity {
   def apply(w: Witness.Lt[Int]): ^[Literal[w.T]] = {
     ^(Literal.apply(w))
   }
+
+  lazy val _0 = Arity(0)
+
+  lazy val _1 = Arity(1)
+
+  lazy val _2 = Arity(2)
+
+  lazy val _3 = Arity(3)
 
   object FromNat {
 
@@ -63,12 +63,4 @@ object Arity {
       ^(Derived.summon[NatAsOp[N]](ev))
     }
   }
-
-  lazy val _0 = Arity(0)
-
-  lazy val _1 = Arity(1)
-
-  lazy val _2 = Arity(2)
-
-  lazy val _3 = Arity(3)
 }

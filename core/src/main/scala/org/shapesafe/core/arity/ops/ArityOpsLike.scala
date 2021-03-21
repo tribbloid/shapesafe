@@ -1,9 +1,8 @@
 package org.shapesafe.core.arity.ops
 
 import com.tribbloids.graph.commons.util.HasOuter
-import org.shapesafe.core.arity.Arity.HasArity
-import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
+import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
 import org.shapesafe.core.shape.Shape
 import org.shapesafe.core.shape.unary.ReduceByName
@@ -18,7 +17,7 @@ trait ArityOpsLike extends HasArity {
 
     type On[A1 <: Arity, A2 <: Arity] = Op#On[A1, A2]
 
-    def apply(that: ArityAPI): ArityAPI.^[On[ArityInner, that.ArityInner]] = op.on(arityInner.^, that).^
+    def apply(that: ArityAPI): ArityAPI.^[On[_Arity, that._Arity]] = op.on(arity.^, that).^
 
     object Updaters extends OldNameUpdaterSystem(op)
 
@@ -34,7 +33,7 @@ trait ArityOpsLike extends HasArity {
 
       override def outer: AnyRef = Infix.this
     }
-    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
+//    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
   }
 
   class InfixImpl[OP <: Op2Like](val op: OP) extends Infix {

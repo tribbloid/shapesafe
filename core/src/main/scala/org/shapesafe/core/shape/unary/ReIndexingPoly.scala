@@ -6,14 +6,14 @@ import org.shapesafe.core.axis.NewNameAppender
 import org.shapesafe.core.shape.LeafShape
 import shapeless.{::, HList, HNil}
 
-trait ReIndexing extends Poly1Base[HList, HList] {
+trait ReIndexingPoly extends Poly1Base[HList, HList] {
 
   implicit val nil: HNil ==> HNil = forAll[HNil].==>(v => HNil)
 
   // TODO: move to a more general 'AndThen' class
   object ToShape extends Poly1Base[HList, LeafShape] {
 
-    val outer: ReIndexing.this.type = ReIndexing.this
+    val outer: ReIndexingPoly.this.type = ReIndexingPoly.this
 
     implicit def toShape[
         I <: HList,
@@ -30,9 +30,9 @@ trait ReIndexing extends Poly1Base[HList, HList] {
   }
 }
 
-object ReIndexing {
+object ReIndexingPoly {
 
-  trait Distinct extends ReIndexing {
+  trait Distinct extends ReIndexingPoly {
 
     implicit def consNewName[
         TI <: HList,

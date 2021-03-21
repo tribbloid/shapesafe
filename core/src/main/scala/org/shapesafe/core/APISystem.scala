@@ -35,9 +35,11 @@ trait APISystem {
   }
 
   implicit final def unbox[T <: API](v: T): v.Inner = v.inner
-  implicit final def box[T <: API](v: T): API.Aux[Bound] = create(v)
+//  implicit final def box[T <: API](v: T): API.Aux[Bound] = create(v)
 
   def create[I <: Bound](internal: I): API.Aux[I]
 
   trait APICompanion {}
 }
+
+object APISystem {}

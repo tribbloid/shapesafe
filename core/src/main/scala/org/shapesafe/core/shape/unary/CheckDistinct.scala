@@ -6,7 +6,7 @@ import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 case class CheckDistinct[
     S1 <: Shape
 ](
-    s1: S1
+    s1: S1 with Shape
 ) extends ShapeConjecture {}
 
 object CheckDistinct {
@@ -27,6 +27,6 @@ object CheckDistinct {
     }
   }
 
-  object _Indexing extends ReIndexing.Distinct
+  object _Indexing extends ReIndexingPoly.Distinct
   type _Indexing = _Indexing.type
 }

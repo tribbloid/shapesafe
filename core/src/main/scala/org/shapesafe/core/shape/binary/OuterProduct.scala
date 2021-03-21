@@ -53,7 +53,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       P1 <: LeafShape,
       S2 <: Shape,
       A2 <: Axis,
-      P2 <: Shape.Vector.Aux[A2]
+      P2 <: LeafShape.Eye >< A2
   ](
       implicit
       lemma1: S1 |-< P1,
@@ -65,7 +65,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head
 
-      val result = p1 appendInner a2
+      val result = p1.^ appendInner a2
 
       result
     }

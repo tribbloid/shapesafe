@@ -25,7 +25,7 @@ class WithNamesSpec extends BaseSpec {
 
       //      inferShort(names1).shouldBe()
 
-      val shape2 = (shape |<<- ab).simplify
+      val shape2 = (shape |<<- ab).eval
 
       //      VizType.infer(shape2).toString.shouldBe()
 
@@ -36,7 +36,7 @@ class WithNamesSpec extends BaseSpec {
 
       val shape1 = shape |<<- ij
 
-      val shape2 = (shape1 |<<- Names >< "a" >< "b").simplify
+      val shape2 = (shape1 |<<- Names >< "a" >< "b").eval
 
       //      VizType.infer(shape2).toString.shouldBe()
 
@@ -47,7 +47,7 @@ class WithNamesSpec extends BaseSpec {
 
       val shape1 = shape |<<- ij
 
-      val shape2 = (shape1.named("a", "b")).simplify
+      val shape2 = (shape1.named("a", "b")).eval
 
       //      VizType.infer(shape2).toString.shouldBe()
 

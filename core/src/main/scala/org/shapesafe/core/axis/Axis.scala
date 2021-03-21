@@ -1,7 +1,7 @@
 package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
-import org.shapesafe.core.arity.Arity.HasArity
+import org.shapesafe.core.arity.ops.HasArity
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.Axis.AxisLike
 import shapeless.Witness
@@ -12,13 +12,13 @@ import scala.language.implicitConversions
 trait Axis extends AxisLike with IDMixin {
   //TODO:; can be a subclass of shapeless KeyTag
 
-  final type Field = FieldType[Name, ArityInner]
-  final def asField: Field = arityInner.asInstanceOf[Field]
+  final type Field = FieldType[Name, _Arity]
+  final def asField: Field = arity.asInstanceOf[Field]
 
-  type AxisSelf >: this.type <: Axis
-  final def axisSelf: AxisSelf = this: AxisSelf
+  type _Axis >: this.type <: Axis
+  final def axis: _Axis = this: _Axis
 
-  override protected lazy val _id: Any = (arityInner, name)
+  override protected lazy val _id: Any = (arity, name)
 }
 
 object Axis {
@@ -31,29 +31,29 @@ object Axis {
       A <: Arity,
       N <: String
   ](
-      val arityInner: A,
+      val arity: A,
       val nameSingleton: Witness.Aux[N]
   ) extends Axis
 //      with KeyTag[N, D :<<- N]
       // TODO: remove? FieldType[] has some black magic written in macro
       {
 
-    type ArityInner = A
+    type _Arity = A
 
-    type AxisSelf = ArityInner :<<- Name
+    type _Axis = _Arity :<<- Name
 
     override lazy val toString: String = {
-      if (name.isEmpty) s"$arityInner"
-      else s"$arityInner :<<- $name"
+      if (name.isEmpty) s"$arity"
+      else s"$arity :<<- $name"
     }
   }
 
   def apply(
       value: ArityAPI,
       name: Witness.Lt[String]
-  ): :<<-[value.ArityInner, name.T] = {
+  ): :<<-[value._Arity, name.T] = {
 
-    new :<<-(value.arityInner, name)
+    new :<<-(value.arity, name)
   }
 
   trait AxisLike extends HasArity {
@@ -63,18 +63,18 @@ object Axis {
 
     final def name: Name = nameSingleton.value
 
-    def nameless: ArityAPI.^[ArityInner] = arityInner.^
+    def nameless: ArityAPI.^[_Arity] = arity.^
 
     def namedT[S <: String](
         implicit
         name: Witness.Aux[S]
-    ): ArityInner :<<- S = Axis(nameless, name)
+    ): _Arity :<<- S = Axis(nameless, name)
 
-    def named(name: Witness.Lt[String]): ArityInner :<<- name.T = {
+    def named(name: Witness.Lt[String]): _Arity :<<- name.T = {
 
       namedT(name)
     }
 
-    def :<<-(name: Witness.Lt[String]): ArityInner :<<- name.T = namedT(name)
+    def :<<-(name: Witness.Lt[String]): _Arity :<<- name.T = namedT(name)
   }
 }

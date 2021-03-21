@@ -3,6 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.arity.ops
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
+import org.shapesafe.core.shape.ShapeAPI.^
 
 import scala.language.implicitConversions
 
@@ -10,7 +11,7 @@ import scala.language.implicitConversions
 case class ContractByName[
     S1 <: Shape
 ](
-    override val s1: S1
+    override val s1: S1 with Shape
 ) extends ContractByName.op._On[S1] {}
 
 object ContractByName {

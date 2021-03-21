@@ -5,10 +5,10 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.{ProveShape, _}
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
-    +S1 <: Shape,
-    +II <: IndicesMagnet
+    S1 <: Shape,
+    II <: IndicesMagnet
 ](
-    s1: S1,
+    s1: S1 with Shape,
     indices: II
 ) extends ShapeConjecture {}
 
@@ -30,7 +30,7 @@ object Reorder {
 
     forAll[Reorder[S1, II]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)
-      val vv = v.copy(s1 = p1, indices = v.indices.asIndices)
+      val vv = v.copy(s1 = p1, indices = v.indices.asIndices: II#AsIndices)
 
       lemma2.apply(vv)
     }
@@ -56,14 +56,14 @@ object Reorder {
     ](
         implicit
         forTail: Reorder[P1, II_-] |- OO_-,
-        forHead: Get.Premise.Case.Aux[Get[P1, I], O]
+        forHead: GetSubscript.Premise.Case.Aux[GetSubscript[P1, I], O]
     ) = {
       forAll[Reorder[P1, Indices.><[II_-, I]]].==> { v =>
         val tail: OO_- = forTail.valueOf(v.copy(indices = v.indices.tail))
 
-        val head: O = forHead(Get(v.s1, v.indices.head))
+        val head: O = forHead(GetSubscript(v.s1, v.indices.head))
 
-        tail appendInner head
+        tail.^ appendInner head
       }
     }
   }

@@ -10,43 +10,41 @@ import scala.language.implicitConversions
 
 trait ArityAPI extends ArityOpsLike with Axis {
 
-  override type AxisSelf >: this.type <: ArityAPI
+  override type _Axis >: this.type <: ArityAPI
 
   final override val nameSingleton: Aux[NoName] = NoNameW
 
-  final override def toString: String = arityInner.fullStr
+  final override def toString: String = arity.toString
 
   final def verify[
       O <: Arity
   ](
       implicit
-      prove: ArityInner |- O
-  ): ArityAPI.^[O] = prove.apply(arityInner).value.^
+      prove: _Arity |- O
+  ): ArityAPI.^[O] = prove.apply(arity).value.^
 
   final def eval[
       O <: LeafArity
   ](
       implicit
-      prove: ArityInner |- O
-  ): ArityAPI.^[O] = prove.apply(arityInner).value.^
+      prove: _Arity |- O
+  ): ArityAPI.^[O] = prove.apply(arity).value.^
 }
 
 object ArityAPI {
 
-  final case class ^[A <: Arity](arityInner: A) extends ArityAPI {
+  type Aux[A <: Arity] = ArityAPI { type _Arity = A }
 
-    override type ArityInner = A
+  final case class ^[A <: Arity](arity: A) extends ArityAPI {
 
-    type AxisSelf = ^[A]
+    override type _Arity = A
+
+    type _Axis = ^[A]
   }
 
-  object ^ {
-
-    implicit def unbox[A <: Arity](v: ^[A]): A = v.arityInner
-  }
-
-  implicit def unbox[T <: ArityAPI](v: T): v.ArityInner = v.arityInner // TODO: why is it not effective?
-  implicit def box[T <: Arity](v: T): ^[T] = ArityAPI.^(v)
+  implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity
+//  implicit def unbox[T <: ArityAPI](v: T): v._Arity = v._arity // TODO: why is it not effective?
+//  implicit def box[T <: Arity](v: T): ^[T] = ArityAPI.^(v) // TODO: remove, type parameter is arbitrary
 
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit

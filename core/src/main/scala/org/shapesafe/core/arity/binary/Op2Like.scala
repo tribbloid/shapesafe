@@ -15,7 +15,7 @@ trait Op2Like extends Operator {
   def on(
       a1: ArityAPI,
       a2: ArityAPI
-  ): On[a1.ArityInner, a2.ArityInner]
+  ): On[a1._Arity, a2._Arity]
 
 //  object AsShapelessPoly2 extends Poly2 {
 //

@@ -5,6 +5,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.Index.Name
 import org.shapesafe.core.shape.{Indices, Names, Shape}
+import org.shapesafe.m.TypeVizCT
 
 class ReorderSpec extends BaseSpec {
 
@@ -39,7 +40,7 @@ class ReorderSpec extends BaseSpec {
         Arity(3) :<<- "z" >|<
         Arity(2) :<<- "y"
 
-      TypeViz.infer(s2).should_=:=(TypeViz.infer(rr))
+      TypeViz.infer(s2.shape).should_=:=(TypeViz.infer(rr))
 
       typeInferShort(rr).shouldBe(
         """
@@ -62,7 +63,7 @@ class ReorderSpec extends BaseSpec {
 
   it("with names") {
 
-    val r = Reorder(s1, Indices >< Name("z") >< Name("y"))
+    val r = Reorder(s1, Indices >< Name("z") >< Name("y")).^
 
     r.eval.toString.shouldBe(
       """
@@ -75,7 +76,7 @@ class ReorderSpec extends BaseSpec {
 
   it(" ... alternatively") {
 
-    val r = Reorder(s1, Names >< "z" >< "y")
+    val r = Reorder(s1, Names >< "z" >< "y").^
 
     r.eval.toString.shouldBe(
       """

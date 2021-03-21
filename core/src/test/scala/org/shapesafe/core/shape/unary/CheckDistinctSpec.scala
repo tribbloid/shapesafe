@@ -16,7 +16,7 @@ class CheckDistinctSpec extends BaseSpec {
 
         val ss = Shape >|< Arity(1) :<<- "a"
 
-        val rr = CheckDistinct(ss)
+        val rr = CheckDistinct(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -24,7 +24,7 @@ class CheckDistinctSpec extends BaseSpec {
 
         val ss = Shape(1) |<<- (Names >< "a")
 
-        val rr = CheckDistinct(ss)
+        val rr = CheckDistinct(ss).^
         assert(ss.eval == rr.eval)
       }
     }
@@ -35,7 +35,7 @@ class CheckDistinctSpec extends BaseSpec {
 
         val ss = Shape >|< Arity(1) :<<- "a" >|< Arity(2) :<<- "b"
 
-        val rr = CheckDistinct(ss)
+        val rr = CheckDistinct(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -45,7 +45,7 @@ class CheckDistinctSpec extends BaseSpec {
 
         val sse = ss.eval
 
-        val rr = CheckDistinct(ss)
+        val rr = CheckDistinct(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -53,7 +53,7 @@ class CheckDistinctSpec extends BaseSpec {
 
         val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
 
-        val rr = CheckDistinct(ss)
+        val rr = CheckDistinct(ss).^
         assert(ss.eval == rr.eval)
       }
     }
@@ -64,7 +64,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "a")
 
-      val rr = CheckDistinct(ss)
+      val rr = CheckDistinct(ss).^
 
       shouldNotCompile("""rr.eval""")
     }

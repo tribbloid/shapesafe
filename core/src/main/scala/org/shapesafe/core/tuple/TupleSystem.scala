@@ -19,6 +19,8 @@ trait TupleSystem {
 
   trait AbstractFromHList extends Poly1Base[HList, Impl] {
 
+    final val outer = TupleSystem.this
+
     implicit val toEye: HNil ==> Eye = {
       forAll[HNil].==> { _ =>
         Eye

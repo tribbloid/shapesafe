@@ -2,14 +2,10 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
-import org.shapesafe.core.axis.{Axis, NoName}
+import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.shape.ops.LeafOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
-import shapeless.ops.hlist.At
-import shapeless.ops.nat.ToInt
-import shapeless.ops.record.Selector
-import shapeless.{::, HList, HNil, Nat, Poly1, Witness}
+import shapeless.{::, HList, HNil, Nat, Witness}
 
 import scala.language.implicitConversions
 
@@ -30,57 +26,58 @@ trait LeafShape extends Shape with LeafShape.Proto {
 
   lazy val runtimeShape: List[Axis] = asList
 
-  object IndexLookup extends Poly1 {
-
-    implicit def name[S <: String](
-        implicit
-        _selector: Selector[Record, S] { type Out <: Arity }
-    ) = at[Index.Name[S]] { name =>
-      val core = _selector(record)
-      core.^ :<<- name.w
-    }
-
-    implicit def ii[N <: Nat](
-        implicit
-        _at: At[Static, N] { type Out <: Axis }
-    ): Case[Index.I_th[N]] {
-      type Result = _at.Out
-    } = at[Index.I_th[N]] { index =>
-      _at(static)
-    }
-  }
-  type IndexLookup = IndexLookup.type
-
-  object Sub {
-
-    def apply[T <: Index](v: T): Sub1[T] = {
-
-      Sub1(v)
-    }
-
-    def apply(i: Nat)(
-        implicit
-        toIntN: ToInt[i.N]
-    ): Sub1[Index.I_th[i.N]] = {
-
-      apply(Index.I_th(i))
-    }
-
-    def apply(w: Witness.Lt[String]): Sub1[Index.Name[w.T]] = {
-
-      apply(Index.Name(w))
-    }
-  }
-
-  case class Sub1[T <: Index](index: T) {
-
-    def axis(
-        implicit
-        byIndex: IndexLookup.Case[T]
-    ): byIndex.Result = {
-      byIndex.apply(index)
-    }
-  }
+  // TODO: merge with GetSubscript & becoming a special case
+//  object IndexLookup extends Poly1 {
+//
+//    implicit def name[S <: String](
+//        implicit
+//        _selector: Selector[Record, S] { type Out <: Arity }
+//    ) = at[Index.Name[S]] { name =>
+//      val core = _selector(record)
+//      core.^ :<<- name.w
+//    }
+//
+//    implicit def ii[N <: Nat](
+//        implicit
+//        _at: At[Static, N] { type Out <: Axis }
+//    ): Case[Index.I_th[N]] {
+//      type Result = _at.Out
+//    } = at[Index.I_th[N]] { index =>
+//      _at(static)
+//    }
+//  }
+//  type IndexLookup = IndexLookup.type
+//
+//  object Sub {
+//
+//    def apply[T <: Index](v: T): Sub1[T] = {
+//
+//      Sub1(v)
+//    }
+//
+//    def apply(i: Nat)(
+//        implicit
+//        toIntN: ToInt[i.N]
+//    ): Sub1[Index.I_th[i.N]] = {
+//
+//      apply(Index.I_th(i))
+//    }
+//
+//    def apply(w: Witness.Lt[String]): Sub1[Index.Name[w.T]] = {
+//
+//      apply(Index.Name(w))
+//    }
+//  }
+//
+//  case class Sub1[T <: Index](index: T) {
+//
+//    def axis(
+//        implicit
+//        byIndex: IndexLookup.Case[T]
+//    ): byIndex.Result = {
+//      byIndex.apply(index)
+//    }
+//  }
 
   final override def nodeString: String = this.toString
 }
@@ -127,8 +124,8 @@ object LeafShape extends TupleSystem with CanFromStatic {
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
 
-    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.ArityInner]
-    final override val dimensions = new Dimensions.><(tail.dimensions, head.arityInner)
+    final override type _Dimensions = Dimensions.><[tail._Dimensions, head._Arity]
+    final override val dimensions = new Dimensions.><(tail.dimensions, head.arity)
   }
 
   final type ><^[
@@ -152,7 +149,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val vHead = v.head: C
         val head: ArityAPI.^[C] = vHead.^
 
-        val result = prev.appendInner(head)
+        val result = prev.^ appendInner head
         result
       }
     }
@@ -176,7 +173,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
 
-        val result = prev appendInner head
+        val result = prev.^ appendInner head
 
         result
       }
@@ -189,8 +186,6 @@ object LeafShape extends TupleSystem with CanFromStatic {
       new ><(tail, head)
     }
   }
-
-  implicit def toOps[T <: LeafShape](self: T): LeafOps[T] = new LeafOps(self)
 
   object FromLiterals extends AbstractFromHList {
 
@@ -208,7 +203,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = forTail(v.tail)
         val head = Arity(w) //  Arity.Impl(LeafArity.Literal(w))
 
-        prev appendInner head
+        prev.^ appendInner head
       }
     }
   }
@@ -229,7 +224,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = apply(v.tail)
         val head = Arity.FromNat(v.head)
 
-        prev appendInner head
+        prev.^ appendInner head
       }
     }
   }

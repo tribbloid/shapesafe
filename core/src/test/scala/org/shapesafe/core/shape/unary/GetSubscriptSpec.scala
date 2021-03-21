@@ -4,7 +4,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.{Index, Names, Shape}
 
-class GetSpec extends BaseSpec {
+class GetSubscriptSpec extends BaseSpec {
 
   val s1 = Shape >|<
     (Arity(1) :<<- "x") >|<
@@ -13,39 +13,41 @@ class GetSpec extends BaseSpec {
 
   it("by name") {
 
-    val ss = Get(s1, Index.Name("x"))
+    val ss = GetSubscript(s1, Index.Name("x")).^
 //    VizType.infer(ee).shouldBe()
     val rr = ss.eval
 
-    typeInferShort(rr).shouldBe(
+    typeInferShort(rr.shape).shouldBe(
       """LeafShape.Eye >< (LeafArity.Literal[Int(1)] :<<- String("x"))"""
     )
   }
 
   it(" ... indirectly") {
 
-    val rr = Get(s1 |<<- Names >< "a" >< "b" >< "c", Index.Name("c")).eval
+    val ss = GetSubscript(s1 |<<- Names >< "a" >< "b" >< "c", Index.Name("c")).^
+    val rr = ss.eval
 
-    typeInferShort(rr).shouldBe(
+    typeInferShort(rr.shape).shouldBe(
       """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("c"))"""
     )
   }
 
   it("by ordinal") {
 
-    val ss = Get(s1, Index.I_th(0))
+    val ss = GetSubscript(s1, Index.I_th(0)).^
     val rr = ss.eval
 
-    typeInferShort(rr).shouldBe(
+    typeInferShort(rr.shape).shouldBe(
       """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z"))"""
     )
   }
 
   it(" .... indirectly") {
 
-    val rr = Get(s1 |<<- Names >< "a" >< "b" >< "c", Index.I_th(1)).eval
+    val ss = GetSubscript(s1 |<<- Names >< "a" >< "b" >< "c", Index.I_th(1))
+    val rr = ss.^.eval
 
-    typeInferShort(rr).shouldBe(
+    typeInferShort(rr.shape).shouldBe(
       """LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("b"))"""
     )
   }

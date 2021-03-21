@@ -11,7 +11,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
   Record // Don't remove! IDE can't figure out the proper import
 
-  val ii = "i" ->> Arity(3).arityInner
+  val ii = "i" ->> Arity(3).arity
 
   describe("can append") {
 
@@ -26,7 +26,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
       it("1") {
 
-        val existing = ("a" ->> Arity(4).arityInner) :: HNil
+        val existing = ("a" ->> Arity(4).arity) :: HNil
 
         val out = NewNameAppender.apply(existing -> ii)
 
@@ -35,7 +35,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
       it("2") {
 
-        val existing = ("a" ->> Arity(4).arityInner) :: ("b" ->> Arity(5).arityInner) :: HNil
+        val existing = ("a" ->> Arity(4).arity) :: ("b" ->> Arity(5).arity) :: HNil
 
         val out = NewNameAppender.apply(existing -> ii)
 
