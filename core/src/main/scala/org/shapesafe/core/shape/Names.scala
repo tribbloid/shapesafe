@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness
 
@@ -7,7 +8,7 @@ import scala.language.implicitConversions
 
 trait Names extends IndicesMagnet with Names.proto.Impl {}
 
-object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals {
+object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
 
   object proto extends StaticTuples.Total[String] with CanInfix_>< {}
 
@@ -55,8 +56,6 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
   implicit def toEyeInfix(s: Names.type): Infix[Eye] = Infix(Eye)
 
-  val fromHList: FromLiterals.type = FromLiterals
-
   trait Syntax {
 
     implicit def literalToNames(v: String)(
@@ -77,4 +76,9 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
   }
 
   object Syntax extends Syntax
+
+  val i = Names("i")
+  val ij = Names("i", "j")
+  val jk = Names("j", "k")
+  val ik = Names("i", "k")
 }

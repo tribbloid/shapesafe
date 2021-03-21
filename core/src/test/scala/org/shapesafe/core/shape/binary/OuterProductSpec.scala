@@ -18,9 +18,9 @@ class OuterProductSpec extends BaseSpec {
         Arity(2) :<<- "i"
       //        Arity.FromLiteral(3) :<<- "j"
 
-      val r = (s1 >< s2).eval
+      val rr = (s1 >< s2).eval
 
-      typeInferShort(r).shouldBe(
+      typeInferShort(rr.shape).shouldBe(
         """
           |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
@@ -36,9 +36,9 @@ class OuterProductSpec extends BaseSpec {
         Arity(2) :<<- "i" >|<
         Arity(3) :<<- "j"
 
-      val r = (s1 outer s2).eval
+      val rr = (s1 outer s2).eval
 
-      typeInferShort(r).shouldBe(
+      typeInferShort(rr.shape).shouldBe(
         """
           |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y")) ><
           | (LeafArity.Literal[Int(2)] :<<- String("i")) >< (LeafArity.Literal[Int(3)] :<<- String("j"))

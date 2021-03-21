@@ -19,7 +19,7 @@ class Op2[
   val msgInfix = Witness(" ?? ")
   override type MsgInfix = msgInfix.T // TODO: this should be a constructor argument
 
-  override def on(a1: ArityAPI, a2: ArityAPI): On[a1.ArityInner, a2.ArityInner] = On(a1.arityInner, a2.arityInner)
+  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
 
   case class On[
       +A1 <: Arity,

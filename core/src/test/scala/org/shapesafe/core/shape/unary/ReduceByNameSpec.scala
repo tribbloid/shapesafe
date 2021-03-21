@@ -18,7 +18,7 @@ class ReduceByNameSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix.SquashByName ‣ ReduceByName.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._SquashByName ‣ ReduceByName.On
         | ‣ OuterProduct
         |    ‣ |<<-┏ Eye ><
         |    :     ┃   x ><
@@ -38,12 +38,13 @@ class ReduceByNameSpec extends BaseSpec {
 
   describe("matrix") {
 
-    it("direct sum") {
-      val s1 =
-        Shape(2, 3) |<<- (Names >< "x" >< "y")
+    val s1 =
+      Shape(2, 3) |<<- (Names >< "x" >< "y")
 
-      val s2 =
-        Shape(4, 5) |<<- (Names >< "x" >< "y")
+    val s2 =
+      Shape(4, 5) |<<- (Names >< "x" >< "y")
+
+    it("direct sum") {
 
       val rr = s1.flattenWith(ArityOps.:+, s2)
 
@@ -57,12 +58,6 @@ class ReduceByNameSpec extends BaseSpec {
     }
 
     it("Kronecker product") {
-
-      val s1 =
-        Shape(2, 3) |<<- (Names >< "x" >< "y")
-
-      val s2 =
-        Shape(4, 5) |<<- (Names >< "x" >< "y")
 
       val rr = s1.flattenWith(ArityOps.:*, s2)
 

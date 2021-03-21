@@ -10,7 +10,8 @@ import scala.language.implicitConversions
 
 trait ReduceByName {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import ProveShape._
+  import ProveShape.Factory._
 
   val oldNameUpdater: RecordUpdater
 
@@ -22,13 +23,8 @@ trait ReduceByName {
 
     override def outer: ReduceByName.this.type = ReduceByName.this
 
-    val s1: S1
+    def s1: S1 with Shape
   }
-
-  case class On[
-      S1 <: Shape
-  ](override val s1: S1)
-      extends _On[S1] {}
 
   object _On {
 
@@ -37,7 +33,7 @@ trait ReduceByName {
         P1 <: LeafShape
     ](
         implicit
-        lemma: S1 =>> P1,
+        lemma: S1 |- P1,
         toShape: _Indexing.ToShape.Case[P1#Record]
     ): _On[S1] =>> toShape.Out = {
 
@@ -47,10 +43,15 @@ trait ReduceByName {
         result
       }
     }
-
   }
 
-  object _Indexing extends ReIndexing.Distinct {
+  case class On[
+      S1 <: Shape
+  ](
+      override val s1: S1 with Shape
+  ) extends _On[S1] {}
+
+  object _Indexing extends UnaryIndexingFn.Distinct {
 
     implicit def consOldName[
         TI <: HList,
@@ -67,8 +68,8 @@ trait ReduceByName {
         val to = consTail(ti)
         oldName(to, v.head)
       }
-
     }
   }
+
   type _Indexing = _Indexing.type
 }

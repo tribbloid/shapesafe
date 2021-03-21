@@ -14,8 +14,6 @@ object TypeVizCT {
     def shouldBe[B]: Unit = macro Macro.shouldBe[A, B]
   }
 
-  class TypeInfo(str: String) extends Throwable(str)
-
   final class Macro(val c: whitebox.Context) extends MWithReflection {
 
     import c.universe._

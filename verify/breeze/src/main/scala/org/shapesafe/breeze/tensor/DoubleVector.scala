@@ -3,7 +3,6 @@ package org.shapesafe.breeze.tensor
 import breeze.linalg.DenseVector
 import breeze.signal
 import org.shapesafe.core.arity.ProveArity.{|-, |-<}
-import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.nullary.SizeOf
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
 import org.shapesafe.core.util.Constraint.ElementOfType
@@ -45,7 +44,7 @@ class DoubleVector[A1 <: Arity](
 
   def concat[A2 <: Arity, O <: LeafArity](that: DoubleVector[A2])(
       implicit
-      lemma: (A1 :+ A2) |-< O
+      lemma: (A1 :+ A2) |- O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.arity :+ that.arity
@@ -53,18 +52,18 @@ class DoubleVector[A1 <: Arity](
 
     val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
 
-    new DoubleVector(proof.value, data)
+    new DoubleVector(proof.value.^, data)
   }
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 :+ (Literal[padding.T] :* Arity._2.ArityInner)) |-< O
+      lemma: (A1 :+ (Literal[padding.T] :* Arity._2._Arity)) |- O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
     val op = this.arity :+ (_padding :* Arity._2)
     val proof = lemma(op)
-    val out = proof.value
+    val out = proof.value.^
 
     val fill = DenseVector.fill(out.runtimeArity)(0.0)
 
@@ -81,14 +80,14 @@ class DoubleVector[A1 <: Arity](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1.ArityInner) :/ Literal[stride.T]) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1._Arity) :/ Literal[stride.T]) |- O
   ): DoubleVector[O] = {
 
     val _stride = Arity(stride)
 
     val op = (this.arity :- kernel.arity :+ Arity._1) :/ _stride
     val proof = lemma(op)
-    val out = proof.value
+    val out = proof.value.^
 
     val range = 0.to(this.data.size - kernel.data.size, stride.value)
 
@@ -109,7 +108,7 @@ class DoubleVector[A1 <: Arity](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1.ArityInner) :/ Arity._1.ArityInner) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1._Arity) :/ Arity._1._Arity) |- O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -120,27 +119,27 @@ object DoubleVector extends ProductArgs {
 
   import LeafArity._
 
-  def applyProduct[D <: HList, S](data: D)(
+  def applyProduct[D <: HList, O <: LeafArity](data: D)(
       implicit
-      proofOfSize: SizeOf[D] |-< Const[S],
+      proofOfSize: SizeOf[D] |- O,
       proofOfType: D ElementOfType Double
-  ): DoubleVector[Const[S]] = {
+  ): DoubleVector[O] = {
 
     val list = data.runtimeList.map { v =>
       v.asInstanceOf[Double]
     }
 
     val size = SizeOf(data)
-    new DoubleVector(proofOfSize.valueOf(size), Vec.apply(list.toArray))
+    new DoubleVector(proofOfSize.valueOf(size).^, Vec.apply(list.toArray))
   }
 
   @transient object from {
 
-    def hList[D <: HList, S <: NatAsOp[_]](data: D)(
+    def hList[D <: HList, O <: LeafArity](data: D)(
         implicit
-        proofOfSize: SizeOf[D] |-< Const[S],
+        proofOfSize: SizeOf[D] |- O,
         proofOfType: D ElementOfType Double
-    ): DoubleVector[Const[S]] = {
+    ): DoubleVector[O] = {
 
       applyProduct(data)(proofOfSize, proofOfType)
     }
@@ -163,7 +162,7 @@ object DoubleVector extends ProductArgs {
 
     def zeros(number: Int): DoubleVector[Var] = {
 
-      new DoubleVector(Var(number), DenseVector.fill(number)(0.0))
+      new DoubleVector(Var(number).^, DenseVector.fill(number)(0.0))
     }
   }
 

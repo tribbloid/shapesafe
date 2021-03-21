@@ -5,20 +5,21 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.shape.ShapeAPI.^
 import org.shapesafe.core.shape._
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
 import shapeless.{Nat, Witness}
 
-case class Get[ // last step of einsum, contract, transpose, etc.
+case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     S1 <: Shape,
     I <: Index
 ](
-    s1: S1,
+    s1: S1 with Shape,
     index: I
 ) extends ShapeConjecture {}
 
-object Get {
+object GetSubscript {
 
 //  object Direct extends ProveShape.SubScope
   //  import Direct._
@@ -32,19 +33,19 @@ object Get {
       O <: Axis
   ](
       implicit
-      lemma1: |-<[S1, P1],
-      lemma2: Premise.==>[Get[P1, I], O]
-  ): Get[S1, I] =>> (LeafShape.Eye >< O) = {
+      lemma1: |-[S1, P1],
+      lemma2: Premise.==>[GetSubscript[P1, I], O]
+  ): GetSubscript[S1, I] =>> (LeafShape.Eye >< O) = {
 
-    ProveShape.forAll[Get[S1, I]].=>> { v =>
+    ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)
-      val vv: Get[P1, I] = v.copy(s1 = p1)
+      val vv: GetSubscript[P1, I] = v.copy(s1 = p1)
 
-      LeafShape.Eye appendInner lemma2(vv)
+      Shape appendInner lemma2(vv)
     }
   }
 
-  object Premise extends Poly1Base[Get[_, _], Axis] {
+  object Premise extends Poly1Base[GetSubscript[_, _], Axis] {
 
     implicit def byName[
         P1 <: LeafShape,
@@ -53,8 +54,8 @@ object Get {
     ](
         implicit
         _selector: Selector.Aux[P1#Record, N, A]
-    ): Get[P1, Index.Name[N]] ==> (A :<<- N) = {
-      forAll[Get[P1, Index.Name[N]]].==> { v =>
+    ): GetSubscript[P1, Index.Name[N]] ==> (A :<<- N) = {
+      forAll[GetSubscript[P1, Index.Name[N]]].==> { v =>
         val p1: P1 = v.s1
 
         val arity: A = _selector(p1.record)
@@ -70,8 +71,8 @@ object Get {
     ](
         implicit
         _at: At.Aux[P1#Static, N, O]
-    ): Get[P1, Index.I_th[N]] ==> O = {
-      forAll[Get[P1, Index.I_th[N]]].==> { v =>
+    ): GetSubscript[P1, Index.I_th[N]] ==> O = {
+      forAll[GetSubscript[P1, Index.I_th[N]]].==> { v =>
         val p1 = v.s1
 
         _at(p1.static)

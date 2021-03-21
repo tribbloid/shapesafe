@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.shape.ProveShape._
+import org.shapesafe.core.shape.ShapeAPI.^
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
@@ -9,7 +10,7 @@ case class |<<-[
     S1 <: Shape,
     N <: Names
 ](
-    s1: S1,
+    s1: S1 with Shape,
     newNames: N
 ) extends ShapeConjecture {}
 

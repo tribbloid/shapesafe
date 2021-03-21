@@ -1,6 +1,6 @@
 # ∀ Linear Algebra ∃ Proof System between Types
 
-**shapesafe** is the missing compile-time verifier for numerical linear algebra in scala, obvious shape and indexing errors in tensor operations are captured by the typing system.
+**shapesafe** is the missing compile-time verifier for numerical linear algebra on JVM, obvious shape and indexing errors in tensor operations are captured by scala's typing system.
 
 shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
 

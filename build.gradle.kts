@@ -61,29 +61,29 @@ allprojects {
     // resolving jar hells
     configurations.all {
         resolutionStrategy.dependencySubstitution {
+            // TODO: use `constraints` as below
             substitute(
                 module("com.chuusai:shapeless_${vs.scalaBinaryV}")
             ).apply {
                 with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
-//            substitute( // TODO: not working!
-//                module("${vs.scalaGroup}:scala-library")
-//            ).apply {
-//                with(module("${vs.scalaGroup}:scala-library:${vs.scalaV}"))
-//            }
         }
     }
 
     dependencies {
 
-        compileOnly("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        // see https://github.com/gradle/gradle/issues/13067
+        fun bothImpl(constraintNotation: Any) {
+            implementation(constraintNotation)
+            testFixturesImplementation(constraintNotation)
+        }
 
-        compileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        testFixturesCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        testCompileOnly("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        // This is a dirty hack to circumvent https://youtrack.jetbrains.com/issue/SCL-17284
+        constraints {
 
-        compileOnly("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        }
 
         //https://github.com/tek/splain
         if (vs.splainV !=null)
@@ -136,8 +136,8 @@ allprojects {
                     "-Xlint:poly-implicit-overload",
                     "-Xlint:option-implicit",
 
-                    "-Xlog-implicits",
-                    "-Xlog-implicit-conversions",
+                    // "-Xlog-implicits",
+                    // "-Xlog-implicit-conversions",
 
                     "-Yissue-debug"
 //                    ,
@@ -260,6 +260,7 @@ allprojects {
                 file(".bloop"),
                 file(".bsp"),
                 file(".metals"),
+                file(".ammonite"),
 
                 file("logs"),
 
