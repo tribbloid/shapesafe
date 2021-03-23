@@ -10,7 +10,7 @@ class DoubleVectorSpec extends BaseSpec {
 
     val v = DoubleVector(1.0, 2.0, 3.0)
 
-    v.arity.internal.requireEqual(3)
+    v.arity.requireEqual(3)
   }
 
   it("... with YUUGE number of args!") {
@@ -23,7 +23,7 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     )
 
-    v.arity.internal.requireEqual(50)
+    v.arity.requireEqual(50)
   }
 
   it(
@@ -40,7 +40,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.from.hList(1.0 :: 2.0 :: 3.0 :: HNil)
 
-      v.arity.internal.requireEqual(3)
+      v.arity.requireEqual(3)
     }
   }
 
@@ -58,9 +58,9 @@ class DoubleVectorSpec extends BaseSpec {
       //    val v0type = ScalaReflection.universe.typeOf[v0.arity.type ].finalResultType
       //    println(v0type)
 
-      v0.arity.internal.proveSameType[Witness.`3`.T]
-      v0.arity.internal.proveEqualType[Witness.`3`.T]
-      v0.arity.internal.requireEqual(3)
+      v0.arity.proveSameType[Witness.`3`.T]
+      v0.arity.proveEqualType[Witness.`3`.T]
+      v0.arity.requireEqual(3)
 
       //    v0.arity.internal.proveSame[Witness.`4`.T]
       //    v0.arity.internal.proveEqual[Witness.`4`.T]
@@ -145,7 +145,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0 concat v1
       assert(result.data == DenseVector(1.0, 2.0, 0.0, 0.0, 0.0))
-      result.arity.internal.requireEqual(5)
+      result.arity.requireEqual(5)
 
       val v2 = DoubleVector.zeros(5)
       val v3 = DoubleVector.zeros(6)
@@ -166,9 +166,9 @@ class DoubleVectorSpec extends BaseSpec {
 
       val aa = v0.arity
 
-      aa.internal.proveSameType[Witness.`6`.T]
-      aa.internal.proveEqualType[Witness.`6`.T]
-      aa.internal.requireEqual(6)
+      aa.proveSameType[Witness.`6`.T]
+      aa.proveEqualType[Witness.`6`.T]
+      aa.requireEqual(6)
 
 //      aa.internal._can_+(3)
     }
@@ -258,7 +258,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0.pad(2)
       result.crossValidate()
-      result.arity.internal.requireEqual(10)
+      result.arity.requireEqual(10)
     }
   }
 
@@ -271,7 +271,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0.conv(v1)
       result.crossValidate()
-      result.arity.internal.requireEqual(4)
+      result.arity.requireEqual(4)
     }
 
     it("2") {
@@ -283,13 +283,13 @@ class DoubleVectorSpec extends BaseSpec {
       {
         val result = v0.conv(v1, 2)
         result.crossValidate()
-        result.arity.internal.requireEqual(2)
+        result.arity.requireEqual(2)
       }
 
       {
         val result = v0.conv(v2, 2)
         result.crossValidate()
-        result.arity.internal.requireEqual(2)
+        result.arity.requireEqual(2)
       }
     }
   }

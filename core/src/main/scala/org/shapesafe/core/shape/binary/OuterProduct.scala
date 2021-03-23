@@ -3,7 +3,6 @@ package org.shapesafe.core.shape.binary
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.ops.LeafOps
 import org.shapesafe.core.shape.{LeafShape, Shape, ShapeConjecture}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
@@ -66,32 +65,9 @@ object OuterProduct extends OuterProduct_Imp0 {
       val p2: P2 = lemma2.valueOf(direct.s2)
       val a2: A2 = p2.head
 
-      new LeafOps[P1](p1) >|< a2
+      val result = p1 appendInner a2
+
+      result
     }
   }
-
-  //  implicit def noOp[
-  //      P1 <: LeafShape
-  //  ]: Direct[P1, LeafShape.Eye] =>> P1 = {
-  //
-  //    from[Direct[P1, LeafShape.Eye]].out { dd =>
-  //      dd.s1
-  //    }
-  //  }
-  //
-  //  implicit def recursive[
-  //      P1 <: LeafShape,
-  //      HEAD2 <: Axis,
-  //      TAIL2 <: LeafShape,
-  //      O <: LeafShape
-  //  ](
-  //      next: Direct[P1 >< HEAD2, TAIL2] ~~> O
-  //  ) = {
-  //
-  //    from[Direct[P1, TAIL2 >< HEAD2]].out { dd =>
-  //      val plus1 = dd.s1 >< dd.s2.head
-  //      val alt = Direct(plus1, dd.s2.tail)
-  //      next()
-  //    }
-  //  }
 }

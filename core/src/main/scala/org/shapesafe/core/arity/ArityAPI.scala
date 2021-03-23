@@ -3,46 +3,56 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
+import shapeless.Witness
 import shapeless.Witness.Aux
 
 import scala.language.implicitConversions
 
 trait ArityAPI extends ArityOpsLike with Axis {
 
-  final override type Name = NoName
-  final override def nameSingleton: Aux[NoName] = NoNameW
+  override type AxisSelf >: this.type <: ArityAPI
 
-  final lazy val runtimeTry = internal.runtimeTry
-  final def runtimeArity: Int = runtimeTry.get
-  final def runtimeOpt: Option[Int] = runtimeTry.toOption
+  final override val nameSingleton: Aux[NoName] = NoNameW
 
-  final override def toString: String = internal.fullStr
+  final override def toString: String = arityInner.fullStr
 
   final def verify[
       O <: Arity
   ](
       implicit
-      prove: Internal |- O
-  ): ArityAPI.^[O] = prove.apply(internal).value.^
+      prove: ArityInner |- O
+  ): ArityAPI.^[O] = prove.apply(arityInner).value.^
 
   final def eval[
       O <: LeafArity
   ](
       implicit
-      prove: Internal |- O
-  ): ArityAPI.^[O] = prove.apply(internal).value.^
-
+      prove: ArityInner |- O
+  ): ArityAPI.^[O] = prove.apply(arityInner).value.^
 }
 
 object ArityAPI {
 
-  final case class ^[C <: Arity](internal: C) extends ArityAPI {
+  final case class ^[A <: Arity](arityInner: A) extends ArityAPI {
 
-    override type Internal = C
+    override type ArityInner = A
 
-    def ^ : ^[C] = this
+    type AxisSelf = ^[A]
   }
 
-  implicit def unbox[T <: ArityAPI](v: T): v.Internal = v.internal
+  object ^ {
 
+    implicit def unbox[A <: Arity](v: ^[A]): A = v.arityInner
+  }
+
+  implicit def unbox[T <: ArityAPI](v: T): v.ArityInner = v.arityInner // TODO: why is it not effective?
+  implicit def box[T <: Arity](v: T): ^[T] = ArityAPI.^(v)
+
+  implicit def fromIntS[T <: Int with Singleton](v: T)(
+      implicit
+      toW: Witness.Aux[T]
+  ): ArityAPI.^[LeafArity.Literal[T]] = {
+
+    Arity(toW)
+  }
 }

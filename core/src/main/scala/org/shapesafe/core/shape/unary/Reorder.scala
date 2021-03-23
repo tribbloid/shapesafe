@@ -63,7 +63,7 @@ object Reorder {
 
         val head: O = forHead(Get(v.s1, v.indices.head))
 
-        tail >|< head
+        tail appendInner head
       }
     }
   }

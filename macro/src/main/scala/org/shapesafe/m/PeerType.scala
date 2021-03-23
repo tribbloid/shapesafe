@@ -4,27 +4,27 @@ import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
 
 /**
-  * non singleton tightest upper bound
+  * a.k.a. non-singleton tightest upper bound
   * @tparam I input type
   */
-trait NonSingletonTUB[I] {
+trait PeerType[I] {
 
   final type In = I
   type Out
 }
 
-object NonSingletonTUB {
+object PeerType {
 
   lazy val objectClassPath: String = {
     val fullName = this.getClass.getCanonicalName.stripSuffix("$")
     s"_root_.$fullName"
   }
 
-  type Aux[A, Out0] = NonSingletonTUB[A] {
+  type Aux[A, Out0] = PeerType[A] {
     type Out = Out0
   }
 
-  case class Make[I, O]() extends NonSingletonTUB[I] {
+  case class Make[I, O]() extends PeerType[I] {
     final type Out = O
   }
 
@@ -36,7 +36,7 @@ object NonSingletonTUB {
     Make[I, O]()
   }
 
-  def apply[I]: NonSingletonTUB[I] = macro Macros.apply[I]
+  def apply[I]: PeerType[I] = macro Macros.apply[I]
 
   final class Macros(val c: whitebox.Context) extends MWithReflection {
 
@@ -68,7 +68,7 @@ object NonSingletonTUB {
           v
       }
 
-      q"_root_.org.shapesafe.m.NonSingletonTUB.make[$tt, $out]" // TODO: make the object Liftable
+      q"_root_.org.shapesafe.m.PeerType.make[$tt, $out]" // TODO: make the object Liftable
     }
   }
 }

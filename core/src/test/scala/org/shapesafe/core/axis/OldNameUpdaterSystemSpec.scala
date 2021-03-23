@@ -12,7 +12,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
   Record // TODO: don't remove! the IDE may clean up the import erratically
 
-  val ii = "i" ->> Arity(3).internal
+  val ii = "i" ->> Arity(3).arityInner
 
   describe("Appender") {
 
@@ -24,7 +24,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(3).internal) :: HNil
+          val existing = ("i" ->> Arity(3).arityInner) :: HNil
 
           val out = appender.apply(existing -> ii)
 
@@ -33,7 +33,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(3).internal) :: ("j" ->> Arity(4).internal) :: HNil
+          val existing = ("i" ->> Arity(3).arityInner) :: ("j" ->> Arity(4).arityInner) :: HNil
 
           val out = appender.apply(existing -> ii)
 
@@ -48,7 +48,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(4).internal) :: HNil
+          val existing = ("i" ->> Arity(4).arityInner) :: HNil
 
           shouldNotCompile(
             """appender.apply(existing -> ii)"""
@@ -58,7 +58,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(4).internal) :: ("j" ->> Arity(3).internal) :: HNil
+          val existing = ("i" ->> Arity(4).arityInner) :: ("j" ->> Arity(3).arityInner) :: HNil
 
           shouldNotCompile(
             """val out = appender.apply(existing -> ii)"""
@@ -67,7 +67,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it("3") {
 
-          val existing = ("j" ->> Arity(3).internal) :: ("i" ->> Arity(4).internal) :: HNil
+          val existing = ("j" ->> Arity(3).arityInner) :: ("i" ->> Arity(4).arityInner) :: HNil
 
           shouldNotCompile(
             """appender.apply(existing -> ii)"""
@@ -87,7 +87,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(3).internal) :: HNil
+          val existing = ("i" ->> Arity(3).arityInner) :: HNil
 
           val out = squasher.apply(existing -> ii)
 
@@ -96,7 +96,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(3).internal) :: ("j" ->> Arity(4).internal) :: HNil
+          val existing = ("i" ->> Arity(3).arityInner) :: ("j" ->> Arity(4).arityInner) :: HNil
 
           val out = squasher.apply(existing -> ii)
 

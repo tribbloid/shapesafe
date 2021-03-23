@@ -2,7 +2,7 @@ package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
-import org.shapesafe.m.NonSingletonTUB
+import org.shapesafe.m.PeerType
 import shapeless.Witness.Lt
 import singleton.ops.{+, ==, Require, ToInt}
 
@@ -72,14 +72,14 @@ class LeafAritySpec extends BaseSpec {
     TypeViz.infer(v.verify) ===! TypeViz.infer(v)
   }
 
-  describe("has NonSingletonTUB") {
+  describe("has PeerType") {
 
     val a = Arity(3)
     val gt = TypeViz.infer(a)
 
     it("2") {
       val v2 = {
-        val v = NonSingletonTUB[a.type]
+        val v = PeerType[a.type]
         TypeViz[v.Out]
       }
 

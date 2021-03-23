@@ -13,19 +13,19 @@ class AssertEqualSpec extends ArityFixture {
       it("a") {
 
         val op = AssertEqual.on(a, a).^
-        op.eval.internal.requireEqual(3)
+        op.eval.requireEqual(3)
       }
 
       it("a + b") {
 
         val op = AssertEqual.on(a :+ b, ab).^
-        op.eval.internal.requireEqual(7)
+        op.eval.requireEqual(7)
       }
 
       it("a + b + c") {
 
         val op = AssertEqual.on(a :+ b :+ c, abc).^
-        op.eval.internal.requireEqual(12)
+        op.eval.requireEqual(12)
       }
     }
 
@@ -34,7 +34,7 @@ class AssertEqualSpec extends ArityFixture {
       it("a + b + c") {
 
         val op = AssertEqual.on(a :+ b :+ c, ab :+ c).^
-        op.eval.internal.requireEqual(12)
+        op.eval.requireEqual(12)
       }
     }
 
@@ -45,7 +45,7 @@ class AssertEqualSpec extends ArityFixture {
         val op = AssertEqual.on(LeafArity.Unchecked.^, a).^
 
         val out = op.eval
-        out.internal.requireEqual(3)
+        out.requireEqual(3)
 
 //        op.asProof.out.core.requireEqual(3)
       }
@@ -56,7 +56,7 @@ class AssertEqualSpec extends ArityFixture {
         val op = AssertEqual.on(sum, LeafArity.Unchecked.^).^
 
         val out = op.eval
-        out.internal.requireEqual(7)
+        out.requireEqual(7)
       }
     }
   }

@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
-import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.axis.{Axis, NoName}
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.shape.ops.LeafOps
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
@@ -19,11 +19,8 @@ import scala.language.implicitConversions
   */
 trait LeafShape extends Shape with LeafShape.Proto {
 
-  type Record <: HList // name: String -> arityCore: ArityCore
+  type Record <: HList // name: String -> arity: Arity
   def record: Record
-//  lazy val recordView: RecordView[Record] = RecordView(record)
-
-//  lazy val getField: recordView.GetField.type = recordView.GetField
 
   type _Names <: Names
   val names: _Names
@@ -130,8 +127,8 @@ object LeafShape extends TupleSystem with CanFromStatic {
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = tail.names >< head.nameSingleton
 
-    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.Internal]
-    final override val dimensions = new Dimensions.><(tail.dimensions, head.internal)
+    final override type _Dimensions = Dimensions.><[tail._Dimensions, head.ArityInner]
+    final override val dimensions = new Dimensions.><(tail.dimensions, head.arityInner)
   }
 
   final type ><^[
@@ -139,7 +136,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
       HEAD <: Arity
   ] = ><[TAIL, ArityAPI.^[HEAD]]
 
-  trait FromArityCore extends AbstractFromHList {
+  trait FromArity extends AbstractFromHList {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
@@ -153,14 +150,15 @@ object LeafShape extends TupleSystem with CanFromStatic {
       forAll[C :: H_TAIL].==> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: C
-        val head = vHead.^
+        val head: ArityAPI.^[C] = vHead.^
 
-        prev >|< head
+        val result = prev.appendInner(head)
+        result
       }
     }
   }
 
-  object FromRecord extends FromArityCore {
+  object FromRecord extends FromArity {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -178,7 +176,9 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
 
-        prev >|< head
+        val result = prev appendInner head
+
+        result
       }
     }
   }
@@ -208,7 +208,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = forTail(v.tail)
         val head = Arity(w) //  Arity.Impl(LeafArity.Literal(w))
 
-        prev >|< head
+        prev appendInner head
       }
     }
   }
@@ -229,7 +229,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         val prev = apply(v.tail)
         val head = Arity.FromNat(v.head)
 
-        prev >|< head
+        prev appendInner head
       }
     }
   }

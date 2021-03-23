@@ -40,7 +40,7 @@ object Get {
       val p1: P1 = lemma1.valueOf(v.s1)
       val vv: Get[P1, I] = v.copy(s1 = p1)
 
-      LeafShape.Eye >|< lemma2(vv)
+      LeafShape.Eye appendInner lemma2(vv)
     }
   }
 
@@ -57,9 +57,9 @@ object Get {
       forAll[Get[P1, Index.Name[N]]].==> { v =>
         val p1: P1 = v.s1
 
-        val arityCore: A = _selector(p1.record)
+        val arity: A = _selector(p1.record)
         val w: Witness.Aux[N] = v.index.w
-        (arityCore.^ :<<- w)
+        (arity.^ :<<- w)
       }
     }
 

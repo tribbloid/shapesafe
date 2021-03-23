@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape.unary
 
+import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.Index.Name
@@ -33,11 +34,30 @@ class ReorderSpec extends BaseSpec {
 
       val ss = Reorder(s1, Indices >< Name("z") >< Name("y"))
       val rr = Reorder.Premise.apply(ss)
+
+      val s2 = Shape >|<
+        Arity(3) :<<- "z" >|<
+        Arity(2) :<<- "y"
+
+      TypeViz.infer(s2).should_=:=(TypeViz.infer(rr))
+
       typeInferShort(rr).shouldBe(
-        """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z")) >< (LeafArity.Literal[Int(2)] :<<- String("y"))"""
+        """
+          |LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z")) >< (LeafArity.Literal[Int(2)] :<<- String("y"))
+          |""".stripMargin
       )
     }
 
+    it("3") {
+
+      val ss = Reorder(s1, Indices >< Name("z") >< Name("y") >< Name("x"))
+      val rr = Reorder.Premise.apply(ss)
+      typeInferShort(rr).shouldBe(
+        """
+          |LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z")) >< (LeafArity.Literal[Int(2)] :<<- String("y")) >< (LeafArity.Literal[Int(1)] :<<- String("x"))
+          |""".stripMargin
+      )
+    }
   }
 
   it("with names") {

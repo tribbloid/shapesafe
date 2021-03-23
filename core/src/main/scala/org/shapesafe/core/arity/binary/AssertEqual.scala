@@ -71,7 +71,7 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
     domain.forEqual(lemma)
   }
 
-  override def on(a1: ArityAPI, a2: ArityAPI): On[a1.Internal, a2.Internal] = {
-    On(a1.internal, a2.internal)
+  override def on(a1: ArityAPI, a2: ArityAPI): On[a1.ArityInner, a2.ArityInner] = {
+    On(a1.arityInner, a2.arityInner)
   }
 }

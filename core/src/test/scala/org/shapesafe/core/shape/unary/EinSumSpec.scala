@@ -55,7 +55,7 @@ class EinSumSpec extends BaseSpec {
 
         //      val eye = EinSumOperand.Eye
 
-        val h1 = indexing(("i" ->> Arity(3).internal) :: HNil)
+        val h1 = indexing(("i" ->> Arity(3).arityInner) :: HNil)
         h1.toString.shouldBe(
           """3:Literal :: HNil"""
         )
@@ -64,13 +64,13 @@ class EinSumSpec extends BaseSpec {
       it("if names has no duplicate") {
 
         val h1 = indexing(
-          ("i" ->> Arity(3).internal) ::
-            ("j" ->> Arity(4).internal) ::
+          ("i" ->> Arity(3).arityInner) ::
+            ("j" ->> Arity(4).arityInner) ::
             HNil
         )
 
         val h2 = indexing(
-          ("k" ->> Arity(5).internal) ::
+          ("k" ->> Arity(5).arityInner) ::
             h1
         )
 
@@ -79,20 +79,20 @@ class EinSumSpec extends BaseSpec {
 
       it("if name -> dimension has no conflict") {
 
-        val ss = ("i" ->> Arity(3).internal) ::
-          ("j" ->> Arity(4).internal) ::
+        val ss = ("i" ->> Arity(3).arityInner) ::
+          ("j" ->> Arity(4).arityInner) ::
           HNil
 
         //      VizType[op.Static].toString.shouldBe()
         //      val v1 = EinSumCondition.apply(op.static -> ("j" ->> Arity(4)))
         //      VizType.infer(v1).toString.shouldBe()
 
-        val h1 = indexing(("j" ->> Arity(4).internal) :: ss)
+        val h1 = indexing(("j" ->> Arity(4).arityInner) :: ss)
         h1.toString.shouldBe(
           """4:Literal :: 3:Literal :: 4:Literal :: HNil"""
         )
 
-        val h2 = indexing(("i" ->> Arity(3).internal) :: ss)
+        val h2 = indexing(("i" ->> Arity(3).arityInner) :: ss)
         h2.toString.shouldBe(
           """3:Literal :: 3:Literal :: 4:Literal :: HNil"""
         )
@@ -103,11 +103,11 @@ class EinSumSpec extends BaseSpec {
 
       it("if name -> dimension has conflict") {
 
-        val ss = ("i" ->> Arity(3).internal) ::
+        val ss = ("i" ->> Arity(3).arityInner) ::
           ("j" ->> Arity(4)) ::
           HNil
 
-        val h1 = ("j" ->> Arity(3).internal) :: ss
+        val h1 = ("j" ->> Arity(3).arityInner) :: ss
 
         shouldNotCompile(
           """indexing(h1)"""

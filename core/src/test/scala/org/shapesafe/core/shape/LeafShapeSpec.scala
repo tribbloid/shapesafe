@@ -129,7 +129,7 @@ class LeafShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = ("x" ->> Arity(3).internal) ::
+      val hh = ("x" ->> Arity(3).arityInner) ::
         HNil
 
       val shape = LeafShape.FromRecord(hh)
@@ -141,8 +141,8 @@ class LeafShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = ("x" ->> Arity(3).internal) ::
-        ("y" ->> Arity(4).internal) ::
+      val hh = ("x" ->> Arity(3).arityInner) ::
+        ("y" ->> Arity(4).arityInner) ::
         HNil
 
       val shape = LeafShape.FromRecord(hh)
@@ -258,7 +258,7 @@ class LeafShapeSpec extends BaseSpec {
           |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).internal)
+      assert(record.get("x") == Arity(2).arityInner)
     }
 
     it("2") {
@@ -282,7 +282,7 @@ class LeafShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x").nameless == Arity(2))
+      assert(record.get("x").^.nameless == Arity(2))
     }
   }
 
@@ -307,7 +307,7 @@ class LeafShapeSpec extends BaseSpec {
           |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).internal)
+      assert(record.get("x") == Arity(2).arityInner)
     }
 
     it("2") {
@@ -331,7 +331,7 @@ class LeafShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).internal)
+      assert(record.get("x") == Arity(2).arityInner)
     }
   }
 
@@ -369,7 +369,7 @@ class LeafShapeSpec extends BaseSpec {
 //          VizType.infer(vvGT).toString
 //        )
 
-      assert(vv.head == Arity(3).internal)
+      assert(vv.head == Arity(3).arityInner)
 
 //      vv.head.toString.shouldBe("FromLiteral: 3")
 

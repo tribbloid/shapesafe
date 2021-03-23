@@ -1,7 +1,8 @@
 package org.shapesafe.core.arity.ops
 
 import com.tribbloids.graph.commons.util.HasOuter
-import org.shapesafe.core.arity.{Arity, ArityAPI, HasArity}
+import org.shapesafe.core.arity.Arity.HasArity
+import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
 import org.shapesafe.core.shape.Shape
@@ -17,7 +18,7 @@ trait ArityOpsLike extends HasArity {
 
     type On[A1 <: Arity, A2 <: Arity] = Op#On[A1, A2]
 
-    def apply(that: ArityAPI): ArityAPI.^[On[Internal, that.Internal]] = op.on(internal.^, that).^
+    def apply(that: ArityAPI): ArityAPI.^[On[ArityInner, that.ArityInner]] = op.on(arityInner.^, that).^
 
     object Updaters extends OldNameUpdaterSystem(op)
 

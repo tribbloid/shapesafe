@@ -27,17 +27,27 @@ trait Arity {
   }
 
   final override def toString: String = fullStr
+
 }
 
 object Arity {
+
+  trait HasArity {
+
+    type ArityInner <: Arity
+    def arityInner: ArityInner
+  }
 
   object Unprovable extends Arity {
     override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
   }
 
-  implicit def toAPI[SELF <: Arity](self: SELF): ArityAPI.^[SELF] = ArityAPI.^(self)
+//  implicit def toAPI[SELF <: Arity](self: SELF): ArityAPI.^[SELF] = ArityAPI.^(self)
 
-//  implicit def toOps[T <: ArityCore](v: T): ArityOps[T] = ArityOps[T](v)
+  implicit class Converters[A <: Arity](self: A) {
+
+    def ^ : ^[A] = ArityAPI.^(self)
+  }
 
   def apply(w: Witness.Lt[Int]): ^[Literal[w.T]] = {
     ^(Literal.apply(w))

@@ -58,7 +58,7 @@ class DoubleVector[A1 <: Arity](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 :+ (Literal[padding.T] :* Arity._2.Internal)) |-< O
+      lemma: (A1 :+ (Literal[padding.T] :* Arity._2.ArityInner)) |-< O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -81,7 +81,7 @@ class DoubleVector[A1 <: Arity](
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1.Internal) :/ Literal[stride.T]) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1.ArityInner) :/ Literal[stride.T]) |-< O
   ): DoubleVector[O] = {
 
     val _stride = Arity(stride)
@@ -109,7 +109,7 @@ class DoubleVector[A1 <: Arity](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1.Internal) :/ Arity._1.Internal) |-< O
+      lemma: ((A1 :- A2 :+ Arity._1.ArityInner) :/ Arity._1.ArityInner) |-< O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)

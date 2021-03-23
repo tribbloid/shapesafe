@@ -9,20 +9,24 @@ class LeafOps[SELF <: LeafShape](val self: SELF) {
   type Static = self.Static
   def static: Static = self.static
 
+  def appendInner[THAT <: Axis](
+      axis: THAT
+  ): ><[SELF, THAT] = {
+
+    new LeafShape.><(self, axis)
+  }
+
+  /**
+    * Same as appendInner, but can be also used on non-parametric Axis by using only its dependent type
+    */
   case object >|< {
 
-//    def apply(
-//        arity: ArityAPI
-//    ): ><^[SELF, arity.Internal] = {
-//
-//      new LeafShape.><^(self, arity.internal)
-//    }
-
-    def apply[THAT <: Axis](
+    // TODO: this convoluted, recursive type bound further shows the necessity for scala to have built-in non-singleton peer type
+    def apply[THAT <: Axis { type AxisSelf <: THAT }](
         axis: THAT
-    ): ><[SELF, THAT] = {
+    ): ><[SELF, axis.AxisSelf] = {
 
-      new LeafShape.><(self, axis)
+      appendInner(axis.axisSelf)
     }
   }
 
