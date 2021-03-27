@@ -43,5 +43,5 @@ trait Op2Like extends Operator {
 
 object Op2Like {
 
-  val msgTitle = Witness("No can do:\n")
+  val msgTitle = Witness(""" ¯\_(ツ)_/¯ """)
 }

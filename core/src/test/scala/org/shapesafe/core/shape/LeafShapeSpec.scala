@@ -356,49 +356,10 @@ class LeafShapeSpec extends BaseSpec {
 
     it("1") {
 
-//      val _vv = shape.valuesFactory //.apply(shape.static)
-//      VizType.infer(_vv).toString.shouldBe()
-
       val vv = shape.dimensions
 
-//      VizType
-//        .infer(vv)
-//        .toString
-//        .shouldBe(
-//          VizType.infer(vvGT).toString
-//        )
-
       assert(vv.head == Arity(3).arity)
-
-//      vv.head.toString.shouldBe("FromLiteral: 3")
-
-//      val vv2 = ss.values(_vv2)
-//      VizType.infer(vv2).toString.shouldBe()
-
     }
   }
 
-//  describe("Sub") {
-//
-//    val shape = Shape >|<
-//      Arity(2) :<<- "x" >|<
-//      Arity(3) :<<- "y" >|<
-//      Arity(4) :<<- "z"
-//
-//    it("getByIndex") {
-//
-//      TypeVizCT.infer(shape).show
-//
-//      val v = shape.Sub(0).axis
-//
-//      assert(v == Arity(4) :<<- "z") // HList is of inverse order
-//    }
-//
-//    it("getByName") {
-//
-//      val v = shape.Sub.apply("y").axis
-//
-//      assert(v == Arity(3) :<<- "y")
-//    }
-//  }
 }

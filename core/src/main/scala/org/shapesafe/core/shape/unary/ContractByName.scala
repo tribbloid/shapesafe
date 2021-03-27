@@ -3,11 +3,10 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.arity.ops
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
-import org.shapesafe.core.shape.ShapeAPI.^
 
 import scala.language.implicitConversions
 
-// TODO: useless, remove?
+// TODO: useless, EinSum handles every thing, remove?
 case class ContractByName[
     S1 <: Shape
 ](
@@ -16,7 +15,7 @@ case class ContractByName[
 
 object ContractByName {
 
-  val op: ops.ArityOps.:==!.SquashByName.type = ArityOps.:==!.SquashByName
+  val op: ops.ArityOps.:==!._SquashByName.type = ArityOps.:==!._SquashByName
 
   def indexing: op._Indexing.type = op._Indexing
 }

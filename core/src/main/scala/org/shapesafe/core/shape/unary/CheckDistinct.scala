@@ -11,14 +11,15 @@ case class CheckDistinct[
 
 object CheckDistinct {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import ProveShape._
+  import ProveShape.Factory._
 
   implicit def simplify[
       S1 <: Shape,
       P1 <: LeafShape
   ](
       implicit
-      lemma: S1 =>> P1,
+      lemma: S1 |- P1,
       indexing: _Indexing.Case[P1#Record]
   ): CheckDistinct[S1] =>> P1 = {
 
@@ -27,6 +28,6 @@ object CheckDistinct {
     }
   }
 
-  object _Indexing extends ReIndexingPoly.Distinct
+  object _Indexing extends UnaryIndexingFn.Distinct
   type _Indexing = _Indexing.type
 }

@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
-import org.shapesafe.core.shape.Shape
+import org.shapesafe.core.shape.binary.PairWise
 import org.shapesafe.core.shape.unary.ReduceByName
 import singleton.ops
 
@@ -21,19 +21,24 @@ trait ArityOpsLike extends HasArity {
 
     object Updaters extends OldNameUpdaterSystem(op)
 
-    object AppendByName extends ReduceByName with HasOuter {
-      object oldNameUpdater extends Updaters.Appender
+    trait _HasOuter extends HasOuter {
 
-      override def outer: AnyRef = Infix.this
+      final override def outer: Infix.this.type = Infix.this
     }
-    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
-    object SquashByName extends ReduceByName with HasOuter {
+    object _AppendByName extends ReduceByName with _HasOuter {
+      object oldNameUpdater extends Updaters.Appender
+    }
+//    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
+
+    object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
-
-      override def outer: AnyRef = Infix.this
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
+
+    object _PairWise extends PairWise with _HasOuter {
+      override val op: Infix.this.Op = Infix.this.op
+    }
   }
 
   class InfixImpl[OP <: Op2Like](val op: OP) extends Infix {

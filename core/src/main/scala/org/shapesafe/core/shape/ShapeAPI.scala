@@ -1,15 +1,15 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
-import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.shape.LeafShape.{><, Eye}
+import org.shapesafe.core.arity.{Arity, LeafArity}
+import org.shapesafe.core.shape.LeafShape.><^
 import org.shapesafe.core.shape.ProveShape.|-
 import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.ops.{EinSumOps, LeafOps, MatrixOps, VectorOps}
-import org.shapesafe.core.shape.unary.{|<<-, CheckDistinct, CheckEinSum, Reorder}
+import org.shapesafe.core.shape.unary._
 import shapeless.ops.hlist.Reverse
-import shapeless.{HList, SingletonProductArgs, Witness}
+import shapeless.ops.nat.ToInt
+import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 
 import scala.language.implicitConversions
 
@@ -99,20 +99,40 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     einSum.-->(names)
   }
 
+  object Sub {
+
+    def apply[T <: Index](v: T): ^[GetSubscript[_Shape, T]] = {
+      GetSubscript(shape, v).^
+    }
+
+    def apply(i: Nat)(
+        implicit
+        toIntN: ToInt[i.N]
+    ): ^[GetSubscript[_Shape, Index.I_th[i.N]]] = {
+
+      apply(Index.I_th(i))
+    }
+
+    def apply(w: Witness.Lt[String]): ^[GetSubscript[_Shape, Index.Name[w.T]]] = {
+
+      apply(Index.Name(w))
+    }
+  }
+
   def flattenWith(
       infix: ArityOps.Infix,
       that: ShapeAPI
-  ): ^[infix.SquashByName.On[OuterProduct[_Shape, that._Shape]]] = {
+  ): ^[infix._SquashByName.On[OuterProduct[_Shape, that._Shape]]] = {
 
     val outerP = ><(that)
-    infix.SquashByName.On(outerP).^
+    infix._SquashByName.On(outerP).^
   }
 
   def flatten(
       infix: ArityOps.Infix
-  ): ^[infix.SquashByName.On[_Shape]] = {
+  ): ^[infix._SquashByName.On[_Shape]] = {
 
-    infix.SquashByName.On(this).^
+    infix._SquashByName.On(this).^
   }
 
   def transpose[N <: Names](names: N): ^[Reorder[CheckDistinct[_Shape], N]] = {
@@ -122,19 +142,30 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
     result.^
   }
+
+  def zipWith(
+      infix: ArityOps.Infix,
+      that: ShapeAPI
+  ): ^[infix._PairWise.On[_Shape, that._Shape]] = {
+
+    infix._PairWise.On(this, that).^
+  }
+
+  def shouldEqual(
+      that: ShapeAPI
+  ): ^[ArityOps.:==!._PairWise.On[_Shape, that._Shape]] = zipWith(ArityOps.:==!, that)
 }
 
 object ShapeAPI {
 
   type Aux[T] = ShapeAPI { type _Shape = T }
 
-  implicit def unbox[S <: Shape](v: ShapeAPI.Aux[S]): S = v.shape
-//  implicit def unbox(v: ShapeAPI): v._Shape = v.shape
+  implicit def unbox[S <: Shape](v: Aux[S]): S = v.shape
 
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit
       toW: Witness.Aux[T]
-  ): Vector.Aux[ArityAPI.^[LeafArity.Literal[T]]] = {
+  ): ^[LeafShape.Eye ><^ LeafArity.Literal[T]] = {
 
     ^(Shape >|< Arity(toW))
   }
@@ -146,16 +177,16 @@ object ShapeAPI {
     final type _Shape = SELF
   }
 
-  // TODO: only support
-  object Vector {
-
-    type Aux[T <: Axis] = ^[Eye >< T]
-  }
-  type Vector = Vector.Aux[_]
-
-  object Matrix {
-
-    type Aux[T1 <: Axis, T2 <: Axis] = ^[Eye >< T1 >< T2]
-  }
-  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
+  // TODO: only support LeafShape, remove
+//  object Vector {
+//
+//    type Aux[T <: Axis] = ^[Eye >< T]
+//  }
+//  type Vector = Vector.Aux[_]
+//
+//  object Matrix {
+//
+//    type Aux[T1 <: Axis, T2 <: Axis] = ^[Eye >< T1 >< T2]
+//  }
+//  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
 }

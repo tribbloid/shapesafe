@@ -3,6 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.{Index, Names, Shape}
+import org.shapesafe.m.TypeVizCT
 
 class GetSubscriptSpec extends BaseSpec {
 
@@ -50,5 +51,22 @@ class GetSubscriptSpec extends BaseSpec {
     typeInferShort(rr.shape).shouldBe(
       """LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("b"))"""
     )
+  }
+
+  describe("Sub") {
+
+    it("getByIndex") {
+
+      val v = s1.Sub(0).eval.shape.head
+
+      assert(v == Arity(3) :<<- "z") // HList is of inverse order
+    }
+
+    it("getByName") {
+
+      val v = s1.Sub("y").eval.shape.head
+
+      assert(v == Arity(2) :<<- "y")
+    }
   }
 }

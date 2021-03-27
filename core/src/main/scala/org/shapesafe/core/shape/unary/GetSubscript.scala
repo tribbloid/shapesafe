@@ -33,7 +33,7 @@ object GetSubscript {
       O <: Axis
   ](
       implicit
-      lemma1: |-<[S1, P1],
+      lemma1: |-[S1, P1],
       lemma2: Premise.==>[GetSubscript[P1, I], O]
   ): GetSubscript[S1, I] =>> (LeafShape.Eye >< O) = {
 

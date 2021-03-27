@@ -3,14 +3,15 @@ package org.shapesafe.core.shape.unary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeAPI, ShapeConjecture}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
 
 trait ReduceByName {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import ProveShape._
+  import ProveShape.Factory._
 
   val oldNameUpdater: RecordUpdater
 
@@ -32,7 +33,7 @@ trait ReduceByName {
         P1 <: LeafShape
     ](
         implicit
-        lemma: S1 =>> P1,
+        lemma: S1 |- P1,
         toShape: _Indexing.ToShape.Case[P1#Record]
     ): _On[S1] =>> toShape.Out = {
 
@@ -42,7 +43,6 @@ trait ReduceByName {
         result
       }
     }
-
   }
 
   case class On[
@@ -51,7 +51,7 @@ trait ReduceByName {
       override val s1: S1 with Shape
   ) extends _On[S1] {}
 
-  object _Indexing extends ReIndexingPoly.Distinct {
+  object _Indexing extends UnaryIndexingFn.Distinct {
 
     implicit def consOldName[
         TI <: HList,
@@ -68,8 +68,8 @@ trait ReduceByName {
         val to = consTail(ti)
         oldName(to, v.head)
       }
-
     }
   }
+
   type _Indexing = _Indexing.type
 }
