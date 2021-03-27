@@ -18,7 +18,7 @@ class ReduceByNameSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix.SquashByName ‣ ReduceByName.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._SquashByName ‣ ReduceByName.On
         | ‣ OuterProduct
         |    ‣ |<<-┏ Eye ><
         |    :     ┃   x ><
