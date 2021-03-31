@@ -40,6 +40,11 @@ trait ShapeAPI extends VectorOps with MatrixOps {
       prove: _Shape |- O
   ): ^[O] = verify(prove)
 
+  final def peek(
+      implicit
+      peek: ShapeReporters.PeekShape.Case[_Shape]
+  ): Unit = {}
+
   /**
     * assign new names
     */
@@ -180,13 +185,13 @@ object ShapeAPI {
   // TODO: only support LeafShape, remove
 //  object Vector {
 //
-//    type Aux[T <: Axis] = ^[Eye >< T]
+//    type Aux[T <: Axis] = ^[➊ >< T]
 //  }
 //  type Vector = Vector.Aux[_]
 //
 //  object Matrix {
 //
-//    type Aux[T1 <: Axis, T2 <: Axis] = ^[Eye >< T1 >< T2]
+//    type Aux[T1 <: Axis, T2 <: Axis] = ^[➊ >< T1 >< T2]
 //  }
 //  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
 }

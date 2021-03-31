@@ -1,9 +1,8 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.LeafShape.{FromRecord, FromStatic}
-import org.shapesafe.m.TypeVizCT
 import shapeless.HNil
 
 class LeafShapeSpec extends BaseSpec {
@@ -69,7 +68,7 @@ class LeafShapeSpec extends BaseSpec {
 
     shape.toString.shouldBe(
       """
-        |Eye ><
+        |➊ ><
         |  2:Literal :<<- x ><
         |  3:Literal ><
         |  4:Literal :<<- z
@@ -167,7 +166,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  4:Literal :<<- i
           |""".stripMargin
       )
@@ -183,7 +182,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  4:Literal :<<- i ><
           |  3:Literal :<<- j ><
           |  2:Literal :<<- k
@@ -204,7 +203,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  4:Derived :<<- i
           |""".stripMargin
       )
@@ -220,7 +219,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  4:Derived :<<- i ><
           |  3:Derived :<<- j ><
           |  2:Derived :<<- k
@@ -362,4 +361,34 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
+  describe("peek") {
+
+    it("Eye") {
+
+      shouldNotCompile(
+        """Shape.peek""",
+        """.*(➊).*"""
+      )
+    }
+
+    it("1") {
+
+      val s = Shape(1, 2)
+
+      shouldNotCompile(
+        """s.peek""",
+        """.*( >< 1 >< 2).*"""
+      )
+    }
+
+    it("2") {
+
+      val s = Shape(1, 2).|<<-*("a", "b").eval
+
+      shouldNotCompile(
+        """s.peek""",
+        """.*(\Q >< (1 :<<- a) >< (2 :<<- b)\E).*"""
+      )
+    }
+  }
 }

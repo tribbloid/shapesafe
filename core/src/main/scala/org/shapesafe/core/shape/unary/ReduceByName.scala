@@ -3,27 +3,32 @@ package org.shapesafe.core.shape.unary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.{::, HList}
+import singleton.ops.+
 
 import scala.language.implicitConversions
 
 trait ReduceByName {
 
-  import ProveShape._
   import ProveShape.Factory._
+  import ProveShape._
 
+  type Symbol
   val oldNameUpdater: RecordUpdater
 
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: Shape
-  ] extends ShapeConjecture
+  ] extends Conjecture1.^[S1]
       with HasOuter {
 
     override def outer: ReduceByName.this.type = ReduceByName.this
 
     def s1: S1 with Shape
+
+    override type _Peek = Peek.PrefixW1[Symbol, S1]
   }
 
   object _On {

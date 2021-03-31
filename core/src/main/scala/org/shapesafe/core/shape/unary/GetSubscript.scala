@@ -4,8 +4,8 @@ import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
+import org.shapesafe.core.debugging.InfoCT.{ErrorMsg, ForShape, Peek}
 import org.shapesafe.core.shape.LeafShape.><
-import org.shapesafe.core.shape.ShapeAPI.^
 import org.shapesafe.core.shape._
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
@@ -17,12 +17,33 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 ](
     s1: S1 with Shape,
     index: I
-) extends ShapeConjecture {}
+) extends Conjecture1.^[S1] {
 
-object GetSubscript {
+  override type _Peek = Peek.InfixW[S1, " GetSubscript ", I]
 
-//  object Direct extends ProveShape.SubScope
-  //  import Direct._
+  override type _Refute = "Index not found"
+}
+
+trait GetSubscript_Imp0 {
+
+  import ProveShape._
+  import Factory._
+
+  implicit def refute[
+      S1 <: Shape,
+      P1 <: LeafShape,
+      I <: Index
+  ](
+      implicit
+      lemma1: S1 |- P1,
+      msg: ErrorMsg[ForShape.Refute0[GetSubscript[P1, I]]]
+  ): GetSubscript[S1, I] =>> LeafShape = {
+    ???
+  }
+}
+
+object GetSubscript extends GetSubscript_Imp0 {
+
   import ProveShape._
   import Factory._
 
@@ -33,7 +54,7 @@ object GetSubscript {
       O <: Axis
   ](
       implicit
-      lemma1: |-[S1, P1],
+      lemma1: S1 |- P1,
       lemma2: Premise.==>[GetSubscript[P1, I], O]
   ): GetSubscript[S1, I] =>> (LeafShape.Eye >< O) = {
 

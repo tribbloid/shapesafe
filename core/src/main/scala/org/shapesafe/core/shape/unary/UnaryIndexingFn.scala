@@ -3,7 +3,8 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.NewNameAppender
-import org.shapesafe.core.shape.LeafShape
+import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.m.TypeVizCT
 import shapeless.{::, HList, HNil}
 
 trait UnaryIndexingFn extends Poly1Base[HList, HList] {

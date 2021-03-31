@@ -1,12 +1,13 @@
 package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.{TreeFormat, TreeLike}
+import org.shapesafe.core.debugging.InfoCT.CanPeek
 import org.shapesafe.core.shape.LeafShape.Eye
 import org.shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 
 import scala.language.implicitConversions
 
-trait Shape extends TreeLike {
+trait Shape extends TreeLike with CanPeek {
 
   override lazy val treeFormat: TreeFormat = TreeFormat.Indent2Minimal
 

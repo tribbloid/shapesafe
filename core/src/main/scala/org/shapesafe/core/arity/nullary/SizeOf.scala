@@ -2,7 +2,7 @@ package org.shapesafe.core.arity.nullary
 
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, LeafArity, ProveArity, VerifiedArity}
+import org.shapesafe.core.arity.{LeafArity, ProveArity, VerifiedArity}
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
@@ -20,10 +20,10 @@ object SizeOf {
       implicit
       length: hlist.Length.Aux[D, N],
       simplify: NatAsOp[N]
-  ): SizeOf[D] =>> LeafArity.Derived[NatAsOp[N]] = {
+  ): SizeOf[D] =>> LeafArity.Derived[simplify.type, simplify.OutInt] = {
 
     ProveArity.forAll[SizeOf[D]].=>> { v =>
-      new LeafArity.Derived(simplify)
+      LeafArity.Derived.summon(simplify)
     }
   }
 
@@ -33,10 +33,14 @@ object SizeOf {
   //    new OfSize(simplify.value)
   //  }
 
-  def getConst[D <: HList, N <: Nat](data: D)(
+  def getConst[
+      D <: HList,
+      N <: Nat,
+      O <: LeafArity.Const[_]
+  ](data: D)(
       implicit
-      self: SizeOf[D] |-< LeafArity.Const[NatAsOp[N]]
-  ) = {
+      self: SizeOf[D] |- O
+  ): O = {
     val raw = SizeOf[D](data)
     self.apply(raw).value
   }

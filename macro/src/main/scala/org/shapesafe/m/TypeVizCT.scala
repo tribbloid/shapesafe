@@ -9,12 +9,12 @@ object TypeVizCT {
 
   class TypeOfCT[A] {
 
-    def show: Unit = macro Macro.show[A]
+    def peek: Unit = macro Macros.show[A]
 
-    def shouldBe[B]: Unit = macro Macro.shouldBe[A, B]
+    def shouldBe[B]: Unit = macro Macros.shouldBe[A, B]
   }
 
-  final class Macro(val c: whitebox.Context) extends MWithReflection {
+  final class Macros(val c: whitebox.Context) extends MWithReflection {
 
     import c.universe._
 
@@ -22,9 +22,9 @@ object TypeVizCT {
 
       val aa: Type = weakTypeOf[A]
 
-      val str = viz.apply(aa).typeTree.treeString
+      val str = viz.of(aa).typeTree.treeString
 
-      throw new TypeInfo("\n" + str)
+      throw new DebugInfo("\n" + str)
 
       q"Unit"
     }
@@ -36,7 +36,7 @@ object TypeVizCT {
 
       if (!(aa =:= bb)) {
         val Seq(s1, s2) = Seq(aa, bb).map { v =>
-          Option(viz.apply(v).typeTree.treeString)
+          Option(viz.of(v).typeTree.treeString)
         }
 
         val diff = StringDiff(s1, s2, Seq(this.getClass))

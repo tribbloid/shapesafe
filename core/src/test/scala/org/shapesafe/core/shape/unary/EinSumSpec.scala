@@ -22,23 +22,23 @@ class EinSumSpec extends BaseSpec {
 
     r.treeString.shouldBe(
       """
-        |Reorder┏ Eye ><
+        |Reorder┏ ➊ ><
         |       ┃   x ><
         |       ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
-        |       :  ‣ |<<-┏ Eye ><
+        |       :  ‣ |<<-┏ ➊ ><
         |       :        ┃   x ><
         |       :        ┃   y
-        |       :     ‣ Eye ><
+        |       :     ‣ ➊ ><
         |       :         1:Literal ><
         |       :         2:Literal
         |       ‣ CheckEinSum
-        |          ‣ |<<-┏ Eye ><
+        |          ‣ |<<-┏ ➊ ><
         |                ┃   i ><
         |                ┃   j
-        |             ‣ Eye ><
+        |             ‣ ➊ ><
         |                 3:Literal ><
         |                 4:Literal
         |""".stripMargin
@@ -179,7 +179,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  1:Literal :<<- i
           |""".stripMargin
       )
@@ -200,7 +200,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin
@@ -221,7 +221,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin
@@ -229,7 +229,7 @@ class EinSumSpec extends BaseSpec {
     }
   }
 
-  describe("cannot einsum if") {
+  describe("CANNOT einsum if") {
 
     it("1st operand has dimension mismatch") {
 
@@ -237,10 +237,11 @@ class EinSumSpec extends BaseSpec {
 
       val s1 = Shape(1, 2, 3) |<<- ("x" >< "y" >< "y")
       val s2 = Shape(3, 4) |<<- ("i" >< "j")
-      val r = s1 einSum s2
+      val r = (s1 einSum s2).all
 
       shouldNotCompile(
-        """r.eval"""
+        """r.eval""",
+        ".*(2 != 3).*"
       )
     }
 
@@ -252,10 +253,11 @@ class EinSumSpec extends BaseSpec {
         ("x" >< "y")
       val s2 = Shape(3, 4) |<<-
         ("i" >< "i")
-      val r = s1 einSum s2
+      val r = (s1 einSum s2).all
 
       shouldNotCompile(
-        """r.eval"""
+        """r.eval""",
+        ".*(3 != 4).*"
       )
     }
 
@@ -267,10 +269,11 @@ class EinSumSpec extends BaseSpec {
         ("x" >< "y")
       val s2 = Shape(3, 4) |<<-
         ("y" >< "z")
-      val r = s1 einSum s2
+      val r = (s1 einSum s2).all
 
       shouldNotCompile(
-        """r.eval"""
+        """r.eval""",
+        ".*(2 != 3).*"
       )
     }
 
@@ -286,10 +289,11 @@ class EinSumSpec extends BaseSpec {
         Shape(3, 4) |<<-
           ("i" >< "j")
 
-      val ops = s1 einSum s2
+      val r = (s1 einSum s2) --> ("x" >< "k")
 
       shouldNotCompile(
-        """val r = ops ---> ("x" >< "k")"""
+        """r.eval""",
+        ".*(Indices not found).*"
       )
     }
   }

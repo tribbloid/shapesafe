@@ -1,8 +1,11 @@
 package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.TreeLike
+import org.shapesafe.core.debugging.InfoCT.CanRefute
 
-trait ArityConjecture extends Arity with TreeLike.ProductAsTree {
+trait ArityConjecture extends Arity.Verifiable with CanRefute with TreeLike.ProductAsTree {
 
 //  final override def toString: String = treeString
 }
+
+object ArityConjecture {}

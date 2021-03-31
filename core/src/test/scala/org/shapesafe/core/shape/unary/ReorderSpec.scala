@@ -67,7 +67,7 @@ class ReorderSpec extends BaseSpec {
 
     r.eval.toString.shouldBe(
       """
-        |Eye ><
+        |➊ ><
         |  3:Literal :<<- z ><
         |  2:Literal :<<- y
         |""".stripMargin
@@ -80,7 +80,7 @@ class ReorderSpec extends BaseSpec {
 
     r.eval.toString.shouldBe(
       """
-        |Eye ><
+        |➊ ><
         |  3:Literal :<<- z ><
         |  2:Literal :<<- y
         |""".stripMargin

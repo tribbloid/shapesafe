@@ -1,9 +1,10 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.axis.Axis
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Shape, ShapeConjecture}
+import org.shapesafe.core.shape.{LeafShape, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -13,7 +14,10 @@ case class OuterProduct[
 ](
     s1: S1,
     s2: S2
-) extends ShapeConjecture {}
+) extends Conjecture2.^[S1, S2] {
+
+  override type _Peek = Peek.InfixW[S1, " OuterProduct ", S2]
+}
 
 trait OuterProduct_Imp0 {
 
@@ -28,8 +32,8 @@ trait OuterProduct_Imp0 {
       HO <: HList
   ](
       implicit
-      lemma1: S1 |-< P1,
-      lemma2: S2 |-< P2,
+      lemma1: S1 |- P1,
+      lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
       toShape: LeafShape.FromStatic.Case[HO]
   ): OuterProduct[S1, S2] =>> toShape.Out = {
@@ -56,8 +60,8 @@ object OuterProduct extends OuterProduct_Imp0 {
       P2 <: LeafShape.Eye >< A2
   ](
       implicit
-      lemma1: S1 |-< P1,
-      lemma2: S2 |-< P2
+      lemma1: S1 |- P1,
+      lemma2: S2 |- P2
   ): OuterProduct[S1, S2] =>> (P1 >< A2) = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>

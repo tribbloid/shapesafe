@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, ArityAPI, ArityFixture, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
 
 class Op2Spec extends ArityFixture {
 
@@ -92,6 +92,28 @@ class Op2Spec extends ArityFixture {
           "op.asProof"
         )
       }
+    }
+  }
+
+  describe("peek") {
+
+    it("1") {
+
+//      (b :+ c).peek
+
+      shouldNotCompile(
+        """(b :+ c).peek""",
+        """.*(\Q  :=  4 + 5\E).*"""
+      )
+    }
+
+    // TODO: doesn't work until fallback mechanism is implemented
+    it("2") {
+
+      shouldNotCompile(
+        """(Arity.Unprovable :+ c).peek""",
+        """.*(\?\?\? \+ 5).*"""
+      )
     }
   }
 }

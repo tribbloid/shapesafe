@@ -16,10 +16,10 @@ class PairWiseSpec extends BaseSpec {
     rr.treeString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._PairWise ‣ PairWise.On
-        | ‣ Eye ><
+        | ‣ ➊ ><
         | :   2:Literal ><
         | :   3:Literal
-        | ‣ Eye ><
+        | ‣ ➊ ><
         |     4:Literal ><
         |     5:Literal
         |""".stripMargin
@@ -39,7 +39,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  6:Derived ><
           |  8:Derived
           |""".stripMargin
@@ -52,7 +52,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  8:Derived ><
           |  15:Derived
           |""".stripMargin
@@ -66,6 +66,57 @@ class PairWiseSpec extends BaseSpec {
       shouldNotCompile(
         """s1.shouldEqual(s2).eval"""
       )
+    }
+  }
+
+  describe("can truncate extra dimension(s) if") {
+    // TODO: is this really the best behaviour?
+
+    it("operands has different dimensions") {
+
+      val s1 = Shape(2, 3)
+      val s2 = Shape(4, 5, 6)
+
+      val rr = s1.zipWith(ArityOps.:+, s2)
+
+      rr.eval.toString.shouldBe(
+        """
+          |➊ ><
+          |  7:Derived ><
+          |  9:Derived
+          |""".stripMargin
+      )
+
+//      shouldNotCompile(
+//        "rr.eval",
+//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
+//      )
+    }
+
+    it(" ... even if both operands are a conjectures") {
+
+      val s1 = Shape(2, 3).|<<-*("a", "b")
+      val s2 = Shape(4, 5, 6).|<<-*("a", "b", "c")
+
+      val rr = s1.zipWith(ArityOps.:*, s2)
+
+      rr.eval.toString.shouldBe(
+        """
+          |➊ ><
+          |  10:Derived ><
+          |  18:Derived
+          |""".stripMargin
+      )
+
+//      shouldNotCompile(
+//        "rr.eval",
+//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
+//      )
+//
+//      shouldNotCompile(
+//        "s.eval",
+//        ".*(\\Q  :=  ➊ >< (2 :<<- a) >< (3 :<<- b)\\E)"
+//      )
     }
   }
 }

@@ -1,27 +1,30 @@
 package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.IDMixin
+import org.shapesafe.core.debugging.InfoCT.{CanPeek, StrOrRaw}
 import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
+import singleton.ops.ToString
 
 import scala.language.implicitConversions
 
-trait Index extends IDMixin {
+trait Index extends IDMixin with CanPeek {
 
   override lazy val toString: String = s"${_id}:${getClass.getSimpleName}"
 }
 
 object Index {
 
-  trait Key_<:[+KUB] extends Index {}
-  type Str = Key_<:[String]
+  trait Name_<:[+KUB] extends Index {}
+  type Str = Name_<:[String]
 
-  class Name[S <: String](val w: Witness.Aux[S]) extends Key_<:[S] {
+  class Name[S <: String](val w: Witness.Aux[S]) extends Name_<:[S] {
     def name: S = w.value
     type Name = S
 
     override protected def _id = w.value
 
+    override type _Peek = StrOrRaw[S]
   }
 
   object Name {
@@ -29,10 +32,12 @@ object Index {
     def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
-  class I_th[N <: Nat](val index: N, indexInt: Int) extends Key_<:[Nothing] {
+  class I_th[N <: Nat](val index: N, indexInt: Int) extends Name_<:[Nothing] {
     type Ordinal = N
 
     override protected def _id = indexInt
+
+    override type _Peek = StrOrRaw[ToString[N]]
   }
 
   object I_th {

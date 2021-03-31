@@ -1,8 +1,8 @@
 package org.shapesafe.core.shape.unary
 
+import org.shapesafe.core.debugging.InfoCT._
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.ShapeAPI.^
-import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
+import org.shapesafe.core.shape.{LeafShape, Names, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 
@@ -12,9 +12,31 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends ShapeConjecture {}
+) extends Conjecture1.^[S1] {
 
-object |<<- {
+  override type _Peek = Peek.InfixW[S1, " |<<- ", N]
+
+  override type _Refute = "Dimension mismatch"
+}
+
+trait WithMames_Imp0 {
+
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
+  implicit def refute[
+      S1 <: Shape,
+      P1 <: LeafShape,
+      N <: Names
+  ](
+      implicit
+      lemma: S1 |- P1,
+      msg: ErrorMsg[ForShape.Refute0[|<<-[P1, N]]]
+  ): |<<-[S1, N] =>> LeafShape = {
+    ???
+  }
+}
+
+object |<<- extends WithMames_Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
@@ -25,8 +47,14 @@ object |<<- {
       HO <: HList
   ](
       implicit
-      lemma: S1 |-< P1,
+      lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//      zip2: ErrorIfNotFound[
+//        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//        "ABC"
+//        //        Refute0[|<<-[P1, N]]
+//      ],
+      // TODO: why this can't work?
       toShape: LeafShape.FromRecord.Case[HO]
   ): |<<-[S1, N] =>> toShape.Out = {
     forAll[|<<-[S1, N]].=>> { src =>
@@ -35,7 +63,7 @@ object |<<- {
 
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
-      val zipped: HO = values.zipWithKeys(keys)
+      val zipped: HO = values.zipWithKeys(keys)(zip)
       LeafShape.FromRecord(zipped)
     }
   }

@@ -1,22 +1,14 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, ArityAPI, Operator}
-import shapeless.Witness
+import com.tribbloids.graph.commons.util.HasOuter
+import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
 
-trait Op2Like extends Operator {
+trait Op2Like_Imp0 {}
 
-  import singleton.ops._
+trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
-  type On[
-      +A1 <: Arity,
-      +A2 <: Arity
-  ] <: Arity
-
-  def on(
-      a1: ArityAPI,
-      a2: ArityAPI
-  ): On[a1._Arity, a2._Arity]
-
+  type Symbol
 //  object AsShapelessPoly2 extends Poly2 {
 //
 //    implicit def trivial[
@@ -30,18 +22,50 @@ trait Op2Like extends Operator {
 //  }
 //  type AsShapelessPoly2 = AsShapelessPoly2.type
 
-  type MsgTitle = Op2Like.msgTitle.T
-  type MsgInfix
-
-  object Msg {
-
-    final val LF = Witness("\n")
-
-    type Infix[S1, S2] = S1 + MsgInfix + S2
-  }
 }
 
 object Op2Like {
 
-  val msgTitle = Witness(""" ¯\_(ツ)_/¯ """)
+  trait Base {
+    self: Op2Like =>
+
+    trait Conjecture2[
+        A1 <: Arity,
+        A2 <: Arity
+    ] extends ArityConjecture
+        with HasOuter {
+
+      final def outer: Op2Like.this.type = Op2Like.this
+
+      final override type _Peek = Peek.InfixW[A1, Symbol, A2] // TODO: add Bracket
+    }
+
+    type On[
+        A1 <: Arity,
+        A2 <: Arity
+    ] <: Conjecture2[A1, A2]
+
+    def on(
+        a1: ArityAPI,
+        a2: ArityAPI
+    ): On[a1._Arity, a2._Arity]
+  }
+
+  trait DebuggingSupport extends Base {
+    self: Op2Like =>
+
+//    implicit def debug[
+//        A1 <: Arity,
+//        A2 <: Arity,
+//        I1 <: Arity.HasInfo,
+//        I2 <: Arity.HasInfo
+//    ](
+//        implicit
+//        toInfo1: ProveArity.|-[A1, I1],
+//        toInfo2: ProveArity.|-[A2, I2],
+//        fail: FailOn[I1, I2]
+//    ): On[A1, A2] =>> Arity = ProveArity.forAll[On[A1, A2]].=>> {
+//      ???
+//    }
+  }
 }

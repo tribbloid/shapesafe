@@ -1,5 +1,8 @@
 package org.shapesafe.core
 
+import org.shapesafe.core.debugging.InfoCT
+import shapeless.Witness
+
 import scala.annotation.implicitNotFound
 import scala.language.implicitConversions
 
@@ -63,7 +66,7 @@ trait ProofScope { // TODO: no IUB?
 
 object ProofScope {
 
-  case class Child[O](root: ProofSystem[O]) extends ProofScope {
+  case class ChildScope[O](root: ProofSystem[O]) extends ProofScope {
 
     type OUB = O
 

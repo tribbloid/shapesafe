@@ -3,7 +3,7 @@ package org.shapesafe.core.arity
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
 import shapeless.Witness
-import singleton.ops.{==, Require}
+import singleton.ops.{==, Require, ToString}
 
 import scala.language.implicitConversions
 
@@ -12,7 +12,9 @@ import scala.language.implicitConversions
   */
 trait LeafArity extends VerifiedArity {}
 
-object LeafArity {
+trait LeafArity_Imp0 {}
+
+object LeafArity extends LeafArity_Imp0 {
 
   import Witness._
 
@@ -20,6 +22,8 @@ object LeafArity {
 
     type SS = S
     def singleton: S
+
+    override type _Peek = ToString[S]
 
     override lazy val _id: S = singleton
 
@@ -36,7 +40,7 @@ object LeafArity {
     // TODO: should be named proofEqual, require should do everything in runtime?
     def requireEqual(w: Lt[Int])(
         implicit
-        proof: Require[SS == w.T]
+        proof: Require[S == w.T]
     ): Unit = {
 
       proveEqualType[w.T]
@@ -47,8 +51,8 @@ object LeafArity {
 
   object Const {}
 
-  class Derived[S <: Op](override val singleton: S) extends Const[S] {
-    override lazy val runtimeArity: Int = singleton.value.asInstanceOf[Int]
+  class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends Const[OUT] {
+    override lazy val runtimeArity: Int = singleton
   }
 
   object Derived {
@@ -56,7 +60,9 @@ object LeafArity {
     implicit def summon[S <: Op](
         implicit
         s: S
-    ): Derived[S] = new Derived[S](s)
+    ): Derived[S, s.OutInt] = {
+      new Derived[S, s.OutInt](s.value.asInstanceOf[s.OutInt])
+    }
   }
 
   // this makes it impossible to construct directly from Int type
@@ -82,9 +88,12 @@ object LeafArity {
 
   case class Var(runtimeArity: Int) extends LeafArity {}
 
+  object Var {}
+
   trait Unchecked extends LeafArity {}
 
   case object Unchecked extends Unchecked {
     override def runtimeArity: Int = throw new UnsupportedOperationException("<no runtime value>")
+
   }
 }

@@ -36,12 +36,12 @@ class LeafAritySpec extends BaseSpec {
       //    v1.core.requireEqual(100)
 
       {
-        val v = implicitly[Derived[ToInt[big.nat.N]]]
+        val v = Derived.summon[ToInt[big.nat.N]]
         validate(v, 100)
       }
 
       {
-        val v = implicitly[Derived[ToInt[big.w.T]]]
+        val v = Derived.summon[ToInt[big.w.T]]
         validate(v, 100)
       }
     }
@@ -92,5 +92,16 @@ class LeafAritySpec extends BaseSpec {
 
     val v1 = Arity(3)
     v1.toString.shouldBe("3:Literal")
+  }
+
+  it("peek") {
+
+    val v1 = Arity(3)
+
+    shouldNotCompile(
+      """v1.peek""",
+      """.*(3).*"""
+    )
+
   }
 }

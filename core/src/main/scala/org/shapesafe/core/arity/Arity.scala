@@ -1,25 +1,28 @@
 package org.shapesafe.core.arity
 
+import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
+import org.shapesafe.core.debugging.InfoCT.CanPeek
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity {
+trait Arity extends CanPeek {
 
   def runtimeArity: Int
   final lazy val runtimeTry: Try[Int] = Try(runtimeArity)
 
   lazy val valueStr: String = runtimeTry
     .map(_.toString)
-    .recover {
-      case ee: Exception =>
-        ee.getMessage
-    }
-    .get
+    .getOrElse("???")
+//    .recover {
+//      case ee: Exception =>
+//        ee.getMessage
+//    }
+//    .get
 
   lazy val fullStr: String = {
 
@@ -27,14 +30,15 @@ trait Arity {
   }
 
   final override def toString: String = fullStr
-
 }
 
-object Arity {
+trait Arity_Imp0 {}
 
-  object Unprovable extends Arity {
-    override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
-  }
+object Arity extends Arity_Imp0 {
+
+  trait Verifiable extends Arity {}
+
+  val Unprovable: ^[arity.Unprovable.type] = arity.Unprovable.^
 
   implicit class Converters[A <: Arity](self: A) {
 
@@ -58,7 +62,7 @@ object Arity {
     def apply[N <: Nat](v: N)(
         implicit
         ev: NatAsOp[N]
-    ): ^[Derived[NatAsOp[N]]] = {
+    ): ^[Derived[NatAsOp[N], ev.OutInt]] = {
 
       ^(Derived.summon[NatAsOp[N]](ev))
     }

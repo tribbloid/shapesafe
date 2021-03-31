@@ -8,7 +8,7 @@ class CheckDistinctSpec extends BaseSpec {
 
   import Names.Syntax._
 
-  describe("can verify if") {
+  describe("can eval if") {
 
     describe("singleton") {
 
@@ -59,7 +59,7 @@ class CheckDistinctSpec extends BaseSpec {
     }
   }
 
-  describe("CANNOT verify if") {
+  describe("CANNOT eval if") {
     it("shape has duplicated names") {
 
       val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "a")
@@ -83,7 +83,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  3:Literal :<<- c
           |""".stripMargin
       )
@@ -97,7 +97,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |Eye ><
+          |➊ ><
           |  3:Literal :<<- c ><
           |  2:Literal :<<- b ><
           |  1:Literal :<<- a

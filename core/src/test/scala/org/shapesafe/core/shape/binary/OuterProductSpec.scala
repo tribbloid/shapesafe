@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.Shape
 
 class OuterProductSpec extends BaseSpec {
