@@ -4,8 +4,8 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity, Utils}
-import shapeless.Witness
+import org.shapesafe.core.arity._
+import org.shapesafe.m.Type2String
 
 import scala.language.implicitConversions
 
@@ -16,10 +16,7 @@ class Op2[
     sh: Utils.IntSh[??]
 ) extends Op2Like {
 
-  val msgInfix = Witness(" ?? ")
-  override type MsgInfix = msgInfix.T // TODO: this should be a constructor argument
-
-  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
+  val nameCT = Type2String[??[_, _]]
 
   case class On[
       +A1 <: Arity,
@@ -34,6 +31,8 @@ class Op2[
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }
+
+  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
 }
 
 trait Op2_Imp0 {

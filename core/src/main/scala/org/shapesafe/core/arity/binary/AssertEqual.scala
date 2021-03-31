@@ -2,9 +2,10 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.ProveArity.{|-<, Proof}
+import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity}
+import org.shapesafe.core.util.CompileMsgs
 import shapeless.Witness
 
 trait AssertEqual_Imp0 {
@@ -46,8 +47,12 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
     }
   }
 
-  val msgInfix = Witness(" != ")
-  override type MsgInfix = msgInfix.T
+  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
+    On(a1.arity, a2.arity)
+  }
+
+  val != = Witness("!=")
+  override type _NotFoundMsg = !=.T
 
   implicit def invar[
       A1 <: Arity,
@@ -58,20 +63,14 @@ object AssertEqual extends AssertEqual_Imp0 with Op2Like {
       implicit
       bound1: A1 |-< Const[S1],
       bound2: A2 |-< Const[S2],
-      //      lemma: Require[S1 == S2]
       lemma: RequireMsg[
         S1 == S2,
-        MsgTitle + Msg.Infix[ToString[S1], ToString[S2]]
+        CompileMsgs.prefix.T + NotFoundInfix[Const[S1]#_ToString, Const[S2]#_ToString]
       ]
-//      lemma: RequireMsgSym[S1 == S2, noLemmaMsg.T, A1 =!= A2]
   ): A1 :==! A2 =>> Const[S1] = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
 
     domain.forEqual(lemma)
-  }
-
-  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
-    On(a1.arity, a2.arity)
   }
 }

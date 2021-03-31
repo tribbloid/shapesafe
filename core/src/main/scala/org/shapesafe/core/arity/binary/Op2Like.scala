@@ -1,9 +1,9 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.{Arity, ArityAPI, Operator}
-import shapeless.Witness
+import org.shapesafe.core.util.CompileMsgs
 
-trait Op2Like extends Operator {
+trait Op2Like extends Operator with CompileMsgs.NotFound {
 
   import singleton.ops._
 
@@ -30,18 +30,7 @@ trait Op2Like extends Operator {
 //  }
 //  type AsShapelessPoly2 = AsShapelessPoly2.type
 
-  type MsgTitle = Op2Like.msgTitle.T
-  type MsgInfix
-
-  object Msg {
-
-    final val LF = Witness("\n")
-
-    type Infix[S1, S2] = S1 + MsgInfix + S2
-  }
+  type NotFoundInfix[S1, S2] = S1 + _NotFoundMsg + S2
 }
 
-object Op2Like {
-
-  val msgTitle = Witness(""" ¯\_(ツ)_/¯ """)
-}
+object Op2Like {}

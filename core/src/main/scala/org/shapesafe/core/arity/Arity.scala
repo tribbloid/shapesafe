@@ -3,12 +3,13 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
+import org.shapesafe.core.util.CompileMsgs
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity {
+trait Arity extends CompileMsgs.ToString {
 
   def runtimeArity: Int
   final lazy val runtimeTry: Try[Int] = Try(runtimeArity)
@@ -27,7 +28,6 @@ trait Arity {
   }
 
   final override def toString: String = fullStr
-
 }
 
 object Arity {

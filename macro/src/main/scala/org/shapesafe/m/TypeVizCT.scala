@@ -9,12 +9,12 @@ object TypeVizCT {
 
   class TypeOfCT[A] {
 
-    def show: Unit = macro Macro.show[A]
+    def debug: Unit = macro Macros.show[A]
 
-    def shouldBe[B]: Unit = macro Macro.shouldBe[A, B]
+    def shouldBe[B]: Unit = macro Macros.shouldBe[A, B]
   }
 
-  final class Macro(val c: whitebox.Context) extends MWithReflection {
+  final class Macros(val c: whitebox.Context) extends MWithReflection {
 
     import c.universe._
 
@@ -24,7 +24,7 @@ object TypeVizCT {
 
       val str = viz.apply(aa).typeTree.treeString
 
-      throw new TypeInfo("\n" + str)
+      throw new DebugInfo("\n" + str)
 
       q"Unit"
     }

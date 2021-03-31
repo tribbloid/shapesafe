@@ -1,10 +1,12 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.ShapeAPI.^
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
-import shapeless.HList
+import org.shapesafe.core.util.CompileMsgs.Fail
+import org.shapesafe.m.Type2String
 import shapeless.ops.hlist.ZipWithKeys
+import shapeless.{HList, Witness}
+import singleton.ops.EnumCount
 
 case class |<<-[
     S1 <: Shape,
@@ -12,11 +14,24 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends ShapeConjecture {}
+) extends ShapeConjecture {
+
+  val info = Type2String[|<<-[S1, N]]
+  type INFO = info.T
+}
 
 object |<<- {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
+
+  val ss = Witness("dummy dummy")
+
+  implicit def debug[
+      T <: |<<-[_, _]
+  ](
+      implicit
+      msg: Fail[T#INFO]
+  ): T =>> Nothing = ???
 
   implicit def simplify[
       S1 <: Shape,

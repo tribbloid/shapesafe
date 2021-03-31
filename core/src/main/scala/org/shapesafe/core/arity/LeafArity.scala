@@ -3,7 +3,7 @@ package org.shapesafe.core.arity
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
 import shapeless.Witness
-import singleton.ops.{==, Require}
+import singleton.ops.{==, Require, ToString}
 
 import scala.language.implicitConversions
 
@@ -20,6 +20,8 @@ object LeafArity {
 
     type SS = S
     def singleton: S
+
+    override type _ToString = ToString[S]
 
     override lazy val _id: S = singleton
 
@@ -80,11 +82,24 @@ object LeafArity {
     }
   }
 
-  case class Var(runtimeArity: Int) extends LeafArity {}
+  case class Var(runtimeArity: Int) extends LeafArity {
 
-  trait Unchecked extends LeafArity {}
+    override type _ToString = Var.nameW.T
+  }
+
+  object Var {
+
+    val nameW = Witness("(var)")
+  }
+
+  trait Unchecked extends LeafArity {
+
+    override type _ToString = Unchecked.nameW.T
+  }
 
   case object Unchecked extends Unchecked {
     override def runtimeArity: Int = throw new UnsupportedOperationException("<no runtime value>")
+
+    val nameW = Witness("(unchecked)")
   }
 }

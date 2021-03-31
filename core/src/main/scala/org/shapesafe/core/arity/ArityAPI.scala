@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ProveArity.|-
+import org.shapesafe.core.arity.ProveArity.{|-, Debugger}
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
 import shapeless.Witness
@@ -29,6 +29,13 @@ trait ArityAPI extends ArityOpsLike with Axis {
       implicit
       prove: _Arity |- O
   ): ArityAPI.^[O] = prove.apply(arity).value.^
+
+  final def debug[
+      O <: LeafArity
+  ](
+      implicit
+      debugger: Debugger.Case.Aux[_Arity, O]
+  ): Unit = {}
 }
 
 object ArityAPI {

@@ -1,8 +1,8 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
-import org.shapesafe.core.util.RecordView
-import shapeless.{::, HList, HNil}
+import org.shapesafe.core.util.{CompileMsgs, RecordView}
+import shapeless.{::, HList, HNil, Witness}
 
 import scala.language.implicitConversions
 
@@ -73,5 +73,12 @@ object StaticTuples {
         new ><(tail, head)
       }
     }
+  }
+
+  object W {
+
+    final val eye = Witness("Eye")
+
+    final val >< = Witness(" >< ")
   }
 }

@@ -93,4 +93,10 @@ class LeafAritySpec extends BaseSpec {
     val v1 = Arity(3)
     v1.toString.shouldBe("3:Literal")
   }
+
+//  it("debug") {
+//
+//    val v1 = Arity(3)
+//    v1.debug
+//  }
 }

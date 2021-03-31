@@ -49,16 +49,15 @@ class WithNamesSpec extends BaseSpec {
 
       val shape2 = (shape1.named("a", "b")).eval
 
-      //      VizType.infer(shape2).toString.shouldBe()
-
       TypeViz.infer(shape2).should_=:=(TypeViz.infer(shapeRenamed))
 
     }
 
     it("should fail if operands are of different dimensions") {
+//      (shape |<<- namesTooMany).eval
 
       shouldNotCompile(
-        "shape <<- namesTooMany"
+        "(shape |<<- namesTooMany).eval"
       )
     }
   }

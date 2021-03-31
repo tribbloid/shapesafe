@@ -79,5 +79,5 @@ trait ProofSystem[O] extends Propositional[O] with ProofScope { // TODO: no IUB?
     }
   }
 
-  class SubScope extends ProofScope.Child(this)
+  class SubScope extends ProofScope.ChildScope(this)
 }
