@@ -7,4 +7,3 @@ fun Project.versions(): Versions {
 
     return Versions(this)
 }
-

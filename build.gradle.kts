@@ -61,8 +61,9 @@ allprojects {
     // resolving jar hells
     configurations.all {
         resolutionStrategy.dependencySubstitution {
+            // TODO: use `constraints` as below
             substitute(
-                    module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
             ).apply {
                 with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
@@ -71,16 +72,17 @@ allprojects {
 
     dependencies {
 
+        // see https://github.com/gradle/gradle/issues/13067
+        fun bothImpl(constraintNotation: Any) {
+            implementation(constraintNotation)
+            testFixturesImplementation(constraintNotation)
+        }
+
         constraints {
 
-            implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-
-            implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-//            testFixturesImplementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-//            testImplementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-            // This is a dirty hack to circumvent https://youtrack.jetbrains.com/issue/SCL-17284
-
-            implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+            bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
         }
 
         //https://github.com/tek/splain
@@ -123,26 +125,26 @@ allprojects {
                 loggingLevel = "verbose"
 
                 val compilerOptions = mutableListOf(
-                        "-encoding", "UTF-8",
-                        "-unchecked",
-                        "-deprecation",
-                        "-feature",
+                    "-encoding", "UTF-8",
+                    "-unchecked",
+                    "-deprecation",
+                    "-feature",
 
-                        "-language:higherKinds",
+                    "-language:higherKinds",
 //                            "-Xfatal-warnings",
 
-                        "-Xlint:poly-implicit-overload",
-                        "-Xlint:option-implicit",
+                    "-Xlint:poly-implicit-overload",
+                    "-Xlint:option-implicit",
 
-                        // "-Xlog-implicits",
-                        // "-Xlog-implicit-conversions",
+                    // "-Xlog-implicits",
+                    // "-Xlog-implicit-conversions",
 
-                        "-Yissue-debug"
+                    "-Yissue-debug"
 //                    ,
 //                    "-Ytyper-debug",
 //                    "-Vtyper"
 
-                        // the following only works on scala 2.13
+                    // the following only works on scala 2.13
 //                        ,
 //                        "-Xlint:implicit-not-found",
 //                        "-Xlint:implicit-recursion"
@@ -151,14 +153,14 @@ allprojects {
 
                 if (vs.splainV != null) {
                     compilerOptions.addAll(
-                            listOf(
-                                    //splain
-                                    "-P:splain:tree",
-                                    "-P:splain:breakinfix:200",
-                                    "-P:splain:bounds:true",
-                                    "-P:splain:boundsimplicits:true",
-                                    "-P:splain:keepmodules:2"
-                            )
+                        listOf(
+                            //splain
+                            "-P:splain:tree",
+                            "-P:splain:breakinfix:200",
+                            "-P:splain:bounds:true",
+                            "-P:splain:boundsimplicits:true",
+                            "-P:splain:keepmodules:2"
+                        )
                     )
                 }
 
@@ -171,7 +173,7 @@ allprojects {
 
                     // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
                     jvmArgs = listOf(
-                            "-Xss256m"
+                        "-Xss256m"
                     )
                 }
             }
@@ -247,27 +249,27 @@ allprojects {
         module {
 
             excludeDirs = excludeDirs + listOf(
-                    file(".gradle"),
-                    file(".github"),
+                file(".gradle"),
+                file(".github"),
 
-                    file ("target"),
+                file ("target"),
 //                        file ("out"),
 
-                    file(".idea"),
-                    file(".vscode"),
-                    file(".bloop"),
-                    file(".bsp"),
-                    file(".metals"),
-                    file(".ammonite"),
+                file(".idea"),
+                file(".vscode"),
+                file(".bloop"),
+                file(".bsp"),
+                file(".metals"),
+                file(".ammonite"),
 
-                    file("logs"),
+                file("logs"),
 
-                    // apache spark
-                    file("warehouse"),
+                // apache spark
+                file("warehouse"),
 
-                    file("spike"),
+                file("spike"),
 
-                    file("splain")
+                file("splain")
             )
 
             isDownloadJavadoc = true
