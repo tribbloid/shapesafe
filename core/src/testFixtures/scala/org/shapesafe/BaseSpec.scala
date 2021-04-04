@@ -18,7 +18,7 @@ trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
-    val format = TypeFormat(hidePackages = true, hideAlias = true)
+    val format = TypeFormat(hidePackages = true, variants = TypeFormat.variants.Dealias)
 
     TypeViz
       .withFormat(format)
