@@ -33,8 +33,14 @@ object FieldTypes {
 
     def cseImpl[A: c.WeakTypeTag](c: whitebox.Context)(typeable: c.Tree): c.Tree = {
       import c.universe._
-      val str = c.eval(c.Expr[String](c.untypecheck(q"$typeable.describe")))
       val tpA = weakTypeOf[A]
+
+      val describe = c.untypecheck(q"$typeable.describe")
+
+      println(describe)
+      val str = c.eval(
+        c.Expr[String](describe)
+      )
       q"null.asInstanceOf[FieldTypes.typeablePoly.Case.Aux[$tpA, _root_.shapeless.labelled.FieldType[$str, $tpA]]]"
     }
   }

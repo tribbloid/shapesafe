@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import org.shapesafe.core.util.CompileMsgs.Fail
-import org.shapesafe.m.Type2String
+import org.shapesafe.m.NameOf
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.{HList, Witness}
 import singleton.ops.EnumCount
@@ -16,7 +16,7 @@ case class |<<-[
     newNames: N
 ) extends ShapeConjecture {
 
-  val info = Type2String[|<<-[S1, N]]
+  val info = NameOf.TypeConstructor[|<<-[_, _]]
   type INFO = info.T
 }
 

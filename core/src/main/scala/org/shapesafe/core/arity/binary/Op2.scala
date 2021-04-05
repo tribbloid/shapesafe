@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.m.Type2String
+import org.shapesafe.m.NameOf
 
 import scala.language.implicitConversions
 
@@ -15,8 +15,6 @@ class Op2[
     implicit
     sh: Utils.IntSh[??]
 ) extends Op2Like {
-
-  val nameCT = Type2String[??[_, _]]
 
   case class On[
       +A1 <: Arity,
