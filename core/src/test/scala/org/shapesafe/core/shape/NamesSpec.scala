@@ -88,6 +88,7 @@ class NamesSpec extends BaseSpec {
 
     TypeViz.infer(names.asIndices).===!(TypeViz.infer(ii))
 
+    type P = String <:< Int
 //    implicitly[Names.Eye <:< Indices.Eye]
 //
 ////    val namesT = WideTyped(names)

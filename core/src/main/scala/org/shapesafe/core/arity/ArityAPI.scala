@@ -1,10 +1,12 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ProveArity.{|-, Debugger}
+import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
+import org.shapesafe.core.debugging.InfoCT
 import shapeless.Witness
 import shapeless.Witness.Aux
+import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -17,7 +19,7 @@ trait ArityAPI extends ArityOpsLike with Axis {
   final override def toString: String = arity.toString
 
   final def verify[
-      O <: Arity
+      O <: Arity.Verifiable
   ](
       implicit
       prove: _Arity |- O
@@ -30,11 +32,12 @@ trait ArityAPI extends ArityOpsLike with Axis {
       prove: _Arity |- O
   ): ArityAPI.^[O] = prove.apply(arity).value.^
 
-  final def debug[
-      O <: LeafArity
+  final def peek[
+      O <: Arity.HasInfo
   ](
       implicit
-      debugger: Debugger.Case.Aux[_Arity, O]
+      toInfo: ProveArity.|-[_Arity, O],
+      fail: InfoCT.Fail[InfoCT.peek.T + O#_Info]
   ): Unit = {}
 }
 

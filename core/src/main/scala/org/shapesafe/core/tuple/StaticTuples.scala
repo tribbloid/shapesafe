@@ -1,7 +1,7 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
-import org.shapesafe.core.util.{CompileMsgs, RecordView}
+import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
 
 import scala.language.implicitConversions

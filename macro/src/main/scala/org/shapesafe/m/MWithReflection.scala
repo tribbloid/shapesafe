@@ -8,8 +8,9 @@ import scala.reflect.macros.blackbox
 trait MWithReflection {
 
   val c: blackbox.Context
+  val u: c.universe.type = c.universe
 
-  lazy val refl = MacroReflection[c.universe.type](c.universe)
+  lazy val refl = MacroReflection[u.type](c.universe)
   lazy val viz = TypeViz(refl)
 
 //  case class MacroError(message: String) extends Exception(message)

@@ -1,6 +1,6 @@
 package org.shapesafe.core
 
-import org.shapesafe.core.util.CompileMsgs
+import org.shapesafe.core.debugging.InfoCT
 import shapeless.Witness
 
 import scala.annotation.implicitNotFound
@@ -62,32 +62,6 @@ trait ProofScope { // TODO: no IUB?
       }
     }
   }
-
-  trait Debugger_Imp0 extends Poly1Base[CompileMsgs.ToString, OUB] {
-
-    def compileTimeOnly() = throw new UnsupportedOperationException("compile time only")
-
-//    implicit def raw(
-//                      implicit ev: CompileMsgs.DebugMsg
-//                    )
-  }
-
-  trait Debugger extends Debugger_Imp0 {
-
-    val info = Witness(
-      "\n${S}\n" +
-        "|-\n" +
-        "${O}"
-    )
-
-    implicit def canProof[S, O <: OUB](
-        implicit
-        lemma: CompileMsgs.ToString { type _ToString <: S } |- O,
-        msg: CompileMsgs.Fail[info.T]
-    ): CompileMsgs.ToString { type _ToString <: S } ==> O = compileTimeOnly()
-  }
-
-  object Debugger extends Debugger {}
 }
 
 object ProofScope {

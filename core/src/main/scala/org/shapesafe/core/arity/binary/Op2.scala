@@ -5,7 +5,8 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.m.NameOf
+import org.shapesafe.core.debugging.InfoCT
+import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -17,8 +18,8 @@ class Op2[
 ) extends Op2Like {
 
   case class On[
-      +A1 <: Arity,
-      +A2 <: Arity
+      A1 <: Arity,
+      A2 <: Arity
   ](
       a1: A1,
       a2: A2
@@ -31,6 +32,9 @@ class Op2[
   }
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
+
+  final override type CannotI[I1 <: InfoCT, I2 <: InfoCT] =
+    InfoCT.noCanDo.T + InfoCT.nonExisting.T + I1#_Info + I2#_Info
 }
 
 trait Op2_Imp0 {

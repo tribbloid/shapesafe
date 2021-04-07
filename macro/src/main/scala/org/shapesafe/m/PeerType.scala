@@ -29,9 +29,6 @@ object PeerType {
   }
 
   def make[I, O]: Make[I, O] = {
-//    new NonSingletonUB[I] {
-//      final type Out = O
-//    }
 
     Make[I, O]()
   }
@@ -46,10 +43,6 @@ object PeerType {
 
       val tt: Type = weakTypeOf[A]
       val _tt = tt.dealias
-
-//      val vv = viz.apply(_tt)
-//      println(_tt.getClass.getCanonicalName)
-//      println(vv)
 
       val out: Type = _tt match {
 

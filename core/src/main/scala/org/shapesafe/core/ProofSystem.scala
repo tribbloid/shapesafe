@@ -6,12 +6,12 @@ import scala.language.implicitConversions
   * This trait forms the backbone of compile-time reasoning and should reflect our best effort in reproducing
   * Curry-Howard isomorphism with scala compiler (regardless of how ill-suited it is), expecting drastic changes in case
   * the implicit search algorithm was improved
-  * @tparam O upper bound of output
+  * @tparam _OUB upper bound of output
   */
 // TODO: If Poly1 works smoothly it could totally supersedes this class, too bad the assumed compiler bug made it necessary
-trait ProofSystem[O] extends Propositional[O] with ProofScope { // TODO: no IUB?
+trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: no IUB?
 
-  type OUB = O
+  type OUB = _OUB
 
   final val root: this.type = this
 
@@ -23,7 +23,7 @@ trait ProofSystem[O] extends Propositional[O] with ProofScope { // TODO: no IUB?
 
   def forAll[I]: Factory[I] = new Factory[I] {}
 
-  final def fromValue[I](v: I): Factory[I] = forAll[I]
+  final def forValue[I](v: I): Factory[I] = forAll[I]
 
   object Factory {
 
@@ -63,19 +63,19 @@ trait ProofSystem[O] extends Propositional[O] with ProofScope { // TODO: no IUB?
       override def apply(v: I): root.Term.ToBe[O] = root.Term.ToBe[O](_fn(v))
     }
 
+    def summon[O <: OUB](
+        implicit
+        prove: I |- O
+    ): I |- O = prove
+
     def to[O <: OUB] = new To[O]
 
     class To[OB <: OUB] {
 
-      def entails[O <: OB](v: I)(
+      def summon[O <: OB](
           implicit
           prove: I |- O
-      ): Term.Aux[O] = prove.apply(v)
-
-      def entailsValue[O <: OB](v: I)(
-          implicit
-          prove: I |- O
-      ): O = prove.apply(v).value
+      ): I |- O = prove
     }
   }
 

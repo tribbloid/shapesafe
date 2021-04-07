@@ -8,9 +8,9 @@ object ProofSystemTest {
 
   case class Simple(name: String) extends Conj
 
-  object Sys extends ProofSystem[Conj]
+  object TestSys extends ProofSystem[Conj]
 
-  import Sys._
+  import TestSys._
   import Factory._
 
   case class P0() extends Conj

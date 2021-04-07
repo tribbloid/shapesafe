@@ -63,23 +63,50 @@ class AssertEqualSpec extends ArityFixture {
 
   describe("CANNOT prove") {
 
-    describe("<Operand Without Proof> ==") {
+    describe("Unprovable == ?") {
 
-      it("a") {
+      it("1") {
 
         val op = AssertEqual.on(Arity.Unprovable.^, a).^
 
         shouldNotCompile(
-          "op.eval"
+          "op.eval",
+//          ".*(Arity.Unprovable.type != 3)"// TODO: doesn't work until fallback mechanism is implemented
+          ".*"
         )
       }
 
-      it("a + b") {
+      it("2") {
 
         val op = AssertEqual.on(Arity.Unprovable.^, a :+ b).^
 
         shouldNotCompile(
-          "op.eval"
+          "op.eval",
+//          ".*(Arity.Unprovable.type != 7)" // TODO: doesn't work until fallback mechanism is implemented
+          ".*"
+        )
+      }
+    }
+
+    describe("if a != b") {
+
+      it("1") {
+
+        val op = AssertEqual.on(a, c).^
+
+        shouldNotCompile(
+          "op.eval",
+          """.*(3 != 5)"""
+        )
+      }
+
+      it("2") {
+
+        val op = AssertEqual.on(a, b :+ c).^
+
+        shouldNotCompile(
+          "op.eval",
+          """.*(3 != 9)"""
         )
       }
     }

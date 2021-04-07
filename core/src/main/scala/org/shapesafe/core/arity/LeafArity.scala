@@ -2,6 +2,7 @@ package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
+import org.shapesafe.m.GetInfoOf
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
 
@@ -12,16 +13,18 @@ import scala.language.implicitConversions
   */
 trait LeafArity extends VerifiedArity {}
 
-object LeafArity {
+trait LeafArity_Imp0 {}
+
+object LeafArity extends LeafArity_Imp0 {
 
   import Witness._
 
-  trait Const[S] extends LeafArity with IDMixin {
+  trait Const[S] extends LeafArity with IDMixin with Arity.HasInfo {
 
     type SS = S
     def singleton: S
 
-    override type _ToString = ToString[S]
+    override type _Info = ToString[S]
 
     override lazy val _id: S = singleton
 
@@ -38,7 +41,7 @@ object LeafArity {
     // TODO: should be named proofEqual, require should do everything in runtime?
     def requireEqual(w: Lt[Int])(
         implicit
-        proof: Require[SS == w.T]
+        proof: Require[S == w.T]
     ): Unit = {
 
       proveEqualType[w.T]
@@ -82,24 +85,14 @@ object LeafArity {
     }
   }
 
-  case class Var(runtimeArity: Int) extends LeafArity {
+  case class Var(runtimeArity: Int) extends LeafArity {}
 
-    override type _ToString = Var.nameW.T
-  }
+  object Var {}
 
-  object Var {
-
-    val nameW = Witness("(var)")
-  }
-
-  trait Unchecked extends LeafArity {
-
-    override type _ToString = Unchecked.nameW.T
-  }
+  trait Unchecked extends LeafArity {}
 
   case object Unchecked extends Unchecked {
     override def runtimeArity: Int = throw new UnsupportedOperationException("<no runtime value>")
 
-    val nameW = Witness("(unchecked)")
   }
 }
