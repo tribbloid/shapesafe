@@ -30,21 +30,21 @@ class LeafAritySpec extends BaseSpec {
       implicitly[out2.SS + w.T]
     }
 
-    it("FromOp") {
-
-      //    val v1 = implicitly[FromSize[SafeInt[big.nat.N]]]
-      //    v1.core.requireEqual(100)
-
-      {
-        val v = implicitly[Derived[ToInt[big.nat.N]]]
-        validate(v, 100)
-      }
-
-      {
-        val v = implicitly[Derived[ToInt[big.w.T]]]
-        validate(v, 100)
-      }
-    }
+//    it("FromOp") {
+//
+//      //    val v1 = implicitly[FromSize[SafeInt[big.nat.N]]]
+//      //    v1.core.requireEqual(100)
+//
+//      {
+//        val v = implicitly[Derived[ToInt[big.nat.N]]]
+//        validate(v, 100)
+//      }
+//
+//      {
+//        val v = implicitly[Derived[ToInt[big.w.T]]]
+//        validate(v, 100)
+//      }
+//    }
 
     it("FromLiteral") {
 
@@ -94,9 +94,12 @@ class LeafAritySpec extends BaseSpec {
     v1.toString.shouldBe("3:Literal")
   }
 
-//  it("debug") {
-//
-//    val v1 = Arity(3)
-//    v1.debug
-//  }
+  it("peek") {
+
+    val v1 = Arity(3)
+    shouldNotCompile(
+      """v1.peek""",
+      ".*(3)"
+    )
+  }
 }

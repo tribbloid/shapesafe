@@ -3,14 +3,16 @@ package org.shapesafe.core.debugging
 import shapeless.Witness
 import singleton.ops.RequireMsg
 
-trait InfoCT {
+trait PeekInfo {
 
-  type _Info
+  type _Peek
+
+  type Out
 
   //TODO: final override val toString = ... ?
 }
 
-object InfoCT {
+object PeekInfo {
 
 //  type Lt[I] = InfoCT { type _Info <: I }
 

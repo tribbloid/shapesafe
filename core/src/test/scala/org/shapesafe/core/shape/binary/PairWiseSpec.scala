@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape.binary
 
+import com.tribbloids.graph.commons.util.debug.print_@
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape

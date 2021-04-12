@@ -218,7 +218,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         asOp: NatAsOp[HEAD]
-    ): (HEAD :: H_TAIL) ==> (TAIL ><^ LeafArity.Derived[NatAsOp[HEAD]]) = {
+    ) = {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = apply(v.tail)

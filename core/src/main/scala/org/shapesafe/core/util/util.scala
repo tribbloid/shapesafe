@@ -1,3 +1,6 @@
 package org.shapesafe.core
 
-package object util {}
+package object util {
+
+  type ~[T] = Negation[T]
+}

@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity}
-import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.PeekInfo
 import shapeless.Witness
 
 trait AssertEqual_Imp0 {
@@ -47,8 +47,8 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   }
 
   lazy val NOT = Witness(" != ")
-  final override type CannotI[I1 <: InfoCT, I2 <: InfoCT] =
-    InfoCT.noCanDo.T + I1#_Info + NOT.T + I2#_Info
+  final override type CannotI[I1 <: PeekInfo, I2 <: PeekInfo] =
+    PeekInfo.noCanDo.T + I1#_Peek + NOT.T + I2#_Peek
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
     On(a1.arity, a2.arity)

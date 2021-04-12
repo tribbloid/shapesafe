@@ -1,6 +1,7 @@
 package org.shapesafe
 
-import com.tribbloids.graph.commons.util.reflect.{ScalaReflection, TypeFormat}
+import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
+import com.tribbloids.graph.commons.util.reflect.ScalaReflection
 import com.tribbloids.graph.commons.util.viz.TypeViz
 import shapeless.{HList, Nat, Witness}
 
@@ -11,14 +12,14 @@ trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   def showRaw(v: Any): String = {
 
-    ScalaReflection.universe.showRaw(v)
+    ScalaReflection._universe.showRaw(v)
 
 //    pprint.tokenize(v).mkString("\n")
   }
 
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
-    val format = TypeFormat(hidePackages = true, variants = TypeFormat.variants.DeAlias)
+    val format = TypeFormat.Type +> TypeFormat.DeAlias +> TypeFormat.HidePackages
 
     TypeViz
       .withFormat(format)

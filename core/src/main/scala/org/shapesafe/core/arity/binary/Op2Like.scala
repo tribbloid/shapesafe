@@ -1,21 +1,11 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
-import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.PeekInfo
 
-trait Op2Like_Imp0 {
+trait Op2Like_Imp0 {}
 
-//  implicit def lastResort[
-//      A <: Arity
-//  ](
-//      implicit
-//      ev: GetInfoOf.Type.From[A]
-//  ): A =>> Arity.LastResortInfo[A] = ProveArity.forAll[A].=>> { v =>
-//    Arity.LastResortInfo(v)
-//  }
-}
-
-trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
+trait Op2Like extends Op2Like.Refutations with Op2Like_Imp0 {
 
 //  object AsShapelessPoly2 extends Poly2 {
 //
@@ -47,22 +37,22 @@ object Op2Like {
     ): On[a1._Arity, a2._Arity]
   }
 
-  trait DebuggingSupport extends Base {
+  trait Refutations extends Base {
 
     import ProveArity.Factory._
 
-    type CannotI[I1 <: InfoCT, I2 <: InfoCT]
-    final type FailOn[I1 <: InfoCT, I2 <: InfoCT] = InfoCT.Fail[CannotI[I1, I2]]
+    type CannotI[I1 <: PeekInfo, I2 <: PeekInfo]
+    final type FailOn[I1 <: PeekInfo, I2 <: PeekInfo] = PeekInfo.Fail[CannotI[I1, I2]]
 
-    implicit def debug[
+    implicit def explain[
         A1 <: Arity,
         A2 <: Arity,
-        I1 <: Arity.HasInfo,
-        I2 <: Arity.HasInfo
+        I1 <: Arity.CanPeek,
+        I2 <: Arity.CanPeek
     ](
         implicit
-        toInfo1: ProveArity.|-[A1, I1],
-        toInfo2: ProveArity.|-[A2, I2],
+        peek1: ProveArity.|-[A1, I1],
+        peek2: ProveArity.|-[A2, I2],
         fail: FailOn[I1, I2]
     ): On[A1, A2] =>> Arity = ProveArity.forAll[On[A1, A2]].=>> {
       ???

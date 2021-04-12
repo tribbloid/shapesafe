@@ -3,7 +3,7 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
-import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.PeekInfo
 import shapeless.Witness
 import shapeless.Witness.Aux
 import singleton.ops.+
@@ -33,11 +33,11 @@ trait ArityAPI extends ArityOpsLike with Axis {
   ): ArityAPI.^[O] = prove.apply(arity).value.^
 
   final def peek[
-      O <: Arity.HasInfo
+      O <: Arity.CanPeek
   ](
       implicit
-      toInfo: ProveArity.|-[_Arity, O],
-      fail: InfoCT.Fail[InfoCT.peek.T + O#_Info]
+      prove: ProveArity.|-[_Arity, O],
+      fail: PeekInfo.Fail[PeekInfo.peek.T + O#_Peek]
   ): Unit = {}
 }
 

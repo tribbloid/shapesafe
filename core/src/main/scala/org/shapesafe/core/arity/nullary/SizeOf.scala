@@ -20,7 +20,7 @@ object SizeOf {
       implicit
       length: hlist.Length.Aux[D, N],
       simplify: NatAsOp[N]
-  ): SizeOf[D] =>> LeafArity.Derived[NatAsOp[N]] = {
+  ) = {
 
     ProveArity.forAll[SizeOf[D]].=>> { v =>
       new LeafArity.Derived(simplify)

@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
-import org.shapesafe.core.arity.Arity
+import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
@@ -73,7 +73,7 @@ trait PairWise {
         TO <: HList,
         A1 <: Arity,
         A2 <: Arity,
-        AO <: Arity
+        AO <: Arity.Verifiable
     ](
         implicit
         consTail: TI ==> TO,
