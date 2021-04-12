@@ -31,8 +31,6 @@ class Op2[
     def outer: Op2.this.type = Op2.this
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
-
-    override type Out = DO[a1.Out, a2.Out]
   }
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)

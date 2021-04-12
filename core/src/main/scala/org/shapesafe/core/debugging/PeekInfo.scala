@@ -7,8 +7,6 @@ trait PeekInfo {
 
   type _Peek
 
-  type Out
-
   //TODO: final override val toString = ... ?
 }
 
