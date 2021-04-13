@@ -58,7 +58,7 @@ class TypeToLiteralSpec extends BaseSpec {
 
       viz[w1.Out].typeStr
         .shouldBe(
-          s"""String("GetInfoOfSpec.Dummy")"""
+          s"""String("TypeToLiteralSpec.Dummy")"""
         )
     }
 
@@ -68,7 +68,7 @@ class TypeToLiteralSpec extends BaseSpec {
 
       viz[e1.KindOf.nameOfSelf.type#Out].typeStr
         .shouldBe(
-          s"""String("GetInfoOfSpec.Dummy")"""
+          s"""String("TypeToLiteralSpec.Dummy")"""
         )
     }
 

@@ -1,19 +1,11 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
+import com.tribbloids.graph.commons.util.HasOuter
+import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.InfoCT.{CanPeek, CanRefute}
 
-trait Op2Like_Imp0 {
-
-//  implicit def lastResort[
-//      A <: Arity
-//  ](
-//      implicit
-//      ev: GetInfoOf.Type.From[A]
-//  ): A =>> Arity.LastResortInfo[A] = ProveArity.forAll[A].=>> { v =>
-//    Arity.LastResortInfo(v)
-//  }
-}
+trait Op2Like_Imp0 {}
 
 trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
@@ -35,11 +27,22 @@ trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 object Op2Like {
 
   trait Base {
+    self: Op2Like =>
+
+    trait Conjecture2[
+        A1 <: Arity,
+        A2 <: Arity
+    ] extends Arity
+        with CanRefute
+        with HasOuter {
+
+      final def outer: Op2Like.this.type = Op2Like.this
+    }
 
     type On[
         A1 <: Arity,
         A2 <: Arity
-    ] <: Arity
+    ] <: Conjecture2[A1, A2]
 
     def on(
         a1: ArityAPI,
@@ -48,24 +51,23 @@ object Op2Like {
   }
 
   trait DebuggingSupport extends Base {
+    self: Op2Like =>
 
-    import ProveArity.Factory._
+    type CannotI[I1 <: CanPeek, I2 <: CanPeek] // TODO: remove this and use CanRefute
+    final type FailOn[I1 <: CanPeek, I2 <: CanPeek] = InfoCT.Fail[CannotI[I1, I2]]
 
-    type CannotI[I1 <: InfoCT, I2 <: InfoCT]
-    final type FailOn[I1 <: InfoCT, I2 <: InfoCT] = InfoCT.Fail[CannotI[I1, I2]]
-
-    implicit def debug[
-        A1 <: Arity,
-        A2 <: Arity,
-        I1 <: Arity.HasInfo,
-        I2 <: Arity.HasInfo
-    ](
-        implicit
-        toInfo1: ProveArity.|-[A1, I1],
-        toInfo2: ProveArity.|-[A2, I2],
-        fail: FailOn[I1, I2]
-    ): On[A1, A2] =>> Arity = ProveArity.forAll[On[A1, A2]].=>> {
-      ???
-    }
+//    implicit def debug[
+//        A1 <: Arity,
+//        A2 <: Arity,
+//        I1 <: Arity.HasInfo,
+//        I2 <: Arity.HasInfo
+//    ](
+//        implicit
+//        toInfo1: ProveArity.|-[A1, I1],
+//        toInfo2: ProveArity.|-[A2, I2],
+//        fail: FailOn[I1, I2]
+//    ): On[A1, A2] =>> Arity = ProveArity.forAll[On[A1, A2]].=>> {
+//      ???
+//    }
   }
 }

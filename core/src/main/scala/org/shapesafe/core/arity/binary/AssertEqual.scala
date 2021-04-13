@@ -1,10 +1,10 @@
 package org.shapesafe.core.arity.binary
 
-import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
-import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity}
+import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
 import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.InfoCT.CanPeek
 import shapeless.Witness
 
 trait AssertEqual_Imp0 {
@@ -32,10 +32,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   ](
       a1: A1,
       a2: A2
-  ) extends ArityConjecture
-      with HasOuter {
-
-    def outer = AssertEqual.this
+  ) extends Conjecture2[A1, A2] {
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity
@@ -47,8 +44,8 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   }
 
   lazy val NOT = Witness(" != ")
-  final override type CannotI[I1 <: InfoCT, I2 <: InfoCT] =
-    InfoCT.noCanDo.T + I1#_Info + NOT.T + I2#_Info
+  final override type CannotI[I1 <: CanPeek, I2 <: CanPeek] =
+    InfoCT.noCanDo.T + I1#_Peek + NOT.T + I2#_Peek
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
     On(a1.arity, a2.arity)

@@ -1,16 +1,24 @@
 package org.shapesafe.core.debugging
 
 import shapeless.Witness
-import singleton.ops.RequireMsg
-
-trait InfoCT {
-
-  type _Info
-
-  //TODO: final override val toString = ... ?
-}
+import singleton.ops.{ITE, IsString, RequireMsg}
 
 object InfoCT {
+
+  type StrOr_?[T1] = ITE[
+    IsString[T1],
+    T1,
+    "???"
+  ]
+
+  trait CanPeek {
+
+    type _Peek
+
+    final type Peek = StrOr_?[_Peek]
+  }
+
+  trait CanRefute {}
 
 //  type Lt[I] = InfoCT { type _Info <: I }
 

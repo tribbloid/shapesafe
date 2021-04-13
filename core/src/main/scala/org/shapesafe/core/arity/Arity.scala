@@ -3,7 +3,6 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.debugging.InfoCT
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
@@ -16,11 +15,12 @@ trait Arity {
 
   lazy val valueStr: String = runtimeTry
     .map(_.toString)
-    .recover {
-      case ee: Exception =>
-        ee.getMessage
-    }
-    .get
+    .getOrElse("???")
+//    .recover {
+//      case ee: Exception =>
+//        ee.getMessage
+//    }
+//    .get
 
   lazy val fullStr: String = {
 
@@ -39,8 +39,6 @@ object Arity extends Arity_Imp0 {
   object Unprovable extends Arity {
     override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
   }
-
-  trait HasInfo extends Arity with InfoCT
 
   implicit class Converters[A <: Arity](self: A) {
 
