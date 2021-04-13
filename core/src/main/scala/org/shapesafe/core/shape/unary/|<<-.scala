@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import org.shapesafe.core.debugging.InfoCT.Fail
-import org.shapesafe.m.GetInfoOf
+import org.shapesafe.m.TypeToLiteral
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.{HList, Witness}
 import singleton.ops.EnumCount
@@ -14,24 +14,13 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends ShapeConjecture {
-
-  val info = GetInfoOf.TypeConstructor[|<<-[_, _]]
-  type INFO = info.Out
-}
+) extends ShapeConjecture {}
 
 object |<<- {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
   val ss = Witness("dummy dummy")
-
-  implicit def debug[
-      T <: |<<-[_, _]
-  ](
-      implicit
-      msg: Fail[T#INFO]
-  ): T =>> Nothing = ???
 
   implicit def simplify[
       S1 <: Shape,

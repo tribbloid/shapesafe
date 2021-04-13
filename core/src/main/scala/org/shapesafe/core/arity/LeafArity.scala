@@ -2,7 +2,7 @@ package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.m.GetInfoOf
+import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
 

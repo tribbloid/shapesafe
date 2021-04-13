@@ -22,7 +22,7 @@ object TypeVizCT {
 
       val aa: Type = weakTypeOf[A]
 
-      val str = viz.apply(aa).typeTree.treeString
+      val str = viz.of(aa).typeTree.treeString
 
       throw new DebugInfo("\n" + str)
 
@@ -36,7 +36,7 @@ object TypeVizCT {
 
       if (!(aa =:= bb)) {
         val Seq(s1, s2) = Seq(aa, bb).map { v =>
-          Option(viz.apply(v).typeTree.treeString)
+          Option(viz.of(v).typeTree.treeString)
         }
 
         val diff = StringDiff(s1, s2, Seq(this.getClass))

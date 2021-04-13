@@ -1,11 +1,9 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.Arity.HasInfo
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.m.GetInfoOf
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
@@ -32,31 +30,7 @@ trait Arity {
   final override def toString: String = fullStr
 }
 
-trait Arity_Imp0 {
-
-  // TODO: useless, scala implicit priority is broken
-
-  //  import ProveArity.Factory._
-  //
-  //  implicit def lastResort[
-  //      A <: LeafArity
-  //  ](
-  //      implicit
-  //      ev: GetInfoOf.Type.From[A]
-  //  ): A =>> Arity.LastResortInfo[A] = ProveArity.forAll[A].=>> { v =>
-  //    Arity.LastResortInfo(v)
-  //  }
-
-  case class LastResortInfo[A <: Arity](self: Arity)(
-      implicit
-      val ev: GetInfoOf.Type.From[A]
-  ) extends HasInfo {
-
-    override def runtimeArity: Int = self.runtimeArity
-
-    override type _Info = ev.Out
-  }
-}
+trait Arity_Imp0 {}
 
 object Arity extends Arity_Imp0 {
 
