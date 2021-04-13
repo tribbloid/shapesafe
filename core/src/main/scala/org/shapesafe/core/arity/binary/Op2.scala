@@ -11,7 +11,8 @@ import singleton.ops.+
 import scala.language.implicitConversions
 
 class Op2[
-    ??[X1, X2] <: Op
+    ??[X1, X2] <: Op,
+    Sym <: String
 ](
     implicit
     sh: Utils.IntSh[??]
@@ -26,13 +27,15 @@ class Op2[
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
 
+    override type _Peek = A1#Peek + Sym + A2#Peek
+
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
 
-  final override type CannotI[I1 <: CanPeek, I2 <: CanPeek] =
-    InfoCT.noCanDo.T + InfoCT.nonExisting.T + I1#_Peek + I2#_Peek
+  final override type Refute[I1 <: CanPeek, I2 <: CanPeek] =
+    InfoCT.noCanDo.T + InfoCT.nonExisting.T + I1#Peek + " ?? " + I2#Peek
 }
 
 trait Op2_Imp0 {
@@ -52,6 +55,10 @@ trait Op2_Imp0 {
 }
 
 object Op2 extends Op2_Imp0 {
+
+  type UB[
+      ??[X1, X2] <: Op
+  ] = Op2[??, _ <: String]
 
   implicit def invar[
       A1 <: Arity,

@@ -53,8 +53,8 @@ object Op2Like {
   trait DebuggingSupport extends Base {
     self: Op2Like =>
 
-    type CannotI[I1 <: CanPeek, I2 <: CanPeek] // TODO: remove this and use CanRefute
-    final type FailOn[I1 <: CanPeek, I2 <: CanPeek] = InfoCT.Fail[CannotI[I1, I2]]
+    type Refute[I1 <: CanPeek, I2 <: CanPeek] // TODO: remove this and use CanRefute
+    final type RefuteFor[I1 <: CanPeek, I2 <: CanPeek] = InfoCT.ReportMsg[Refute[I1, I2]]
 
 //    implicit def debug[
 //        A1 <: Arity,

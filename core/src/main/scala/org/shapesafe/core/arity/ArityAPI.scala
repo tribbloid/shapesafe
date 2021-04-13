@@ -33,12 +33,9 @@ trait ArityAPI extends ArityOpsLike with Axis {
       prove: _Arity |- O
   ): ArityAPI.^[O] = prove.apply(arity).value.^
 
-  final def peek[
-      O <: Arity with CanPeek
-  ](
+  final def peek(
       implicit
-      toInfo: ProveArity.|-[_Arity, O],
-      fail: InfoCT.Fail[InfoCT.peek.T + O#_Peek]
+      peek: PeekArity.Case[_Arity]
   ): Unit = {}
 }
 

@@ -2,7 +2,6 @@ package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.debugging.InfoCT.CanPeek
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
 
@@ -19,7 +18,7 @@ object LeafArity extends LeafArity_Imp0 {
 
   import Witness._
 
-  trait Const[S] extends LeafArity with IDMixin with CanPeek {
+  trait Const[S] extends LeafArity with IDMixin {
 
     type SS = S
     def singleton: S

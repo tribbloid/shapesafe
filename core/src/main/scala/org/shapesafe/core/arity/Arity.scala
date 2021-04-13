@@ -3,12 +3,13 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
+import org.shapesafe.core.debugging.InfoCT.CanPeek
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity {
+trait Arity extends CanPeek {
 
   def runtimeArity: Int
   final lazy val runtimeTry: Try[Int] = Try(runtimeArity)
@@ -36,9 +37,10 @@ object Arity extends Arity_Imp0 {
 
   trait Verifiable extends Arity {}
 
-  object Unprovable extends Arity {
+  object _Unprovable extends Arity {
     override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
   }
+  val Unprovable: ^[_Unprovable.type] = _Unprovable.^
 
   implicit class Converters[A <: Arity](self: A) {
 

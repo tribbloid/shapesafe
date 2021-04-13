@@ -95,23 +95,25 @@ class Op2Spec extends ArityFixture {
     }
   }
 
-  describe("debug") {
+  describe("peek") {
 
     it("1") {
 
+//      (b :+ c).peek
+
       shouldNotCompile(
         """(b :+ c).peek""",
-        ".*(9)"
+        """.*(4 \+ 5 := 9)"""
       )
     }
 
     // TODO: doesn't work until fallback mechanism is implemented
-//    it("2") {
-//
-//      shouldNotCompile(
-//        """(Arity.Unprovable.^ :+ c).debug""",
-//        "9"
-//      )
-//    }
+    it("2") {
+
+      shouldNotCompile(
+        """(Arity.Unprovable :+ c).peek""",
+        """.*(\?\?\? \+ 5)"""
+      )
+    }
   }
 }

@@ -24,7 +24,7 @@ abstract class UncheckedDomain[
   def forOp2[??[X1, X2] <: Op](
       implicit
       sh: Utils.IntSh[??]
-  ): Op2[??]#On[A1, A2] =>> Unchecked = ProveArity.forAll[Op2[??]#On[A1, A2]].=>> { _ =>
+  ): Op2.UB[??]#On[A1, A2] =>> Unchecked = ProveArity.forAll[Op2.UB[??]#On[A1, A2]].=>> { _ =>
     Unchecked
   }
 

@@ -1,7 +1,7 @@
 package org.shapesafe.core.debugging
 
 import shapeless.Witness
-import singleton.ops.{ITE, IsString, RequireMsg}
+import singleton.ops.{+, ITE, IsString, RequireMsg}
 
 object InfoCT {
 
@@ -13,12 +13,17 @@ object InfoCT {
 
   trait CanPeek {
 
-    type _Peek
+    protected type _Peek
 
     final type Peek = StrOr_?[_Peek]
   }
 
-  trait CanRefute {}
+  trait CanRefute {
+
+    protected type _Refute
+
+    final type Refute = StrOr_?[_Refute]
+  }
 
 //  type Lt[I] = InfoCT { type _Info <: I }
 
@@ -32,13 +37,17 @@ object InfoCT {
 
   // TODO: add another instance that shows reasoning process?
 
-  type Fail[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time
+  type ReportMsg[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time
+
+  type PeekMsg[T] = ReportMsg[InfoCT.peek.T + T]
 
   val LF = Witness("\n")
 
   val EMPTY = Witness("")
 
   val FALSE = Witness(false)
+
+  val YIELD = Witness(" := ")
 
   val noCanDo = Witness("""¯\_(ツ)_/¯  """)
 

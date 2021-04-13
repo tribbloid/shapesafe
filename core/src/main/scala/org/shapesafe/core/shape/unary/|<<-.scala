@@ -2,11 +2,8 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
-import org.shapesafe.core.debugging.InfoCT.Fail
-import org.shapesafe.m.TypeToLiteral
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.{HList, Witness}
-import singleton.ops.EnumCount
 
 case class |<<-[
     S1 <: Shape,

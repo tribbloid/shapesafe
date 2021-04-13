@@ -67,7 +67,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("1") {
 
-        val op = AssertEqual.on(Arity.Unprovable.^, a).^
+        val op = AssertEqual.on(Arity.Unprovable, a).^
 
         shouldNotCompile(
           "op.eval",
@@ -78,7 +78,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("2") {
 
-        val op = AssertEqual.on(Arity.Unprovable.^, a :+ b).^
+        val op = AssertEqual.on(Arity.Unprovable, a :+ b).^
 
         shouldNotCompile(
           "op.eval",
