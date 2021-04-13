@@ -1,9 +1,10 @@
 package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.IDMixin
+import com.tribbloids.graph.commons.util.reflect.format.InfoFormat.ConstV
 import org.shapesafe.core.arity.Utils.Op
 import shapeless.Witness
-import singleton.ops.{==, Require, ToString}
+import singleton.ops.{==, Require}
 
 import scala.language.implicitConversions
 
@@ -22,8 +23,6 @@ object LeafArity extends LeafArity_Imp0 {
 
     type SS = S
     def singleton: S
-
-    final override type _Peek = ToString[S]
 
     override lazy val _id: S = singleton
 
@@ -51,10 +50,10 @@ object LeafArity extends LeafArity_Imp0 {
 
   object Const {}
 
-  class Derived[S <: Op, O](override val singleton: S) extends Const[S] {
+  class Derived[S <: Op, OUT](override val singleton: S) extends Const[S] {
     override lazy val runtimeArity: Int = singleton.value.asInstanceOf[Int]
 
-    final override type Out = O
+    final override type _TypeInfo = ConstV[OUT]
   }
 
   object Derived {
@@ -62,7 +61,9 @@ object LeafArity extends LeafArity_Imp0 {
     implicit def summon[S <: Op](
         implicit
         s: S
-    ): Derived[S, s.Out] = new Derived[S, s.Out](s)
+    ): Derived[S, s.Out] = {
+      new Derived[S, s.Out](s)
+    }
   }
 
   // this makes it impossible to construct directly from Int type
@@ -70,7 +71,7 @@ object LeafArity extends LeafArity_Imp0 {
 
     override def runtimeArity: Int = singleton
 
-    override type Out = S
+    final override type _TypeInfo = ConstV[S]
   }
 
   object Literal {

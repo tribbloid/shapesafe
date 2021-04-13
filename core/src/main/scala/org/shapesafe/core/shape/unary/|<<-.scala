@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.PeekInfo.Fail
+import org.shapesafe.core.CompileTimeInfo.Fail
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import shapeless.ops.hlist.ZipWithKeys

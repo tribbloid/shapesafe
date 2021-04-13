@@ -5,7 +5,7 @@ import com.tribbloids.graph.commons.util.viz.TypeViz
 
 import scala.reflect.macros.blackbox
 
-trait MWithReflection {
+trait ReflectionM {
 
   val c: blackbox.Context
   val u: c.universe.type = c.universe

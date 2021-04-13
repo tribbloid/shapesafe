@@ -1,16 +1,32 @@
-package org.shapesafe.core.debugging
+package org.shapesafe.core
 
+import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
+import org.shapesafe.m.FormattedTypeAsConst
 import shapeless.Witness
-import singleton.ops.RequireMsg
+import singleton.ops.{ITE, IsString, RequireMsg}
 
-trait PeekInfo {
+object CompileTimeInfo {
 
-  type _Peek
+  lazy val defaultFormat: TypeFormat = FormattedTypeAsConst.Ovrd.format
 
-  //TODO: final override val toString = ... ?
-}
+  type StrOr_???[T1] = ITE[
+    IsString[T1],
+    T1,
+    "???"
+  ]
 
-object PeekInfo {
+  trait CanPeek {
+
+    type _TypeInfo
+
+    final type CanPeek = StrOr_???[_TypeInfo]
+  }
+
+  trait CanRefute {
+
+    type _Refute
+
+  }
 
 //  type Lt[I] = InfoCT { type _Info <: I }
 

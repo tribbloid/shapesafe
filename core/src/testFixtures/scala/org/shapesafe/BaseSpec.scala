@@ -12,7 +12,7 @@ trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
 
   def showRaw(v: Any): String = {
 
-    ScalaReflection._universe.showRaw(v)
+    ScalaReflection.universe.showRaw(v)
 
 //    pprint.tokenize(v).mkString("\n")
   }

@@ -46,19 +46,18 @@ trait ArityOpsLike extends HasArity {
     type Op = OP
   }
 
-//  object :+ extends Op2[ops.+] with Infix
-  object :+ extends InfixImpl(new Op2[ops.+])
+  case object :+ extends InfixImpl(Op2[ops.+](":+"))
   type :+[X <: Arity, Y <: Arity] = :+.On[X, Y]
 
-  object :- extends InfixImpl(new Op2[ops.-])
+  case object :- extends InfixImpl(Op2[ops.-](":-"))
   type :-[X <: Arity, Y <: Arity] = :-.On[X, Y]
 
-  object :* extends InfixImpl(new Op2[ops.*])
+  case object :* extends InfixImpl(Op2[ops.*](":*"))
   type :*[X <: Arity, Y <: Arity] = :*.On[X, Y]
 
-  object :/ extends InfixImpl(new Op2[ops./])
+  case object :/ extends InfixImpl(Op2[ops./](":/"))
   type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
 
-  object :==! extends InfixImpl(AssertEqual)
+  case object :==! extends InfixImpl(AssertEqual)
   type :==![X <: Arity, Y <: Arity] = :==!.On[X, Y]
 }

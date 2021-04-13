@@ -1,12 +1,11 @@
 package org.shapesafe.core.arity.binary
 
-import com.tribbloids.graph.commons.util.HasOuter
+import com.tribbloids.graph.commons.util.reflect.format.InfoFormat.{~~, ConstV}
+import org.shapesafe.core.CompileTimeInfo
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.PeekInfo
-import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -17,7 +16,7 @@ class Op2[
     sh: Utils.IntSh[??]
 ) extends Op2Like {
 
-  trait DO[A1, A2]
+  type SYM <: String
 
   case class On[
       A1 <: Arity,
@@ -25,18 +24,19 @@ class Op2[
   ](
       a1: A1,
       a2: A2
-  ) extends ArityConjecture // TODO: can this be VerifiedArity?
-      with HasOuter {
+  ) extends Conjecture2 {
 
-    def outer: Op2.this.type = Op2.this
+    // TODO: can this be VerifiedArity?
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
+
+    final override type _TypeInfo = A1 ~~ ConstV[SYM] ~~ A2
+
+    final override type _Refute =
+      ConstV[CompileTimeInfo.noCanDo.T] ~~ ConstV[CompileTimeInfo.nonExisting.T] ~~ _TypeInfo
   }
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
-
-  final override type CannotI[I1 <: PeekInfo, I2 <: PeekInfo] =
-    PeekInfo.noCanDo.T + PeekInfo.nonExisting.T + I1#_Peek + I2#_Peek
 }
 
 trait Op2_Imp0 {
@@ -90,4 +90,17 @@ object Op2 extends Op2_Imp0 {
 //
 //    op2.On(a1, a2)
 //  }
+
+  type Aux[??[X1, X2] <: Op, S] = Op2[??] {
+    type SYM = S
+  }
+
+  def apply[
+      ??[X1, X2] <: Op
+  ](s: String with Singleton)(
+      implicit
+      sh: Utils.IntSh[??]
+  ): Op2.Aux[??, s.type] = new Op2[??] {
+    final override type SYM = s.type
+  }
 }

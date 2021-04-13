@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.m.PeerType
 import shapeless.Witness.Lt
-import singleton.ops.{+, ==, Require, ToInt}
+import singleton.ops.{+, ==, Require}
 
 class LeafAritySpec extends BaseSpec {
 
@@ -97,6 +97,7 @@ class LeafAritySpec extends BaseSpec {
   it("peek") {
 
     val v1 = Arity(3)
+
     shouldNotCompile(
       """v1.peek""",
       ".*(3)"

@@ -14,7 +14,7 @@ object Constraint {
   // TODO: why reinventing the wheel? shapeless LUBConstraint is the same
   case class ElementOfType[Data <: HList, Element: TypeTag]() extends Constraint {
 
-    val ttg: TypeTag[Element] = _universe.typeTag[Element]
+    val ttg: TypeTag[Element] = universe.typeTag[Element]
 
   }
 

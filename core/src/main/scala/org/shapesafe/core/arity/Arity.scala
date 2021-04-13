@@ -1,27 +1,22 @@
 package org.shapesafe.core.arity
 
+import com.tribbloids.graph.commons.util.reflect.format.HasTypeInfo
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.debugging.PeekInfo
 import shapeless.{Nat, Witness}
-import singleton.ops.ToString
 
 import scala.language.implicitConversions
 import scala.util.Try
 
-trait Arity extends PeekInfo {
+trait Arity extends HasTypeInfo {
 
   def runtimeArity: Int
   final lazy val runtimeTry: Try[Int] = Try(runtimeArity)
 
   lazy val valueStr: String = runtimeTry
     .map(_.toString)
-    .recover {
-      case ee: Exception =>
-        s"[${ee.toString}]"
-    }
-    .get
+    .getOrElse("???")
 
   lazy val fullStr: String = {
 
@@ -37,16 +32,12 @@ object Arity extends Arity_Imp0 {
 
   trait Verifiable extends Arity {}
 
-  object Unprovable extends Arity {
+  object _Unprovable extends Arity {
     override def runtimeArity: Int = throw new UnsupportedOperationException(
       this.getClass.getSimpleName.stripSuffix("$")
     )
   }
-
-  type CanPeek = Arity {
-
-    type _Peek <: ToString[_]
-  }
+  lazy val Unprovable: ^[_Unprovable.type] = _Unprovable.^
 
   implicit class Converters[A <: Arity](self: A) {
 

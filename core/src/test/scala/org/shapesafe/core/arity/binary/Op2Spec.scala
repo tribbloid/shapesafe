@@ -101,44 +101,44 @@ class Op2Spec extends ArityFixture {
 
   describe("peek") {
 
-    describe("spike") {
-      it("1") {
-
-        val va = (a :+ b).eval.arity
-
-        {
-          TypeViz[va.Out].should_=:=()
-        }
-      }
-
-      it("2") {
-
-//        TypeViz.infer(a).should_=:=()
-//        TypeViz.infer(Arity.Unprovable.^).should_=:=()
-
-        {
-
-          val va = (a :+ b).arity
-
-          TypeViz.infer(va).should_=:=()
-          //        TypeViz[va.Out].should_=:=()
-        }
-
-        {
-          val vb = (a :+ Arity.Unprovable.^).arity
-
-          TypeViz.infer(vb).should_=:=()
-        }
-
-        {
-          val vb = (Arity.Unprovable.^ :+ b).arity
-
-          TypeViz.infer(vb).should_=:=()
-        }
-
-//        TypeViz[vb.Out].should_=:=()
-      }
-    }
+//    describe("spike") {
+//      it("1") {
+//
+//        val va = (a :+ b).eval.arity
+//
+//        {
+//          TypeViz[va.Out].should_=:=()
+//        }
+//      }
+//
+//      it("2") {
+//
+////        TypeViz.infer(a).should_=:=()
+////        TypeViz.infer(Arity.Unprovable.^).should_=:=()
+//
+//        {
+//
+//          val va = (a :+ b).arity
+//
+//          TypeViz.infer(va).should_=:=()
+//          //        TypeViz[va.Out].should_=:=()
+//        }
+//
+//        {
+//          val vb = (a :+ Arity.Unprovable.^).arity
+//
+//          TypeViz.infer(vb).should_=:=()
+//        }
+//
+//        {
+//          val vb = (Arity.Unprovable.^ :+ b).arity
+//
+//          TypeViz.infer(vb).should_=:=()
+//        }
+//
+////        TypeViz[vb.Out].should_=:=()
+//      }
+//    }
 
     it("1") {
 
@@ -151,8 +151,10 @@ class Op2Spec extends ArityFixture {
     // TODO: add back
 //    it("2") {
 //
+//      (Arity.Unprovable :+ c).peek
+//
 //      shouldNotCompile(
-//        """(Arity.Unprovable.^ :+ c).peek""",
+//        """(Arity.Unprovable :+ c).peek""",
 //        "9"
 //      )
 //    }

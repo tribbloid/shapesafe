@@ -2,7 +2,7 @@ package org.shapesafe.core
 
 import org.shapesafe.BaseSpec
 
-object ProofSystemTest {
+object ProofSystemSpec {
 
   trait Conj
 
@@ -48,9 +48,9 @@ object ProofSystemTest {
 
 }
 
-class ProofSystemTest extends BaseSpec {
+class ProofSystemSpec extends BaseSpec {
 
-  import ProofSystemTest._
+  import ProofSystemSpec._
 
 //  it("can prove P1") {
 //

@@ -1,11 +1,12 @@
 package org.shapesafe.core.arity.binary
 
-import com.tribbloids.graph.commons.util.HasOuter
+import com.tribbloids.graph.commons.util.reflect.format.InfoFormat.{~~, ConstV}
+import org.shapesafe.core.CompileTimeInfo
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
-import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture, ProveArity}
-import org.shapesafe.core.debugging.PeekInfo
+import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
 import shapeless.Witness
+import singleton.ops.impl.OpId
 
 trait AssertEqual_Imp0 {
 
@@ -32,10 +33,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   ](
       a1: A1,
       a2: A2
-  ) extends ArityConjecture
-      with HasOuter {
-
-    def outer = AssertEqual.this
+  ) extends Conjecture2 {
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity
@@ -44,11 +42,15 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       require(v1 == v2)
       v1
     }
+
+    final override type _TypeInfo = A1 ~~ ConstV[SYM.T] ~~ A2
+
+    final override type _Refute =
+      ConstV[CompileTimeInfo.noCanDo.T] ~~ A1 ~~ ConstV[NOT.T] ~~ A2
   }
 
-  lazy val NOT = Witness(" != ")
-  final override type CannotI[I1 <: PeekInfo, I2 <: PeekInfo] =
-    PeekInfo.noCanDo.T + I1#_Peek + NOT.T + I2#_Peek
+  val SYM = Witness(":==!")
+  val NOT = Witness(" != ")
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
     On(a1.arity, a2.arity)
@@ -65,7 +67,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       implicit
       bound1: A1 |-< Const[S1],
       bound2: A2 |-< Const[S2],
-      lemma: RequireMsg[S1 == S2, CannotI[Const[S1], Const[S2]]]
+      lemma: RequireMsg[S1 == S2, (Const[S1] :==! Const[S2])#_Refute]
   ): (A1 :==! A2) =>> Const[S1] = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)

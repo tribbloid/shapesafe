@@ -35,7 +35,7 @@ object PeerType {
 
   def apply[I]: PeerType[I] = macro Macros.apply[I]
 
-  final class Macros(val c: whitebox.Context) extends MWithReflection {
+  final class Macros(val c: whitebox.Context) extends ReflectionM {
 
     import c.universe._
 
