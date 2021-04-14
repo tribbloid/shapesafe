@@ -52,10 +52,10 @@ class ProofSystemTest extends BaseSpec {
 
   import ProofSystemTest._
 
-//  it("can prove P1") {
-//
-//    val p1 = P1(P0(), 123)
-//
-//    Sys.at(p1).entails
-//  }
+  it("can prove P1") {
+
+    val p1 = P1(P0(), 123)
+
+    TestSys.forValue(p1).summon
+  }
 }

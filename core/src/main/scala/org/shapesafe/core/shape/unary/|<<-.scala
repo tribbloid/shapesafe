@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape.unary
 
+import org.shapesafe.core.debugging.InfoCT.Infix
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
 import shapeless.ops.hlist.ZipWithKeys
@@ -11,7 +12,10 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends ShapeConjecture {}
+) extends ShapeConjecture {
+
+  override type _Peek = Infix.FromPeek[S1, " |<<- ", N]
+}
 
 object |<<- {
 

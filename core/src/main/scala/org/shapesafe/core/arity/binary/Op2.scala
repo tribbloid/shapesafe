@@ -12,11 +12,13 @@ import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op,
-    Sym <: String
+    SYM <: String
 ](
     implicit
     sh: Utils.IntSh[??]
 ) extends Op2Like {
+
+  type Symbol = SYM
 
   case class On[
       A1 <: Arity,
@@ -26,8 +28,6 @@ class Op2[
       a2: A2
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
-
-    override type _Peek = Peek[A1] + Sym + Peek[A2] // TODO: add Bracket
 
     override type _Refute = InfoCT.noCanDo.T + InfoCT.nonExisting.T + _Peek
 

@@ -25,6 +25,8 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   import ProveArity.Factory._
   import singleton.ops._
 
+  override type Symbol = " == "
+
   case class On[
       A1 <: Arity,
       A2 <: Arity
@@ -32,8 +34,6 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a1: A1,
       a2: A2
   ) extends Conjecture2[A1, A2] {
-
-    override type _Peek = Peek[A1] + " == " + Peek[A2]
 
     override type _Refute = InfoCT.noCanDo.T + Peek[A1] + " != " + Peek[A2]
 

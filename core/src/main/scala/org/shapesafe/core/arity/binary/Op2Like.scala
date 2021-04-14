@@ -3,12 +3,14 @@ package org.shapesafe.core.arity.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.CanRefute
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
+import singleton.ops.+
 
 trait Op2Like_Imp0 {}
 
 trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
+  type Symbol
 //  object AsShapelessPoly2 extends Poly2 {
 //
 //    implicit def trivial[
@@ -37,6 +39,8 @@ object Op2Like {
         with HasOuter {
 
       final def outer: Op2Like.this.type = Op2Like.this
+
+      final override type _Peek = Peek[A1] + Symbol + Peek[A2] // TODO: add Bracket
     }
 
     type On[

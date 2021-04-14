@@ -3,14 +3,17 @@ package org.shapesafe.core.shape.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
+import org.shapesafe.core.debugging.InfoCT.Infix
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
+import singleton.ops.+
 
 trait PairWise {
 
   val op: Op2Like
+  type Symbol = op.Symbol
 
   // all names must be distinctive - no duplication allowed
   trait _On[
@@ -23,6 +26,8 @@ trait PairWise {
 
     def s1: S1 with Shape
     def s2: S2 with Shape
+
+    override type _Peek = "PairWise(" + Infix.FromPeek[S1, Symbol, S2] + ")"
   }
 
   object _On {
@@ -61,7 +66,7 @@ trait PairWise {
   ](
       override val s1: S1 with Shape,
       override val s2: S2 with Shape
-  ) extends _On[S1, S2]
+  ) extends _On[S1, S2] {}
 
   // TODO: now sure if it is too convoluted, should it extends BinaryIndexingFn?
   object _Indexing extends UnaryIndexingFn {

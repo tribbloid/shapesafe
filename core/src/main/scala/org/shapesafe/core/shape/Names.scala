@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.debugging.InfoCT.StrOrRaw
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness
@@ -10,10 +11,11 @@ trait Names extends IndicesMagnet with Names.proto.Impl {}
 
 object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
 
-  object proto extends StaticTuples.Total[String] with CanInfix_>< {}
+  type UpperBound = String
+
+  object proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
 
   type Impl = Names
-  type UpperBound = proto.UpperBound
 
   class Eye extends proto.Eye with Names {
     override type AsIndices = Indices.Eye
@@ -37,6 +39,8 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
     override def asIndices: AsIndices =
       tail.asIndices >< Index.Name(headW)
+
+    override type _PeekHead = StrOrRaw[Head]
   }
 
   implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {

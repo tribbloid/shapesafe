@@ -1,8 +1,10 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
+import org.shapesafe.core.debugging.InfoCT.{CanPeek, Peek}
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
+import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -10,7 +12,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   final type UpperBound = UB
 
-  trait Impl extends IDMixin { // TODO: rename to `Tuple`
+  trait Impl extends IDMixin with CanPeek { // TODO: rename to `Tuple`
 
     type Static <: HList
     def static: Static
@@ -30,7 +32,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override def asList: List[UB] = Nil
 
-    override lazy val toString = "Eye"
+    override lazy val toString = "[Eye]"
+    final override type _Peek = "[Eye]"
   }
   override lazy val Eye = new Eye
 
@@ -58,6 +61,9 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
            |${TextBlock(head.toString).indent("  ").build}
            | """.stripMargin.trim
     }
+
+    type _PeekHead
+    final override type _Peek = Peek[TAIL] + " >< " + _PeekHead
   }
 }
 

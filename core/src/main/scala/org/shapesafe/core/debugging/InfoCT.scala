@@ -37,6 +37,13 @@ object InfoCT {
     T#_Refute
   ]
 
+  object Infix {
+
+    type FromPeek[T1 <: CanPeek, S, T2 <: CanPeek] =
+      Peek[T1] + StrOrRaw[S] + Peek[T2]
+
+  }
+
   // TODO: add another instance that shows reasoning process?
 
   type ReportMsg[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time

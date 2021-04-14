@@ -16,10 +16,10 @@ class PairWiseSpec extends BaseSpec {
     rr.treeString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._PairWise ‣ PairWise.On
-        | ‣ Eye ><
+        | ‣ [Eye] ><
         | :   2:Literal ><
         | :   3:Literal
-        | ‣ Eye ><
+        | ‣ [Eye] ><
         |     4:Literal ><
         |     5:Literal
         |""".stripMargin
@@ -39,7 +39,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |Eye ><
+          |[Eye] ><
           |  6:Derived ><
           |  8:Derived
           |""".stripMargin
@@ -52,7 +52,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |Eye ><
+          |[Eye] ><
           |  8:Derived ><
           |  15:Derived
           |""".stripMargin
