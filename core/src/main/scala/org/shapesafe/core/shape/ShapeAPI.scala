@@ -40,6 +40,11 @@ trait ShapeAPI extends VectorOps with MatrixOps {
       prove: _Shape |- O
   ): ^[O] = verify(prove)
 
+  final def peek(
+      implicit
+      peek: ShapeDebuggers.PeekShape.Case[_Shape]
+  ): Unit = {}
+
   /**
     * assign new names
     */

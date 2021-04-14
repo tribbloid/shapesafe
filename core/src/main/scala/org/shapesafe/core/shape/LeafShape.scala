@@ -4,9 +4,10 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.debugging.InfoCT.CanPeek
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil, Nat, Witness}
+import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -14,7 +15,7 @@ import scala.language.implicitConversions
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait LeafShape extends Shape with LeafShape.Proto with CanPeek {
+trait LeafShape extends Shape with LeafShape.Proto {
 
   type Record <: HList // name: String -> arity: Arity
   def record: Record
@@ -105,6 +106,8 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
+
+    override type _Peek = "e"
   }
   override lazy val Eye = new Eye
 
@@ -127,6 +130,8 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head._Arity]
     final override val dimensions = new Dimensions.><(tail.dimensions, head.arity)
+
+    override type _Peek = Peek[TAIL] + " >< " + Peek[HEAD]
   }
 
   final type ><^[

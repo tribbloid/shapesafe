@@ -1,9 +1,8 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.LeafShape.{FromRecord, FromStatic}
-import org.shapesafe.m.TypeVizCT
 import shapeless.HNil
 
 class LeafShapeSpec extends BaseSpec {
@@ -362,4 +361,35 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
+  describe("peek") {
+
+    it("Eye") {
+
+      shouldNotCompile(
+        """Shape.peek""",
+        """.*(e)"""
+      )
+    }
+
+    it("1") {
+
+      val s = Shape(1, 2)
+
+      shouldNotCompile(
+        """s.peek""",
+        """.*(e >< 1 >< 2)"""
+      )
+    }
+
+    it("2") {
+
+      val s = Shape(1, 2).|<<-*("a", "b")
+
+      shouldNotCompile(
+        """s.peek""",
+//        """.*(:= e >< (1 :<<- a) >< (2 :<<- b))""", TODO
+        """.*"""
+      )
+    }
+  }
 }

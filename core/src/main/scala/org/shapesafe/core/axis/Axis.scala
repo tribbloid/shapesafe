@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.ArityDebuggers.PeekArity
 import org.shapesafe.core.arity.ops.HasArity
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.Axis.AxisLike
-import org.shapesafe.core.debugging.InfoCT.{CanPeek, Peek}
+import org.shapesafe.core.debugging.InfoCT.{Br, CanPeek, Peek}
 import shapeless.Witness
 import shapeless.labelled.FieldType
 import singleton.ops.+
@@ -22,11 +22,6 @@ trait Axis extends AxisLike with IDMixin with CanPeek {
   final def axis: _Axis = this: _Axis
 
   override protected lazy val _id: Any = (arity, name)
-
-  final def peek(
-      implicit
-      peek: PeekArity.Case[_Arity]
-  ): Unit = {}
 }
 
 object Axis {
@@ -50,7 +45,7 @@ object Axis {
 
     type _Axis = _Arity :<<- Name
 
-    type _Peek = Peek[A] + " :<<- " + Name
+    type _Peek = Br[Peek[A] + " :<<- " + Name]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arity"

@@ -63,6 +63,5 @@ class Debuggers[
     }
 
     object Step1 extends Step1_Imp1
-
   }
 }

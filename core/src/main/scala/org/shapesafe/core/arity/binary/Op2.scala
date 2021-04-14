@@ -27,7 +27,7 @@ class Op2[
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
 
-    override type _Peek = Peek[A1] + Sym + Peek[A2]
+    override type _Peek = Peek[A1] + Sym + Peek[A2] // TODO: add Bracket
 
     override type _Refute = InfoCT.noCanDo.T + InfoCT.nonExisting.T + _Peek
 

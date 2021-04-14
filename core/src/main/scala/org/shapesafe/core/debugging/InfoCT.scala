@@ -55,7 +55,9 @@ object InfoCT {
 
   val nonExisting = Witness(""" ∄ """)
 
-  val peek = Witness("͡o _ ͡o  ")
+  val peek = Witness("> ")
 
   val impossible = Witness("IMPOSSIBLE!")
+
+  type Br[T] = "(" + T + ")"
 }
