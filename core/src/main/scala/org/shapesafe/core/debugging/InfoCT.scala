@@ -1,39 +1,41 @@
 package org.shapesafe.core.debugging
 
+import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString, RequireMsg}
 
 object InfoCT {
 
-  type StrOr_?[T1] = ITE[
+  type StrOrRaw[T1] = ITE[
     IsString[T1],
     T1,
     "???"
   ]
 
+  // TODO: is it possible and better?
+  //  also need time for https://github.com/fthomas/singleton-ops/issues/182
+  TypeToLiteral
+//  type StrOrRaw[T1] = ITE[
+//    IsString[T1],
+//    T1,
+//    TypeToLiteral.Type.Case[T1]
+//  ]
+
   trait CanPeek {
 
-    protected type _Peek
-
-    final type Peek = StrOr_?[_Peek]
+    protected[InfoCT] type _Peek
   }
+  type Peek[T <: CanPeek] = StrOrRaw[
+    T#_Peek
+  ]
 
   trait CanRefute {
 
-    protected type _Refute
-
-    final type Refute = StrOr_?[_Refute]
+    protected[InfoCT] type _Refute
   }
-
-//  type Lt[I] = InfoCT { type _Info <: I }
-
-//  class Direct[_INFO]() extends InfoCT {
-//
-//    final override type _Info = _INFO
-//  }
-//
-//  def direct[T]: Direct[T] = new Direct[T]()
-//  def direct(w: Witness.Lt[String]): Direct[w.T] = direct[w.T]
+  type Refute[T <: CanRefute] = StrOrRaw[
+    T#_Refute
+  ]
 
   // TODO: add another instance that shows reasoning process?
 

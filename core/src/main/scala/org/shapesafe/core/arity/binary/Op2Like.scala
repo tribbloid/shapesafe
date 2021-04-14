@@ -3,7 +3,7 @@ package org.shapesafe.core.arity.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.{CanPeek, CanRefute}
+import org.shapesafe.core.debugging.InfoCT.CanRefute
 
 trait Op2Like_Imp0 {}
 
@@ -52,9 +52,6 @@ object Op2Like {
 
   trait DebuggingSupport extends Base {
     self: Op2Like =>
-
-    type Refute[I1 <: CanPeek, I2 <: CanPeek] // TODO: remove this and use CanRefute
-    final type RefuteFor[I1 <: CanPeek, I2 <: CanPeek] = InfoCT.ReportMsg[Refute[I1, I2]]
 
 //    implicit def debug[
 //        A1 <: Arity,

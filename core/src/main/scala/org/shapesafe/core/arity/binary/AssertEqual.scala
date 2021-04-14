@@ -4,8 +4,7 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
 import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.CanPeek
-import shapeless.Witness
+import org.shapesafe.core.debugging.InfoCT.{Peek, Refute}
 
 trait AssertEqual_Imp0 {
 
@@ -34,7 +33,9 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a2: A2
   ) extends Conjecture2[A1, A2] {
 
-    override type _Peek = A1#Peek + " != " + A2#Peek
+    override type _Peek = Peek[A1] + " == " + Peek[A2]
+
+    override type _Refute = InfoCT.noCanDo.T + Peek[A1] + " != " + Peek[A2]
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity
@@ -44,10 +45,6 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       v1
     }
   }
-
-  lazy val NOT = Witness(" != ")
-  final override type Refute[I1 <: CanPeek, I2 <: CanPeek] =
-    InfoCT.noCanDo.T + I1#Peek + NOT.T + I2#Peek
 
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
     On(a1.arity, a2.arity)
@@ -64,7 +61,10 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       implicit
       bound1: A1 |-< Const[S1],
       bound2: A2 |-< Const[S2],
-      lemma: RequireMsg[S1 == S2, Refute[Const[S1], Const[S2]]]
+      lemma: RequireMsg[
+        S1 == S2,
+        Refute[Const[S1] :==! Const[S2]]
+      ]
   ): (A1 :==! A2) =>> Const[S1] = {
 
     val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)

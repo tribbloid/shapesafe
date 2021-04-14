@@ -3,11 +3,9 @@ package org.shapesafe.core.arity
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
-import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.CanPeek
+import org.shapesafe.core.debugging.InfoCT.Peek
 import shapeless.Witness
 import shapeless.Witness.Aux
-import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -32,11 +30,6 @@ trait ArityAPI extends ArityOpsLike with Axis {
       implicit
       prove: _Arity |- O
   ): ArityAPI.^[O] = prove.apply(arity).value.^
-
-  final def peek(
-      implicit
-      peek: PeekArity.Case[_Arity]
-  ): Unit = {}
 }
 
 object ArityAPI {
@@ -48,6 +41,8 @@ object ArityAPI {
     override type _Arity = A
 
     type _Axis = ^[A]
+
+    type _Peek = Peek[A]
   }
 
   implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity

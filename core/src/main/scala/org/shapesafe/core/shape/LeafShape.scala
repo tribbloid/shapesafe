@@ -4,6 +4,7 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
+import org.shapesafe.core.debugging.InfoCT.CanPeek
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
@@ -13,7 +14,7 @@ import scala.language.implicitConversions
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error
   */
-trait LeafShape extends Shape with LeafShape.Proto {
+trait LeafShape extends Shape with LeafShape.Proto with CanPeek {
 
   type Record <: HList // name: String -> arity: Arity
   def record: Record
