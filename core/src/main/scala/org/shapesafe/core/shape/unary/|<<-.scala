@@ -1,10 +1,10 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.InfoCT.Infix
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, ShapeConjecture}
+import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
-import shapeless.{HList, Witness}
 
 case class |<<-[
     S1 <: Shape,
@@ -14,14 +14,12 @@ case class |<<-[
     newNames: N
 ) extends ShapeConjecture {
 
-  override type _Peek = Infix.FromPeek[S1, " |<<- ", N]
+  override type _Peek = Peek.InfixW[S1, " |<<- ", N]
 }
 
 object |<<- {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
-
-  val ss = Witness("dummy dummy")
 
   implicit def simplify[
       S1 <: Shape,

@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
-import org.shapesafe.core.debugging.InfoCT.Infix
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.ops.hlist.Zip
@@ -13,7 +13,7 @@ import singleton.ops.+
 trait PairWise {
 
   val op: Op2Like
-  type Symbol = op.Symbol
+  type Symbol
 
   // all names must be distinctive - no duplication allowed
   trait _On[
@@ -27,13 +27,13 @@ trait PairWise {
     def s1: S1 with Shape
     def s2: S2 with Shape
 
-    override type _Peek = "PairWise(" + Infix.FromPeek[S1, Symbol, S2] + ")"
+    override type _Peek = Peek.PrefixW2[Symbol, S1, S2]
   }
 
   object _On {
 
-    import ProveShape.|-
     import ProveShape.Factory._
+    import ProveShape.|-
 
     implicit def simplify[
         S1 <: Shape,

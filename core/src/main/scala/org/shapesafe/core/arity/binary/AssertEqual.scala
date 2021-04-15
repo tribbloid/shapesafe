@@ -35,7 +35,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a2: A2
   ) extends Conjecture2[A1, A2] {
 
-    override type _Refute = InfoCT.noCanDo.T + Peek[A1] + " != " + Peek[A2]
+    override type _Refute = InfoCT.noCanDo.T + Peek.InfixW[A1, " != ", A2]
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity

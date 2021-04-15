@@ -4,9 +4,8 @@ import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.debugging.InfoCT.{Infix, Peek}
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.LeafShape.><
-import org.shapesafe.core.shape.ShapeAPI.^
 import org.shapesafe.core.shape._
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
@@ -20,7 +19,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends ShapeConjecture {
 
-  override type _Peek = Infix.FromPeek[S1, " GetSubscript ", I]
+  override type _Peek = Peek.InfixW[S1, " GetSubscript ", I]
 }
 
 object GetSubscript {

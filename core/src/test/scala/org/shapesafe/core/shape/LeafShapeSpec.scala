@@ -383,12 +383,11 @@ class LeafShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val s = Shape(1, 2).|<<-*("a", "b")
+      val s = Shape(1, 2).|<<-*("a", "b").eval
 
       shouldNotCompile(
         """s.peek""",
-//        """.*(:= e >< (1 :<<- a) >< (2 :<<- b))""", TODO
-        """.*"""
+        """.*(\Q[Eye] >< (1 :<<- a) >< (2 :<<- b)\E)"""
       )
     }
   }

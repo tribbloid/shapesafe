@@ -1,5 +1,6 @@
 package org.shapesafe.core.arity
 
+import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
@@ -37,10 +38,7 @@ object Arity extends Arity_Imp0 {
 
   trait Verifiable extends Arity {}
 
-  object _Unprovable extends Arity {
-    override def runtimeArity: Int = throw new UnsupportedOperationException(s"cannot verified an Unprovable")
-  }
-  val Unprovable: ^[_Unprovable.type] = _Unprovable.^
+  val Unprovable: ^[arity.Unprovable.type] = arity.Unprovable.^
 
   implicit class Converters[A <: Arity](self: A) {
 

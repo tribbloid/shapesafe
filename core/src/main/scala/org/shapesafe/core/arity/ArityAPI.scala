@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ArityDebuggers.PeekArity
+import org.shapesafe.core.arity.ArityReporters.PeekArity
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}

@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.InfoCT.{Infix, Peek}
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import singleton.ops.+
 
@@ -11,7 +11,7 @@ case class CheckDistinct[
     s1: S1 with Shape
 ) extends ShapeConjecture {
 
-  override type _Peek = "Distinct(" + Peek[S1] + ")"
+  override type _Peek = Peek.PrefixW1["Distinct", S1]
 }
 
 object CheckDistinct {

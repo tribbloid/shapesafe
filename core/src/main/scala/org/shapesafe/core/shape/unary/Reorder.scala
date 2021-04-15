@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.InfoCT.Infix
+import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.{ProveShape, _}
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
@@ -13,7 +13,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends ShapeConjecture {
 
-  override type _Peek = Infix.FromPeek[S1, " Reorder ", indices.AsIndices]
+  override type _Peek = Peek.InfixW[S1, " Reorder ", indices.AsIndices]
 }
 
 object Reorder {

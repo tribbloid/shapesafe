@@ -39,12 +39,14 @@ trait ArityOpsLike extends HasArity {
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type Symbol = "AppendByName(" + Infix.this.Symbol + ")"
+      type Symbol = "SquashByName(" + Infix.this.Symbol + ")"
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _PairWise extends PairWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
+
+      type Symbol = "PairWise(" + Infix.this.Symbol + ")"
     }
   }
 

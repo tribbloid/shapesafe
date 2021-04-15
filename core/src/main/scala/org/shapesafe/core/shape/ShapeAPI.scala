@@ -42,7 +42,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
   final def peek(
       implicit
-      peek: ShapeDebuggers.PeekShape.Case[_Shape]
+      peek: ShapeReporters.PeekShape.Case[_Shape]
   ): Unit = {}
 
   /**

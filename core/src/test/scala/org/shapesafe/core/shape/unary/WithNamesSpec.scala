@@ -61,4 +61,25 @@ class WithNamesSpec extends BaseSpec {
       )
     }
   }
+
+  describe("peek") {
+
+    it("1") {
+
+      val s = Shape(1, 2).|<<-*("a", "b")
+      shouldNotCompile(
+        """s.peek""",
+        """.*(\Q[Eye] >< 1 >< 2 |<<- [Eye] >< a >< b := [Eye] >< (1 :<<- a) >< (2 :<<- b)\E)"""
+      )
+    }
+
+    it("2") {
+
+      val s = Shape(1, 2).|<<-*("a", "b", "c")
+      shouldNotCompile(
+        """s.peek""",
+        """.*(\Q[Eye] >< 1 >< 2 |<<- [Eye] >< a >< b >< c\E)"""
+      )
+    }
+  }
 }

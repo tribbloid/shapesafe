@@ -25,9 +25,22 @@ object InfoCT {
 
     protected[InfoCT] type _Peek
   }
+
   type Peek[T <: CanPeek] = StrOrRaw[
     T#_Peek
   ]
+  object Peek {
+
+    // TODO: brackets?
+    type InfixW[T1 <: CanPeek, S, T2 <: CanPeek] =
+      Peek[T1] + StrOrRaw[S] + Peek[T2]
+
+    type PrefixW1[S, T <: CanPeek] =
+      StrOrRaw[S] + Br[Peek[T]]
+
+    type PrefixW2[S, T1 <: CanPeek, T2 <: CanPeek] =
+      StrOrRaw[S] + Br[Peek[T1] + ", " + Peek[T2]]
+  }
 
   trait CanRefute {
 
@@ -36,13 +49,6 @@ object InfoCT {
   type Refute[T <: CanRefute] = StrOrRaw[
     T#_Refute
   ]
-
-  object Infix {
-
-    type FromPeek[T1 <: CanPeek, S, T2 <: CanPeek] =
-      Peek[T1] + StrOrRaw[S] + Peek[T2]
-
-  }
 
   // TODO: add another instance that shows reasoning process?
 
@@ -65,6 +71,8 @@ object InfoCT {
   val peek = Witness("> ")
 
   val impossible = Witness("IMPOSSIBLE!")
+
+  val apply = Witness("")
 
   type Br[T] = "(" + T + ")"
 }

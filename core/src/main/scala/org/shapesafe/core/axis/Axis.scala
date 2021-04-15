@@ -1,7 +1,7 @@
 package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
-import org.shapesafe.core.arity.ArityDebuggers.PeekArity
+import org.shapesafe.core.arity.ArityReporters.PeekArity
 import org.shapesafe.core.arity.ops.HasArity
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.Axis.AxisLike
