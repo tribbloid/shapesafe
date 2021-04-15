@@ -46,7 +46,7 @@ object Conjecture1 {
   ](
       implicit
       step1: Refute1.Case[S1]
-  ): S1 |- Shape = {
+  ): S1 |- S1 = {
     ???
   }
 }

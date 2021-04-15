@@ -45,12 +45,13 @@ object Conjecture2 {
     }
   }
 
-  implicit def refute2[
-      S1 <: Conjecture2
-  ](
-      implicit
-      step1: Refute2.Case[S1]
-  ): S1 |- Shape = {
-    ???
-  }
+  // TODO: disabled for causing slow performance. Need a good bypass
+//  implicit def refute2[
+//      S1 <: Conjecture2
+//  ](
+//      implicit
+//      step1: Refute2.Case[S1]
+//  ): S1 |- S1 = {
+//    ???
+//  }
 }
