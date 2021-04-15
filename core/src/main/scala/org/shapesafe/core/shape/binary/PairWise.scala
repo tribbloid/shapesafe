@@ -5,10 +5,9 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
-import singleton.ops.+
 
 trait PairWise {
 
@@ -19,7 +18,7 @@ trait PairWise {
   trait _On[
       S1 <: Shape,
       S2 <: Shape
-  ] extends ShapeConjecture
+  ] extends Conjecture2.^[S1, S2]
       with HasOuter {
 
     override def outer: PairWise.this.type = PairWise.this

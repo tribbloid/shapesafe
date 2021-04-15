@@ -54,25 +54,39 @@ object InfoCT {
 
   type ReportMsg[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time
 
-  type PeekMsg[T] = ReportMsg[InfoCT.peek.T + T]
-
   val LF = Witness("\n")
 
   val EMPTY = Witness("")
 
   val FALSE = Witness(false)
 
-  val YIELD = Witness(" := ")
+  val REFUTE =
+    Witness("""¯\_(ツ)_/¯ """)
+  val PEEK =
+    Witness("""|>    """)
+  val ENTAILS =
+    Witness("""  :=  """)
 
-  val noCanDo = Witness("""¯\_(ツ)_/¯  """)
+  type EntailsLF = LF.T + ENTAILS.T
 
   val nonExisting = Witness(""" ∄ """)
 
-  val peek = Witness("> ")
-
   val impossible = Witness("IMPOSSIBLE!")
 
-  val apply = Witness("")
-
   type Br[T] = "(" + T + ")"
+
+  val from1 = Witness("\n    -<< 1 condition >>-\n")
+  val from2 = Witness("\n    -<< 2 conditions >>-\n")
+
+  type Refute1[SELF <: CanRefute, C1] =
+    Refute[SELF] +
+      from1.T +
+      C1
+
+  type Refute2[SELF <: CanRefute, C1, C2] =
+    Refute[SELF] +
+      from2.T +
+      C1 +
+      LF.T +
+      C2
 }

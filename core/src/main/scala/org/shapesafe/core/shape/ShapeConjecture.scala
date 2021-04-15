@@ -9,5 +9,5 @@ trait ShapeConjecture extends Shape with CanRefute with TreeLike.ProductAsTree {
 
   final override def toString: String = treeString
 
-  override type _Refute = InfoCT.noCanDo.T + InfoCT.nonExisting.T + _Peek
+  override type _Refute = InfoCT.REFUTE.T + InfoCT.nonExisting.T + _Peek
 }

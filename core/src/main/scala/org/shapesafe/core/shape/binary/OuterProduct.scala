@@ -4,7 +4,7 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Shape, ShapeConjecture}
+import org.shapesafe.core.shape.{LeafShape, Shape}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -14,7 +14,7 @@ case class OuterProduct[
 ](
     s1: S1,
     s2: S2
-) extends ShapeConjecture {
+) extends Conjecture2.^[S1, S2] {
 
   override type _Peek = Peek.InfixW[S1, " OuterProduct ", S2]
 }

@@ -68,4 +68,55 @@ class PairWiseSpec extends BaseSpec {
       )
     }
   }
+
+  describe("can truncate extra dimension(s) if") {
+    // TODO: is this really the best behaviour?
+
+    it("operands has different dimensions") {
+
+      val s1 = Shape(2, 3)
+      val s2 = Shape(4, 5, 6)
+
+      val rr = s1.zipWith(ArityOps.:+, s2)
+
+      rr.eval.toString.shouldBe(
+        """
+          |[Eye] ><
+          |  7:Derived ><
+          |  9:Derived
+          |""".stripMargin
+      )
+
+//      shouldNotCompile(
+//        "rr.eval",
+//        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
+//      )
+    }
+
+    it(" ... even if both operands are a conjectures") {
+
+      val s1 = Shape(2, 3).|<<-*("a", "b")
+      val s2 = Shape(4, 5, 6).|<<-*("a", "b", "c")
+
+      val rr = s1.zipWith(ArityOps.:*, s2)
+
+      rr.eval.toString.shouldBe(
+        """
+          |[Eye] ><
+          |  10:Derived ><
+          |  18:Derived
+          |""".stripMargin
+      )
+
+//      shouldNotCompile(
+//        "rr.eval",
+//        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
+//      )
+//
+//      shouldNotCompile(
+//        "s.eval",
+//        ".*(\\Q  :=  [Eye] >< (2 :<<- a) >< (3 :<<- b)\\E)"
+//      )
+    }
+  }
 }

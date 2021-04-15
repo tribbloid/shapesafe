@@ -21,7 +21,7 @@ trait ReduceByName {
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: Shape
-  ] extends ShapeConjecture
+  ] extends Conjecture1.^[S1]
       with HasOuter {
 
     override def outer: ReduceByName.this.type = ReduceByName.this

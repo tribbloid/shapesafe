@@ -103,7 +103,7 @@ class Op2Spec extends ArityFixture {
 
       shouldNotCompile(
         """(b :+ c).peek""",
-        """.*(4 \+ 5 := 9)"""
+        """.*(  :=  9)"""
       )
     }
 
