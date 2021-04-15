@@ -73,8 +73,8 @@ class WithNamesSpec extends BaseSpec {
 
         msg.toString.shouldBe(
           """
-            ||>    [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
-            |  :=  [Eye] >< (2 :<<- a) >< (3 :<<- b)
+            ||>    [Eye] >< (2 :<<- a) >< (3 :<<- b)
+            |  :=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
             |""".stripMargin
         )
       }
@@ -84,7 +84,7 @@ class WithNamesSpec extends BaseSpec {
         val s = good
         shouldNotCompile(
           """s.peek""",
-          """.*(\Q  :=  [Eye] >< (2 :<<- a) >< (3 :<<- b)\E)"""
+          """.*(\Q:=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b\E)"""
         )
       }
 
@@ -108,8 +108,9 @@ class WithNamesSpec extends BaseSpec {
 
         msg.toString.shouldBe(
           """
-            |¯\_(ツ)_/¯  ∄ [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
-            |    -<< 1 condition >>-
+            |Dimension mismatch
+            |[Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
+            |    -<< derived from 1 condition >>-
             ||>    [Eye] >< 2 >< 3
             |""".stripMargin
         )
@@ -137,7 +138,7 @@ class WithNamesSpec extends BaseSpec {
 
       shouldNotCompile(
         "s.eval",
-        ".*(\\Q  :=  [Eye] >< (2 :<<- a) >< (3 :<<- b)\\E)"
+        ".*(\\Q  :=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b\\E)"
       )
     }
   }

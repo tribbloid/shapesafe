@@ -4,7 +4,7 @@ import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape._
 import shapeless.ops.hlist.At
@@ -17,9 +17,12 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 ](
     s1: S1 with Shape,
     index: I
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.^[S1]
+    with CanRefute {
 
   override type _Peek = Peek.InfixW[S1, " GetSubscript ", I]
+
+  override type _Refute = "Index not found"
 }
 
 object GetSubscript {

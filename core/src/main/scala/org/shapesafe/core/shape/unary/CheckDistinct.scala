@@ -1,23 +1,25 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.InfoCT.Peek
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
-import singleton.ops.+
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 
 // all names must be distinctive - no duplication allowed
 case class CheckDistinct[
     S1 <: Shape
 ](
     s1: S1 with Shape
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.^[S1]
+    with CanRefute {
 
   override type _Peek = Peek.PrefixW1["Distinct", S1]
+
+  override type _Refute = "Names has duplicates"
 }
 
 object CheckDistinct {
 
-  import ProveShape._
   import ProveShape.Factory._
+  import ProveShape._
 
   implicit def simplify[
       S1 <: Shape,

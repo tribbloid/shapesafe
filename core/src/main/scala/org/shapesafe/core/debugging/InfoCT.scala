@@ -23,7 +23,7 @@ object InfoCT {
 
   trait CanPeek {
 
-    protected[InfoCT] type _Peek
+    type _Peek
   }
 
   type Peek[T <: CanPeek] = StrOrRaw[
@@ -44,7 +44,7 @@ object InfoCT {
 
   trait CanRefute {
 
-    protected[InfoCT] type _Refute
+    type _Refute
   }
   type Refute[T <: CanRefute] = StrOrRaw[
     T#_Refute
@@ -54,7 +54,7 @@ object InfoCT {
 
   type ReportMsg[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time
 
-  val LF = Witness("\n")
+//  val LF = Witness("\n")
 
   val EMPTY = Witness("")
 
@@ -67,7 +67,7 @@ object InfoCT {
   val ENTAILS =
     Witness("""  :=  """)
 
-  type EntailsLF = LF.T + ENTAILS.T
+  type EntailsLF = "\n" + ENTAILS.T
 
   val nonExisting = Witness(""" ∄ """)
 
@@ -75,18 +75,22 @@ object InfoCT {
 
   type Br[T] = "(" + T + ")"
 
-  val from1 = Witness("\n    -<< 1 condition >>-\n")
-  val from2 = Witness("\n    -<< 2 conditions >>-\n")
+  val FROM1 = Witness("\n\n    -<< derived from 1 condition >>-\n\n")
+  val FROM2 = Witness("\n\n    -<< derived from 2 conditions >>-\n\n")
 
-  type Refute1[SELF <: CanRefute, C1] =
+  type Refute1[SELF <: CanPeek with CanRefute, C1] =
     Refute[SELF] +
-      from1.T +
+      "\n\n" +
+      Peek[SELF] +
+      FROM1.T +
       C1
 
-  type Refute2[SELF <: CanRefute, C1, C2] =
-    Refute[SELF] +
-      from2.T +
+  type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
+    Peek[SELF] +
+      "\n\n" +
+      Refute[SELF] +
+      FROM2.T +
       C1 +
-      LF.T +
+      "\n\n" +
       C2
 }

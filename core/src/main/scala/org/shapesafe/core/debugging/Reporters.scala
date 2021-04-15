@@ -34,7 +34,7 @@ class Reporters[
           implicit
           lemma: A |- S
       ) =
-        forAll[A].==>(_ => MsgBroker.peek[Peek[A] + EntailsLF + Peek[S]])
+        forAll[A].==>(_ => MsgBroker.peek[Peek[S] + EntailsLF + Peek[A]])
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {

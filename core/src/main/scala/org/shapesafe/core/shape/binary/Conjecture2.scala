@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.Poly1Base
-import org.shapesafe.core.debugging.InfoCT.Refute2
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, Refute2}
 import org.shapesafe.core.debugging.Reporters.MsgBroker
 import org.shapesafe.core.debugging.Reporters.MsgBroker.Aux
 import org.shapesafe.core.shape.ProveShape.|-
@@ -21,12 +21,12 @@ object Conjecture2 {
     final override type SS2 = S2
   }
 
-  object Refute2 extends ShapeReporters.RefuteReporter[Conjecture2] {
+  object Refute2 extends ShapeReporters.RefuteReporter[Conjecture2 with CanRefute] {
 
     override object Step1 extends Poly1Base[Iub, MsgBroker] {
 
       implicit def evalS2[
-          SELF <: Conjecture2,
+          SELF <: Iub,
           M1 <: MsgBroker,
           M2 <: MsgBroker
       ](

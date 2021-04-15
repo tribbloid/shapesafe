@@ -12,9 +12,12 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.^[S1]
+    with CanRefute {
 
   override type _Peek = Peek.InfixW[S1, " |<<- ", N]
+
+  override type _Refute = "Dimension mismatch"
 }
 
 trait _Imp0 {}
