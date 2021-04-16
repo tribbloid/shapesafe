@@ -62,7 +62,7 @@ class NamesSpec extends BaseSpec {
       .toString
       .shouldBe(
         """
-        |[Eye] ><
+        |➊ ><
         |  a
         |""".stripMargin
       )

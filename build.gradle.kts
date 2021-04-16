@@ -136,18 +136,17 @@ allprojects {
                     "-Xlint:poly-implicit-overload",
                     "-Xlint:option-implicit",
 
-                    // "-Xlog-implicits",
-                    // "-Xlog-implicit-conversions",
 
                     "-Yissue-debug"
 //                    ,
 //                    "-Ytyper-debug",
 //                    "-Vtyper"
 
-                    // the following only works on scala 2.13
-//                        ,
-//                        "-Xlint:implicit-not-found",
-//                        "-Xlint:implicit-recursion"
+//                    ,
+//                    "-Xlog-implicits",
+//                    "-Xlog-implicit-conversions",
+//                    "-Xlint:implicit-not-found",
+//                    "-Xlint:implicit-recursion"
 
                 )
 

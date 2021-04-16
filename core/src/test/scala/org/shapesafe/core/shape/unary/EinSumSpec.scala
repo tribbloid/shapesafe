@@ -22,23 +22,23 @@ class EinSumSpec extends BaseSpec {
 
     r.treeString.shouldBe(
       """
-        |Reorder┏ [Eye] ><
+        |Reorder┏ ➊ ><
         |       ┃   x ><
         |       ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
-        |       :  ‣ |<<-┏ [Eye] ><
+        |       :  ‣ |<<-┏ ➊ ><
         |       :        ┃   x ><
         |       :        ┃   y
-        |       :     ‣ [Eye] ><
+        |       :     ‣ ➊ ><
         |       :         1:Literal ><
         |       :         2:Literal
         |       ‣ CheckEinSum
-        |          ‣ |<<-┏ [Eye] ><
+        |          ‣ |<<-┏ ➊ ><
         |                ┃   i ><
         |                ┃   j
-        |             ‣ [Eye] ><
+        |             ‣ ➊ ><
         |                 3:Literal ><
         |                 4:Literal
         |""".stripMargin
@@ -179,7 +179,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  1:Literal :<<- i
           |""".stripMargin
       )
@@ -200,7 +200,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin
@@ -221,7 +221,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin

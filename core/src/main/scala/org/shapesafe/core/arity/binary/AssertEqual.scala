@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
 import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.{Peek, Refute}
+import org.shapesafe.core.debugging.InfoCT.{ForArity, Peek}
 
 trait AssertEqual_Imp0 {
 
@@ -63,7 +63,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       bound2: A2 |-< Const[S2],
       lemma: RequireMsg[
         S1 == S2,
-        Refute[Const[S1] :==! Const[S2]]
+        ForArity.Refute0[Const[S1] :==! Const[S2]]
       ]
   ): (A1 :==! A2) =>> Const[S1] = {
 

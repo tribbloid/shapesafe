@@ -2,7 +2,7 @@ package org.shapesafe.core.debugging
 
 import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
-import singleton.ops.{+, ITE, IsString, RequireMsg}
+import singleton.ops.{+, ITE, IsString}
 
 object InfoCT {
 
@@ -29,6 +29,10 @@ object InfoCT {
   type Peek[T <: CanPeek] = StrOrRaw[
     T#_Peek
   ]
+
+//  type Peek0[T <: CanPeek] = Peek[T] +
+//    "\n"
+
   object Peek {
 
     // TODO: brackets?
@@ -50,9 +54,43 @@ object InfoCT {
     T#_Refute
   ]
 
-  // TODO: add another instance that shows reasoning process?
+  object ForArity {
 
-  type ReportMsg[T] = RequireMsg[FALSE.T, T] // always fail, force the message to be displayed at compile time
+    val TRY_ARITY = Witness("\n\n| trying to prove arity >\n\n")
+
+    type Refute0[SELF <: CanPeek with CanRefute] =
+      Refute[SELF] +
+        TRY_ARITY.T +
+        Peek[SELF]
+
+    type Refute1[SELF <: CanPeek with CanRefute, C1] =
+      Refute[SELF] +
+        TRY_ARITY.T +
+        Peek[SELF] +
+        FROM1.T +
+        C1
+
+    type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
+      Peek[SELF] +
+        TRY_ARITY.T +
+        Refute[SELF] +
+        FROM2.T +
+        C1 +
+        "\n\n" +
+        C2
+  }
+
+  object ForShape {
+
+    val TRY_SHAPE = Witness("\n\n| trying to prove shape >\n\n")
+
+    type Refute0[SELF <: CanPeek with CanRefute] =
+      Refute[SELF] +
+        TRY_SHAPE.T +
+        Peek[SELF]
+  }
+
+  // TODO: add another instance that shows reasoning process?
 
 //  val LF = Witness("\n")
 
@@ -75,22 +113,6 @@ object InfoCT {
 
   type Br[T] = "(" + T + ")"
 
-  val FROM1 = Witness("\n\n    -<< derived from 1 condition >>-\n\n")
-  val FROM2 = Witness("\n\n    -<< derived from 2 conditions >>-\n\n")
-
-  type Refute1[SELF <: CanPeek with CanRefute, C1] =
-    Refute[SELF] +
-      "\n\n" +
-      Peek[SELF] +
-      FROM1.T +
-      C1
-
-  type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
-    Peek[SELF] +
-      "\n\n" +
-      Refute[SELF] +
-      FROM2.T +
-      C1 +
-      "\n\n" +
-      C2
+  val FROM1 = Witness("\n\n| with 1 prior >\n\n")
+  val FROM2 = Witness("\n\n| with 2 priors >\n\n")
 }

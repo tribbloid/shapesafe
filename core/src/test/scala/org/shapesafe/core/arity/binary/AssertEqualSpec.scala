@@ -96,7 +96,7 @@ class AssertEqualSpec extends ArityFixture {
 
         shouldNotCompile(
           "op.eval",
-          """.*(3 != 5)"""
+          """.*(3 != 5).*"""
         )
       }
 
@@ -106,7 +106,7 @@ class AssertEqualSpec extends ArityFixture {
 
         shouldNotCompile(
           "op.eval",
-          """.*(3 != 9)"""
+          """.*(3 != 9).*"""
         )
       }
     }

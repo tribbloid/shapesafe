@@ -100,7 +100,7 @@ class LeafAritySpec extends BaseSpec {
 
     shouldNotCompile(
       """v1.peek""",
-      """.*(3)"""
+      """.*(3).*"""
     )
 
   }

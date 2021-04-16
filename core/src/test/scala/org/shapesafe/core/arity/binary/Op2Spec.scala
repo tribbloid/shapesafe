@@ -103,7 +103,7 @@ class Op2Spec extends ArityFixture {
 
       shouldNotCompile(
         """(b :+ c).peek""",
-        """.*(\Q  :=  4 + 5\E)"""
+        """.*(\Q  :=  4 + 5\E).*"""
       )
     }
 
@@ -112,7 +112,7 @@ class Op2Spec extends ArityFixture {
 
       shouldNotCompile(
         """(Arity.Unprovable :+ c).peek""",
-        """.*(\?\?\? \+ 5)"""
+        """.*(\?\?\? \+ 5).*"""
       )
     }
   }

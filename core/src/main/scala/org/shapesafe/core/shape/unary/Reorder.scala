@@ -11,8 +11,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 ](
     s1: S1 with Shape,
     indices: II
-) extends Conjecture1.^[S1]
-    with CanRefute {
+) extends Conjecture1.^[S1] {
 
   override type _Peek = Peek.InfixW[S1, " Reorder ", indices.AsIndices]
 

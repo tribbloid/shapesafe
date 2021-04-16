@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape.unary
 
+import org.shapesafe.core.debugging.ImplicitMsgs.ErrorIfNotFound
 import org.shapesafe.core.debugging.InfoCT._
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
@@ -12,15 +13,35 @@ case class |<<-[
 ](
     s1: S1 with Shape,
     newNames: N
-) extends Conjecture1.^[S1]
-    with CanRefute {
+) extends Conjecture1.^[S1] {
 
   override type _Peek = Peek.InfixW[S1, " |<<- ", N]
 
   override type _Refute = "Dimension mismatch"
 }
 
-trait _Imp0 {}
+trait _Imp0 {
+
+  import org.shapesafe.core.shape.ProveShape.Factory._
+
+  implicit def bullshit[ // TODO: why this can't be merged into below?
+      S1 <: Shape,
+      P1 <: LeafShape,
+      N <: Names,
+      HO <: HList
+  ](
+      implicit
+      lemma: S1 |-< P1,
+      zip2: ErrorIfNotFound[
+        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//        "ABC"
+        ForShape.Refute0[|<<-[P1, N]]
+      ],
+      toShape: LeafShape.FromRecord.Case[HO]
+  ): |<<-[S1, N] =>> toShape.Out = {
+    ???
+  }
+}
 
 object |<<- extends _Imp0 {
 
@@ -35,6 +56,11 @@ object |<<- extends _Imp0 {
       implicit
       lemma: S1 |-< P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//      zip2: ErrorIfNotFound[
+//        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//        "ABC"
+//        //        Refute0[|<<-[P1, N]]
+//      ],
       toShape: LeafShape.FromRecord.Case[HO]
   ): |<<-[S1, N] =>> toShape.Out = {
     forAll[|<<-[S1, N]].=>> { src =>
@@ -43,7 +69,7 @@ object |<<- extends _Imp0 {
 
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
-      val zipped: HO = values.zipWithKeys(keys)
+      val zipped: HO = values.zipWithKeys(keys)(zip)
       LeafShape.FromRecord(zipped)
     }
   }

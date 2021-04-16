@@ -4,7 +4,6 @@ import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape
-import org.shapesafe.core.shape.unary.Conjecture1.Refute1
 import org.shapesafe.core.shape.{Names, Shape}
 
 class WithNamesSpec extends BaseSpec {
@@ -73,8 +72,8 @@ class WithNamesSpec extends BaseSpec {
 
         msg.toString.shouldBe(
           """
-            ||>    [Eye] >< (2 :<<- a) >< (3 :<<- b)
-            |  :=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
+            ||>    ➊ >< (2 :<<- a) >< (3 :<<- b)
+            |  :=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b
             |""".stripMargin
         )
       }
@@ -84,7 +83,7 @@ class WithNamesSpec extends BaseSpec {
         val s = good
         shouldNotCompile(
           """s.peek""",
-          """.*(\Q:=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b\E)"""
+          """.*(\Q:=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b\E).*"""
         )
       }
 
@@ -93,42 +92,37 @@ class WithNamesSpec extends BaseSpec {
         val s = bad
         shouldNotCompile(
           """s.peek""",
-          """.*(\Q[Eye] >< 2 >< 3 |<<- [Eye] >< a >< b >< c\E)"""
+          """.*(\Q➊ >< 2 >< 3 |<<- ➊ >< a >< b >< c\E).*"""
         )
       }
     }
 
-    describe("refute") {
-
-      it("getReportMsg") {
-
-        val msg = Refute1
-          .From[good._Shape]()
-          .getReportMsg
-
-        msg.toString.shouldBe(
-          """
-            |Dimension mismatch
-            |[Eye] >< 2 >< 3 |<<- [Eye] >< a >< b
-            |    -<< derived from 1 condition >>-
-            ||>    [Eye] >< 2 >< 3
-            |""".stripMargin
-        )
-      }
-    }
+//    describe("refute") {
+//
+//      it("getReportMsg") {
+//
+//        val msg = Refute1
+//          .From[good._Shape]()
+//          .getReportMsg
+//
+//        msg.toString.shouldBe(
+//          """
+//            |Dimension mismatch
+//            |➊ >< 2 >< 3 |<<- ➊ >< a >< b
+//            |    -<< derived from 1 condition >>-
+//            ||>    ➊ >< 2 >< 3
+//            |""".stripMargin
+//        )
+//      }
+//    }
 
     it("operands has different dimensions") {
 
       val s = bad
 
       shouldNotCompile(
-        "Conjecture1.refute1[s._Shape]",
-        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
-      )
-
-      shouldNotCompile(
         "s.eval",
-        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
+        ".*(\\QDimension mismatch\\E).*"
       )
     }
 
@@ -138,7 +132,7 @@ class WithNamesSpec extends BaseSpec {
 
       shouldNotCompile(
         "s.eval",
-        ".*(\\Q  :=  [Eye] >< 2 >< 3 |<<- [Eye] >< a >< b\\E)"
+        ".*(\\QDimension mismatch\\E).*"
       )
     }
   }

@@ -9,7 +9,7 @@ object TypeVizCT {
 
   class TypeOfCT[A] {
 
-    def debug: Unit = macro Macros.show[A]
+    def peek: Unit = macro Macros.show[A]
 
     def shouldBe[B]: Unit = macro Macros.shouldBe[A, B]
   }

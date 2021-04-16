@@ -10,6 +10,8 @@ import scala.language.implicitConversions
 
 trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
+  import StaticTuples._
+
   final type UpperBound = UB
 
   trait Impl extends IDMixin with CanPeek { // TODO: rename to `Tuple`
@@ -32,8 +34,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override def asList: List[UB] = Nil
 
-    override lazy val toString = "[Eye]"
-    final override type _Peek = "[Eye]"
+    override lazy val toString: _Peek = EYE.value
+    final override type _Peek = EYE.T
   }
   override lazy val Eye = new Eye
 
@@ -69,6 +71,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
 object StaticTuples {
 
+  val EYE = Witness("➊")
 //  implicit def toEyeOps(s: TupleSystem[_]): s.Impl.InfixOps[s.Eye] = new s.Impl.InfixOps(s.Eye)
 
   trait Total[UB] extends StaticTuples[UB] {

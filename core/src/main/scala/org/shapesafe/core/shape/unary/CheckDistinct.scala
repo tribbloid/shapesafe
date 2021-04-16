@@ -8,8 +8,7 @@ case class CheckDistinct[
     S1 <: Shape
 ](
     s1: S1 with Shape
-) extends Conjecture1.^[S1]
-    with CanRefute {
+) extends Conjecture1.^[S1] {
 
   override type _Peek = Peek.PrefixW1["Distinct", S1]
 

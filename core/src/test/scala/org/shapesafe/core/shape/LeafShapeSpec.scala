@@ -68,7 +68,7 @@ class LeafShapeSpec extends BaseSpec {
 
     shape.toString.shouldBe(
       """
-        |[Eye] ><
+        |➊ ><
         |  2:Literal :<<- x ><
         |  3:Literal ><
         |  4:Literal :<<- z
@@ -166,7 +166,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  4:Literal :<<- i
           |""".stripMargin
       )
@@ -182,7 +182,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  4:Literal :<<- i ><
           |  3:Literal :<<- j ><
           |  2:Literal :<<- k
@@ -203,7 +203,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  4:Derived :<<- i
           |""".stripMargin
       )
@@ -219,7 +219,7 @@ class LeafShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  4:Derived :<<- i ><
           |  3:Derived :<<- j ><
           |  2:Derived :<<- k
@@ -367,7 +367,7 @@ class LeafShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """Shape.peek""",
-        """.*(\[EYE\])"""
+        """.*(➊).*"""
       )
     }
 
@@ -377,7 +377,7 @@ class LeafShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """s.peek""",
-        """.*(\[EYE\] >< 1 >< 2)"""
+        """.*( >< 1 >< 2).*"""
       )
     }
 
@@ -387,7 +387,7 @@ class LeafShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """s.peek""",
-        """.*(\Q[Eye] >< (1 :<<- a) >< (2 :<<- b)\E)"""
+        """.*(\Q >< (1 :<<- a) >< (2 :<<- b)\E).*"""
       )
     }
   }

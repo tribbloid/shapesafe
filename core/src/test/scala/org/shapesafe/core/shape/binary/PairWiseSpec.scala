@@ -16,10 +16,10 @@ class PairWiseSpec extends BaseSpec {
     rr.treeString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._PairWise ‣ PairWise.On
-        | ‣ [Eye] ><
+        | ‣ ➊ ><
         | :   2:Literal ><
         | :   3:Literal
-        | ‣ [Eye] ><
+        | ‣ ➊ ><
         |     4:Literal ><
         |     5:Literal
         |""".stripMargin
@@ -39,7 +39,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  6:Derived ><
           |  8:Derived
           |""".stripMargin
@@ -52,7 +52,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  8:Derived ><
           |  15:Derived
           |""".stripMargin
@@ -81,7 +81,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  7:Derived ><
           |  9:Derived
           |""".stripMargin
@@ -89,7 +89,7 @@ class PairWiseSpec extends BaseSpec {
 
 //      shouldNotCompile(
 //        "rr.eval",
-//        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
+//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
 //      )
     }
 
@@ -102,7 +102,7 @@ class PairWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |[Eye] ><
+          |➊ ><
           |  10:Derived ><
           |  18:Derived
           |""".stripMargin
@@ -110,12 +110,12 @@ class PairWiseSpec extends BaseSpec {
 
 //      shouldNotCompile(
 //        "rr.eval",
-//        ".*(\\Q|>    [Eye] >< 2 >< 3\\E)"
+//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
 //      )
 //
 //      shouldNotCompile(
 //        "s.eval",
-//        ".*(\\Q  :=  [Eye] >< (2 :<<- a) >< (3 :<<- b)\\E)"
+//        ".*(\\Q  :=  ➊ >< (2 :<<- a) >< (3 :<<- b)\\E)"
 //      )
     }
   }

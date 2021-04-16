@@ -1,9 +1,9 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.{PEEK, REFUTE, _}
+import org.shapesafe.core.debugging.InfoCT.{PEEK, _}
 import org.shapesafe.core.{Poly1Base, ProofScope}
-import singleton.ops.{+, ToString}
-import singleton.ops.impl.OpString
+import singleton.ops.impl.{Op, OpString}
+import singleton.ops.{+, RequireMsg, ToString}
 
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
@@ -16,13 +16,14 @@ class Reporters[
 
   trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ReporterBase[IUB] {
 
-    import MsgBroker._
     import scope._
+
+    override type ReportMsg[T] = RequireMsg[FALSE.T, T]
 
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 
       implicit def raw[A <: Iub] =
-        forAll[A].==>(_ => MsgBroker.peek[Peek[A]])
+        forAll[A].==>(_ => MsgBroker.peek[Peek[A] + "\n"])
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -34,24 +35,29 @@ class Reporters[
           implicit
           lemma: A |- S
       ) =
-        forAll[A].==>(_ => MsgBroker.peek[Peek[S] + EntailsLF + Peek[A]])
+        forAll[A].==>(_ => MsgBroker.peek[Peek[S] + EntailsLF + Peek[A] + "\n"])
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyPreferred[S <: TGT with Iub] =
-        forAll[S].==>(_ => MsgBroker.peek[Peek[S]])
+        forAll[S].==>(_ => MsgBroker.peek[Peek[S] + "\n"])
     }
 
     override object Step1 extends Step1_Imp1
   }
 
-  trait RefuteReporter[IUB <: CanRefute] extends ReporterBase[IUB] {}
+//  trait RefuteReporter[IUB <: CanRefute] extends ReporterBase[IUB] {
+//
+//    override type ReportMsg[T] = RequireMsgSym[FALSE.T, T, Warn]
+//  }
 }
 
 object Reporters {
 
   trait ReporterBase[IUB] extends Poly1Base[IUB, Unit] {
+
+    type ReportMsg[T] <: Op
 
     final type Iub = IUB
 
