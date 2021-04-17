@@ -51,8 +51,8 @@ object LeafArity extends LeafArity_Imp0 {
 
   object Const {}
 
-  class Derived[S <: Op](override val singleton: S) extends Const[S] {
-    override lazy val runtimeArity: Int = singleton.value.asInstanceOf[Int]
+  class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends Const[OUT] {
+    override lazy val runtimeArity: Int = singleton
   }
 
   object Derived {
@@ -60,7 +60,9 @@ object LeafArity extends LeafArity_Imp0 {
     implicit def summon[S <: Op](
         implicit
         s: S
-    ): Derived[S] = new Derived[S](s)
+    ): Derived[S, s.OutInt] = {
+      new Derived[S, s.OutInt](s.value.asInstanceOf[s.OutInt])
+    }
   }
 
   // this makes it impossible to construct directly from Int type

@@ -23,7 +23,7 @@ case class InvarDomain[
   def forOp2[??[X1, X2] <: Op](
       implicit
       lemma: S1 ?? S2
-  ): Op2.UB[??]#On[A1, A2] =>> LeafArity.Derived[S1 ?? S2] = ProveArity.forAll[Op2.UB[??]#On[A1, A2]].=>> { v =>
+  ) = ProveArity.forAll[Op2.UB[??]#On[A1, A2]].=>> { v =>
     LeafArity.Derived.summon[S1 ?? S2](lemma)
   }
 

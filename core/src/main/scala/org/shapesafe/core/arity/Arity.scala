@@ -62,7 +62,7 @@ object Arity extends Arity_Imp0 {
     def apply[N <: Nat](v: N)(
         implicit
         ev: NatAsOp[N]
-    ): ^[Derived[NatAsOp[N]]] = {
+    ): ^[Derived[NatAsOp[N], ev.OutInt]] = {
 
       ^(Derived.summon[NatAsOp[N]](ev))
     }

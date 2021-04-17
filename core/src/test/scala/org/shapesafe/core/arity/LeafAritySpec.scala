@@ -36,12 +36,12 @@ class LeafAritySpec extends BaseSpec {
       //    v1.core.requireEqual(100)
 
       {
-        val v = implicitly[Derived[ToInt[big.nat.N]]]
+        val v = Derived.summon[ToInt[big.nat.N]]
         validate(v, 100)
       }
 
       {
-        val v = implicitly[Derived[ToInt[big.w.T]]]
+        val v = Derived.summon[ToInt[big.w.T]]
         validate(v, 100)
       }
     }
