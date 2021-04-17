@@ -18,7 +18,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
   override type _Refute = "Indices not found"
 }
 
-object Reorder {
+trait Reorder_Imp0 {
 
   import ProveShape._
   import Factory._
@@ -29,11 +29,18 @@ object Reorder {
       II <: IndicesMagnet
   ](
       implicit
-      lemma: S1 |-< P1,
+      lemma: S1 |- P1,
       msg: ErrorMsg[ForShape.Refute0[Reorder[P1, II]]]
   ): Reorder[S1, II] =>> LeafShape = {
     ???
   }
+
+}
+
+object Reorder extends Reorder_Imp0 {
+
+  import ProveShape._
+  import Factory._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
@@ -42,7 +49,7 @@ object Reorder {
       II <: IndicesMagnet
   ](
       implicit
-      lemma1: |-<[S1, P1],
+      lemma1: S1 |- P1,
       lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
   ): Reorder[S1, II] =>> lemma2.Out = {
 

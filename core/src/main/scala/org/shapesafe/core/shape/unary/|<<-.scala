@@ -19,7 +19,7 @@ case class |<<-[
   override type _Refute = "Dimension mismatch"
 }
 
-trait _Imp0 {
+trait WithMames_Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
@@ -29,32 +29,14 @@ trait _Imp0 {
       N <: Names
   ](
       implicit
-      lemma: S1 |-< P1,
+      lemma: S1 |- P1,
       msg: ErrorMsg[ForShape.Refute0[|<<-[P1, N]]]
   ): |<<-[S1, N] =>> LeafShape = {
     ???
   }
-
-//  implicit def bullshit[ // TODO: why this can't be merged into below?
-//      S1 <: Shape,
-//      P1 <: LeafShape,
-//      N <: Names,
-//      HO <: HList
-//  ](
-//      implicit
-//      lemma: S1 |-< P1,
-//      zip2: ErrorIfNotFound[
-//        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-//        //        "ABC"
-//        ForShape.Refute0[|<<-[P1, N]]
-//      ],
-//      toShape: LeafShape.FromRecord.Case[HO]
-//  ): |<<-[S1, N] =>> toShape.Out = {
-//    ???
-//  }
 }
 
-object |<<- extends _Imp0 {
+object |<<- extends WithMames_Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
@@ -65,13 +47,14 @@ object |<<- extends _Imp0 {
       HO <: HList
   ](
       implicit
-      lemma: S1 |-< P1,
+      lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
 //      zip2: ErrorIfNotFound[
 //        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
 //        "ABC"
 //        //        Refute0[|<<-[P1, N]]
 //      ],
+      // TODO: why this can't work?
       toShape: LeafShape.FromRecord.Case[HO]
   ): |<<-[S1, N] =>> toShape.Out = {
     forAll[|<<-[S1, N]].=>> { src =>

@@ -32,8 +32,8 @@ trait OuterProduct_Imp0 {
       HO <: HList
   ](
       implicit
-      lemma1: S1 |-< P1,
-      lemma2: S2 |-< P2,
+      lemma1: S1 |- P1,
+      lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
       toShape: LeafShape.FromStatic.Case[HO]
   ): OuterProduct[S1, S2] =>> toShape.Out = {
@@ -60,8 +60,8 @@ object OuterProduct extends OuterProduct_Imp0 {
       P2 <: LeafShape.Eye >< A2
   ](
       implicit
-      lemma1: S1 |-< P1,
-      lemma2: S2 |-< P2
+      lemma1: S1 |- P1,
+      lemma2: S2 |- P2
   ): OuterProduct[S1, S2] =>> (P1 >< A2) = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>

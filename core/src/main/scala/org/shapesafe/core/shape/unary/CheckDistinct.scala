@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
+import org.shapesafe.core.arity.LeafArity
+import org.shapesafe.core.debugging.InfoCT.{CanRefute, ErrorMsg, ForShape, Peek}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 
 // all names must be distinctive - no duplication allowed
@@ -15,7 +16,24 @@ case class CheckDistinct[
   override type _Refute = "Names has duplicates"
 }
 
-object CheckDistinct {
+trait CheckDistinct_Imp0 {
+
+  import ProveShape.Factory._
+  import ProveShape._
+
+  implicit def refute[
+      S1 <: Shape,
+      P1 <: LeafShape
+  ](
+      implicit
+      lemma: S1 |- P1,
+      msg: ErrorMsg[ForShape.Refute0[CheckDistinct[P1]]]
+  ): CheckDistinct[S1] =>> LeafShape = {
+    ???
+  }
+}
+
+object CheckDistinct extends CheckDistinct_Imp0 {
 
   import ProveShape.Factory._
   import ProveShape._
