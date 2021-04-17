@@ -32,21 +32,21 @@ trait ArityOpsLike extends HasArity {
     object _AppendByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
-      type Symbol = "AppendByName(" + Infix.this.Symbol + ")"
+      type Symbol = "AppendByName[" + Infix.this.Symbol + "]"
     }
 //    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type Symbol = "SquashByName(" + Infix.this.Symbol + ")"
+      type Symbol = "SquashByName[" + Infix.this.Symbol + "]"
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _PairWise extends PairWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type Symbol = "PairWise(" + Infix.this.Symbol + ")"
+      type Symbol = "PairWise[" + Infix.this.Symbol + "]"
     }
   }
 

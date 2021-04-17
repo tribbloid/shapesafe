@@ -1,13 +1,12 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.FALSE
-import singleton.ops.{RequireMsg, ToString}
+import org.shapesafe.core.debugging.InfoCT.ErrorMsg
 
 object ImplicitMsgs {
 
   trait Proto_Imp1 {
 
-    type ReportMsg[T] = RequireMsg[FALSE.T, T]
+    type ReportMsg[T] = ErrorMsg[T]
 
     trait Case {
       type Self

@@ -18,7 +18,7 @@ class Reporters[
 
     import scope._
 
-    override type ReportMsg[T] = RequireMsg[FALSE.T, T]
+    override type ReportMsg[T] = ErrorMsg[T]
 
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 

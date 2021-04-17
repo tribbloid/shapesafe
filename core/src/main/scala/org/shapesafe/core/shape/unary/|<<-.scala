@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.ImplicitMsgs.ErrorIfNotFound
 import org.shapesafe.core.debugging.InfoCT._
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
@@ -24,23 +23,35 @@ trait _Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
-  implicit def bullshit[ // TODO: why this can't be merged into below?
+  implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      N <: Names,
-      HO <: HList
+      N <: Names
   ](
       implicit
       lemma: S1 |-< P1,
-      zip2: ErrorIfNotFound[
-        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-//        "ABC"
-        ForShape.Refute0[|<<-[P1, N]]
-      ],
-      toShape: LeafShape.FromRecord.Case[HO]
-  ): |<<-[S1, N] =>> toShape.Out = {
+      msg: ErrorMsg[ForShape.Refute0[|<<-[P1, N]]]
+  ): |<<-[S1, N] =>> LeafShape = {
     ???
   }
+
+//  implicit def bullshit[ // TODO: why this can't be merged into below?
+//      S1 <: Shape,
+//      P1 <: LeafShape,
+//      N <: Names,
+//      HO <: HList
+//  ](
+//      implicit
+//      lemma: S1 |-< P1,
+//      zip2: ErrorIfNotFound[
+//        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
+//        //        "ABC"
+//        ForShape.Refute0[|<<-[P1, N]]
+//      ],
+//      toShape: LeafShape.FromRecord.Case[HO]
+//  ): |<<-[S1, N] =>> toShape.Out = {
+//    ???
+//  }
 }
 
 object |<<- extends _Imp0 {

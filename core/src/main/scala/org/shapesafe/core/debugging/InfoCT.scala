@@ -2,7 +2,7 @@ package org.shapesafe.core.debugging
 
 import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
-import singleton.ops.{+, ITE, IsString}
+import singleton.ops.{+, ITE, IsString, RequireMsg, RequireMsgSym}
 
 object InfoCT {
 
@@ -56,7 +56,7 @@ object InfoCT {
 
   object ForArity {
 
-    val TRY_ARITY = Witness("\n\n| trying to prove arity >\n\n")
+    val TRY_ARITY = Witness("\n\n| when proving arity >\n\n")
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
@@ -82,7 +82,7 @@ object InfoCT {
 
   object ForShape {
 
-    val TRY_SHAPE = Witness("\n\n| trying to prove shape >\n\n")
+    val TRY_SHAPE = Witness("\n\n| when proving shape >\n\n")
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
@@ -97,6 +97,9 @@ object InfoCT {
   val EMPTY = Witness("")
 
   val FALSE = Witness(false)
+
+  type ErrorMsg[T] = RequireMsg[FALSE.T, T]
+  type WarnMsg[T] = RequireMsgSym[FALSE.T, T, singleton.ops.Warn]
 
   val REFUTE =
     Witness("""¯\_(ツ)_/¯ """)

@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
+import org.shapesafe.core.debugging.InfoCT.{ErrorMsg, ForShape, Peek}
 import org.shapesafe.core.shape.{ProveShape, _}
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
@@ -22,6 +22,18 @@ object Reorder {
 
   import ProveShape._
   import Factory._
+
+  implicit def refute[
+      S1 <: Shape,
+      P1 <: LeafShape,
+      II <: IndicesMagnet
+  ](
+      implicit
+      lemma: S1 |-< P1,
+      msg: ErrorMsg[ForShape.Refute0[Reorder[P1, II]]]
+  ): Reorder[S1, II] =>> LeafShape = {
+    ???
+  }
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
