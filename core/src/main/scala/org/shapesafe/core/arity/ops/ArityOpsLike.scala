@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
-import org.shapesafe.core.shape.binary.PairWise
+import org.shapesafe.core.shape.binary.DimensionWise
 import org.shapesafe.core.shape.unary.ReduceByName
 import singleton.ops
 import singleton.ops.+
@@ -43,7 +43,7 @@ trait ArityOpsLike extends HasArity {
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
-    object _PairWise extends PairWise with _HasOuter {
+    object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
       type Symbol = "PairWise[" + Infix.this.Symbol + "]"

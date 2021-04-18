@@ -6,11 +6,14 @@ trait MatrixOps extends HasShape {
 
   import org.shapesafe.core.shape.Names._
 
-  def :*[THAT <: ShapeAPI](that: THAT) = {
+  def matMul[THAT <: ShapeAPI](that: THAT) = {
     val s1 = api |<<- ij
     val s2 = that |<<- jk
 
     s1.einSum(s2) --> ik
+  }
 
+  def mat_*[THAT <: ShapeAPI](that: THAT) = {
+    matMul[that.type](that)
   }
 }

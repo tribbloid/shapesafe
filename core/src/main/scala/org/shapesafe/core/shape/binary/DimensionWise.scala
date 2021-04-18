@@ -9,7 +9,7 @@ import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
 
-trait PairWise {
+trait DimensionWise {
 
   val op: Op2Like
   type Symbol
@@ -21,7 +21,7 @@ trait PairWise {
   ] extends Conjecture2.^[S1, S2]
       with HasOuter {
 
-    override def outer: PairWise.this.type = PairWise.this
+    override def outer: DimensionWise.this.type = DimensionWise.this
 
     def s1: S1 with Shape
     def s2: S2 with Shape

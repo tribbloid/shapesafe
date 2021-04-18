@@ -148,17 +148,17 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     result.^
   }
 
-  def zipWith(
+  def dimensionWise(
       infix: ArityOps.Infix,
       that: ShapeAPI
-  ): ^[infix._PairWise.On[_Shape, that._Shape]] = {
+  ): ^[infix._DimensionWise.On[_Shape, that._Shape]] = {
 
-    infix._PairWise.On(this, that).^
+    infix._DimensionWise.On(this, that).^
   }
 
-  def shouldEqual(
+  def elementWise(
       that: ShapeAPI
-  ): ^[ArityOps.:==!._PairWise.On[_Shape, that._Shape]] = zipWith(ArityOps.:==!, that)
+  ): ^[ArityOps.:==!._DimensionWise.On[_Shape, that._Shape]] = dimensionWise(ArityOps.:==!, that)
 }
 
 object ShapeAPI {

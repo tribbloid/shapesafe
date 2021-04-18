@@ -4,18 +4,18 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
 
-class PairWiseSpec extends BaseSpec {
+class DimensionWiseSpec extends BaseSpec {
 
   it("treeString") {
     val s1 = Shape(2, 3)
 
     val s2 = Shape(4, 5)
 
-    val rr = s1.zipWith(ArityOps.:+, s2)
+    val rr = s1.dimensionWise(ArityOps.:+, s2)
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._PairWise ‣ PairWise.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On
         | ‣ ➊ ><
         | :   2:Literal ><
         | :   3:Literal
@@ -33,7 +33,7 @@ class PairWiseSpec extends BaseSpec {
 
     it("direct sum") {
 
-      val rr = s1.zipWith(ArityOps.:+, s2)
+      val rr = s1.dimensionWise(ArityOps.:+, s2)
 
 //      TypeVizCT.infer(rr.shape).show
 
@@ -48,7 +48,7 @@ class PairWiseSpec extends BaseSpec {
 
     it("Kronecker product") {
 
-      val rr = s1.zipWith(ArityOps.:*, s2)
+      val rr = s1.dimensionWise(ArityOps.:*, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -61,7 +61,7 @@ class PairWiseSpec extends BaseSpec {
 
     it("shouldEqual") {
 
-      s1.shouldEqual(s1).eval
+      s1.elementWise(s1).eval
 
       shouldNotCompile(
         """s1.shouldEqual(s2).eval"""
@@ -77,7 +77,7 @@ class PairWiseSpec extends BaseSpec {
       val s1 = Shape(2, 3)
       val s2 = Shape(4, 5, 6)
 
-      val rr = s1.zipWith(ArityOps.:+, s2)
+      val rr = s1.dimensionWise(ArityOps.:+, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -98,7 +98,7 @@ class PairWiseSpec extends BaseSpec {
       val s1 = Shape(2, 3).|<<-*("a", "b")
       val s2 = Shape(4, 5, 6).|<<-*("a", "b", "c")
 
-      val rr = s1.zipWith(ArityOps.:*, s2)
+      val rr = s1.dimensionWise(ArityOps.:*, s2)
 
       rr.eval.toString.shouldBe(
         """
