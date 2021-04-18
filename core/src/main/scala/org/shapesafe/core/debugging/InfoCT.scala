@@ -1,5 +1,6 @@
 package org.shapesafe.core.debugging
 
+import org.shapesafe.core.debugging.InfoCT.Label
 import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString, RequireMsg, RequireMsgSym}
@@ -54,25 +55,29 @@ object InfoCT {
     T#_Refute
   ]
 
+  val shades_+ = Witness(" ░▒▓")
+
+  type Label[T] = "\u001b[7m" + T + shades_+.T + "\u001b[0m" + "\n\n"
+
   object ForArity {
 
-    val TRY_ARITY = Witness("\n\n| when proving arity >\n\n")
+    type TryArity = "\n\n" + Label["... when proving arity"]
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
-        TRY_ARITY.T +
+        TryArity +
         Peek[SELF]
 
     type Refute1[SELF <: CanPeek with CanRefute, C1] =
       Refute[SELF] +
-        TRY_ARITY.T +
+        TryArity +
         Peek[SELF] +
         FROM1.T +
         C1
 
     type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
       Peek[SELF] +
-        TRY_ARITY.T +
+        TryArity +
         Refute[SELF] +
         FROM2.T +
         C1 +
@@ -82,11 +87,11 @@ object InfoCT {
 
   object ForShape {
 
-    val TRY_SHAPE = Witness("\n\n| when proving shape >\n\n")
+    type TryShape = "\n\n" + Label["... when proving shape"]
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
-        TRY_SHAPE.T +
+        TryShape +
         Peek[SELF]
   }
 
@@ -110,12 +115,14 @@ object InfoCT {
 
   type EntailsLF = "\n" + ENTAILS.T
 
-  val nonExisting = Witness(""" ∄ """)
+  type CannotEval = Label["cannot evaluate"]
+
+  val nonExisting = Witness(""" Undefined """)
 
   val impossible = Witness("IMPOSSIBLE!")
 
   type Br[T] = "(" + T + ")"
 
-  val FROM1 = Witness("\n\n| with 1 prior >\n\n")
-  val FROM2 = Witness("\n\n| with 2 priors >\n\n")
+  val FROM1 = Witness("\n\n... with 1 prior >\n\n")
+  val FROM2 = Witness("\n\n... with 2 priors >\n\n")
 }

@@ -48,7 +48,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   /**
     * assign new names
     */
-  object withNames {
+  object namedWith {
 
     def apply[N <: Names](newNames: N): ^[|<<-[_Shape, N]] = {
 
@@ -56,7 +56,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     }
   }
 
-  lazy val |<<- : withNames.type = withNames
+  lazy val |<<- : namedWith.type = namedWith
 
   // no need for Names constructor
   object named extends SingletonProductArgs {
@@ -71,7 +71,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
       val out = lemma.apply(reverse(v))
 
-      withNames.apply(out)
+      namedWith.apply(out)
     }
   }
 
@@ -140,12 +140,28 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     infix._SquashByName.On(this).^
   }
 
-  def transpose[N <: Names](names: N): ^[Reorder[CheckDistinct[_Shape], N]] = {
+  def transposeWith[N <: Names](names: N): ^[Reorder[CheckDistinct[_Shape], N]] = {
 
     val distinct = CheckDistinct(shape)
     val result = Reorder(distinct, names)
 
     result.^
+  }
+
+  object transpose extends SingletonProductArgs {
+
+    def applyProduct[H1 <: HList, H2 <: HList](
+        v: H1
+    )(
+        implicit
+        reverse: Reverse.Aux[H1, H2],
+        lemma: Names.FromLiterals.Case[H2]
+    ): ^[Reorder[CheckDistinct[_Shape], lemma.Out]] = {
+
+      val out = lemma.apply(reverse(v))
+
+      transposeWith(out)
+    }
   }
 
   def dimensionWise(

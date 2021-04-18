@@ -19,7 +19,7 @@ case class |<<-[
   override type _Refute = "Dimension mismatch"
 }
 
-trait WithMames_Imp0 {
+trait NamedWith_Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 
@@ -36,7 +36,7 @@ trait WithMames_Imp0 {
   }
 }
 
-object |<<- extends WithMames_Imp0 {
+object |<<- extends NamedWith_Imp0 {
 
   import org.shapesafe.core.shape.ProveShape.Factory._
 

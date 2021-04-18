@@ -29,7 +29,7 @@ class Op2[
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
 
-    override type _Refute = InfoCT.REFUTE.T + InfoCT.nonExisting.T + _Peek
+    override type _Refute = InfoCT.REFUTE.T + InfoCT.nonExisting.T
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }

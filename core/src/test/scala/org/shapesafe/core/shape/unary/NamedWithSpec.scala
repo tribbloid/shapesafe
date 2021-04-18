@@ -6,7 +6,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape
 import org.shapesafe.core.shape.{Names, Shape}
 
-class WithNamesSpec extends BaseSpec {
+class NamedWithSpec extends BaseSpec {
 
   val shape = Shape >|<
     Arity(2) :<<- "x" >|<

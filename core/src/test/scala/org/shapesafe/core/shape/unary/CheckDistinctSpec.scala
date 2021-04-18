@@ -66,7 +66,10 @@ class CheckDistinctSpec extends BaseSpec {
 
       val rr = CheckDistinct(ss).^
 
-      shouldNotCompile("""rr.eval""")
+      shouldNotCompile(
+        """rr.eval""",
+        """.*(Names has duplicates).*"""
+      )
     }
   }
 
@@ -79,7 +82,7 @@ class CheckDistinctSpec extends BaseSpec {
         Arity(2) :<<- "b" >|<
         Arity(3) :<<- "c"
 
-      val r = shape.transpose(Names >< "c")
+      val r = shape.transposeWith(Names >< "c")
 
       r.eval.toString.shouldBe(
         """
@@ -93,7 +96,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
 
-      val r = shape.transpose("c" >< "b" >< "a")
+      val r = shape.transposeWith("c" >< "b" >< "a")
 
       r.eval.toString.shouldBe(
         """
@@ -112,7 +115,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "a")).eval
 
-      val r = shape.transpose(Names("a", "b"))
+      val r = shape.transposeWith(Names("a", "b"))
 
       shouldNotCompile("""r.eval""")
     }
@@ -121,7 +124,7 @@ class CheckDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
 
-      val r = shape.transpose(Names("a", "i"))
+      val r = shape.transposeWith(Names("a", "i"))
 
       shouldNotCompile("""r.eval""")
     }

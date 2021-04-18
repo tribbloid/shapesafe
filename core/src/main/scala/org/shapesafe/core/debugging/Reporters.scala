@@ -23,7 +23,7 @@ class Reporters[
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 
       implicit def raw[A <: Iub] =
-        forAll[A].==>(_ => MsgBroker.peek[Peek[A] + "\n"])
+        forAll[A].==>(_ => MsgBroker.apply[CannotEval + Peek[A] + "\n"])
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -35,13 +35,13 @@ class Reporters[
           implicit
           lemma: A |- S
       ) =
-        forAll[A].==>(_ => MsgBroker.peek[Peek[S] + EntailsLF + Peek[A] + "\n"])
+        forAll[A].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"])
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyPreferred[S <: TGT with Iub] =
-        forAll[S].==>(_ => MsgBroker.peek[Peek[S] + "\n"])
+        forAll[S].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + "\n"])
     }
 
     override object Step1 extends Step1_Imp1
@@ -102,8 +102,6 @@ object Reporters {
     def apply[O]: Aux[O] = new MsgBroker {
       override type Out = O
     }
-
-    def peek[O]: Aux[PEEK.T + O] = apply[InfoCT.PEEK.T + O]
 
   }
 }
