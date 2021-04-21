@@ -3,7 +3,7 @@ package org.shapesafe.m.viz
 import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
 import com.tribbloids.graph.commons.util.viz.{TypeViz, TypeVizFormat}
 import com.tribbloids.graph.commons.util.{HasOuter, TreeFormat}
-import org.shapesafe.m.MWithReflection
+import org.shapesafe.m.{EmitMsg, MWithReflection}
 import shapeless.Witness
 import singleton.ops.{+, RequireMsg, RequireMsgSym}
 
@@ -98,9 +98,12 @@ object VizCTSystem {
   val FALSE = Witness(false)
 
   type EmitError[T] = RequireMsg[FALSE.T, T]
-  type EmitWarning[T] = RequireMsgSym[FALSE.T, T, singleton.ops.Warn]
 
-  type EmitInfo[T] = EmitWarning[T] // should change after the patch
+  type EmitWarning[T] = RequireMsgSym[FALSE.T, T, singleton.ops.Warn]
+//  type EmitInfo[T] = EmitWarning[T] // should change after the patch
+
+//  type EmitWarning[T] = EmitMsg[T, EmitMsg.Warning]
+  type EmitInfo[T] = EmitMsg[T, EmitMsg.Info]
 
   trait MBase extends MWithReflection {
 

@@ -45,7 +45,7 @@ object DebuggingUtil {
   val ENTAILS =
     Witness("""  :=  """)
 
-  type EntailsLF = "\n" + ENTAILS.T
+  type EntailsLF = "\n\n" + ENTAILS.T
 
   type CannotEval = Stripe["cannot evaluate"]
 

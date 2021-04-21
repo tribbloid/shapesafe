@@ -120,7 +120,7 @@ object Reporters {
 
   trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 
-    type EmitMsg[T] <: Op
+    type EmitMsg[T]
 
     final type Iub = IUB
 
@@ -147,21 +147,21 @@ object Reporters {
         step1: Step1.Case.Aux[IN, SS],
         step2: EmitMsg[SS]
     ): IN ==> Unit = forAll[IN].==> { _ =>
-//      val emit = new EmitMsg[SS, EmitMsg.Error]
-//      emit.emit
+      //      val emit = new EmitMsg[SS, EmitMsg.Error]
+      //      emit.emit
     }
   }
 
-//  trait MsgBroker {
-//    type Out <: Op
-//  }
-//
-//  object MsgBroker {
-//
-//    class ^[O <: Op] extends MsgBroker {
-//      type Out = O
-//    }
-//
-//    def apply[O <: Op]: ^[O] = new ^[O]
-//  }
+  //  trait MsgBroker {
+  //    type Out <: Op
+  //  }
+  //
+  //  object MsgBroker {
+  //
+  //    class ^[O <: Op] extends MsgBroker {
+  //      type Out = O
+  //    }
+  //
+  //    def apply[O <: Op]: ^[O] = new ^[O]
+  //  }
 }

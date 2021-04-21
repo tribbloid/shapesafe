@@ -56,7 +56,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
       implicit
       reporter: ShapeReporters.PeekShape.Case[_Shape],
       prove: _Shape |- O
-  ): ^[O] = verify(prove)
+  ): ^[O] = eval(prove)
 
   /**
     * assign new names

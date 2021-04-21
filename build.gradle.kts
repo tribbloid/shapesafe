@@ -94,7 +94,6 @@ allprojects {
 //        compileOnly(kotlin("stdlib-jdk8"))
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
-//        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")

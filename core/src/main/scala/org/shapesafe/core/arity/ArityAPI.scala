@@ -14,12 +14,10 @@ trait ArityAPI extends ArityOpsLike with Axis {
 
   override type _Axis >: this.type <: ArityAPI
 
-  final override val nameSingleton: Aux[NoName] = NoNameW
-
   final override def toString: String = arity.toString
 
   def verify[
-      O <: Arity.Verifiable
+      O <: Arity
   ](
       implicit
       prove: _Arity |- O
@@ -48,7 +46,9 @@ trait ArityAPI extends ArityOpsLike with Axis {
       implicit
       reporter: ArityReporters.PeekArity.Case[_Arity],
       prove: _Arity |- O
-  ): ArityAPI.^[O] = verify(prove)
+  ): ArityAPI.^[O] = eval(prove)
+
+  final override val nameSingleton: Aux[NoName] = NoNameW
 }
 
 object ArityAPI {

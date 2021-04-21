@@ -1,5 +1,8 @@
 package org.shapesafe.m
 
+import com.tribbloids.graph.commons.util.reflect.Reflection
+import singleton.ops.impl.Op
+
 import java.util.logging.Logger
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
@@ -20,7 +23,26 @@ object EmitMsg {
 
   def create[A, SS <: EmitMsg.EmitLevel]: EmitMsg[A, SS] = new EmitMsg[A, SS]
 
-  implicit def emit[A, SS <: EmitMsg.EmitLevel]: EmitMsg[A, SS] = macro Macros.emit[A, SS]
+  def apply[SS <: EmitMsg.EmitLevel]: Level[SS] = Level[SS]()
+
+  case class Level[SS <: EmitMsg.EmitLevel]() {
+
+    def byOp[A <: Op](
+        implicit
+        _op: A
+    ): EmitMsg[A, SS] =
+      macro Macros.byOp[A, SS]
+
+    def byType[A, SS <: EmitMsg.EmitLevel](
+        implicit
+        _ttg: Reflection.Runtime.TypeTag[A]
+    ): EmitMsg[A, SS] =
+      macro Macros.byTypeTag[A, SS]
+
+    def weakly[A]: EmitMsg[A, SS] = macro Macros.weakly[A, SS]
+  }
+
+  implicit def weakly[SS <: EmitMsg.EmitLevel, A]: EmitMsg[A, SS] = macro Macros.weakly[A, SS]
 
   final class Macros(val c: whitebox.Context) extends MWithReflection {
 
@@ -28,17 +50,22 @@ object EmitMsg {
 
     def outer: EmitMsg.type = EmitMsg.this
 
-    def emit[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
+    def byOp[A: c.WeakTypeTag, LL: c.WeakTypeTag](_op: c.Tree): c.Tree = {
 
       val aa: Type = weakTypeOf[A]
-      val v = aa match {
-        case v: u.ConstantType => v.value.value
-        case _ =>
-          throw new UnsupportedOperationException(
-            s"type $aa is not a constant"
-          )
-      }
+      val tree = q"${_op}.value"
+      val expr = c.Expr[Any](c.untypecheck(tree))
+
+      val v: Any = c.eval(expr)
+
+      val ll = emitValue[LL](v)
+
+      q"$liftOuter.create[$aa, $ll]"
+    }
+
+    def emitValue[LL: c.WeakTypeTag](v: Any): Type = {
       val ss = "" + v
+
       val ll: Type = weakTypeOf[LL]
 
       // if inherited from multiple traits, take the most serious one
@@ -58,6 +85,28 @@ object EmitMsg {
           s"type $ll is not an EmitLevel"
         )
       }
+
+      ll
+    }
+
+    def byTypeTag[A: c.WeakTypeTag, LL: c.WeakTypeTag](_ttg: c.Tree): c.Tree = {
+
+      val aa: Type = weakTypeOf[A]
+
+      val ttg: Reflection.Runtime.TypeTag[A] = c.eval(c.Expr[Reflection.Runtime.TypeTag[A]](c.untypecheck(q"${_ttg}")))
+      val v = Reflection.Runtime.TypeView(ttg.tpe).getOnlyInstance
+
+      val ll = emitValue[LL](v)
+
+      q"$liftOuter.create[$aa, $ll]"
+    }
+
+    def weakly[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
+
+      val aa: Type = weakTypeOf[A]
+      val v = refl.TypeView(aa).getOnlyInstance
+
+      val ll = emitValue[LL](v)
 
       q"$liftOuter.create[$aa, $ll]"
     }
