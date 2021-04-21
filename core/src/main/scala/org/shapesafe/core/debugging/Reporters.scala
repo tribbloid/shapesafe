@@ -14,11 +14,9 @@ class Reporters[
 
   import Reporters._
 
-  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ReporterBase[IUB] {
+  trait ProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ReporterBase[IUB] {
 
     import scope._
-
-    override type ReportMsg[T] = ErrorMsg[T]
 
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 
@@ -45,6 +43,16 @@ class Reporters[
     }
 
     override object Step1 extends Step1_Imp1
+  }
+
+  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
+
+    override type ReportMsg[T] = WarnMsg[T]
+  }
+
+  trait ErrorReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
+
+    override type ReportMsg[T] = ErrorMsg[T]
   }
 
 //  trait RefuteReporter[IUB <: CanRefute] extends ReporterBase[IUB] {

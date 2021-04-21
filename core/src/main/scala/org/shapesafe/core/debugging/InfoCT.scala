@@ -1,6 +1,6 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.Label
+import org.shapesafe.core.debugging.InfoCT.Stripe
 import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString, RequireMsg, RequireMsgSym}
@@ -57,11 +57,11 @@ object InfoCT {
 
   val shades_+ = Witness(" ░▒▓")
 
-  type Label[T] = "\u001b[7m" + T + shades_+.T + "\u001b[0m" + "\n\n"
+  type Stripe[T] = "\u001b[7m" + T + shades_+.T + "\u001b[0m" + "\n\n"
 
   object ForArity {
 
-    type TryArity = "\n\n" + Label["... when proving arity"]
+    type TryArity = "\n\n" + Stripe["... when proving arity"]
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
@@ -87,7 +87,7 @@ object InfoCT {
 
   object ForShape {
 
-    type TryShape = "\n\n" + Label["... when proving shape"]
+    type TryShape = "\n\n" + Stripe["... when proving shape"]
 
     type Refute0[SELF <: CanPeek with CanRefute] =
       Refute[SELF] +
@@ -109,13 +109,13 @@ object InfoCT {
   val REFUTE =
     Witness("""¯\_(ツ)_/¯ """)
   val PEEK =
-    Witness("""|>    """)
+    Witness("""      """)
   val ENTAILS =
     Witness("""  :=  """)
 
   type EntailsLF = "\n" + ENTAILS.T
 
-  type CannotEval = Label["cannot evaluate"]
+  type CannotEval = Stripe["cannot evaluate"]
 
   val nonExisting = Witness(""" Undefined """)
 

@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.core.arity.ArityReporters.PeekArity
+import org.shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
@@ -34,8 +34,13 @@ trait ArityAPI extends ArityOpsLike with Axis {
 
   final def peek(
       implicit
-      peek: PeekArity.Case[_Arity]
-  ): Unit = {}
+      reporter: PeekArity.Case[_Arity]
+  ): this.type = this
+
+  final def interrupt(
+      implicit
+      reporter: InterruptArity.Case[_Arity]
+  ): this.type = this
 }
 
 object ArityAPI {

@@ -95,14 +95,14 @@ class Op2Spec extends ArityFixture {
     }
   }
 
-  describe("peek") {
+  describe("peek & interrupt") {
 
     it("1") {
 
 //      (b :+ c).peek
 
       shouldNotCompile(
-        """(b :+ c).peek""",
+        """(b :+ c).interrupt""",
         """.*(\Q  :=  4 + 5\E).*"""
       )
     }
@@ -111,7 +111,7 @@ class Op2Spec extends ArityFixture {
     it("2") {
 
       shouldNotCompile(
-        """(Arity.Unprovable :+ c).peek""",
+        """(Arity.Unprovable :+ c).interrupt""",
         """.*(\?\?\? \+ 5).*"""
       )
     }

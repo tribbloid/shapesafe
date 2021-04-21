@@ -361,12 +361,12 @@ class LeafShapeSpec extends BaseSpec {
     }
   }
 
-  describe("peek") {
+  describe("peek & interrupt") {
 
     it("Eye") {
 
       shouldNotCompile(
-        """Shape.peek""",
+        """Shape.interrupt""",
         """.*(➊).*"""
       )
     }
@@ -376,7 +376,7 @@ class LeafShapeSpec extends BaseSpec {
       val s = Shape(1, 2)
 
       shouldNotCompile(
-        """s.peek""",
+        """s.interrupt""",
         """.*( >< 1 >< 2).*"""
       )
     }
@@ -386,7 +386,7 @@ class LeafShapeSpec extends BaseSpec {
       val s = Shape(1, 2).|<<-*("a", "b").eval
 
       shouldNotCompile(
-        """s.peek""",
+        """s.interrupt""",
         """.*(\Q >< (1 :<<- a) >< (2 :<<- b)\E).*"""
       )
     }

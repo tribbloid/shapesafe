@@ -62,7 +62,7 @@ class NamedWithSpec extends BaseSpec {
     val good = shapeSansName |<<- ab
     val bad = shapeSansName |<<- namesTooMany
 
-    describe("peek") {
+    describe("peek & interrupt") {
 
       it("getReportMsg") {
 
@@ -72,7 +72,7 @@ class NamedWithSpec extends BaseSpec {
 
         msg.toString.shouldBe(
           """
-            ||>    ➊ >< (2 :<<- a) >< (3 :<<- b)
+            |      ➊ >< (2 :<<- a) >< (3 :<<- b)
             |  :=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b
             |""".stripMargin
         )
@@ -82,7 +82,7 @@ class NamedWithSpec extends BaseSpec {
 
         val s = good
         shouldNotCompile(
-          """s.peek""",
+          """s.interrupt""",
           """.*(\Q:=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b\E).*"""
         )
       }
@@ -91,7 +91,7 @@ class NamedWithSpec extends BaseSpec {
 
         val s = bad
         shouldNotCompile(
-          """s.peek""",
+          """s.interrupt""",
           """.*(\Q➊ >< 2 >< 3 |<<- ➊ >< a >< b >< c\E).*"""
         )
       }

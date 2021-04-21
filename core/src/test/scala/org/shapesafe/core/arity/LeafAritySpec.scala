@@ -94,14 +94,13 @@ class LeafAritySpec extends BaseSpec {
     v1.toString.shouldBe("3:Literal")
   }
 
-  it("peek") {
+  it("peek & interrupt") {
 
     val v1 = Arity(3)
 
     shouldNotCompile(
-      """v1.peek""",
+      """v1.interrupt""",
       """.*(3).*"""
     )
-
   }
 }
