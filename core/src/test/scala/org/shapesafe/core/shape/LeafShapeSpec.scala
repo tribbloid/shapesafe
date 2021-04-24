@@ -377,7 +377,7 @@ class LeafShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """s.interrupt""",
-        """.*( >< 1 >< 2).*"""
+        """.*(1 >< 2).*"""
       )
     }
 
@@ -387,7 +387,7 @@ class LeafShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """s.interrupt""",
-        """.*(\Q >< (1 :<<- a) >< (2 :<<- b)\E).*"""
+        """.*(\Q1 :<<- a >< (2 :<<- b)\E).*"""
       )
     }
   }

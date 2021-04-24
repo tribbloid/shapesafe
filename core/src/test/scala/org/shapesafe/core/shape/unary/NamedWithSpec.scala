@@ -67,13 +67,13 @@ class NamedWithSpec extends BaseSpec {
       it("getReportMsg") {
 
         val msg = PeekShape
-          .From[good._Shape]()
+          .From(good.shape)
           .getReportMsg
 
         msg.toString.shouldBe(
           """
-            |      ➊ >< (2 :<<- a) >< (3 :<<- b)
-            |  :=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b
+            |      2 :<<- a >< (3 :<<- b)
+            |  :=  2 >< 3 |<<- (a >< b)
             |""".stripMargin
         )
       }
@@ -83,7 +83,7 @@ class NamedWithSpec extends BaseSpec {
         val s = good
         shouldNotCompile(
           """s.interrupt""",
-          """.*(\Q:=  ➊ >< 2 >< 3 |<<- ➊ >< a >< b\E).*"""
+          """.*(\Q:=  2 >< 3 |<<- (a >< b)\E).*"""
         )
       }
 
@@ -92,7 +92,7 @@ class NamedWithSpec extends BaseSpec {
         val s = bad
         shouldNotCompile(
           """s.interrupt""",
-          """.*(\Q➊ >< 2 >< 3 |<<- ➊ >< a >< b >< c\E).*"""
+          """.*(\Q2 >< 3 |<<- (a >< b >< c)\E).*"""
         )
       }
     }

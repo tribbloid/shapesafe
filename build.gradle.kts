@@ -56,6 +56,7 @@ allprojects {
         mavenCentral()
 //        jcenter()
         maven("https://dl.bintray.com/kotlin/kotlin-dev")
+        maven("https://scala-ci.typesafe.com/artifactory/scala-integration/") // scala SNAPSHOT
     }
 
     // resolving jar hells
@@ -63,7 +64,7 @@ allprojects {
         resolutionStrategy.dependencySubstitution {
             // TODO: use `constraints` as below
             substitute(
-                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+                    module("com.chuusai:shapeless_${vs.scalaBinaryV}")
             ).apply {
                 with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
@@ -95,6 +96,7 @@ allprojects {
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
 //        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.0+22-59783019+20200731-1305-SNAPSHOT")
+        api("com.github.dwickern:scala-nameof_${vs.scalaBinaryV}:3.0.0")
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
@@ -125,19 +127,19 @@ allprojects {
                 loggingLevel = "verbose"
 
                 val compilerOptions = mutableListOf(
-                    "-encoding", "UTF-8",
-                    "-unchecked",
-                    "-deprecation",
-                    "-feature",
+                        "-encoding", "UTF-8",
+                        "-unchecked",
+                        "-deprecation",
+                        "-feature",
 
-                    "-language:higherKinds",
+                        "-language:higherKinds",
 //                            "-Xfatal-warnings",
 
-                    "-Xlint:poly-implicit-overload",
-                    "-Xlint:option-implicit",
+                        "-Xlint:poly-implicit-overload",
+                        "-Xlint:option-implicit",
 
-
-                    "-Yissue-debug"
+//                        "-Ydebug",
+                        "-Yissue-debug"
 //                    ,
 //                    "-Ytyper-debug",
 //                    "-Vtyper"
@@ -152,14 +154,14 @@ allprojects {
 
                 if (vs.splainV != null) {
                     compilerOptions.addAll(
-                        listOf(
-                            //splain
-                            "-P:splain:tree",
-                            "-P:splain:breakinfix:200",
-                            "-P:splain:bounds:true",
-                            "-P:splain:boundsimplicits:true",
-                            "-P:splain:keepmodules:2"
-                        )
+                            listOf(
+                                    //splain
+                                    "-P:splain:tree",
+                                    "-P:splain:breakinfix:200",
+                                    "-P:splain:bounds:true",
+                                    "-P:splain:boundsimplicits:true",
+                                    "-P:splain:keepmodules:2"
+                            )
                     )
                 }
 
@@ -172,7 +174,7 @@ allprojects {
 
                     // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
                     jvmArgs = listOf(
-                        "-Xss256m"
+                            "-Xss256m"
                     )
                 }
             }
@@ -248,27 +250,27 @@ allprojects {
         module {
 
             excludeDirs = excludeDirs + listOf(
-                file(".gradle"),
-                file(".github"),
+                    file(".gradle"),
+                    file(".github"),
 
-                file ("target"),
+                    file ("target"),
 //                        file ("out"),
 
-                file(".idea"),
-                file(".vscode"),
-                file(".bloop"),
-                file(".bsp"),
-                file(".metals"),
-                file(".ammonite"),
+                    file(".idea"),
+                    file(".vscode"),
+                    file(".bloop"),
+                    file(".bsp"),
+                    file(".metals"),
+                    file(".ammonite"),
 
-                file("logs"),
+                    file("logs"),
 
-                // apache spark
-                file("warehouse"),
+                    // apache spark
+                    file("warehouse"),
 
-                file("spike"),
+                    file("spike"),
 
-                file("splain")
+                    file("splain")
             )
 
             isDownloadJavadoc = true

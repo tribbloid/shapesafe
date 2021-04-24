@@ -4,21 +4,20 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.{DebuggingUtil, Expr}
 import singleton.ops.+
 
 import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op,
-    SYM <: String
+    SS[A, B] <: Expr.HasLiteral
 ](
     implicit
     sh: Utils.IntSh[??]
-) extends Op2Like {
+) extends Op2.UB[??] {
 
-  type Symbol = SYM
+  override type Symbol[A, B] = SS[A, B]
 
   case class On[
       A1 <: Arity,
@@ -29,7 +28,7 @@ class Op2[
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
 
-    override type _Refute = InfoCT.REFUTE.T + InfoCT.nonExisting.T
+    override type _Refute = DebuggingUtil.REFUTE.T + DebuggingUtil.nonExisting.T
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }
@@ -55,9 +54,9 @@ trait Op2_Imp0 {
 
 object Op2 extends Op2_Imp0 {
 
-  type UB[
+  trait UB[
       ??[X1, X2] <: Op
-  ] = Op2[??, _ <: String]
+  ] extends Op2Like
 
   implicit def invar[
       A1 <: Arity,

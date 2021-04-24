@@ -1,14 +1,11 @@
 package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
-import org.shapesafe.core.arity.ArityReporters.PeekArity
-import org.shapesafe.core.arity.ops.HasArity
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.axis.Axis.AxisLike
-import org.shapesafe.core.debugging.InfoCT.{Br, CanPeek, Peek}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{CanPeek, DebuggingUtil, Expr, OpStr, OpStrLike}
 import shapeless.Witness
 import shapeless.labelled.FieldType
-import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -45,7 +42,14 @@ object Axis {
 
     type _Axis = _Arity :<<- Name
 
-    type _Peek = Br[Peek[A] + " :<<- " + Name]
+    trait CanPeekName extends CanPeek {
+
+      override type _OpStr = Name
+      override type _Expr = Name
+    }
+
+    type _OpStr = DebuggingUtil.Br[OpStr.Infix[A, " :<<- ", CanPeekName]]
+    override type _Expr = Expr.:<<-[Expr[A], Expr[CanPeekName]]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arity"
@@ -59,27 +63,5 @@ object Axis {
   ): :<<-[value._Arity, name.T] = {
 
     new :<<-(value.arity, name)
-  }
-
-  trait AxisLike extends HasArity {
-
-    val nameSingleton: Witness.Lt[String]
-    final type Name = nameSingleton.T
-
-    final def name: Name = nameSingleton.value
-
-    def nameless: ArityAPI.^[_Arity] = arity.^
-
-    def namedT[S <: String](
-        implicit
-        name: Witness.Aux[S]
-    ): _Arity :<<- S = Axis(nameless, name)
-
-    def named(name: Witness.Lt[String]): _Arity :<<- name.T = {
-
-      namedT(name)
-    }
-
-    def :<<-(name: Witness.Lt[String]): _Arity :<<- name.T = namedT(name)
   }
 }

@@ -1,6 +1,6 @@
 package org.shapesafe.core
 
-import shapeless.{DepFn1, DepFn2, Poly1}
+import shapeless.Poly1
 
 import scala.annotation.implicitNotFound
 

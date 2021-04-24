@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.debugging.InfoCT.Peek
 import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
 
 import scala.language.implicitConversions
@@ -32,7 +31,7 @@ object Indices extends TupleSystem with CanInfix_>< {
   ) extends proto.><[TAIL, HEAD](tail, head)
       with Impl {
 
-    override type _PeekHead = Peek[Head]
+    override type PeekHead = Head
   }
 
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {

@@ -1,8 +1,9 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.arity.LeafArity
-import org.shapesafe.core.debugging.InfoCT.{CanRefute, ErrorMsg, ForShape, Peek}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.m.viz.VizCTSystem.EmitError
 
 // all names must be distinctive - no duplication allowed
 case class CheckDistinct[
@@ -11,7 +12,8 @@ case class CheckDistinct[
     s1: S1 with Shape
 ) extends Conjecture1.^[S1] {
 
-  override type _Peek = Peek.PrefixW1["Distinct", S1]
+  override type _OpStr = OpStr.PrefixW1["Distinct", S1]
+  override type _Expr = Expr.CheckDistinct[Expr[S1]]
 
   override type _Refute = "Names has duplicates"
 }
@@ -27,7 +29,7 @@ trait CheckDistinct_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      msg: ErrorMsg[ForShape.Refute0[CheckDistinct[P1]]]
+      msg: EmitError[OpStr.ForShape.Refute0[CheckDistinct[P1]]]
   ): CheckDistinct[S1] =>> LeafShape = {
     ???
   }

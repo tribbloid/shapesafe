@@ -5,7 +5,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.shape.Index.Name
 import org.shapesafe.core.shape.{Indices, Names, Shape}
-import org.shapesafe.m.TypeVizCT
+import org.shapesafe.m.viz.TypeVizCT
 
 class ReorderSpec extends BaseSpec {
 

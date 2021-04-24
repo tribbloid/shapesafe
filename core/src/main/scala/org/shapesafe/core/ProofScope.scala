@@ -1,6 +1,6 @@
 package org.shapesafe.core
 
-import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.DebuggingUtil
 import shapeless.Witness
 
 import scala.annotation.implicitNotFound
@@ -19,6 +19,10 @@ trait ProofScope { // TODO: no IUB?
 
   type Consequent = root.Term
 
+  // TODO: this should potentially be merged with Refutation cases in MsgBroker
+  //  Such that successful proof can show reasoning at runtime.
+  //  At this moment, this feature is implemented in PeekReporter
+  //  which is too complex for its own good
   type Proof[-I, +P <: Consequent] <: root.Proof[I, P]
 
   /**

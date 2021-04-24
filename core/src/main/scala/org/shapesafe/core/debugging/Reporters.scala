@@ -1,9 +1,12 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.{PEEK, _}
+import org.shapesafe.core.debugging.OpStr.OpStr
+import org.shapesafe.core.debugging.Expr.Expr
 import org.shapesafe.core.{Poly1Base, ProofScope}
-import singleton.ops.impl.{Op, OpString}
-import singleton.ops.{+, RequireMsg, ToString}
+import org.shapesafe.m.viz.ExpressionVizCT
+import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
+import singleton.ops.{+, XString}
+import singleton.ops.impl.Op
 
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
@@ -14,14 +17,66 @@ class Reporters[
 
   import Reporters._
 
-  trait ProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ReporterBase[IUB] {
+  trait ExprProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
     import scope._
+    import org.shapesafe.core.debugging.DebuggingUtil._
 
-    trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
+    trait Step1_Imp3 extends Poly1Base[Iub, XString] {
 
-      implicit def raw[A <: Iub] =
-        forAll[A].==>(_ => MsgBroker.apply[CannotEval + Peek[A] + "\n"])
+      implicit def raw[A <: Iub, VA <: XString](
+          implicit
+          vizA: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[A], VA],
+          mk: (CannotEval + VA + "\n") { type Out <: XString }
+      ): A ==> mk.Out =
+        forAll[A].==>(_ => mk.value)
+    }
+
+    trait Step1_Imp2 extends Step1_Imp3 {
+
+      implicit def eval[
+          A <: Iub,
+          S <: TGT,
+          VA <: XString,
+          VS <: XString
+      ](
+          implicit
+          lemma: A |- S,
+          vizA: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[A], VA],
+          vizS: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[S], VS],
+          mk: (PEEK.T + VS + EntailsLF + VA + "\n") { type Out <: XString }
+      ): A ==> mk.Out =
+        forAll[A].==>(_ => mk.value)
+    }
+
+    trait Step1_Imp1 extends Step1_Imp2 {
+
+      implicit def alreadyTarget[
+          S <: TGT with Iub,
+          VS <: XString
+      ](
+          implicit
+          vizS: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[S], VS],
+          op: (PEEK.T + VS + "\n") { type Out <: XString }
+      ): S ==> op.Out =
+        forAll[S].==>(_ => op.value)
+    }
+
+    override object Step1 extends Step1_Imp1
+  }
+
+  trait OpProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
+
+    import scope._
+    import org.shapesafe.core.debugging.DebuggingUtil._
+
+    trait Step1_Imp3 extends Poly1Base[Iub, XString] {
+
+      implicit def raw[A <: Iub](
+          implicit
+          mk: (CannotEval + OpStr[A] + "\n") { type Out <: XString }
+      ): A ==> mk.Out =
+        forAll[A].==>(_ => mk.value)
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -31,85 +86,82 @@ class Reporters[
           S <: TGT
       ](
           implicit
-          lemma: A |- S
-      ) =
-        forAll[A].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"])
+          lemma: A |- S,
+          mk: (PEEK.T + OpStr[S] + EntailsLF + OpStr[A] + "\n") { type Out <: XString }
+      ): A ==> mk.Out =
+        forAll[A].==>(_ => mk.value)
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
-      implicit def alreadyPreferred[S <: TGT with Iub] =
-        forAll[S].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + "\n"])
+      implicit def alreadyTarget[S <: TGT with Iub](
+          implicit
+          mk: (PEEK.T + OpStr[S] + "\n") { type Out <: XString }
+      ): S ==> mk.Out =
+        forAll[S].==>(_ => mk.value)
     }
 
     override object Step1 extends Step1_Imp1
   }
 
-  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
+  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
 
-    override type ReportMsg[T] = WarnMsg[T]
+    override type EmitMsg[T] = EmitInfo[T]
   }
 
-  trait ErrorReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
+  trait InterruptReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
 
-    override type ReportMsg[T] = ErrorMsg[T]
+    override type EmitMsg[T] = EmitError[T]
   }
 
-//  trait RefuteReporter[IUB <: CanRefute] extends ReporterBase[IUB] {
-//
-//    override type ReportMsg[T] = RequireMsgSym[FALSE.T, T, Warn]
-//  }
 }
 
 object Reporters {
 
-  trait ReporterBase[IUB] extends Poly1Base[IUB, Unit] {
+  trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 
-    type ReportMsg[T] <: Op
+    type EmitMsg[T] <: Op
 
     final type Iub = IUB
 
-    val Step1: Poly1Base[IUB, MsgBroker]
+    val Step1: Poly1Base[IUB, XString]
 
-    object getReportMsg
-
-    case class From[IN <: IUB]() {
+    case class From[IN <: IUB](v: IN) {
 
       def getReportMsg[
-          MSG <: MsgBroker,
-          SS <: String with Singleton
+          SS <: XString
       ](
           implicit
-          step1: Step1.Case.Aux[IN, MSG],
-          toString: OpString.Aux[ToString[MSG#Out], SS]
+          step1: Step1.Case.Aux[IN, SS]
       ): SS = {
 
-//        step1.apply(null.asInstanceOf[IN])
-        toString.value
+        step1.apply(v)
       }
     }
 
     implicit def attempt[
         IN <: IUB,
-        MSG <: MsgBroker
+        SS <: XString
     ](
         implicit
-        step1: Step1.Case.Aux[IN, MSG],
-        step2: ReportMsg[MSG#Out]
-    ): IN ==> Unit = forAll[IN].==> { _ => }
-  }
-
-  trait MsgBroker {
-    type Out
-  }
-
-  object MsgBroker {
-
-    type Aux[O] = MsgBroker { type Out = O }
-
-    def apply[O]: Aux[O] = new MsgBroker {
-      override type Out = O
+        step1: Step1.Case.Aux[IN, SS],
+        step2: EmitMsg[SS]
+    ): IN ==> Unit = forAll[IN].==> { _ =>
+//      val emit = new EmitMsg[SS, EmitMsg.Error]
+//      emit.emit
     }
-
   }
+
+//  trait MsgBroker {
+//    type Out <: Op
+//  }
+//
+//  object MsgBroker {
+//
+//    class ^[O <: Op] extends MsgBroker {
+//      type Out = O
+//    }
+//
+//    def apply[O <: Op]: ^[O] = new ^[O]
+//  }
 }

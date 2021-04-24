@@ -1,6 +1,8 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.debugging.InfoCT.StrOrRaw
+import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
+import org.shapesafe.core.debugging.CanPeek
+import org.shapesafe.core.debugging.DebuggingUtil.StrOrRaw
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness
@@ -40,7 +42,10 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
     override def asIndices: AsIndices =
       tail.asIndices >< Index.Name(headW)
 
-    override type _PeekHead = StrOrRaw[Head]
+    trait PeekHead extends CanPeek {
+      override type _OpStr = Head
+      override type _Expr = Head
+    }
   }
 
   implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {

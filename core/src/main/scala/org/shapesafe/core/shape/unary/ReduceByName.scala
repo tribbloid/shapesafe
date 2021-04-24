@@ -3,10 +3,10 @@ package org.shapesafe.core.shape.unary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
-import org.shapesafe.core.debugging.InfoCT.Peek
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.{::, HList}
-import singleton.ops.+
 
 import scala.language.implicitConversions
 
@@ -15,7 +15,8 @@ trait ReduceByName {
   import ProveShape.Factory._
   import ProveShape._
 
-  type Symbol
+  type _Unary <: Expr.UnaryOn
+
   val oldNameUpdater: RecordUpdater
 
   // all names must be distinctive - no duplication allowed
@@ -28,7 +29,8 @@ trait ReduceByName {
 
     def s1: S1 with Shape
 
-    override type _Peek = Peek.PrefixW1[Symbol, S1]
+    override type _OpStr = OpStr.PrefixW1[_Unary#Lit, S1]
+    override type _Expr = _Unary#On[Expr[S1]]
   }
 
   object _On {
