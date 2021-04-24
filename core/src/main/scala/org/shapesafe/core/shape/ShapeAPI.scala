@@ -33,19 +33,27 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 //      prove: _Shape |- O
 //  ): ^[O] = prove.valueOf(shape).^
 
-  final def eval[ // TODO: eval each member?
+  def eval[ // TODO: eval each member?
       O <: LeafShape
   ](
       implicit
       prove: _Shape |- O
   ): ^[O] = verify(prove)
 
-  final def peek(
+  def peek[
+      O <: LeafShape
+  ](
+      implicit
+      reporter: ShapeReporters.PeekShape.Case[_Shape],
+      prove: _Shape |- O
+  ): ^[O] = verify(prove)
+
+  def peekOnly(
       implicit
       reporter: ShapeReporters.PeekShape.Case[_Shape]
   ): this.type = this
 
-  final def interrupt(
+  def interrupt(
       implicit
       reporter: ShapeReporters.InterruptShape.Case[_Shape]
   ): this.type = this

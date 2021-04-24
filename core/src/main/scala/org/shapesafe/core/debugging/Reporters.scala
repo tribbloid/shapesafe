@@ -1,6 +1,6 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT._
+import org.shapesafe.core.debugging.InfoCT.{PEEK, _}
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import singleton.ops.impl.{Op, OpString}
 import singleton.ops.{+, ToString}
@@ -20,7 +20,7 @@ class Reporters[
 
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 
-      implicit def raw[A <: Iub] =
+      implicit def raw[A <: Iub]: A ==> Reporters.MsgBroker.^[CannotEval + Peek[A] + "\n"] =
         forAll[A].==>(_ => MsgBroker[CannotEval + Peek[A] + "\n"])
     }
 
@@ -32,13 +32,13 @@ class Reporters[
       ](
           implicit
           lemma: A |- S
-      ) =
+      ): A ==> Reporters.MsgBroker.^[PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"] =
         forAll[A].==>(_ => MsgBroker[InfoCT.PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"])
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
-      implicit def alreadyPreferred[S <: TGT with Iub] =
+      implicit def alreadyTarget[S <: TGT with Iub]: S ==> Reporters.MsgBroker.^[PEEK.T + Peek[S] + "\n"] =
         forAll[S].==>(_ => MsgBroker[InfoCT.PEEK.T + Peek[S] + "\n"])
     }
 
@@ -55,10 +55,6 @@ class Reporters[
     override type ReportMsg[T] = ErrorMsg[T]
   }
 
-//  trait RefuteReporter[IUB <: CanRefute] extends ReporterBase[IUB] {
-//
-//    override type ReportMsg[T] = RequireMsgSym[FALSE.T, T, Warn]
-//  }
 }
 
 object Reporters {
@@ -98,15 +94,14 @@ object Reporters {
 
   trait MsgBroker {
     type Out
-
-    type Report
   }
 
   object MsgBroker {
 
-    class ^[O] extends MsgBroker { type Out = O }
+    class ^[O] extends MsgBroker {
+      type Out = O
+    }
 
     def apply[O]: ^[O] = new ^[O]
-
   }
 }

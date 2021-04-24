@@ -18,26 +18,34 @@ trait ArityAPI extends ArityOpsLike with Axis {
 
   final override def toString: String = arity.toString
 
-  final def verify[
+  def verify[
       O <: Arity.Verifiable
   ](
       implicit
       prove: _Arity |- O
   ): ArityAPI.^[O] = prove.apply(arity).value.^
 
-  final def eval[
+  def eval[
       O <: LeafArity
   ](
       implicit
       prove: _Arity |- O
-  ): ArityAPI.^[O] = prove.apply(arity).value.^
+  ): ArityAPI.^[O] = verify(prove)
 
-  final def peek(
+  def peek[
+      O <: LeafArity
+  ](
+      implicit
+      reporter: ArityReporters.PeekArity.Case[_Arity],
+      prove: _Arity |- O
+  ): ArityAPI.^[O] = verify(prove)
+
+  def peekOnly(
       implicit
       reporter: PeekArity.Case[_Arity]
   ): this.type = this
 
-  final def interrupt(
+  def interrupt(
       implicit
       reporter: InterruptArity.Case[_Arity]
   ): this.type = this
