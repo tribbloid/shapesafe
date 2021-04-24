@@ -1,9 +1,9 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.{PEEK, _}
+import org.shapesafe.core.debugging.InfoCT._
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import singleton.ops.impl.{Op, OpString}
-import singleton.ops.{+, RequireMsg, ToString}
+import singleton.ops.{+, ToString}
 
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
@@ -14,14 +14,14 @@ class Reporters[
 
   import Reporters._
 
-  trait ProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ReporterBase[IUB] {
+  trait ProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
     import scope._
 
     trait Step1_Imp3 extends Poly1Base[Iub, MsgBroker] {
 
       implicit def raw[A <: Iub] =
-        forAll[A].==>(_ => MsgBroker.apply[CannotEval + Peek[A] + "\n"])
+        forAll[A].==>(_ => MsgBroker[CannotEval + Peek[A] + "\n"])
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -33,13 +33,13 @@ class Reporters[
           implicit
           lemma: A |- S
       ) =
-        forAll[A].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"])
+        forAll[A].==>(_ => MsgBroker[InfoCT.PEEK.T + Peek[S] + EntailsLF + Peek[A] + "\n"])
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyPreferred[S <: TGT with Iub] =
-        forAll[S].==>(_ => MsgBroker.apply[InfoCT.PEEK.T + Peek[S] + "\n"])
+        forAll[S].==>(_ => MsgBroker[InfoCT.PEEK.T + Peek[S] + "\n"])
     }
 
     override object Step1 extends Step1_Imp1
@@ -63,15 +63,13 @@ class Reporters[
 
 object Reporters {
 
-  trait ReporterBase[IUB] extends Poly1Base[IUB, Unit] {
+  trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 
     type ReportMsg[T] <: Op
 
     final type Iub = IUB
 
     val Step1: Poly1Base[IUB, MsgBroker]
-
-    object getReportMsg
 
     case class From[IN <: IUB]() {
 
@@ -84,7 +82,6 @@ object Reporters {
           toString: OpString.Aux[ToString[MSG#Out], SS]
       ): SS = {
 
-//        step1.apply(null.asInstanceOf[IN])
         toString.value
       }
     }
@@ -101,15 +98,15 @@ object Reporters {
 
   trait MsgBroker {
     type Out
+
+    type Report
   }
 
   object MsgBroker {
 
-    type Aux[O] = MsgBroker { type Out = O }
+    class ^[O] extends MsgBroker { type Out = O }
 
-    def apply[O]: Aux[O] = new MsgBroker {
-      override type Out = O
-    }
+    def apply[O]: ^[O] = new ^[O]
 
   }
 }
