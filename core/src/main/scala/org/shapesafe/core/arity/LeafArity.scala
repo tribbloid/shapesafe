@@ -1,6 +1,7 @@
 package org.shapesafe.core.arity
 
 import com.tribbloids.graph.commons.util.IDMixin
+import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.arity.Utils.Op
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
@@ -23,7 +24,8 @@ object LeafArity extends LeafArity_Imp0 {
     type SS = S
     def singleton: S
 
-    override type _Peek = ToString[S]
+    override type _Ops = ToString[S]
+    override type _Ovrd = Only[S]
 
     override lazy val _id: S = singleton
 

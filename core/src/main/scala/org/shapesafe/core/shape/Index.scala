@@ -1,7 +1,9 @@
 package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.IDMixin
-import org.shapesafe.core.debugging.InfoCT.{CanPeek, StrOrRaw}
+import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
+import org.shapesafe.core.debugging.CanPeek
+import org.shapesafe.core.debugging.OpsUtil.StrOrRaw
 import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
 import singleton.ops.ToString
@@ -24,7 +26,8 @@ object Index {
 
     override protected def _id = w.value
 
-    override type _Peek = StrOrRaw[S]
+    override type _Ops = StrOrRaw[S]
+    override type _Ovrd = Only[S]
   }
 
   object Name {
@@ -37,7 +40,9 @@ object Index {
 
     override protected def _id = indexInt
 
-    override type _Peek = StrOrRaw[ToString[N]]
+    // TODO: type string is too long
+    override type _Ops = StrOrRaw[ToString[N]]
+    override type _Ovrd = Only[ToString[N]]
   }
 
   object I_th {

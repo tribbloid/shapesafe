@@ -1,7 +1,8 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
-import org.shapesafe.core.debugging.InfoCT.{CanPeek, Peek}
+import org.shapesafe.core.debugging.CanPeek
+import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
@@ -34,8 +35,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override def asList: List[UB] = Nil
 
-    override lazy val toString: _Peek = EYE.value
-    final override type _Peek = EYE.T
+    override lazy val toString: _Ops = EYE.value
+    final override type _Ops = EYE.T
   }
   override lazy val Eye = new Eye
 
@@ -65,7 +66,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     }
 
     type _PeekHead
-    final override type _Peek = Peek[TAIL] + " >< " + _PeekHead
+    final override type _Ops = Peek[TAIL] + " >< " + _PeekHead
   }
 }
 

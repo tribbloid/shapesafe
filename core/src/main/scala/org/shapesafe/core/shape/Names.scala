@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.debugging.InfoCT.StrOrRaw
+import org.shapesafe.core.debugging.OpsUtil.StrOrRaw
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness

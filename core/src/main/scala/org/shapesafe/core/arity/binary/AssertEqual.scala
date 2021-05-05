@@ -3,8 +3,8 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
-import org.shapesafe.core.debugging.InfoCT
-import org.shapesafe.core.debugging.InfoCT.{ForArity, Peek}
+import org.shapesafe.core.debugging.OpsUtil
+import org.shapesafe.core.debugging.OpsUtil.{ForArity, Peek}
 
 trait AssertEqual_Imp0 {
 
@@ -35,7 +35,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a2: A2
   ) extends Conjecture2[A1, A2] {
 
-    override type _Refute = InfoCT.REFUTE.T + Peek.InfixW[A1, " != ", A2]
+    override type _Refute = OpsUtil.REFUTE.T + Peek.Infix[A1, " != ", A2]
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity

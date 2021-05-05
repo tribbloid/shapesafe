@@ -37,6 +37,8 @@ object PeerType {
 
   final class Macros(val c: whitebox.Context) extends MWithReflection {
 
+    def outer = PeerType.this
+
     import c.universe._
 
     def apply[A: WeakTypeTag]: Tree = {

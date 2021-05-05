@@ -4,10 +4,9 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil, Nat, Witness}
-import singleton.ops.+
 
 import scala.language.implicitConversions
 

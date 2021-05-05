@@ -4,7 +4,7 @@ import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
 import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.debugging.InfoCT.CanPeek
+import org.shapesafe.core.debugging.CanPeek
 import shapeless.{Nat, Witness}
 
 import scala.language.implicitConversions

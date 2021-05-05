@@ -1,10 +1,8 @@
 package org.shapesafe.core.util
 
-import org.shapesafe.core.shape.Index
 import shapeless.labelled.FieldType
-import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
-import shapeless.{HList, Nat, Poly1}
+import shapeless.{HList, Poly1}
 
 case class RecordView[H <: HList](hh: H) {
 

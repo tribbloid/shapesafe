@@ -2,7 +2,9 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
-import org.shapesafe.core.debugging.InfoCT.{CanRefute, Peek}
+import org.shapesafe.core.debugging.OpsUtil.{CanRefute, Peek}
+import org.shapesafe.core.debugging.OvrdUtil
+import org.shapesafe.core.debugging.OvrdUtil.Ovrd
 
 trait Op2Like_Imp0 {}
 
@@ -37,7 +39,8 @@ object Op2Like {
 
       final def outer: Op2Like.this.type = Op2Like.this
 
-      final override type _Peek = Peek.InfixW[A1, Symbol, A2] // TODO: add Bracket
+      final override type _Ops = Peek.Infix[A1, Symbol, A2] // TODO: add Bracket
+      override type _Ovrd = Ovrd.Infix[A1, Symbol, A2]
     }
 
     type On[

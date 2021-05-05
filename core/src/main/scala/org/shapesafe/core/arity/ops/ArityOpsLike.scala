@@ -46,7 +46,7 @@ trait ArityOpsLike extends HasArity {
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type Symbol = "PairWise[" + Infix.this.Symbol + "]"
+      type Symbol = "DimensionWise[" + Infix.this.Symbol + "]"
     }
   }
 

@@ -1,11 +1,9 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.InfoCT.Stripe
-import org.shapesafe.m.TypeToLiteral
 import shapeless.Witness
-import singleton.ops.{+, ITE, IsString, RequireMsg, RequireMsgSym}
+import singleton.ops.{+, ITE, IsString}
 
-object InfoCT {
+object OpsUtil {
 
   type StrOrRaw[T1] = ITE[
     IsString[T1],
@@ -15,29 +13,20 @@ object InfoCT {
 
   // TODO: is it possible and better?
   //  also need time for https://github.com/fthomas/singleton-ops/issues/182
-  TypeToLiteral
+
 //  type StrOrRaw[T1] = ITE[
 //    IsString[T1],
 //    T1,
 //    TypeToLiteral.Type.Case[T1]
 //  ]
 
-  trait CanPeek {
-
-    type _Peek
-  }
-
   type Peek[T <: CanPeek] = StrOrRaw[
-    T#_Peek
+    T#_Ops
   ]
-
-//  type Peek0[T <: CanPeek] = Peek[T] +
-//    "\n"
-
   object Peek {
 
     // TODO: brackets?
-    type InfixW[T1 <: CanPeek, S, T2 <: CanPeek] =
+    type Infix[T1 <: CanPeek, S, T2 <: CanPeek] =
       Peek[T1] + StrOrRaw[S] + Peek[T2]
 
     type PrefixW1[S, T <: CanPeek] =
@@ -100,11 +89,6 @@ object InfoCT {
 //  val LF = Witness("\n")
 
   val EMPTY = Witness("")
-
-  val FALSE = Witness(false)
-
-  type ErrorMsg[T] = RequireMsg[FALSE.T, T]
-  type WarnMsg[T] = RequireMsgSym[FALSE.T, T, singleton.ops.Warn]
 
   val REFUTE =
     Witness("""¯\_(ツ)_/¯ """)

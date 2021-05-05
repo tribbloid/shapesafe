@@ -1,6 +1,6 @@
 package org.shapesafe.core
 
-import org.shapesafe.core.debugging.InfoCT
+import org.shapesafe.core.debugging.OpsUtil
 import shapeless.Witness
 
 import scala.annotation.implicitNotFound

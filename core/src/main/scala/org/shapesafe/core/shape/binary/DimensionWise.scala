@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.ops.hlist.Zip
@@ -26,7 +26,7 @@ trait DimensionWise {
     def s1: S1 with Shape
     def s2: S2 with Shape
 
-    override type _Peek = Peek.PrefixW2[Symbol, S1, S2]
+    override type _Ops = Peek.PrefixW2[Symbol, S1, S2]
   }
 
   object _On {

@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Shape}
@@ -16,7 +16,7 @@ case class OuterProduct[
     s2: S2
 ) extends Conjecture2.^[S1, S2] {
 
-  override type _Peek = Peek.InfixW[S1, " OuterProduct ", S2]
+  override type _Ops = Peek.Infix[S1, " OuterProduct ", S2]
 }
 
 trait OuterProduct_Imp0 {

@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
-import org.shapesafe.core.debugging.InfoCT.Peek
+import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, ShapeConjecture}
 import shapeless.{::, HList}
 import singleton.ops.+
@@ -28,7 +28,7 @@ trait ReduceByName {
 
     def s1: S1 with Shape
 
-    override type _Peek = Peek.PrefixW1[Symbol, S1]
+    override type _Ops = Peek.PrefixW1[Symbol, S1]
   }
 
   object _On {
