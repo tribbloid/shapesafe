@@ -9,7 +9,7 @@ case object ExpressionVizCT extends VizCTSystem {
   override def format: TypeVizFormat = FormatProtos.TransformText(
     FormatProtos.Trials(
       FormatOvrd.Only,
-      Formats.TypeInfo.DeAlias.HideOwner.recursively
+      Formats.TypeInfo.DeAlias.HideStatic.recursively
     )
   )
 
