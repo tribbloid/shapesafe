@@ -2,15 +2,36 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
-import org.shapesafe.core.debugging.OpsUtil.{CanRefute, Peek}
-import org.shapesafe.core.debugging.OvrdUtil
-import org.shapesafe.core.debugging.OvrdUtil.Ovrd
+import org.shapesafe.core.debugging.OpsUtil.Peek
+import org.shapesafe.core.debugging.symbol
 
 trait Op2Like_Imp0 {}
 
 trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
-  type Symbol
+  type Symbol[A1, A2] <: symbol.HasLiteral
+
+  trait Conjecture2[
+      A1 <: Arity,
+      A2 <: Arity
+  ] extends ArityConjecture
+      with HasOuter {
+
+    final def outer: Op2Like.this.type = Op2Like.this
+
+    final override type _Ops = Peek.Infix[A1, Symbol[symbol.?, symbol.?]#Lit, A2] // TODO: add Bracket
+    override type _Ovrd = Symbol[A1#Ovrd, A2#Ovrd]
+  }
+
+  type On[
+      A1 <: Arity,
+      A2 <: Arity
+  ] <: Conjecture2[A1, A2]
+
+  def on(
+      a1: ArityAPI,
+      a2: ArityAPI
+  ): On[a1._Arity, a2._Arity]
 //  object AsShapelessPoly2 extends Poly2 {
 //
 //    implicit def trivial[
@@ -28,33 +49,7 @@ trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
 object Op2Like {
 
-  trait Base {
-    self: Op2Like =>
-
-    trait Conjecture2[
-        A1 <: Arity,
-        A2 <: Arity
-    ] extends ArityConjecture
-        with HasOuter {
-
-      final def outer: Op2Like.this.type = Op2Like.this
-
-      final override type _Ops = Peek.Infix[A1, Symbol, A2] // TODO: add Bracket
-      override type _Ovrd = Ovrd.Infix[A1, Symbol, A2]
-    }
-
-    type On[
-        A1 <: Arity,
-        A2 <: Arity
-    ] <: Conjecture2[A1, A2]
-
-    def on(
-        a1: ArityAPI,
-        a2: ArityAPI
-    ): On[a1._Arity, a2._Arity]
-  }
-
-  trait DebuggingSupport extends Base {
+  trait DebuggingSupport {
     self: Op2Like =>
 
 //    implicit def debug[

@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.OpsUtil._
+import org.shapesafe.core.debugging.symbol
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -16,6 +17,7 @@ case class |<<-[
 ) extends Conjecture1.^[S1] {
 
   override type _Ops = Peek.Infix[S1, " |<<- ", N]
+  override type _Ovrd = symbol.|<<-[S1#Ovrd, N#Ovrd]
 
   override type _Refute = "Dimension mismatch"
 }

@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.OpsUtil.{ForShape, Peek}
+import org.shapesafe.core.debugging.symbol
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -12,6 +13,7 @@ case class CheckDistinct[
 ) extends Conjecture1.^[S1] {
 
   override type _Ops = Peek.PrefixW1["Distinct", S1]
+  override type _Ovrd = symbol.CheckDistinct[S1#Ovrd]
 
   override type _Refute = "Names has duplicates"
 }

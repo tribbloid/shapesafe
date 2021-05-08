@@ -4,20 +4,20 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.OpsUtil
+import org.shapesafe.core.debugging.{symbol, OpsUtil}
 import singleton.ops.+
 
 import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op,
-    SYM <: String
+    SS[A, B] <: symbol.HasLiteral
 ](
     implicit
     sh: Utils.IntSh[??]
-) extends Op2Like {
+) extends Op2.UB[??] {
 
-  type Symbol = SYM
+  override type Symbol[A, B] = SS[A, B]
 
   case class On[
       A1 <: Arity,
@@ -54,9 +54,9 @@ trait Op2_Imp0 {
 
 object Op2 extends Op2_Imp0 {
 
-  type UB[
+  trait UB[
       ??[X1, X2] <: Op
-  ] = Op2[??, _ <: String]
+  ] extends Op2Like
 
   implicit def invar[
       A1 <: Arity,

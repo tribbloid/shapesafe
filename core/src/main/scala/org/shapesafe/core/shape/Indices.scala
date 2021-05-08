@@ -32,7 +32,7 @@ object Indices extends TupleSystem with CanInfix_>< {
   ) extends proto.><[TAIL, HEAD](tail, head)
       with Impl {
 
-    override type _PeekHead = Peek[Head]
+    override type PeekHead = Head
   }
 
   implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound] = {

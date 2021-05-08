@@ -3,9 +3,8 @@ package org.shapesafe.core.axis
 import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.debugging.{CanPeek, OpsUtil}
 import org.shapesafe.core.debugging.OpsUtil.Peek
-import org.shapesafe.core.debugging.OvrdUtil.Ovrd
+import org.shapesafe.core.debugging.{symbol, CanPeek, OpsUtil}
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
@@ -51,7 +50,7 @@ object Axis {
     }
 
     type _Ops = OpsUtil.Br[Peek.Infix[A, " :<<- ", CanPeekName]]
-    override type _Ovrd = Ovrd.:<<-[A, CanPeekName]
+    override type _Ovrd = symbol.:<<-[A#Ovrd, CanPeekName#Ovrd]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arity"

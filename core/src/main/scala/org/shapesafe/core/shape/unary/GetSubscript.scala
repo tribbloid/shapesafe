@@ -5,6 +5,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.debugging.OpsUtil.{ForShape, Peek}
+import org.shapesafe.core.debugging.symbol
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -21,6 +22,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 ) extends Conjecture1.^[S1] {
 
   override type _Ops = Peek.Infix[S1, " GetSubscript ", I]
+  override type _Ovrd = symbol.GetSubscript[S1#Ovrd, I#Ovrd]
 
   override type _Refute = "Index not found"
 }

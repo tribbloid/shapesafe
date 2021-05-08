@@ -2,7 +2,7 @@ package org.shapesafe.m.viz
 
 import com.tribbloids.graph.commons.testlib.BaseSpec
 import com.tribbloids.graph.commons.util.reflect.Reflection
-import com.tribbloids.graph.commons.util.reflect.format.DerivedFormats.{DeAlias, HidePackages}
+import com.tribbloids.graph.commons.util.reflect.format.FormatProtos.{DeAlias, HidePackages}
 import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.{~~, Only}
 import com.tribbloids.graph.commons.util.viz.TypeViz
 import shapeless.Witness
