@@ -4,9 +4,11 @@ import singleton.ops.+
 
 trait ExprLike {
 
-  type Expr[T <: CanPeek] = T#_Expr with T
+  type Expr[T <: CanPeek] = T#_Expr // with T
 
   trait ?
+
+  trait ???
 
   trait :<<-[A, B]
   trait ><[A, B]

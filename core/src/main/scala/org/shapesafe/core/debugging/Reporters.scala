@@ -17,7 +17,7 @@ class Reporters[
 
   import Reporters._
 
-  trait OvrdProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
+  trait ExprProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
     import scope._
     import org.shapesafe.core.debugging.DebuggingUtil._
@@ -65,7 +65,7 @@ class Reporters[
     override object Step1 extends Step1_Imp1
   }
 
-  trait OpsProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
+  trait OpProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
     import scope._
     import org.shapesafe.core.debugging.DebuggingUtil._
@@ -104,12 +104,12 @@ class Reporters[
     override object Step1 extends Step1_Imp1
   }
 
-  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends OpsProofReporter[IUB, TGT] {
+  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = EmitInfo[T]
   }
 
-  trait InterruptReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends OpsProofReporter[IUB, TGT] {
+  trait InterruptReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = EmitError[T]
   }

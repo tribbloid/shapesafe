@@ -6,9 +6,11 @@ import scala.language.experimental.macros
 
 case object ExpressionVizCT extends VizCTSystem {
 
-  override def vizFormat: TypeVizFormat = FormatProtos.Trials(
-    FormatOvrd.Only,
-    Formats.TypeInfo.Short
+  override def vizFormat: TypeVizFormat = FormatProtos.TransformUp(
+    FormatProtos.Trials(
+      FormatOvrd.Only,
+      Formats.TypeInfo.Short
+    )
   )
 
   override def useTree: Boolean = true
