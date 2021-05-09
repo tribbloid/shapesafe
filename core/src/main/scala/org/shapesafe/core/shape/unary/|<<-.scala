@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.OpsUtil._
-import org.shapesafe.core.debugging.symbol
+import org.shapesafe.core.debugging.expr.Expr
+import org.shapesafe.core.debugging.{expr, OpStr}
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -16,8 +16,8 @@ case class |<<-[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type _Ops = Peek.Infix[S1, " |<<- ", N]
-  override type _Ovrd = symbol.|<<-[S1#Ovrd, N#Ovrd]
+  override type _OpStr = OpStr.Infix[S1, " |<<- ", N]
+  override type _Expr = expr.|<<-[Expr[S1], Expr[N]]
 
   override type _Refute = "Dimension mismatch"
 }
@@ -33,7 +33,7 @@ trait NamedWith_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      msg: EmitError[ForShape.Refute0[|<<-[P1, N]]]
+      msg: EmitError[OpStr.ForShape.Refute0[|<<-[P1, N]]]
   ): |<<-[S1, N] =>> LeafShape = {
     ???
   }

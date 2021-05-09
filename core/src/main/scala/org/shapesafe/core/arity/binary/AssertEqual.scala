@@ -3,8 +3,8 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
-import org.shapesafe.core.debugging.{symbol, OpsUtil}
-import org.shapesafe.core.debugging.OpsUtil.{ForArity, Peek}
+import org.shapesafe.core.debugging.{expr, DebuggingUtil, OpStr, OpStrLike}
+import org.shapesafe.core.debugging.OpStr.ForArity
 
 trait AssertEqual_Imp0 {
 
@@ -25,7 +25,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   import ProveArity.Factory._
   import singleton.ops._
 
-  override type Symbol[A, B] = symbol.==[A, B]
+  override type Symbol[A, B] = expr.Elementary.==[A, B]
 
   case class On[
       A1 <: Arity,
@@ -35,7 +35,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a2: A2
   ) extends Conjecture2[A1, A2] {
 
-    override type _Refute = OpsUtil.REFUTE.T + Peek.Infix[A1, " != ", A2]
+    override type _Refute = DebuggingUtil.REFUTE.T + OpStr.Infix[A1, " != ", A2]
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity

@@ -1,8 +1,8 @@
 package org.shapesafe.m.viz
 
-import com.tribbloids.graph.commons.util.TreeFormat
 import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
 import com.tribbloids.graph.commons.util.viz.TypeVizFormat
+import com.tribbloids.graph.commons.util.{HasOuter, TreeFormat}
 import org.shapesafe.m.MWithReflection
 import shapeless.Witness
 import singleton.ops.{+, RequireMsg, RequireMsgSym}
@@ -82,6 +82,13 @@ trait VizCTSystem extends Product {
     //    }
   }
 
+  trait Updated extends VizCTSystem with HasOuter {
+
+    override def outer: VizCTSystem = VizCTSystem.this
+
+    override def vizFormat: TypeVizFormat = VizCTSystem.this.vizFormat
+    override def useTree: Boolean = VizCTSystem.this.useTree
+  }
 }
 
 object VizCTSystem {

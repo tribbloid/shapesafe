@@ -2,14 +2,14 @@ package org.shapesafe.core.arity.binary
 
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
-import org.shapesafe.core.debugging.OpsUtil.Peek
-import org.shapesafe.core.debugging.symbol
+import org.shapesafe.core.debugging.expr.Expr
+import org.shapesafe.core.debugging.{expr, OpStr}
 
 trait Op2Like_Imp0 {}
 
 trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
-  type Symbol[A1, A2] <: symbol.HasLiteral
+  type Symbol[A1, A2] <: expr.HasLiteral
 
   trait Conjecture2[
       A1 <: Arity,
@@ -19,8 +19,8 @@ trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _Ops = Peek.Infix[A1, Symbol[symbol.?, symbol.?]#Lit, A2] // TODO: add Bracket
-    override type _Ovrd = Symbol[A1#Ovrd, A2#Ovrd]
+    final override type _OpStr = OpStr.Infix[A1, Symbol[expr.?, expr.?]#Lit, A2] // TODO: add Bracket
+    override type _Expr = Symbol[Expr[A1], Expr[A2]]
   }
 
   type On[

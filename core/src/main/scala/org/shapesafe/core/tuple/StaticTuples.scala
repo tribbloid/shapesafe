@@ -1,9 +1,9 @@
 package org.shapesafe.core.tuple
 
-import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
-import org.shapesafe.core.debugging.{symbol, CanPeek}
-import org.shapesafe.core.debugging.OpsUtil.Peek
+import org.shapesafe.core.debugging.OpStr.OpStr
+import org.shapesafe.core.debugging.expr.Expr
+import org.shapesafe.core.debugging.{expr, CanPeek}
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
@@ -36,9 +36,9 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override def asList: List[UB] = Nil
 
-    override lazy val toString: _Ops = EYE.value
-    final override type _Ops = EYE.T
-    override type _Ovrd = Only[EYE.T]
+    override lazy val toString: _OpStr = EYE.value
+    final override type _OpStr = EYE.T
+    override type _Expr = EYE.T
   }
   override lazy val Eye = new Eye
 
@@ -69,8 +69,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     type PeekHead <: CanPeek
 
-    final override type _Ops = Peek[TAIL] + " >< " + Peek[PeekHead]
-    final override type _Ovrd = symbol.><[TAIL#Ovrd, PeekHead#Ovrd]
+    final override type _OpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
+    final override type _Expr = expr.><[Expr[TAIL], Expr[PeekHead]]
   }
 }
 

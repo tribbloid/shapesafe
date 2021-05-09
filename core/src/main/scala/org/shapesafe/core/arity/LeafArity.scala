@@ -24,8 +24,8 @@ object LeafArity extends LeafArity_Imp0 {
     type SS = S
     def singleton: S
 
-    override type _Ops = ToString[S]
-    override type _Ovrd = Only[S]
+    override type _OpStr = ToString[S]
+    override type _Expr = S
 
     override lazy val _id: S = singleton
 

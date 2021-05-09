@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
-import org.shapesafe.core.debugging.OpsUtil.Peek
+import org.shapesafe.core.debugging.OpStr.OpStr
 import shapeless.Witness
 import shapeless.Witness.Aux
 
@@ -61,8 +61,8 @@ object ArityAPI {
 
     type _Axis = ^[A]
 
-    type _Ops = Peek[A]
-    type _Ovrd = A#_Ovrd
+    type _OpStr = OpStr[A]
+    type _Expr = A#_Expr
   }
 
   implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity

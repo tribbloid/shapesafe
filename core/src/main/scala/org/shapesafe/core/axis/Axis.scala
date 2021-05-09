@@ -1,10 +1,9 @@
 package org.shapesafe.core.axis
 
 import com.tribbloids.graph.commons.util.IDMixin
-import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.debugging.OpsUtil.Peek
-import org.shapesafe.core.debugging.{symbol, CanPeek, OpsUtil}
+import org.shapesafe.core.debugging.expr.Expr
+import org.shapesafe.core.debugging.{expr, CanPeek, DebuggingUtil, OpStr, OpStrLike}
 import shapeless.Witness
 import shapeless.labelled.FieldType
 
@@ -45,12 +44,12 @@ object Axis {
 
     trait CanPeekName extends CanPeek {
 
-      override type _Ops = Name
-      override type _Ovrd = Only[Name]
+      override type _OpStr = Name
+      override type _Expr = Name
     }
 
-    type _Ops = OpsUtil.Br[Peek.Infix[A, " :<<- ", CanPeekName]]
-    override type _Ovrd = symbol.:<<-[A#Ovrd, CanPeekName#Ovrd]
+    type _OpStr = DebuggingUtil.Br[OpStr.Infix[A, " :<<- ", CanPeekName]]
+    override type _Expr = expr.:<<-[Expr[A], Expr[CanPeekName]]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arity"

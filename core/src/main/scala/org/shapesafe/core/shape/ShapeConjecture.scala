@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.TreeLike
-import org.shapesafe.core.debugging.OpsUtil.CanRefute
+import org.shapesafe.core.debugging.DebuggingUtil.CanRefute
 
 trait ShapeConjecture extends Shape with CanRefute with TreeLike.ProductAsTree {
 

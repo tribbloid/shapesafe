@@ -3,7 +3,7 @@ package org.shapesafe.core.shape
 import com.tribbloids.graph.commons.util.IDMixin
 import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.debugging.CanPeek
-import org.shapesafe.core.debugging.OpsUtil.StrOrRaw
+import org.shapesafe.core.debugging.DebuggingUtil.StrOrRaw
 import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
 import singleton.ops.ToString
@@ -26,8 +26,8 @@ object Index {
 
     override protected def _id = w.value
 
-    override type _Ops = StrOrRaw[S]
-    override type _Ovrd = Only[S]
+    override type _OpStr = StrOrRaw[S]
+    override type _Expr = S
   }
 
   object Name {
@@ -41,8 +41,8 @@ object Index {
     override protected def _id = indexInt
 
     // TODO: type string is too long
-    override type _Ops = StrOrRaw[ToString[N]]
-    override type _Ovrd = Only[ToString[N]]
+    override type _OpStr = StrOrRaw[ToString[N]]
+    override type _Expr = ToString[N]
   }
 
   object I_th {

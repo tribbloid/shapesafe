@@ -6,5 +6,5 @@ object ShapeReporters extends Reporters[ProveShape.type](ProveShape) {
 
   object PeekShape extends PeekReporter[Shape, LeafShape]
 
-  object InterruptShape extends ErrorReporter[Shape, LeafShape]
+  object InterruptShape extends InterruptReporter[Shape, LeafShape]
 }

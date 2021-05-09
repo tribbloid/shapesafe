@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.debugging.OpsUtil.Peek
 import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
 
 import scala.language.implicitConversions

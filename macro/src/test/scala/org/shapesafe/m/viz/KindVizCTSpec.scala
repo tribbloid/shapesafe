@@ -111,7 +111,7 @@ object KindVizCTSpec {
 
     TypeInfo ~ DeAlias ~ HidePackages
   }
-  val stub = KindVizCT.Stub
+  val stub = KindVizCT.NoTree
   val ovrd = KindVizCT.Ovrd
 
   final val finalV = "b"

@@ -4,9 +4,9 @@ import com.tribbloids.graph.commons.util.reflect.format.Formats
 import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 
-class OpsUtilSpec extends BaseSpec {
+class DebuggingUtilSpec extends BaseSpec {
 
-  import OpsUtilSpec._
+  import DebuggingUtilSpec._
 
   val viz = TypeViz.formattedBy(Formats.TypeImpl.Both)
 
@@ -18,7 +18,7 @@ class OpsUtilSpec extends BaseSpec {
   }
 }
 
-object OpsUtilSpec {
+object DebuggingUtilSpec {
 
   trait JJ {
 

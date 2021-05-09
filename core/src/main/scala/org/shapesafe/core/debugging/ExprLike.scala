@@ -1,41 +1,47 @@
 package org.shapesafe.core.debugging
 
-package object symbol {
+import singleton.ops.+
+
+trait ExprLike {
+
+  type Expr[T <: CanPeek] = T#_Expr with T
 
   trait ?
 
   trait :<<-[A, B]
   trait ><[A, B]
 
-//  trait Infix[A, S, B] extends (A ~~ Only[S] ~~ B)
-//  trait PrefixW1[S, A] extends (Only[S] ~~ A)
-//  trait PrefixW2[S, A, B] extends (Only[S] ~~ A ~~ B)
+  //  trait Infix[A, S, B] extends (A ~~ Only[S] ~~ B)
+  //  trait PrefixW1[S, A] extends (Only[S] ~~ A)
+  //  trait PrefixW2[S, A, B] extends (Only[S] ~~ A ~~ B)
 
   trait HasLiteral {
     type Lit
   }
 
-//  trait Infix[A, B] extends HasLiteral {}
-//
-//  trait PrefixW1[A] extends HasLiteral {
-//
-//    type OpsOut = Lit + A
-//  }
+  //  trait Infix[A, B] extends HasLiteral {}
+  //
+  //  trait PrefixW1[A] extends HasLiteral {
+  //
+  //    type OpsOut = Lit + A
+  //  }
 
-  trait +[A, B] extends HasLiteral {
-    type Lit = " + "
-  }
-  trait -[A, B] extends HasLiteral {
-    type Lit = " - "
-  }
-  trait *[A, B] extends HasLiteral {
-    type Lit = " * "
-  }
-  trait /[A, B] extends HasLiteral {
-    type Lit = " / "
-  }
-  trait ==[A, B] extends HasLiteral {
-    type Lit = " == "
+  object Elementary {
+    trait +[A, B] extends HasLiteral {
+      type Lit = " + "
+    }
+    trait -[A, B] extends HasLiteral {
+      type Lit = " - "
+    }
+    trait *[A, B] extends HasLiteral {
+      type Lit = " * "
+    }
+    trait /[A, B] extends HasLiteral {
+      type Lit = " / "
+    }
+    trait ==[A, B] extends HasLiteral {
+      type Lit = " == "
+    }
   }
 
   trait |<<-[A, B]

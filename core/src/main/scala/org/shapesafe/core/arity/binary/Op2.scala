@@ -4,14 +4,14 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.{symbol, OpsUtil}
+import org.shapesafe.core.debugging.{expr, DebuggingUtil}
 import singleton.ops.+
 
 import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op,
-    SS[A, B] <: symbol.HasLiteral
+    SS[A, B] <: expr.HasLiteral
 ](
     implicit
     sh: Utils.IntSh[??]
@@ -28,7 +28,7 @@ class Op2[
   ) extends Conjecture2[A1, A2] {
     // TODO: can this be VerifiedArity?
 
-    override type _Refute = OpsUtil.REFUTE.T + OpsUtil.nonExisting.T
+    override type _Refute = DebuggingUtil.REFUTE.T + DebuggingUtil.nonExisting.T
 
     override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
   }

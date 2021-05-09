@@ -6,5 +6,5 @@ object ArityReporters extends Reporters[ProveArity.type](ProveArity) {
 
   object PeekArity extends PeekReporter[Arity, LeafArity]
 
-  object InterruptArity extends ErrorReporter[Arity, LeafArity]
+  object InterruptArity extends InterruptReporter[Arity, LeafArity]
 }

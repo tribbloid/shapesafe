@@ -3,8 +3,8 @@ package org.shapesafe.core.shape.binary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
-import org.shapesafe.core.debugging.OpsUtil.Peek
-import org.shapesafe.core.debugging.symbol
+import org.shapesafe.core.debugging.expr.Expr
+import org.shapesafe.core.debugging.{expr, OpStr}
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.ops.hlist.Zip
@@ -13,7 +13,7 @@ import shapeless.{::, HList, HNil}
 trait DimensionWise {
 
   val op: Op2Like
-  type _Binary <: symbol.Binary
+  type _Binary <: expr.Binary
 
   // all names must be distinctive - no duplication allowed
   trait _On[
@@ -27,8 +27,8 @@ trait DimensionWise {
     def s1: S1 with Shape
     def s2: S2 with Shape
 
-    override type _Ops = Peek.PrefixW2[_Binary#Lit, S1, S2]
-    override type _Ovrd = _Binary#On[S1#Ovrd, S2#Ovrd]
+    override type _OpStr = OpStr.PrefixW2[_Binary#Lit, S1, S2]
+    override type _Expr = _Binary#On[Expr[S1], Expr[S2]]
   }
 
   object _On {
