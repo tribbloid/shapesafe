@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.expr.Expr
-import org.shapesafe.core.debugging.{expr, OpStr}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -17,7 +17,7 @@ case class |<<-[
 ) extends Conjecture1.^[S1] {
 
   override type _OpStr = OpStr.Infix[S1, " |<<- ", N]
-  override type _Expr = expr.|<<-[Expr[S1], Expr[N]]
+  override type _Expr = Expr.|<<-[Expr[S1], Expr[N]]
 
   override type _Refute = "Dimension mismatch"
 }

@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.expr.Expr
-import org.shapesafe.core.debugging.{expr, OpStr}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -13,7 +13,7 @@ case class CheckDistinct[
 ) extends Conjecture1.^[S1] {
 
   override type _OpStr = OpStr.PrefixW1["Distinct", S1]
-  override type _Expr = expr.CheckDistinct[Expr[S1]]
+  override type _Expr = Expr.CheckDistinct[Expr[S1]]
 
   override type _Refute = "Names has duplicates"
 }

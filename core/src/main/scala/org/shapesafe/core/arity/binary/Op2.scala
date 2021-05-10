@@ -4,14 +4,14 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.{expr, DebuggingUtil}
+import org.shapesafe.core.debugging.{DebuggingUtil, Expr}
 import singleton.ops.+
 
 import scala.language.implicitConversions
 
 class Op2[
     ??[X1, X2] <: Op,
-    SS[A, B] <: expr.HasLiteral
+    SS[A, B] <: Expr.HasLiteral
 ](
     implicit
     sh: Utils.IntSh[??]

@@ -6,10 +6,10 @@ import scala.language.experimental.macros
 
 case object ExpressionVizCT extends VizCTSystem {
 
-  override def vizFormat: TypeVizFormat = FormatProtos.TransformUp(
+  override def vizFormat: TypeVizFormat = FormatProtos.TransformText(
     FormatProtos.Trials(
       FormatOvrd.Only,
-      Formats.TypeInfo.Short
+      Formats.TypeInfo.DeAlias.HideOwner.recursively
     )
   )
 

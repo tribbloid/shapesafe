@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{AssertEqual, Op2, Op2Like}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
-import org.shapesafe.core.debugging.expr
+import org.shapesafe.core.debugging.Expr
 import org.shapesafe.core.shape.binary.DimensionWise
 import org.shapesafe.core.shape.unary.ReduceByName
 import singleton.ops
@@ -30,21 +30,21 @@ trait ArityOpsLike extends HasArity {
     object _AppendByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
-      type _Unary = expr.AppendByName[Op#Symbol[_, _]]
+      type _Unary = Expr.AppendByName[Op#Symbol[_, _]]
     }
 //    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type _Unary = expr.SquashByName[Op#Symbol[_, _]]
+      type _Unary = Expr.SquashByName[Op#Symbol[_, _]]
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = expr.DimensionWise[Op#Symbol[_, _]]
+      type _Binary = Expr.DimensionWise[Op#Symbol[_, _]]
     }
   }
 
@@ -54,16 +54,16 @@ trait ArityOpsLike extends HasArity {
   }
 
 //  object :+ extends Op2[ops.+] with Infix
-  object :+ extends InfixImpl(new Op2[ops.+, expr.Elementary.+])
+  object :+ extends InfixImpl(new Op2[ops.+, Expr.Elementary.+])
   type :+[X <: Arity, Y <: Arity] = :+.On[X, Y]
 
-  object :- extends InfixImpl(new Op2[ops.-, expr.Elementary.-])
+  object :- extends InfixImpl(new Op2[ops.-, Expr.Elementary.-])
   type :-[X <: Arity, Y <: Arity] = :-.On[X, Y]
 
-  object :* extends InfixImpl(new Op2[ops.*, expr.Elementary.*])
+  object :* extends InfixImpl(new Op2[ops.*, Expr.Elementary.*])
   type :*[X <: Arity, Y <: Arity] = :*.On[X, Y]
 
-  object :/ extends InfixImpl(new Op2[ops./, expr.Elementary./])
+  object :/ extends InfixImpl(new Op2[ops./, Expr.Elementary./])
   type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
 
   object :==! extends InfixImpl(AssertEqual)

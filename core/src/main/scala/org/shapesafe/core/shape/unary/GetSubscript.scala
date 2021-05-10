@@ -4,8 +4,8 @@ import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.debugging.expr.Expr
-import org.shapesafe.core.debugging.{expr, OpStr}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -22,7 +22,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 ) extends Conjecture1.^[S1] {
 
   override type _OpStr = OpStr.Infix[S1, " GetSubscript ", I]
-  override type _Expr = expr.GetSubscript[Expr[S1], Expr[I]]
+  override type _Expr = Expr.GetSubscript[Expr[S1], Expr[I]]
 
   override type _Refute = "Index not found"
 }

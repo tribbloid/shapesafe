@@ -121,20 +121,29 @@ object VizCTSystem {
         val r = refl.TypeView(tt).getOnlyInstance
         r.asInstanceOf[VizCTSystem]
       }
-      val useTree = self.useTree
-
-      val str = if (useTree) {
-
-        viz.formattedBy(self.vizFormat).of(tt).treeString
-      } else {
-
-        refl.TypeView(tt).formattedBy(self.typeFormat).text
-      }
-
       val name: String = self.getClass.getCanonicalName.stripSuffix("$")
       val liftSelf = c.parse(name)
 
-      q"$liftSelf.createInfoOf[$tt, $str]"
+      val result =
+        try {
+
+          val useTree = self.useTree
+
+          val str = if (useTree) {
+
+            viz.formattedBy(self.vizFormat).of(tt).treeString
+          } else {
+
+            refl.TypeView(tt).formattedBy(self.typeFormat).text
+          }
+
+          str
+        } catch {
+          case e: Throwable =>
+            "[ ERROR ] " + e.toString
+        }
+
+      q"$liftSelf.createInfoOf[$tt, $result]"
     }
 
     //    def T[A: WeakTypeTag]: Tree = {

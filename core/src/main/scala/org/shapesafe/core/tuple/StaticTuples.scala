@@ -2,8 +2,8 @@ package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
 import org.shapesafe.core.debugging.OpStr.OpStr
-import org.shapesafe.core.debugging.expr.Expr
-import org.shapesafe.core.debugging.{expr, CanPeek}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{CanPeek, Expr}
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
@@ -70,7 +70,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     type PeekHead <: CanPeek
 
     final override type _OpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
-    final override type _Expr = expr.><[Expr[TAIL], Expr[PeekHead]]
+    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
   }
 }
 

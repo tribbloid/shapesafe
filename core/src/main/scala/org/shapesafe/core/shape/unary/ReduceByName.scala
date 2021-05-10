@@ -3,8 +3,8 @@ package org.shapesafe.core.shape.unary
 import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
-import org.shapesafe.core.debugging.expr.Expr
-import org.shapesafe.core.debugging.{expr, OpStr}
+import org.shapesafe.core.debugging.Expr.Expr
+import org.shapesafe.core.debugging.{Expr, OpStr}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.{::, HList}
 
@@ -15,7 +15,7 @@ trait ReduceByName {
   import ProveShape.Factory._
   import ProveShape._
 
-  type _Unary <: expr.Unary
+  type _Unary <: Expr.Unary
 
   val oldNameUpdater: RecordUpdater
 
