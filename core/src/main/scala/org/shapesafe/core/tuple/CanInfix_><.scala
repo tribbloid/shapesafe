@@ -5,7 +5,7 @@ import scala.language.implicitConversions
 trait CanInfix_>< extends CanCons {
   _self: TupleSystem =>
 
-  trait InfixMixin[SELF <: Impl] {
+  trait InfixMixin[SELF <: Tuple] {
 
     def self: SELF
 
@@ -19,7 +19,7 @@ trait CanInfix_>< extends CanCons {
     ): cons.ConsResult = cons(self, head)
   }
 
-  implicit class Infix[SELF <: Impl](val self: SELF) extends InfixMixin[SELF] {}
+  implicit class Infix[SELF <: Tuple](val self: SELF) extends InfixMixin[SELF] {}
 
   implicit def toEyeInfix(s: this.type): Infix[Eye] = Infix[Eye](Eye)
 }

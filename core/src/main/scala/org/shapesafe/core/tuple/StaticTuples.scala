@@ -16,7 +16,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   final type UpperBound = UB
 
-  trait Impl extends IDMixin with CanPeek { // TODO: rename to `Tuple`
+  trait Tuple extends IDMixin with CanPeek { // TODO: rename to `Tuple`
 
     type Static <: HList
     def static: Static
@@ -30,7 +30,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     type _ConsExpr[PEEK <: CanPeek]
   }
 
-  class Eye extends Impl {
+  class Eye extends Tuple {
 
     override type Static = HNil
     override def static: HNil = HNil
@@ -48,12 +48,12 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   // cartesian product symbol
   class ><[
-      TAIL <: Impl,
+      TAIL <: Tuple,
       HEAD <: UB
   ](
       val tail: TAIL,
       val head: HEAD
-  ) extends Impl {
+  ) extends Tuple {
 
     // in scala 3 these will be gone
     type Tail = TAIL
@@ -88,7 +88,7 @@ object StaticTuples {
 
   trait Total[UB] extends StaticTuples[UB] {
 
-    implicit def consAlways[TAIL <: Impl, HEAD <: UB]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+    implicit def consAlways[TAIL <: Tuple, HEAD <: UB]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
       Cons.from[TAIL, HEAD].to { (tail, head) =>
         new ><(tail, head)

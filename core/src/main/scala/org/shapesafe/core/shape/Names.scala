@@ -9,7 +9,7 @@ import shapeless.Witness
 
 import scala.language.implicitConversions
 
-trait Names extends IndicesMagnet with Names.proto.Impl {}
+trait Names extends IndicesMagnet with Names.proto.Tuple {}
 
 object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
 
@@ -17,7 +17,7 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
   object proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
 
-  type Impl = Names
+  type Tuple = Names
 
   class Eye extends proto.Eye with Names {
     override type AsIndices = Indices.Eye
@@ -27,13 +27,13 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
   lazy val Eye = new Eye
 
   class ><[
-      TAIL <: Impl,
+      TAIL <: Tuple,
       HEAD <: UpperBound
   ](
       override val tail: TAIL,
       override val head: HEAD
   ) extends proto.><[TAIL, HEAD](tail, head)
-      with Impl {
+      with Tuple {
 
     val headW: Witness.Aux[HEAD] = Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]]
 
@@ -48,14 +48,14 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
     }
   }
 
-  implicit def consW[TAIL <: Impl, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consW[TAIL <: Tuple, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
     Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }
 
-  implicit class Infix[SELF <: Impl](self: SELF) {
+  implicit class Infix[SELF <: Tuple](self: SELF) {
 
     def ><(name: Witness.Lt[String]): SELF >< name.T = {
 

@@ -4,5 +4,5 @@ package object shape {
 
 //  type Indices = Indices.Impl
 
-  type Dimensions = Dimensions.Impl
+  type Dimensions = Dimensions.Tuple
 }

@@ -4,23 +4,23 @@ trait CanCons {
   _self: TupleSystem =>
 
   // TODO:too much boilerplate, switch to ~~> Proof pattern or Poly1/Poly2?
-  trait Cons[-TAIL <: Impl, -HEAD <: UpperBound] {
+  trait Cons[-TAIL <: Tuple, -HEAD <: UpperBound] {
 
-    type ConsResult <: Impl
+    type ConsResult <: Tuple
 
     def apply(tail: TAIL, head: HEAD): ConsResult
   }
 
   object Cons {
 
-    def from[TAIL <: Impl, HEAD <: UpperBound] = new Factory[TAIL, HEAD]
+    def from[TAIL <: Tuple, HEAD <: UpperBound] = new Factory[TAIL, HEAD]
 
-    class Factory[TAIL <: Impl, HEAD <: UpperBound] {
+    class Factory[TAIL <: Tuple, HEAD <: UpperBound] {
 
-      def to[O <: Impl](fn: (TAIL, HEAD) => O) = new FromFn2[TAIL, HEAD, O](fn)
+      def to[O <: Tuple](fn: (TAIL, HEAD) => O) = new FromFn2[TAIL, HEAD, O](fn)
     }
 
-    case class FromFn2[-TAIL <: Impl, -HEAD <: UpperBound, O <: Impl](
+    case class FromFn2[-TAIL <: Tuple, -HEAD <: UpperBound, O <: Tuple](
         fn: (TAIL, HEAD) => O
     ) extends Cons[TAIL, HEAD] {
 
@@ -29,12 +29,12 @@ trait CanCons {
       final override def apply(tail: TAIL, head: HEAD): ConsResult = fn(tail, head)
     }
 
-    def summonFor[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
+    def summonFor[TAIL <: Tuple, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
         implicit
         ev: Cons[TAIL, HEAD]
     ): ev.type = ev
 
-    def apply[TAIL <: Impl, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
+    def apply[TAIL <: Tuple, HEAD <: UpperBound](tail: TAIL, head: HEAD)(
         implicit
         ev: Cons[TAIL, HEAD]
     ): ev.ConsResult = {

@@ -7,9 +7,9 @@ trait TupleSystem {
 
   type UpperBound
 
-  type Impl
+  type Tuple
 
-  type Eye <: Impl
+  type Eye <: Tuple
   def Eye: Eye
 
 //  type ><[
@@ -17,7 +17,7 @@ trait TupleSystem {
 //      HEAD <: UpperBound
 //  ] <: Impl
 
-  trait AbstractFromHList extends Poly1Base[HList, Impl] {
+  trait AbstractFromHList extends Poly1Base[HList, Tuple] {
 
     final val outer = TupleSystem.this
 

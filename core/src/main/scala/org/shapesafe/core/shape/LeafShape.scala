@@ -21,7 +21,7 @@ trait LeafShape extends Shape with LeafShape.Proto {
   type _Names <: Names
   val names: _Names
 
-  type _Dimensions <: Dimensions.Impl
+  type _Dimensions <: Dimensions.Tuple
   val dimensions: _Dimensions
 
   lazy val runtimeShape: List[Axis] = asList
@@ -89,9 +89,9 @@ object LeafShape extends TupleSystem with CanFromStatic {
   final type UpperBound = Axis
 
   object Proto extends StaticTuples[UpperBound]
-  type Proto = Proto.Impl
+  type Proto = Proto.Tuple
 
-  final type Impl = LeafShape
+  final type Tuple = LeafShape
 
   // Cartesian product doesn't have eye but whatever
   class Eye extends Proto.Eye with LeafShape {
@@ -109,7 +109,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
   // cartesian product symbol
   class ><[
-      TAIL <: Impl,
+      TAIL <: Tuple,
       HEAD <: UpperBound
   ](
       override val tail: TAIL,
@@ -131,7 +131,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
   }
 
   final type ><^[
-      TAIL <: Impl,
+      TAIL <: Tuple,
       HEAD <: Arity
   ] = ><[TAIL, ArityAPI.^[HEAD]]
 
@@ -139,7 +139,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
-        TAIL <: Impl,
+        TAIL <: Tuple,
         C <: Arity
     ](
         implicit
@@ -161,7 +161,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     implicit def inductive[
         H_TAIL <: HList,
-        TAIL <: Impl,
+        TAIL <: Tuple,
         N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
         C <: Arity
     ](
@@ -182,7 +182,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def consAlways[TAIL <: Impl, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consAlways[TAIL <: Tuple, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
     Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
@@ -193,7 +193,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     implicit def inductive[
         H_TAIL <: HList,
-        TAIL <: Impl,
+        TAIL <: Tuple,
         HEAD <: Int with Singleton
     ](
         implicit
@@ -214,7 +214,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
     implicit def inductive[
         H_TAIL <: HList,
-        TAIL <: Impl,
+        TAIL <: Tuple,
         HEAD <: Nat
     ](
         implicit
