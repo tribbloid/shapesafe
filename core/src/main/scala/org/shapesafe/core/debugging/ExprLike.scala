@@ -1,14 +1,8 @@
 package org.shapesafe.core.debugging
 
-import singleton.ops.+
-
 trait ExprLike {
 
   type Expr[T <: CanPeek] = T#_Expr // with T
-
-  trait ?
-
-  trait ???
 
   trait :<<-[A, B]
   trait ><[A, B]
@@ -21,56 +15,38 @@ trait ExprLike {
     type Lit
   }
 
-  //  trait Infix[A, B] extends HasLiteral {}
-  //
-  //  trait PrefixW1[A] extends HasLiteral {
-  //
-  //    type OpsOut = Lit + A
-  //  }
-
-  object Elementary {
-    trait +[A, B] extends HasLiteral {
-      type Lit = " + "
-    }
-    trait -[A, B] extends HasLiteral {
-      type Lit = " - "
-    }
-    trait *[A, B] extends HasLiteral {
-      type Lit = " * "
-    }
-    trait /[A, B] extends HasLiteral {
-      type Lit = " / "
-    }
-    trait ==[A, B] extends HasLiteral {
-      type Lit = " == "
-    }
-  }
-
   trait |<<-[A, B]
-  trait OuterProduct[A, B]
+//  trait OuterProduct[A, B] use >< instead
   trait CheckDistinct[A]
   trait GetSubscript[A, B]
   trait Reorder[A, B]
 
   trait Unary extends HasLiteral {
 
-    trait On[A] extends HasLiteral {
-      type Lit = Unary.this.Lit + "On"
-    }
+    type On[A]
   }
+  trait UnaryOn extends HasLiteral {
 
+    trait On[A] {}
+  }
   trait Binary extends HasLiteral {
 
-    trait On[A, B] extends HasLiteral {}
+    type On[A, B]
+  }
+  trait BinaryOn extends HasLiteral {
+
+    trait On[A, B] {}
   }
 
-  trait AppendByName[O <: HasLiteral] extends Unary {
-    type Lit = "AppendByName[" + O#Lit + "]"
+  import singleton.ops.+
+
+  trait AppendByName[O] extends UnaryOn {
+    type Lit = "AppendByName[" + O + "]"
   }
-  trait SquashByName[O <: HasLiteral] extends Unary {
-    type Lit = "SquashByName[" + O#Lit + "]"
+  trait SquashByName[O] extends UnaryOn {
+    type Lit = "SquashByName[" + O + "]"
   }
-  trait DimensionWise[O <: HasLiteral] extends Binary {
-    type Lit = "DimensionWise[" + O#Lit + "]"
+  trait DimensionWise[O] extends BinaryOn {
+    type Lit = "DimensionWise[" + O + "]"
   }
 }

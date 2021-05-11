@@ -19,7 +19,7 @@ trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _OpStr = OpStr.Infix[A1, Symbol[Expr.?, Expr.?]#Lit, A2] // TODO: add Bracket
+    final override type _OpStr = OpStr.Infix[A1, Symbol[Unit, Unit]#Lit, A2] // TODO: add Bracket
     override type _Expr = Symbol[Expr[A1], Expr[A2]]
   }
 

@@ -30,21 +30,21 @@ trait ArityOpsLike extends HasArity {
     object _AppendByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
-      type _Unary = Expr.AppendByName[Op#Symbol[_, _]]
+      type _Unary = Expr.AppendByName[Op#Symbol[Unit, Unit]#Lit]
     }
 //    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type _Unary = Expr.SquashByName[Op#Symbol[_, _]]
+      type _Unary = Expr.SquashByName[Op#Symbol[Unit, Unit]#Lit]
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expr.DimensionWise[Op#Symbol[_, _]]
+      type _Binary = Expr.DimensionWise[Op#Symbol[Unit, Unit]#Lit]
     }
   }
 
@@ -54,16 +54,16 @@ trait ArityOpsLike extends HasArity {
   }
 
 //  object :+ extends Op2[ops.+] with Infix
-  object :+ extends InfixImpl(new Op2[ops.+, Expr.Elementary.+])
+  object :+ extends InfixImpl(new Op2[ops.+, Expr.+])
   type :+[X <: Arity, Y <: Arity] = :+.On[X, Y]
 
-  object :- extends InfixImpl(new Op2[ops.-, Expr.Elementary.-])
+  object :- extends InfixImpl(new Op2[ops.-, Expr.-])
   type :-[X <: Arity, Y <: Arity] = :-.On[X, Y]
 
-  object :* extends InfixImpl(new Op2[ops.*, Expr.Elementary.*])
+  object :* extends InfixImpl(new Op2[ops.*, Expr.*])
   type :*[X <: Arity, Y <: Arity] = :*.On[X, Y]
 
-  object :/ extends InfixImpl(new Op2[ops./, Expr.Elementary./])
+  object :/ extends InfixImpl(new Op2[ops./, Expr./])
   type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
 
   object :==! extends InfixImpl(AssertEqual)

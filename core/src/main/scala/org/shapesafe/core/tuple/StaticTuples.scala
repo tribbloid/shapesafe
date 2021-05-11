@@ -26,7 +26,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override protected def _id: Any = asList
 
-    type ><[HEAD <: UB] = StaticTuples.this.><[this.type, UB]
+    final type Cons[HH <: UB] = StaticTuples.this.><[this.type, UB]
+    type _ConsExpr[PEEK <: CanPeek]
   }
 
   class Eye extends Impl {
@@ -37,8 +38,11 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override def asList: List[UB] = Nil
 
     override lazy val toString: _OpStr = EYE.value
+
     final override type _OpStr = EYE.T
-    override type _Expr = EYE.T
+
+    final override type _ConsExpr[PEEK <: CanPeek] = Expr[PEEK]
+    final override type _Expr = EYE.T
   }
   override lazy val Eye = new Eye
 
@@ -70,6 +74,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     type PeekHead <: CanPeek
 
     final override type _OpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
+
+    final override type _ConsExpr[PEEK <: CanPeek] = Expr.><[Expr[this.type], Expr[PEEK]]
     final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
   }
 }

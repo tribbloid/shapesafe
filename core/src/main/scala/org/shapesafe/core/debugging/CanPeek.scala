@@ -1,7 +1,5 @@
 package org.shapesafe.core.debugging
 
-import com.tribbloids.graph.commons.util.reflect.format.Formats.KindName
-
 trait CanPeek {
 
   type _OpStr // use singleton-ops

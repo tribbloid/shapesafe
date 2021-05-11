@@ -1,7 +1,7 @@
 package org.shapesafe.m.viz
 
 import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
-import com.tribbloids.graph.commons.util.viz.TypeVizFormat
+import com.tribbloids.graph.commons.util.viz.{TypeViz, TypeVizFormat}
 import com.tribbloids.graph.commons.util.{HasOuter, TreeFormat}
 import org.shapesafe.m.MWithReflection
 import shapeless.Witness
@@ -13,12 +13,12 @@ trait VizCTSystem extends Product {
 
   import VizCTSystem._
 
-  def vizFormat: TypeVizFormat
+  def format: TypeVizFormat
 
   def useTree: Boolean
 
-  final def typeFormat: TypeFormat = vizFormat.base
-  final def treeFormat: TreeFormat = vizFormat.treeFormat
+  final def typeFormat: TypeFormat = format.base
+  final def treeFormat: TreeFormat = format.treeFormat
 
   trait InfoOf[T] {
     type Out
@@ -82,11 +82,13 @@ trait VizCTSystem extends Product {
     //    }
   }
 
+  lazy val runtime = TypeViz.formattedBy(this.format)
+
   trait Updated extends VizCTSystem with HasOuter {
 
     override def outer: VizCTSystem = VizCTSystem.this
 
-    override def vizFormat: TypeVizFormat = VizCTSystem.this.vizFormat
+    override def format: TypeVizFormat = VizCTSystem.this.format
     override def useTree: Boolean = VizCTSystem.this.useTree
   }
 }
@@ -131,7 +133,7 @@ object VizCTSystem {
 
           val str = if (useTree) {
 
-            viz.formattedBy(self.vizFormat).of(tt).treeString
+            viz.formattedBy(self.format).of(tt).treeString
           } else {
 
             refl.TypeView(tt).formattedBy(self.typeFormat).text

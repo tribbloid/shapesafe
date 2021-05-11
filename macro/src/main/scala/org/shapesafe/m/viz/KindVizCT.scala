@@ -7,7 +7,7 @@ import scala.language.experimental.macros
 
 case object KindVizCT extends VizCTSystem {
 
-  override def vizFormat: TypeVizFormat = Formats.KindName.HidePackage.recursively
+  override def format: TypeVizFormat = Formats.KindName.HidePackage.recursively
   override def useTree: Boolean = true
 
   implicit def infoOf[I]: InfoOf[I] = macro VizCTSystem.Macros.infoOf[I, this.type]
@@ -21,7 +21,7 @@ case object KindVizCT extends VizCTSystem {
 
   case object Ovrd extends Updated {
 
-    override def vizFormat: TypeVizFormat = EnableOvrd(outer.typeFormat)
+    override def format: TypeVizFormat = EnableOvrd(outer.typeFormat)
     override def useTree: Boolean = false
 
     implicit def infoOf[I]: InfoOf[I] = macro VizCTSystem.Macros.infoOf[I, this.type]

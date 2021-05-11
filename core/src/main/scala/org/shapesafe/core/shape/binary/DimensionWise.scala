@@ -13,7 +13,7 @@ import shapeless.{::, HList, HNil}
 trait DimensionWise {
 
   val op: Op2Like
-  type _Binary <: Expr.Binary
+  type _Binary <: Expr.BinaryOn
 
   // all names must be distinctive - no duplication allowed
   trait _On[

@@ -15,7 +15,7 @@ trait ReduceByName {
   import ProveShape.Factory._
   import ProveShape._
 
-  type _Unary <: Expr.Unary
+  type _Unary <: Expr.UnaryOn
 
   val oldNameUpdater: RecordUpdater
 

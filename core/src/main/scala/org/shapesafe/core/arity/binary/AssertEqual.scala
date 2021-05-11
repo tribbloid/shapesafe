@@ -25,7 +25,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
   import ProveArity.Factory._
   import singleton.ops._
 
-  override type Symbol[A, B] = Expr.Elementary.==[A, B]
+  override type Symbol[A, B] = Expr.==[A, B]
 
   case class On[
       A1 <: Arity,

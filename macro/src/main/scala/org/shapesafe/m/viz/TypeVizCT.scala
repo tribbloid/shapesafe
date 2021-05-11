@@ -8,7 +8,7 @@ import scala.reflect.macros.whitebox
 
 case object TypeVizCT extends VizCTSystem {
 
-  override def vizFormat: TypeVizFormat = TypeFormat.Default
+  override def format: TypeVizFormat = TypeFormat.Default
   override def useTree: Boolean = true
 
   implicit def infoOf[I]: InfoOf[I] = macro VizCTSystem.Macros.infoOf[I, this.type]
