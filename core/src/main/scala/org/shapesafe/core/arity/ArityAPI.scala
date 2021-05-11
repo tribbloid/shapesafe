@@ -32,15 +32,7 @@ trait ArityAPI extends ArityOpsLike with Axis {
       prove: _Arity |- O
   ): ArityAPI.^[O] = verify(prove)
 
-  def peek[
-      O <: LeafArity
-  ](
-      implicit
-      reporter: ArityReporters.PeekArity.Case[_Arity],
-      prove: _Arity |- O
-  ): ArityAPI.^[O] = verify(prove)
-
-  def peekOnly(
+  def peek(
       implicit
       reporter: PeekArity.Case[_Arity]
   ): this.type = this
@@ -49,6 +41,14 @@ trait ArityAPI extends ArityOpsLike with Axis {
       implicit
       reporter: InterruptArity.Case[_Arity]
   ): this.type = this
+
+  def reason[
+      O <: LeafArity
+  ](
+      implicit
+      reporter: ArityReporters.PeekArity.Case[_Arity],
+      prove: _Arity |- O
+  ): ArityAPI.^[O] = verify(prove)
 }
 
 object ArityAPI {

@@ -40,15 +40,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
       prove: _Shape |- O
   ): ^[O] = verify(prove)
 
-  def peek[
-      O <: LeafShape
-  ](
-      implicit
-      reporter: ShapeReporters.PeekShape.Case[_Shape],
-      prove: _Shape |- O
-  ): ^[O] = verify(prove)
-
-  def peekOnly(
+  def peek(
       implicit
       reporter: ShapeReporters.PeekShape.Case[_Shape]
   ): this.type = this
@@ -57,6 +49,14 @@ trait ShapeAPI extends VectorOps with MatrixOps {
       implicit
       reporter: ShapeReporters.InterruptShape.Case[_Shape]
   ): this.type = this
+
+  def reason[
+      O <: LeafShape
+  ](
+      implicit
+      reporter: ShapeReporters.PeekShape.Case[_Shape],
+      prove: _Shape |- O
+  ): ^[O] = verify(prove)
 
   /**
     * assign new names
