@@ -76,7 +76,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     final override type _OpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
 
     final override type _ConsExpr[PEEK <: CanPeek] = Expr.><[Expr[this.type], Expr[PEEK]]
-    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
+//    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
+    final override type _Expr = TAIL#_ConsExpr[PeekHead]
   }
 }
 
