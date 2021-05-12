@@ -82,7 +82,7 @@ object ProofScope {
 
       trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.Factory.=>>^^[I, P]
 
-      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.ToBe[O]] with root.Factory.=>>[I, O]
+      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] with root.Factory.=>>[I, O]
     }
 
     trait Factory[I] extends root.Factory[I] {
@@ -95,7 +95,7 @@ object ProofScope {
 
       override def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
 //        override def valueOf(v: I): O = fn(v)
-        override def apply(v: I): root.Term.ToBe[O] = root.Term.ToBe[O](_fn(v))
+        override def apply(v: I): root.Term.^[O] = root.Term.^[O](_fn(v))
       }
     }
   }

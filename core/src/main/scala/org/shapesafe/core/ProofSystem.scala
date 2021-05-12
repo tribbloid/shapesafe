@@ -46,21 +46,21 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
       * @tparam I src type
       * @tparam O tgt type
       */
-    trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.ToBe[O]] {}
+    trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] {}
   }
 
   trait Factory[I] {
 
     import Factory._
 
-    def =>>^^[P <: Consequent](_fn: I => P) = new (I =>>^^ P) {
+    def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
       override def apply(v: I): P = _fn(v)
     }
 
-    def =>>[O <: OUB](_fn: I => O) = new (I =>> O) {
+    def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
 //      override def valueOf(v: I): O = _fn(v)
 
-      override def apply(v: I): root.Term.ToBe[O] = root.Term.ToBe[O](_fn(v))
+      override def apply(v: I): root.Term.^[O] = root.Term.^[O](_fn(v))
     }
 
     def summon[O <: OUB](

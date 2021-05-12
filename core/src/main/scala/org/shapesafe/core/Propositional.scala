@@ -24,7 +24,7 @@ trait Propositional[OUB] {
       final type Domain = O
     }
 
-    case class ToBe[O <: OUB](val value: O) extends Of[O]
+    case class ^[O <: OUB](val value: O) extends Of[O]
   }
 }
 
