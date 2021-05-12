@@ -100,7 +100,7 @@ allprojects {
         testImplementation("org.junit.jupiter:junit-jupiter:5.6.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.8")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.9")
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
 
