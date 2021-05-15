@@ -2,7 +2,7 @@
 
 **shapesafe** is the missing compile-time verifier for numerical linear algebra on JVM, obvious shape and indexing errors in tensor operations are captured by scala's typing system.
 
-shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
+shapesafe actively proves itself while being written. The following capabilities are introduced at inception:
 
 - static & runtime-dependent tensor shapes of arbitrary rank
 
@@ -12,7 +12,7 @@ shapesafe is one-size-fits-all. The following capabilities are introduced at inc
 
 ![S2](doc/video/S2.gif)
 
-- contractions & operations that depends on index equality, generally those representable by einsum notation (dot/cross/matrix/hadamard product)
+- tensor contractions & operations that depends on index equality, (all cases of EinSum, dot/cross/matrix/hadamard product)
 
 ![S3](doc/video/S3.gif)
 
@@ -20,6 +20,9 @@ shapesafe is one-size-fits-all. The following capabilities are introduced at inc
 
 ![S4](doc/video/S4.gif)
 
+- complex function composition, with no implicit scope
+
+![S5](doc/video/S5.gif)
 
 **It is not a tensor computing library!** Instead, it is designed to augment existing libraries for less error-prone prototyping (see Roadmap for possible augmentations).
 
@@ -45,7 +48,11 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js 
 - DL4j & ND4j integration
 - breeze integration (only tensors to up to rank-2 is required)
 
-##### Upgrade to Scala 3 (dotty)
+[comment]: <> (### Architecture)
+
+[comment]: <> (Contrary to many of its predecessors, all type-level operations in shapesafe are lazy, and invoking them requires no implicit arguments. This is a deliberate design which allows complex compositions to be defined with little boilerplate.)
+
+##### Upgrade to Scala 3
 
 Most features in shapeless & singleton-ops are taken over by native compiler features:
 
