@@ -5,9 +5,21 @@
 shapesafe is one-size-fits-all. The following capabilities are introduced at inception:
 
 - static & runtime-dependent tensor shapes of arbitrary rank
+
+![S1](doc/video/S1.gif)
+
 - named tensor: each dimension is indexed by both its name and ordinal number
+
+![S2](doc/video/S2.gif)
+
 - contractions & operations that depends on index equality, generally those representable by einsum notation (dot/cross/matrix/hadamard product)
+
+![S3](doc/video/S3.gif)
+
 - operations that depends on shape arithmetics (convolution, direct sum, kronecker product, flatten/reshape)
+
+![S4](doc/video/S4.gif)
+
 
 **It is not a tensor computing library!** Instead, it is designed to augment existing libraries for less error-prone prototyping (see Roadmap for possible augmentations).
 
