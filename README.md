@@ -48,6 +48,12 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js 
 - DL4j & ND4j integration
 - breeze integration (only tensors to up to rank-2 is required)
 
+### How to compile
+
+In POSIX shell, run `./dev/make-all.sh`
+
+Guaranteed to be working by [Continuous Integration](.github/workflows/main.yml)
+
 [comment]: <> (### Architecture)
 
 [comment]: <> (Contrary to many of its predecessors, all type-level operations in shapesafe are lazy, and invoking them requires no implicit arguments. This is a deliberate design which allows complex compositions to be defined with little boilerplate.)
