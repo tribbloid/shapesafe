@@ -26,9 +26,9 @@ shapesafe actively proves itself while being written. The following capabilities
 
 **It is not a tensor computing library!** Instead, it is designed to augment existing libraries for less error-prone prototyping (see Roadmap for possible augmentations).
 
-shapesafe started as an assignment to understand Martin-Löf type theory used by scala compiler, it minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
+shapesafe started as an assignment to understand intuitionistic type theory used in compiler design, it minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
 
-Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js will only be enforced intermittenly and upon request, please create (or vote for) tickets to backport for a specific major version.
+Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js will only be enforced intermittently and upon request, please create (or vote for) tickets to backport for a specific major version.
 
 ### Build Status
 
@@ -70,7 +70,7 @@ Most features in shapeless & singleton-ops are taken over by native compiler fea
 
 ... but some are still missing:
 
-- extensible & contractable Record type
+- extensible & contractible Record type
   - shapeless.record => ???
   - used to derive output of EinSum & tensor contraction
   - proposed a long time ago: https://github.com/lampepfl/dotty-feature-requests/issues/8, but contraction is still problematic
