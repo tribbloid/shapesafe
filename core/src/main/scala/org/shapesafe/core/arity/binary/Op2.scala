@@ -36,22 +36,6 @@ class Op2[
   override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
 }
 
-trait Op2_Imp0 {
-
-  implicit def unchecked[
-      A1 <: Arity,
-      A2 <: Arity,
-      O <: ProveArity.Term,
-      ??[X1, X2] <: Op
-  ](
-      implicit
-      domain: UncheckedDomain[A1, A2, O],
-      sh: Utils.IntSh[??]
-  ) = {
-    domain.forOp2[??]
-  }
-}
-
 object Op2 extends Op2_Imp0 {
 
   trait UB[

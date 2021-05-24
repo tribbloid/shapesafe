@@ -1,10 +1,16 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
+import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
-import org.shapesafe.core.debugging.{DebuggingUtil, Expr, OpStr, OpStrLike}
 import org.shapesafe.core.debugging.OpStr.ForArity
+import org.shapesafe.core.debugging.{DebuggingUtil, Expr, OpStr}
+
+trait Require[
+    ??[X1, X2] <: Op,
+    SS[A, B] <: Expr.HasLiteral
+] {}
 
 trait AssertEqual_Imp0 {
 

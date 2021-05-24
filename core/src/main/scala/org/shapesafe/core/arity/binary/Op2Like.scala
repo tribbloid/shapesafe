@@ -5,9 +5,7 @@ import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
 import org.shapesafe.core.debugging.Expr.Expr
 import org.shapesafe.core.debugging.{Expr, OpStr}
 
-trait Op2Like_Imp0 {}
-
-trait Op2Like extends Op2Like.DebuggingSupport with Op2Like_Imp0 {
+trait Op2Like extends Op2Like.DebuggingSupport {
 
   type Symbol[A1, A2] <: Expr.HasLiteral
 
