@@ -4,75 +4,81 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.{DebuggingUtil, Expr}
+import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
 import singleton.ops.+
 
+import scala.collection.mutable
 import scala.language.implicitConversions
 
-class Op2[
-    ??[X1, X2] <: Op,
-    SS[A, B] <: Expr.HasLiteral
-](
-    implicit
-    sh: Utils.IntSh[??]
-) extends Op2.UB[??] {
+trait Op2 extends Op2Like {
 
-  override type Symbol[A, B] = SS[A, B]
-
-  case class On[
-      A1 <: Arity,
-      A2 <: Arity
-  ](
-      a1: A1,
-      a2: A2
-  ) extends Conjecture2[A1, A2] {
-    // TODO: can this be VerifiedArity?
-
-    override type _Refute = DebuggingUtil.REFUTE.T + DebuggingUtil.nonExisting.T
-
-    override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
-  }
-
-  override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
-}
-
-trait Op2_Imp0 {
-
-  implicit def unchecked[
-      A1 <: Arity,
-      A2 <: Arity,
-      O <: ProveArity.Term,
-      ??[X1, X2] <: Op
-  ](
-      implicit
-      domain: UncheckedDomain[A1, A2, O],
-      sh: Utils.IntSh[??]
-  ) = {
-    domain.forOp2[??]
-  }
+  type Lemma[X1, X2] <: Op
 }
 
 object Op2 extends Op2_Imp0 {
 
-  trait UB[
-      ??[X1, X2] <: Op
-  ] extends Op2Like
+  class Impl[
+      ??[X1, X2] <: Op,
+      SS[A, B] <: DebugSymbol
+  ](
+      implicit
+      sh: Utils.IntSh[??]
+  ) extends Op2 {
+
+    override type Lemma[X1, X2] = ??[X1, X2]
+    override type Debug[A, B] = SS[A, B]
+
+    case class On[
+        A1 <: Arity,
+        A2 <: Arity
+    ](
+        a1: A1,
+        a2: A2
+    ) extends Conjecture2[A1, A2] {
+      // TODO: can this be VerifiedArity?
+
+      override type _Refute =
+        DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#_AsStr, A2] + DebugUtil.UNDEFINED.T
+
+      override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
+    }
+
+    override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
+  }
+
+  lazy val cache = mutable.Map.empty[AnyRef, Op2]
+
+  def apply[
+      ??[X1, X2] <: Op,
+      SS[A, B] <: DebugSymbol
+  ](
+      implicit
+      sh: Utils.IntSh[??]
+  ): Impl[??, SS] = {
+
+    cache
+      .getOrElseUpdate(
+        sh,
+        new Impl[??, SS]
+      )
+      .asInstanceOf[Impl[??, SS]]
+  }
 
   implicit def invar[
       A1 <: Arity,
       A2 <: Arity,
       S1,
       S2,
-      ??[X1, X2] <: Op
+      OP <: Op2
   ](
       implicit
       bound1: A1 |-< Const[S1], // TODO: make it similar to unsafe
       bound2: A2 |-< Const[S2],
-      lemma: S1 ?? S2
+      lemma: OP#Lemma[S1, S2]
   ) = {
-    val domain = InvarDomain[A1, A2, S1, S2]()(bound1, bound2)
-
-    domain.forOp2[??]
+    ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
+      LeafArity.Derived.summon[OP#Lemma[S1, S2]](lemma)
+    }
   }
 
 //  def apply[

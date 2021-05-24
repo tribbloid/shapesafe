@@ -1,7 +1,7 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.Expr.Expr
-import org.shapesafe.core.debugging.OpStr.OpStr
+import org.shapesafe.core.debugging.Expressions.Expr
+import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import org.shapesafe.m.viz.ExpressionVizCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
@@ -18,7 +18,7 @@ class Reporters[
 
   trait ExprProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
-    import org.shapesafe.core.debugging.DebuggingUtil._
+    import org.shapesafe.core.debugging.DebugUtil._
     import scope._
 
     trait Step1_Imp3 extends Poly1Base[Iub, XString] {
@@ -66,7 +66,7 @@ class Reporters[
 
   trait OpProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
-    import org.shapesafe.core.debugging.DebuggingUtil._
+    import org.shapesafe.core.debugging.DebugUtil._
     import scope._
 
     trait Step1_Imp3 extends Poly1Base[Iub, XString] {

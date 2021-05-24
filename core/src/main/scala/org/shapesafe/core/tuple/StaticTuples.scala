@@ -1,9 +1,9 @@
 package org.shapesafe.core.tuple
 
 import com.tribbloids.graph.commons.util.{IDMixin, TextBlock}
-import org.shapesafe.core.debugging.OpStr.OpStr
-import org.shapesafe.core.debugging.Expr.Expr
-import org.shapesafe.core.debugging.{CanPeek, Expr}
+import org.shapesafe.core.debugging.OpStrs.OpStr
+import org.shapesafe.core.debugging.Expressions.Expr
+import org.shapesafe.core.debugging.{CanPeek, Expressions}
 import org.shapesafe.core.util.RecordView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
@@ -37,12 +37,12 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     override def asList: List[UB] = Nil
 
-    override lazy val toString: _OpStr = EYE.value
+    override lazy val toString: _AsStr = EYE.value
 
-    final override type _OpStr = EYE.T
+    final override type _AsStr = EYE.T
 
     final override type _ConsExpr[PEEK <: CanPeek] = Expr[PEEK]
-    final override type _Expr = EYE.T
+    final override type _AsExpr = EYE.T
   }
   override lazy val Eye = new Eye
 
@@ -73,11 +73,11 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
     type PeekHead <: CanPeek
 
-    final override type _OpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
+    final override type _AsStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
 
-    final override type _ConsExpr[PEEK <: CanPeek] = Expr.><[Expr[this.type], Expr[PEEK]]
+    final override type _ConsExpr[PEEK <: CanPeek] = Expressions.><[Expr[this.type], Expr[PEEK]]
 //    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
-    final override type _Expr = TAIL#_ConsExpr[PeekHead]
+    final override type _AsExpr = TAIL#_ConsExpr[PeekHead]
   }
 }
 

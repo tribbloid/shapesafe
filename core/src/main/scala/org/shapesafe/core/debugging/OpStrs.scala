@@ -1,12 +1,12 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.DebuggingUtil._
+import org.shapesafe.core.debugging.DebugUtil._
 import singleton.ops.+
 
-trait OpStrLike {
+object OpStrs {
 
   type OpStr[T <: CanPeek] = StrOrRaw[
-    T#_OpStr
+    T#_AsStr
   ]
 
   // TODO: brackets?
