@@ -1,37 +1,17 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Const
-import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity}
-import org.shapesafe.core.debugging.OpStr.ForArity
-import org.shapesafe.core.debugging.{DebuggingUtil, Expr, OpStr}
-
-trait Require[
-    ??[X1, X2] <: Op,
-    SS[A, B] <: Expr.HasLiteral
-] {}
-
-trait AssertEqual_Imp0 {
-
-  implicit def unchecked[
-      A1 <: Arity,
-      A2 <: Arity,
-      O <: ProveArity.Term
-  ](
-      implicit
-      domain: UncheckedDomain[A1, A2, O]
-  ): ProveArity.Proof[A1 :==! A2, O] = {
-    domain.forEqual
-  }
-}
+import org.shapesafe.core.debugging.OpStrs.ForArity
+import org.shapesafe.core.debugging.{DebuggingUtil, Expressions, OpStrs}
 
 object AssertEqual extends Op2Like with AssertEqual_Imp0 {
 
   import ProveArity.Factory._
   import singleton.ops._
 
-  override type Symbol[A, B] = Expr.==[A, B]
+  override type Symbol[A, B] = Expressions.==[A, B]
 
   case class On[
       A1 <: Arity,
@@ -41,7 +21,7 @@ object AssertEqual extends Op2Like with AssertEqual_Imp0 {
       a2: A2
   ) extends Conjecture2[A1, A2] {
 
-    override type _Refute = DebuggingUtil.REFUTE.T + OpStr.Infix[A1, " != ", A2]
+    override type _Refute = DebuggingUtil.REFUTE.T + OpStrs.Infix[A1, " != ", A2]
 
     override lazy val runtimeArity: Int = {
       val v1 = a1.runtimeArity

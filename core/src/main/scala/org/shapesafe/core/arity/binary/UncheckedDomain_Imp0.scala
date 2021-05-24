@@ -11,23 +11,23 @@ trait UncheckedDomain_Imp0 {
   case class D2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Term
+      O <: Arity
   ]()(
       implicit
       val bound1: A1 |-< Unchecked,
-      val bound2: A2 Proof O
+      val bound2: A2 |-< O
   ) extends UncheckedDomain[A1, A2, O] {
 
-    override def selectSafer(a1: A1, a2: A2): O = bound2(a2)
+    override def selectMoreSpecific(a1: A1, a2: A2): O = bound2.valueOf(a2)
   }
 
   implicit def d2[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Term
+      O <: Arity
   ](
       implicit
       bound1: A1 |-< Unchecked,
-      bound2: A2 Proof O
+      bound2: A2 |-< O
   ): UncheckedDomain[A1, A2, O] = D2()
 }

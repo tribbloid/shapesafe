@@ -1,8 +1,8 @@
 package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.Expr.Expr
-import org.shapesafe.core.debugging.{Expr, OpStr}
+import org.shapesafe.core.debugging.Expressions.Expr
+import org.shapesafe.core.debugging.{Expressions, OpStrs}
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Shape}
@@ -17,8 +17,8 @@ case class OuterProduct[
     s2: S2
 ) extends Conjecture2.^[S1, S2] {
 
-  override type _OpStr = OpStr.Infix[S1, " OuterProduct ", S2]
-  override type _Expr = Expr.><[Expr[S1], Expr[S2]]
+  override type _OpStr = OpStrs.Infix[S1, " OuterProduct ", S2]
+  override type _Expression = Expressions.><[Expr[S1], Expr[S2]]
 }
 
 trait OuterProduct_Imp0 {

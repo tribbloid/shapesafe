@@ -32,9 +32,7 @@ trait Arity extends CanPeek {
   final override def toString: String = fullStr
 }
 
-trait Arity_Imp0 {}
-
-object Arity extends Arity_Imp0 {
+object Arity {
 
   trait Verifiable extends Arity {}
 

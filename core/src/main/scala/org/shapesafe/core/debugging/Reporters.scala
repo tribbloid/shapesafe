@@ -1,7 +1,7 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.Expr.Expr
-import org.shapesafe.core.debugging.OpStr.OpStr
+import org.shapesafe.core.debugging.Expressions.Expr
+import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import org.shapesafe.m.viz.ExpressionVizCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}

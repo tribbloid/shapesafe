@@ -44,7 +44,7 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
     trait PeekHead extends CanPeek {
       override type _OpStr = Head
-      override type _Expr = Head
+      override type _Expression = Head
     }
   }
 

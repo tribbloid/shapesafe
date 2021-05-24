@@ -13,9 +13,7 @@ import scala.language.implicitConversions
   */
 trait LeafArity extends VerifiedArity {}
 
-trait LeafArity_Imp0 {}
-
-object LeafArity extends LeafArity_Imp0 {
+object LeafArity {
 
   import Witness._
 
@@ -25,7 +23,7 @@ object LeafArity extends LeafArity_Imp0 {
     def singleton: S
 
     override type _OpStr = ToString[S]
-    override type _Expr = S
+    override type _Expression = S
 
     override lazy val _id: S = singleton
 

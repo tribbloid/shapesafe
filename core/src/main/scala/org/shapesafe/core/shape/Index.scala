@@ -27,7 +27,7 @@ object Index {
     override protected def _id = w.value
 
     override type _OpStr = StrOrRaw[S]
-    override type _Expr = S
+    override type _Expression = S
   }
 
   object Name {
@@ -42,7 +42,7 @@ object Index {
 
     // TODO: type string is too long
     override type _OpStr = StrOrRaw[ToString[N]]
-    override type _Expr = ToString[N]
+    override type _Expression = ToString[N]
   }
 
   object I_th {
