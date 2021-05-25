@@ -4,7 +4,7 @@ import com.tribbloids.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{DebugSymbol, Expressions, OpStrs}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import shapeless.{::, HList}
 
@@ -15,7 +15,7 @@ trait ReduceByName {
   import ProveShape.Factory._
   import ProveShape._
 
-  type _Unary <: Expressions.UnaryOn
+  type _Unary <: DebugSymbol.On1
 
   val oldNameUpdater: RecordUpdater
 
@@ -29,8 +29,8 @@ trait ReduceByName {
 
     def s1: S1 with Shape
 
-    override type _OpStr = OpStrs.PrefixW1[_Unary#_OpStr, S1]
-    override type _Expression = _Unary#On[Expr[S1]]
+    override type _AsStr = OpStrs.PrefixW1[_Unary#_AsStr, S1]
+    override type _AsExpr = _Unary#On[Expr[S1]]
   }
 
   object _On {

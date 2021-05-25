@@ -12,8 +12,8 @@ case class CheckDistinct[
     s1: S1 with Shape
 ) extends Conjecture1.^[S1] {
 
-  override type _OpStr = OpStrs.PrefixW1["Distinct", S1]
-  override type _Expression = Expressions.CheckDistinct[Expr[S1]]
+  override type _AsStr = OpStrs.PrefixW1["Distinct", S1]
+  override type _AsExpr = Expressions.CheckDistinct[Expr[S1]]
 
   override type _Refute = "Names has duplicates"
 }

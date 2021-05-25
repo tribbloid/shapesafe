@@ -16,8 +16,8 @@ case class |<<-[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type _OpStr = OpStrs.Infix[S1, " |<<- ", N]
-  override type _Expression = Expressions.|<<-[Expr[S1], Expr[N]]
+  override type _AsStr = OpStrs.Infix[S1, " |<<- ", N]
+  override type _AsExpr = Expressions.|<<-[Expr[S1], Expr[N]]
 
   override type _Refute = "Dimension mismatch"
 }

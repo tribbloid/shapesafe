@@ -31,4 +31,5 @@ object Utils {
   //  }
 
   type IntSh[??[_, _] <: Op] = TwoFaceAny.Int.Shell2[??, Int, std.Int, Int, std.Int]
+  type BoolSh[??[_, _] <: Op] = TwoFaceAny.Boolean.Shell2[??, Int, std.Int, Int, std.Int]
 }

@@ -17,8 +17,8 @@ case class OuterProduct[
     s2: S2
 ) extends Conjecture2.^[S1, S2] {
 
-  override type _OpStr = OpStrs.Infix[S1, " OuterProduct ", S2]
-  override type _Expression = Expressions.><[Expr[S1], Expr[S2]]
+  override type _AsStr = OpStrs.Infix[S1, " OuterProduct ", S2]
+  override type _AsExpr = Expressions.><[Expr[S1], Expr[S2]]
 }
 
 trait OuterProduct_Imp0 {

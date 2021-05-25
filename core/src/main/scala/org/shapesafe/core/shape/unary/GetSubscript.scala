@@ -21,8 +21,8 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type _OpStr = OpStrs.Infix[S1, " GetSubscript ", I]
-  override type _Expression = Expressions.GetSubscript[Expr[S1], Expr[I]]
+  override type _AsStr = OpStrs.Infix[S1, " GetSubscript ", I]
+  override type _AsExpr = Expressions.GetSubscript[Expr[S1], Expr[I]]
 
   override type _Refute = "Index not found"
 }

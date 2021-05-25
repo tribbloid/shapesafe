@@ -3,7 +3,7 @@ package org.shapesafe.core.debugging
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
-object DebuggingUtil {
+object DebugUtil {
 
   type StrOrRaw[T1] = ITE[
     IsString[T1],
@@ -49,9 +49,9 @@ object DebuggingUtil {
 
   type CannotEval = Stripe["cannot evaluate"]
 
-  val nonExisting = Witness(""" Undefined """)
+  val UNDEFINED = Witness(""" is undefined """)
 
-  val impossible = Witness("IMPOSSIBLE!")
+  val IMPOSSIBLE = Witness("IMPOSSIBLE!")
 
   type Br[T] = "(" + T + ")"
 

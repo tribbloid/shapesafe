@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.debugging.CanPeek
-import org.shapesafe.core.debugging.DebuggingUtil.StrOrRaw
+import org.shapesafe.core.debugging.DebugUtil.StrOrRaw
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness
@@ -43,8 +43,8 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
       tail.asIndices >< Index.Name(headW)
 
     trait PeekHead extends CanPeek {
-      override type _OpStr = Head
-      override type _Expression = Head
+      override type _AsStr = Head
+      override type _AsExpr = Head
     }
   }
 

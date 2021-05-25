@@ -75,7 +75,7 @@ class EmitMsgSpec extends BaseSpec {
 ////    )
 //  }
 
-  it("can emit warning") {
+  it("can emit warning") { // TODO: how to de-verbose?
     emitWarning.weakly["ABC"]
 
     type TT = EmitMsg["ABC", EmitMsg.Warning]

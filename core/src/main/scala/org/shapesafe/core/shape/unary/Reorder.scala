@@ -15,8 +15,8 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.^[S1] {
 
-  override type _OpStr = OpStrs.Infix[S1, " Reorder ", indices.AsIndices]
-  override type _Expression = Expressions.Reorder[Expr[S1], Expr[indices.AsIndices]]
+  override type _AsStr = OpStrs.Infix[S1, " Reorder ", indices.AsIndices]
+  override type _AsExpr = Expressions.Reorder[Expr[S1], Expr[indices.AsIndices]]
 
   override type _Refute = "Indices not found"
 }

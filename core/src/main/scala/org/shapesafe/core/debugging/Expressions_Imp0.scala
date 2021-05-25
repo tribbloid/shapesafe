@@ -1,8 +1,10 @@
 package org.shapesafe.core.debugging
 
+import org.shapesafe.core.debugging.DebugSymbol.{On1, On2}
+
 trait Expressions_Imp0 {
 
-  type Expr[T <: CanPeek] = T#_Expression // with T
+  type Expr[T <: CanPeek] = T#_AsExpr // with T
 
   trait :<<-[A, B]
   trait ><[A, B]
@@ -17,27 +19,15 @@ trait Expressions_Imp0 {
   trait GetSubscript[A, B]
   trait Reorder[A, B]
 
-  trait DualExpression {
-    type _OpStr
-  }
-  trait UnaryOn extends DualExpression {
-
-    trait On[A] {}
-  }
-  trait BinaryOn extends DualExpression {
-
-    trait On[A, B] {}
-  }
-
   import singleton.ops.+
 
-  trait AppendByName[O] extends UnaryOn {
-    type _OpStr = "AppendByName[" + O + "]"
+  trait AppendByName[O] extends On1 {
+    type _AsStr = "AppendByName[" + O + "]"
   }
-  trait SquashByName[O] extends UnaryOn {
-    type _OpStr = "SquashByName[" + O + "]"
+  trait SquashByName[O] extends On1 {
+    type _AsStr = "SquashByName[" + O + "]"
   }
-  trait DimensionWise[O] extends BinaryOn {
-    type _OpStr = "DimensionWise[" + O + "]"
+  trait DimensionWise[O] extends On2 {
+    type _AsStr = "DimensionWise[" + O + "]"
   }
 }

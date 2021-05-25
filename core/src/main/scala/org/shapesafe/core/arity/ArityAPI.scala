@@ -61,8 +61,8 @@ object ArityAPI {
 
     type _Axis = ^[A]
 
-    type _OpStr = OpStr[A]
-    type _Expression = A#_Expression
+    type _AsStr = OpStr[A]
+    type _AsExpr = A#_AsExpr
   }
 
   implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity

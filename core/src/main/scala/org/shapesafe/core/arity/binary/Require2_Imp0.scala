@@ -4,16 +4,15 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOps.:==!
 
-trait AssertEqual_Imp0 {
+trait Require2_Imp0 extends Require2_Imp1 {
 
-  implicit def unchecked[
+  implicit def uncheckedEqual[
       A1 <: Arity,
-      A2 <: Arity,
-      O <: Arity
+      A2 <: Arity
   ](
       implicit
-      domain: UncheckedDomain[A1, A2, O]
-  ): (A1 :==! A2) |- O = {
+      domain: UncheckedDomain[A1, A2]
+  ): (A1 :==! A2) |- domain.Tightest = {
     domain.forEqual
   }
 }

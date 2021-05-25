@@ -2,35 +2,40 @@ package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
-import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.ops.ArityOps.:==!
-import org.shapesafe.core.arity.{Arity, ProveArity, Utils}
+import org.shapesafe.core.arity.{Arity, ProveArity}
 
 import scala.language.existentials
 
 abstract class UncheckedDomain[
     A1 <: Arity,
-    A2 <: Arity,
-    O <: Arity
+    A2 <: Arity
 ] {
 
   import ProveArity.Factory._
 
-  def bound1: A1 |-< Arity
+  type O1 <: Arity
+
+  def bound1: A1 |-< O1
   def bound2: A2 |-< Arity
 
-  def selectMoreSpecific(a1: A1, a2: A2): O
+  type Tightest <: Arity
+  def selectTightest(a1: A1, a2: A2): Tightest
 
-  def forOp2[??[X1, X2] <: Op](
-      implicit
-      sh: Utils.IntSh[??]
-  ): Op2.UB[??]#On[A1, A2] =>> Unchecked = ProveArity.forAll[Op2.UB[??]#On[A1, A2]].=>> { _ =>
-    Unchecked
-  }
+  def forOp2[OP <: Op2]: OP#On[A1, A2] =>> Unchecked =
+    ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
+      Unchecked
+    }
 
-  val forEqual: (A1 :==! A2) |- O = ProveArity.forAll[A1 :==! A2].=>> { v =>
-    selectMoreSpecific(v.a1, v.a2)
-  }
+  val forEqual: (A1 :==! A2) |- Tightest =
+    ProveArity.forAll[A1 :==! A2].=>> { v =>
+      selectTightest(v.a1, v.a2)
+    }
+
+  def forRequire2[OP <: Require2]: OP#On[A1, A2] =>> O1 =
+    ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
+      bound1.valueOf(v.a1)
+    }
 }
 
 object UncheckedDomain extends UncheckedDomain_Imp0 {
@@ -41,29 +46,32 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
       O <: Arity
   ](
       implicit
-      self: UncheckedDomain[A1, A2, O]
-  ): UncheckedDomain[A1, A2, O] = self
+      self: UncheckedDomain[A1, A2]
+  ): UncheckedDomain[A1, A2] = self
 
   case class D1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Arity
+      TC <: Arity
   ]()(
       implicit
-      val bound1: A1 |-< O,
+      val bound1: A1 |-< TC,
       val bound2: A2 |-< Unchecked
-  ) extends UncheckedDomain[A1, A2, O] {
+  ) extends UncheckedDomain[A1, A2] {
 
-    override def selectMoreSpecific(a1: A1, a2: A2): O = bound1.valueOf(a1)
+    final type O1 = TC
+
+    final type Tightest = TC
+    override def selectTightest(a1: A1, a2: A2): Tightest = bound1.valueOf(a1)
   }
 
   implicit def d1[
       A1 <: Arity,
       A2 <: Arity,
-      O <: Arity
+      TC <: Arity
   ](
       implicit
-      bound1: A1 |-< O,
+      bound1: A1 |-< TC,
       bound2: A2 |-< Unchecked
-  ): UncheckedDomain[A1, A2, O] = D1()
+  ): D1[A1, A2, TC] = D1()
 }

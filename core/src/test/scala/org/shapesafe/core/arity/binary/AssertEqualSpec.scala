@@ -1,5 +1,6 @@
 package org.shapesafe.core.arity.binary
 
+import org.shapesafe.core.arity.ops.ArityOpsLike.RequireEqual
 import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
 
 import scala.language.existentials
@@ -12,19 +13,19 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual.on(a, a).^
+        val op = RequireEqual.on(a, a).^
         op.eval.requireEqual(3)
       }
 
       it("a + b") {
 
-        val op = AssertEqual.on(a :+ b, ab).^
+        val op = RequireEqual.on(a :+ b, ab).^
         op.eval.requireEqual(7)
       }
 
       it("a + b + c") {
 
-        val op = AssertEqual.on(a :+ b :+ c, abc).^
+        val op = RequireEqual.on(a :+ b :+ c, abc).^
         op.eval.requireEqual(12)
       }
     }
@@ -33,7 +34,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a + b + c") {
 
-        val op = AssertEqual.on(a :+ b :+ c, ab :+ c).^
+        val op = RequireEqual.on(a :+ b :+ c, ab :+ c).^
         op.eval.requireEqual(12)
       }
     }
@@ -42,7 +43,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("a") {
 
-        val op = AssertEqual.on(LeafArity.Unchecked.^, a).^
+        val op = RequireEqual.on(LeafArity.Unchecked.^, a).^
 
         val out = op.eval
         out.requireEqual(3)
@@ -53,7 +54,7 @@ class AssertEqualSpec extends ArityFixture {
       it("a + b") {
 
         val sum = a :+ b
-        val op = AssertEqual.on(sum, LeafArity.Unchecked.^).^
+        val op = RequireEqual.on(sum, LeafArity.Unchecked.^).^
 
         val out = op.eval
         out.requireEqual(7)
@@ -67,7 +68,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("1") {
 
-        val op = AssertEqual.on(Arity.Unprovable, a).^
+        val op = RequireEqual.on(Arity.Unprovable, a).^
 
         shouldNotCompile(
           "op.eval",
@@ -78,7 +79,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("2") {
 
-        val op = AssertEqual.on(Arity.Unprovable, a :+ b).^
+        val op = RequireEqual.on(Arity.Unprovable, a :+ b).^
 
         shouldNotCompile(
           "op.eval",
@@ -92,7 +93,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("1") {
 
-        val op = AssertEqual.on(a, c).^
+        val op = RequireEqual.on(a, c).^
 
         shouldNotCompile(
           "op.eval",
@@ -102,7 +103,7 @@ class AssertEqualSpec extends ArityFixture {
 
       it("2") {
 
-        val op = AssertEqual.on(a, b :+ c).^
+        val op = RequireEqual.on(a, b :+ c).^
 
         shouldNotCompile(
           "op.eval",
