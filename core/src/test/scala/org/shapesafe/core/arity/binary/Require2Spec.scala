@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.{Arity, ArityFixture, LeafArity}
 
 import scala.language.existentials
 
-class AssertEqualSpec extends ArityFixture {
+class Require2Spec extends ArityFixture {
 
   describe("can prove") {
 
@@ -89,7 +89,7 @@ class AssertEqualSpec extends ArityFixture {
       }
     }
 
-    describe("if a != b") {
+    describe("a == b if not") {
 
       it("1") {
 
