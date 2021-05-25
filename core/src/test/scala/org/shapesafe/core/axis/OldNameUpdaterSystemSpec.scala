@@ -16,7 +16,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
   describe("Appender") {
 
-    val appender = ArityOps.:==!._AppendByName.oldNameUpdater
+    val appender = ArityOps.==!._AppendByName.oldNameUpdater
 
     describe("can append") {
 
@@ -79,7 +79,7 @@ class OldNameUpdaterSystemSpec extends BaseSpec {
 
   describe("Squasher") {
 
-    val squasher = ArityOps.:==!._SquashByName.oldNameUpdater
+    val squasher = ArityOps.==!._SquashByName.oldNameUpdater
 
     describe("can squash") {
 

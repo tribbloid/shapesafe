@@ -7,6 +7,8 @@ import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity, Utils}
 import org.shapesafe.core.debugging.OpStrs.ForArity
 import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
 
+import scala.collection.mutable
+
 /**
   * Output is always the TIGHTEST TYPE CONSTRAINT of the FIRST argument, no exception
   */
@@ -31,7 +33,7 @@ object Require2 extends Require2_Imp0 {
     // TODO: this should supersedes AssertEqual
 
     override type Lemma[X1, X2] = ??[X1, X2]
-    override type _Debug[A, B] = SS[A, B]
+    override type Debug[A, B] = SS[A, B]
 
     import singleton.ops._
 
@@ -58,6 +60,24 @@ object Require2 extends Require2_Imp0 {
     override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
       On(a1.arity, a2.arity)
     }
+  }
+
+  lazy val cache = mutable.Map.empty[AnyRef, Require2]
+
+  def apply[
+      ??[X1, X2] <: Op,
+      SS[A, B] <: DebugSymbol.Require
+  ](
+      implicit
+      sh: Utils.BoolSh[??]
+  ): Impl[??, SS] = {
+
+    cache
+      .getOrElseUpdate(
+        sh,
+        new Impl[??, SS]
+      )
+      .asInstanceOf[Impl[??, SS]]
   }
 
   implicit def invar[

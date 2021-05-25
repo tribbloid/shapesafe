@@ -18,8 +18,8 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _AsStr = OpStrs.Infix[A1, _Debug[Unit, Unit]#_AsStr, A2] // TODO: add Bracket
-    final override type _AsExpr = _Debug[Expr[A1], Expr[A2]]
+    final override type _AsStr = OpStrs.Infix[A1, Debug[Unit, Unit]#_AsStr, A2] // TODO: add Bracket
+    final override type _AsExpr = Debug[Expr[A1], Expr[A2]]
   }
 
   type On[
@@ -51,7 +51,7 @@ object Op2Like {
   trait DebuggingSupport {
     self: Op2Like =>
 
-    type _Debug[A1, A2] <: DebugSymbol
+    type Debug[A1, A2] <: DebugSymbol
 //    implicit def debug[
 //        A1 <: Arity,
 //        A2 <: Arity,

@@ -15,7 +15,7 @@ case class ContractByName[
 
 object ContractByName {
 
-  val op: ops.ArityOps.:==!._SquashByName.type = ArityOps.:==!._SquashByName
+  val op: ops.ArityOps.==!._SquashByName.type = ArityOps.==!._SquashByName
 
   def indexing: op._Indexing.type = op._Indexing
 }

@@ -20,6 +20,7 @@ trait ArityOpsLike extends HasArity {
 
     type On[A1 <: Arity, A2 <: Arity] = Op#On[A1, A2]
 
+    final type apply[A1 <: Arity, A2 <: Arity] = On[A1, A2]
     def apply(that: ArityAPI): ArityAPI.^[On[_Arity, that._Arity]] = op.on(arity.^, that).^
 
     object Updaters extends OldNameUpdaterSystem(op)
@@ -32,21 +33,21 @@ trait ArityOpsLike extends HasArity {
     object _AppendByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
-      type _Unary = Expressions.AppendByName[Op#_Debug[Unit, Unit]#_AsStr]
+      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsStr]
     }
 //    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type _Unary = Expressions.SquashByName[Op#_Debug[Unit, Unit]#_AsStr]
+      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsStr]
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.DimensionWise[Op#_Debug[Unit, Unit]#_AsStr]
+      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_AsStr]
     }
   }
 
@@ -56,23 +57,38 @@ trait ArityOpsLike extends HasArity {
   }
 
 //  object :+ extends Op2[ops.+] with Infix
-  object :+ extends InfixImpl(new Op2.Impl[ops.+, Expressions.+])
+  object :+ extends InfixImpl(Op2[ops.+, Expressions.+])
   type :+[X <: Arity, Y <: Arity] = :+.On[X, Y]
 
-  object :- extends InfixImpl(new Op2.Impl[ops.-, Expressions.-])
+  object :- extends InfixImpl(Op2[ops.-, Expressions.-])
   type :-[X <: Arity, Y <: Arity] = :-.On[X, Y]
 
-  object :* extends InfixImpl(new Op2.Impl[ops.*, Expressions.*])
+  object :* extends InfixImpl(Op2[ops.*, Expressions.*])
   type :*[X <: Arity, Y <: Arity] = :*.On[X, Y]
 
-  object :/ extends InfixImpl(new Op2.Impl[ops./, Expressions./])
+  object :/ extends InfixImpl(Op2[ops./, Expressions./])
   type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
 
-  object :==! extends InfixImpl(RequireEqual)
-  type :==![X <: Arity, Y <: Arity] = :==!.On[X, Y]
+  object ==! extends InfixImpl(RequireEqual)
+  type ==![X <: Arity, Y <: Arity] = ==!.On[X, Y]
+
+  object !=! extends InfixImpl(Require2[ops.!=, Expressions.!=])
+  type !=![X <: Arity, Y <: Arity] = !=!.On[X, Y]
+
+  object `<!` extends InfixImpl(Require2[ops.<, Expressions.<])
+  type `<!`[X <: Arity, Y <: Arity] = `<!`.On[X, Y]
+
+  object >! extends InfixImpl(Require2[ops.>, Expressions.>])
+  type >![X <: Arity, Y <: Arity] = >!.On[X, Y]
+
+  object <=! extends InfixImpl(Require2[ops.<=, Expressions.<=])
+  type <=![X <: Arity, Y <: Arity] = <=!.On[X, Y]
+
+  object >=! extends InfixImpl(Require2[ops.>=, Expressions.>=])
+  type >=![X <: Arity, Y <: Arity] = >=!.On[X, Y]
 }
 
 object ArityOpsLike {
 
-  val RequireEqual = new Require2.Impl[ops.==, Expressions.==]
+  val RequireEqual: Require2.Impl[ops.==, Expressions.==] = Require2[ops.==, Expressions.==]
 }

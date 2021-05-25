@@ -15,7 +15,7 @@ case class CheckEinSum[
 
 object CheckEinSum {
 
-  val op: arity.ops.ArityOps.:==!._AppendByName.type = ArityOps.:==!._AppendByName
+  val op: arity.ops.ArityOps.==!._AppendByName.type = ArityOps.==!._AppendByName
 
   def indexing: op._Indexing.type = op._Indexing
 }

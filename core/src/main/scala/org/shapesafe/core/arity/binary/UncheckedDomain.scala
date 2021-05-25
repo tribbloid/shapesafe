@@ -2,7 +2,7 @@ package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.LeafArity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
-import org.shapesafe.core.arity.ops.ArityOps.:==!
+import org.shapesafe.core.arity.ops.ArityOps.==!
 import org.shapesafe.core.arity.{Arity, ProveArity}
 
 import scala.language.existentials
@@ -27,8 +27,8 @@ abstract class UncheckedDomain[
       Unchecked
     }
 
-  val forEqual: (A1 :==! A2) |- Tightest =
-    ProveArity.forAll[A1 :==! A2].=>> { v =>
+  val forEqual: (A1 ==! A2) =>> Tightest =
+    ProveArity.forAll[A1 ==! A2].=>> { v =>
       selectTightest(v.a1, v.a2)
     }
 

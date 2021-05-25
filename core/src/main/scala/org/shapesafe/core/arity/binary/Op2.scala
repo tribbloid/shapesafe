@@ -7,6 +7,7 @@ import org.shapesafe.core.arity._
 import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
 import singleton.ops.+
 
+import scala.collection.mutable
 import scala.language.implicitConversions
 
 trait Op2 extends Op2Like {
@@ -25,7 +26,7 @@ object Op2 extends Op2_Imp0 {
   ) extends Op2 {
 
     override type Lemma[X1, X2] = ??[X1, X2]
-    override type _Debug[A, B] = SS[A, B]
+    override type Debug[A, B] = SS[A, B]
 
     case class On[
         A1 <: Arity,
@@ -43,6 +44,24 @@ object Op2 extends Op2_Imp0 {
     }
 
     override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
+  }
+
+  lazy val cache = mutable.Map.empty[AnyRef, Op2]
+
+  def apply[
+      ??[X1, X2] <: Op,
+      SS[A, B] <: DebugSymbol
+  ](
+      implicit
+      sh: Utils.IntSh[??]
+  ): Impl[??, SS] = {
+
+    cache
+      .getOrElseUpdate(
+        sh,
+        new Impl[??, SS]
+      )
+      .asInstanceOf[Impl[??, SS]]
   }
 
   implicit def invar[
