@@ -95,7 +95,7 @@ In the above example, calling `eval` instructs the compiler to summon a chain of
 
 Evidently, `eval` can only be used iff each shape operand in the expression (in the above example `a` and `b`)  is either already evaluated, or can be evaluated in the same scope. This is the only case when implicit type classes needs to be defined by the user.
 
-In practice, shapesafe works most efficiently if all input tensors have constant shapes (represented by `org.shapesafe.core.arity.Const`), which can satisfy most architectures in applied linear algebra / ML. Support for variable shape algebra will be gradually enabled in future releases.
+Shapesafe works most efficiently if each tensor shape dimension is either a constant (represented by `org.shapesafe.core.arity.Const`), or unchecked (represented by `org.shapesafe.core.arity.Unchecked`,  meaning that it has no constraint or symbol, and should be ignored in validation). In practice, this can reliably support the majority of applied linear algebra / ML use cases. Support for algebra of variable shape (represented by `org.shapesafe.core.arity.Var`) will be gradually enabled in future releases.
 
 ##### Upgrade to Scala 3
 
