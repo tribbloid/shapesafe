@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.binary
 
-import com.tribbloids.graph.commons.util.HasOuter
+import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.Expressions.Expr
@@ -27,7 +27,7 @@ trait DimensionWise {
     def s1: S1 with Shape
     def s2: S2 with Shape
 
-    override type _AsStr = OpStrs.PrefixW2[_Binary#_AsStr, S1, S2]
+    override type _AsOpStr = OpStrs.PrefixW2[_Binary#_AsOpStr, S1, S2]
     override type _AsExpr = _Binary#On[Expr[S1], Expr[S2]]
   }
 

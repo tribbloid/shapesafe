@@ -1,7 +1,7 @@
 package org.shapesafe.core.debugging
 
 trait DebugSymbol {
-  type _AsStr
+  type _AsOpStr
 }
 
 object DebugSymbol {

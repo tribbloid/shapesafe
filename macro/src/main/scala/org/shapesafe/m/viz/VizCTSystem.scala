@@ -1,8 +1,8 @@
 package org.shapesafe.m.viz
 
-import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
-import com.tribbloids.graph.commons.util.viz.{TypeViz, TypeVizFormat}
-import com.tribbloids.graph.commons.util.{HasOuter, TreeFormat}
+import org.shapesafe.graph.commons.util.reflect.format.TypeFormat
+import org.shapesafe.graph.commons.util.viz.{TypeViz, TypeVizFormat}
+import org.shapesafe.graph.commons.util.{HasOuter, TreeFormat}
 import org.shapesafe.m.{EmitMsg, MWithReflection}
 import shapeless.Witness
 import singleton.ops.{+, RequireMsg, RequireMsgSym}

@@ -1,11 +1,11 @@
 package org.shapesafe
 
-import com.tribbloids.graph.commons.util.reflect.ScalaReflection
-import com.tribbloids.graph.commons.util.reflect.format.{Formats, TypeFormat}
-import com.tribbloids.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.util.reflect.ScalaReflection
+import org.shapesafe.graph.commons.util.reflect.format.{Formats, TypeFormat}
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HList, Nat, Witness}
 
-trait BaseSpec extends com.tribbloids.graph.commons.testlib.BaseSpec {
+trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
 
   val small = BaseSpec.small
   val big = BaseSpec.big

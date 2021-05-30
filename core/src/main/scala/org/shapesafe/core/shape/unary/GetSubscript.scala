@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -21,7 +21,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type _AsStr = OpStrs.Infix[S1, " GetSubscript ", I]
+  override type _AsOpStr = OpStrs.Infix[S1, " GetSubscript ", I]
   override type _AsExpr = Expressions.GetSubscript[Expr[S1], Expr[I]]
 
   override type _Refute = "Index not found"
@@ -35,11 +35,13 @@ trait GetSubscript_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      I <: Index
+      I <: Index,
+      Msg
   ](
       implicit
       lemma1: S1 |- P1,
-      msg: EmitError[OpStrs.ForShape.Refute0[GetSubscript[P1, I]]]
+      refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], Msg],
+      msg: EmitError[Msg]
   ): GetSubscript[S1, I] =>> LeafShape = {
     ???
   }

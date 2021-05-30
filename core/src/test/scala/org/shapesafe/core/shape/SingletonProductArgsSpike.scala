@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.WideTyped
-import com.tribbloids.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.util.WideTyped
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.scalatest.Ignore
 import org.shapesafe.BaseSpec
 import shapeless.ops.hlist.ZipWithKeys

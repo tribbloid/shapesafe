@@ -22,12 +22,12 @@ trait Expressions_Imp0 {
   import singleton.ops.+
 
   trait AppendByName[O] extends On1 {
-    type _AsStr = "AppendByName[" + O + "]"
+    type _AsOpStr = "AppendByName[" + O + "]"
   }
   trait SquashByName[O] extends On1 {
-    type _AsStr = "SquashByName[" + O + "]"
+    type _AsOpStr = "SquashByName[" + O + "]"
   }
   trait DimensionWise[O] extends On2 {
-    type _AsStr = "DimensionWise[" + O + "]"
+    type _AsOpStr = "DimensionWise[" + O + "]"
   }
 }

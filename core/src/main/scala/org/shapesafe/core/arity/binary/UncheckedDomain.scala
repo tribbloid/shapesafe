@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.LeafArity.Unchecked
+import org.shapesafe.core.arity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.ops.ArityOps.==!
 import org.shapesafe.core.arity.{Arity, ProveArity}

@@ -1,6 +1,6 @@
 package org.shapesafe.m
 
-import com.tribbloids.graph.commons.testlib.BaseSpec
+import org.shapesafe.graph.commons.testlib.BaseSpec
 import singleton.ops.ToString
 
 class EmitMsgSpec extends BaseSpec {

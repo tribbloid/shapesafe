@@ -9,7 +9,7 @@ trait Constraint {}
 
 object Constraint {
 
-  import com.tribbloids.graph.commons.util.reflect.ScalaReflection._
+  import org.shapesafe.graph.commons.util.reflect.ScalaReflection._
 
   // TODO: why reinventing the wheel? shapeless LUBConstraint is the same
   case class ElementOfType[Data <: HList, Element: TypeTag]() extends Constraint {

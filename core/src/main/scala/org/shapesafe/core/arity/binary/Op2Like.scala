@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import com.tribbloids.graph.commons.util.HasOuter
+import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
@@ -18,7 +18,7 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _AsStr = OpStrs.Infix[A1, Debug[Unit, Unit]#_AsStr, A2] // TODO: add Bracket
+    final override type _AsOpStr = OpStrs.Infix[A1, Debug[Unit, Unit]#_AsOpStr, A2] // TODO: add Bracket
     final override type _AsExpr = Debug[Expr[A1], Expr[A2]]
   }
 

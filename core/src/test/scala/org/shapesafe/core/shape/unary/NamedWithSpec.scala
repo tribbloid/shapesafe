@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import com.tribbloids.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape

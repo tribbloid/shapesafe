@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.LeafArity.Const
+import org.shapesafe.core.arity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
@@ -38,7 +38,7 @@ object Op2 extends Op2_Imp0 {
       // TODO: can this be VerifiedArity?
 
       override type _Refute =
-        DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#_AsStr, A2] + DebugUtil.UNDEFINED.T
+        DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#_AsOpStr, A2] + DebugUtil.UNDEFINED.T
 
       override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
     }
@@ -77,7 +77,7 @@ object Op2 extends Op2_Imp0 {
       lemma: OP#Lemma[S1, S2]
   ) = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
-      LeafArity.Derived.summon[OP#Lemma[S1, S2]](lemma)
+      Const.Derived.summon[OP#Lemma[S1, S2]](lemma)
     }
   }
 

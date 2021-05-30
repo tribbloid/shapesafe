@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.ops
 
-import com.tribbloids.graph.commons.util.HasOuter
+import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.axis.OldNameUpdaterSystem
@@ -33,21 +33,21 @@ trait ArityOpsLike extends HasArity {
     object _AppendByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Appender
 
-      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsStr]
+      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsOpStr]
     }
 //    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
       object oldNameUpdater extends Updaters.Squasher
 
-      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsStr]
+      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsOpStr]
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_AsStr]
+      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_AsOpStr]
     }
   }
 

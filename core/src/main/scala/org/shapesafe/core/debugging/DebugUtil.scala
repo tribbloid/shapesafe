@@ -1,5 +1,7 @@
 package org.shapesafe.core.debugging
 
+import org.shapesafe.core.debugging.Expressions.Expr
+import org.shapesafe.core.debugging.OpStrs.OpStr
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
@@ -13,7 +15,6 @@ object DebugUtil {
 
   // TODO: is it possible and better?
   //  also need time for https://github.com/fthomas/singleton-ops/issues/182
-
 //  type StrOrRaw[T1] = ITE[
 //    IsString[T1],
 //    T1,

@@ -1,18 +1,17 @@
 package org.shapesafe.core.arity
 
-import com.tribbloids.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
+import org.shapesafe.core.arity.Const.{Derived, Literal}
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.m.PeerType
 import shapeless.Witness.Lt
 import singleton.ops.{+, ==, Require, ToInt}
 
 class LeafAritySpec extends BaseSpec {
 
-  import LeafArity._
-
   describe("big") {
 
-    def validate[S](subject: LeafArity.Const[S], w: Lt[Int])(
+    def validate[S](subject: Const[S], w: Lt[Int])(
         implicit
         proof: Require[S == w.T],
         plus: S + w.T

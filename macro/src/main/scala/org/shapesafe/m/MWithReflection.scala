@@ -1,7 +1,7 @@
 package org.shapesafe.m
 
-import com.tribbloids.graph.commons.util.reflect.MacroReflection
-import com.tribbloids.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.util.reflect.MacroReflection
+import org.shapesafe.graph.commons.util.viz.TypeViz
 
 import scala.reflect.macros.blackbox
 

@@ -2,9 +2,10 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
+import org.shapesafe.core.arity.Const.Literal
 import org.shapesafe.core.arity.ProveArity.{|-, |-<}
 import org.shapesafe.core.arity.nullary.SizeOf
-import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}
 import org.shapesafe.core.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
@@ -16,7 +17,6 @@ class DoubleVector[A1 <: Arity](
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import LeafArity._
   import org.shapesafe.core.arity.ops.ArityOps._
 
   // TODO: the format should be customisable
@@ -116,8 +116,6 @@ class DoubleVector[A1 <: Arity](
 }
 
 object DoubleVector extends ProductArgs {
-
-  import LeafArity._
 
   def applyProduct[D <: HList, O <: LeafArity](data: D)(
       implicit

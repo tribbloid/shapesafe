@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity}
+import org.shapesafe.core.arity.{Arity, ArityAPI, Const, LeafArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
@@ -199,7 +199,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
         implicit
         forTail: H_TAIL ==> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> (TAIL ><^ LeafArity.Literal[HEAD]) = {
+    ): (HEAD :: H_TAIL) ==> (TAIL ><^ Const.Literal[HEAD]) = {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = forTail(v.tail)

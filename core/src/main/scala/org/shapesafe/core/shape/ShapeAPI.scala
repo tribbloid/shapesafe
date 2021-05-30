@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.arity.{Arity, LeafArity}
+import org.shapesafe.core.arity.{Arity, Const, LeafArity}
 import org.shapesafe.core.shape.LeafShape.><^
 import org.shapesafe.core.shape.ProveShape.|-
 import org.shapesafe.core.shape.binary.OuterProduct
@@ -199,7 +199,7 @@ object ShapeAPI {
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit
       toW: Witness.Aux[T]
-  ): ^[LeafShape.Eye ><^ LeafArity.Literal[T]] = {
+  ): ^[LeafShape.Eye ><^ Const.Literal[T]] = {
 
     ^(Shape >|< Arity(toW))
   }

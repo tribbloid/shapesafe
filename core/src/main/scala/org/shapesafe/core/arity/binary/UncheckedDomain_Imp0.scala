@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.arity.LeafArity.Unchecked
+import org.shapesafe.core.arity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 
 import scala.language.existentials

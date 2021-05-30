@@ -1,10 +1,10 @@
 package org.shapesafe.m.viz
 
-import com.tribbloids.graph.commons.testlib.BaseSpec
-import com.tribbloids.graph.commons.util.reflect.Reflection
-import com.tribbloids.graph.commons.util.reflect.format.FormatProtos.{DeAlias, Hide}
-import com.tribbloids.graph.commons.util.reflect.format.FormatOvrd.{~~, Only}
-import com.tribbloids.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.testlib.BaseSpec
+import org.shapesafe.graph.commons.util.reflect.Reflection
+import org.shapesafe.graph.commons.util.reflect.format.FormatProtos.{DeAlias, Hide}
+import org.shapesafe.graph.commons.util.reflect.format.FormatOvrd.{~~, Only}
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.Witness
 
 class KindVizCTSpec extends BaseSpec {
@@ -108,7 +108,7 @@ class KindVizCTSpec extends BaseSpec {
 object KindVizCTSpec {
 
   val viz: TypeViz[Reflection.Runtime.type] = TypeViz.formattedBy {
-    import com.tribbloids.graph.commons.util.reflect.format.Formats._
+    import org.shapesafe.graph.commons.util.reflect.format.Formats._
 
     TypeInfo ~ DeAlias ~ Hide.Package
   }

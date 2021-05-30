@@ -1,10 +1,10 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.debug.print_@
-import com.tribbloids.graph.commons.util.viz.TypeViz
-import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.LeafArity
 import org.scalatest.Ignore
+import org.shapesafe.BaseSpec
+import org.shapesafe.core.arity.Const
+import org.shapesafe.graph.commons.util.debug.print_@
+import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HNil, Witness}
 
 @Ignore
@@ -161,8 +161,8 @@ class LeafShapeSpike extends BaseSpec {
     it("zip") {
 
       val dims = {
-        (Symbol("x") ->> LeafArity.Literal(3)) ::
-          (Symbol("y") ->> LeafArity.Literal(4)) ::
+        (Symbol("x") ->> Const.Literal(3)) ::
+          (Symbol("y") ->> Const.Literal(4)) ::
           HNil
       }
 

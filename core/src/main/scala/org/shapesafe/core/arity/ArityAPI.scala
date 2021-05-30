@@ -61,7 +61,7 @@ object ArityAPI {
 
     type _Axis = ^[A]
 
-    type _AsStr = OpStr[A]
+    type _AsOpStr = OpStr[A]
     type _AsExpr = A#_AsExpr
   }
 
@@ -72,7 +72,7 @@ object ArityAPI {
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit
       toW: Witness.Aux[T]
-  ): ArityAPI.^[LeafArity.Literal[T]] = {
+  ): ArityAPI.^[Const.Literal[T]] = {
 
     Arity(toW)
   }

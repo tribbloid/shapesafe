@@ -9,8 +9,8 @@ import scala.annotation.implicitNotFound
 // TODO: merge into shapeless Poly1
 trait Poly1Base[IUB, OUB] {
 
-  final type InUB = IUB
-  final type OutUB = OUB
+  final type _IUB = IUB
+  final type _OUB = OUB
 
   // TODO: how to override it in subclasses?
   @implicitNotFound(

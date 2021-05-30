@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.{ProveShape, _}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -15,7 +15,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.^[S1] {
 
-  override type _AsStr = OpStrs.Infix[S1, " Reorder ", indices.AsIndices]
+  override type _AsOpStr = OpStrs.Infix[S1, " Reorder ", indices.AsIndices]
   override type _AsExpr = Expressions.Reorder[Expr[S1], Expr[indices.AsIndices]]
 
   override type _Refute = "Indices not found"
@@ -29,11 +29,13 @@ trait Reorder_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      II <: IndicesMagnet
+      II <: IndicesMagnet,
+      Msg
   ](
       implicit
       lemma: S1 |- P1,
-      msg: EmitError[OpStrs.ForShape.Refute0[Reorder[P1, II]]]
+      refute0: Reporters.ForShape.Refute0[Reorder[P1, II], Msg],
+      msg: EmitError[Msg]
   ): Reorder[S1, II] =>> LeafShape = {
     ???
   }

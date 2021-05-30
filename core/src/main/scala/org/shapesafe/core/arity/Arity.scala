@@ -2,7 +2,7 @@ package org.shapesafe.core.arity
 
 import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ArityAPI.^
-import org.shapesafe.core.arity.LeafArity.{Derived, Literal}
+import org.shapesafe.core.arity.Const.{Derived, Literal}
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.debugging.CanPeek
 import shapeless.{Nat, Witness}

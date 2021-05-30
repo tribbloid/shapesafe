@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.util.{TreeFormat, TreeLike}
+import org.shapesafe.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.core.shape.LeafShape.Eye
 import org.shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}

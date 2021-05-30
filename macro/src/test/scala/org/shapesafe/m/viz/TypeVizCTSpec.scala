@@ -1,6 +1,6 @@
 package org.shapesafe.m.viz
 
-import com.tribbloids.graph.commons.testlib.BaseSpec
+import org.shapesafe.graph.commons.testlib.BaseSpec
 
 class TypeVizCTSpec extends BaseSpec {
 

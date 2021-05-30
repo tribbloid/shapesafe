@@ -1,6 +1,6 @@
 package org.shapesafe.core.axis
 
-import com.tribbloids.graph.commons.util.IDMixin
+import org.shapesafe.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{CanPeek, DebugUtil, Expressions, OpStrs}
@@ -44,11 +44,11 @@ object Axis {
 
     trait CanPeekName extends CanPeek {
 
-      override type _AsStr = Name
+      override type _AsOpStr = Name
       override type _AsExpr = Name
     }
 
-    type _AsStr = DebugUtil.Br[OpStrs.Infix[A, " :<<- ", CanPeekName]]
+    type _AsOpStr = DebugUtil.Br[OpStrs.Infix[A, " :<<- ", CanPeekName]]
     override type _AsExpr = Expressions.:<<-[Expr[A], Expr[CanPeekName]]
 
     override lazy val toString: String = {

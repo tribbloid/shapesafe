@@ -1,6 +1,6 @@
 package org.shapesafe.m
 
-import com.tribbloids.graph.commons.util.reflect.Reflection
+import org.shapesafe.graph.commons.util.reflect.Reflection
 import singleton.ops.impl.Op
 
 import java.util.logging.Logger

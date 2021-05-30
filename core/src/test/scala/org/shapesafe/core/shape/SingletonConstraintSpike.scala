@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import com.tribbloids.graph.commons.testlib.BaseSpec
+import org.shapesafe.graph.commons.testlib.BaseSpec
 import org.scalatest.Ignore
 import shapeless.Witness
 
@@ -44,11 +44,20 @@ class SingletonConstraintSpike extends BaseSpec {
 
 object SingletonConstraintSpike {
 
-  def s1[T]()(implicit ev: Witness.Aux[T]) = {}
+  def s1[T]()(
+      implicit
+      ev: Witness.Aux[T]
+  ) = {}
 
-  def s2[T]()(implicit ev: Witness.Lt[T]) = {}
+  def s2[T]()(
+      implicit
+      ev: Witness.Lt[T]
+  ) = {}
 
-  def s3[T](v: T)(implicit ev: Witness.Aux[T]) = {}
+  def s3[T](v: T)(
+      implicit
+      ev: Witness.Aux[T]
+  ) = {}
 
   def adhocW = Witness(3)
 

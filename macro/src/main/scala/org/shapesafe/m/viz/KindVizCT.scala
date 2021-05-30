@@ -1,7 +1,7 @@
 package org.shapesafe.m.viz
 
-import com.tribbloids.graph.commons.util.reflect.format.{EnableOvrd, Formats}
-import com.tribbloids.graph.commons.util.viz.TypeVizFormat
+import org.shapesafe.graph.commons.util.reflect.format.{EnableOvrd, Formats}
+import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 
 import scala.language.experimental.macros
 

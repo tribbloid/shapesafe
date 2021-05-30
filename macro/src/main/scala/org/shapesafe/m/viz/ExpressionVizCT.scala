@@ -1,6 +1,6 @@
 package org.shapesafe.m.viz
-import com.tribbloids.graph.commons.util.reflect.format.{FormatOvrd, FormatProtos, Formats}
-import com.tribbloids.graph.commons.util.viz.TypeVizFormat
+import org.shapesafe.graph.commons.util.reflect.format.{FormatOvrd, FormatProtos, Formats}
+import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 
 import scala.language.experimental.macros
 
