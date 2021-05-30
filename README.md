@@ -126,7 +126,7 @@ Most features in shapeless & singleton-ops are taken over by native compiler fea
 - All maintainers of [splain](https://github.com/tek/splain)
 - Breandan Considine, maintainer of [Kotlin∇](https://openreview.net/forum?id=SkluMSZ08H)
 
-This project is heavily influenced by Kotlin∇ and other pioneers in type-safe ML:
+This project is heavily influenced by Kotlin∇ (see discussion [here](https://github.com/breandan/kotlingrad/issues/11)) and several pioneers in type-safe ML:
 
 - Evan Spark for [first showing the possibility](https://etrain.github.io/2015/05/28/type-safe-linear-algebra-in-scala)
 - Tongfei Chen for [Nexus](https://github.com/ctongfei/nexus)
