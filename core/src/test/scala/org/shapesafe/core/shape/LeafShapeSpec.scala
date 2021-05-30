@@ -19,7 +19,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< (LeafArity.Literal[Int(3)] :<<- String("y"))
+          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
       )
 
@@ -36,7 +36,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< ArityAPI.^[LeafArity.Literal[Int(2)]] >< ArityAPI.^[LeafArity.Literal[Int(3)]]
+          |LeafShape.Eye >< ArityAPI.^[Const.Literal[Int(2)]] >< ArityAPI.^[Const.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -54,7 +54,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[LeafArity.Literal[Int(3)]] >< (LeafArity.Literal[Int(4)] :<<- String("z"))
+          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[Const.Literal[Int(3)]] >< (Const.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -253,7 +253,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
+          |Const.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -276,7 +276,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |LeafArity.Literal[Int(3)] :: LeafArity.Literal[Int(2)] :: HNil
+          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 
@@ -302,7 +302,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |LeafArity.Literal[Int(2)] :: HNil""".stripMargin
+          |Const.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -325,7 +325,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |LeafArity.Literal[Int(3)] :: LeafArity.Literal[Int(2)] :: HNil
+          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 

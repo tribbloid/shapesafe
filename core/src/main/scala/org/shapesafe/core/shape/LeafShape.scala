@@ -203,7 +203,7 @@ object LeafShape extends TupleSystem with CanFromStatic {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = forTail(v.tail)
-        val head = Arity(w) //  Arity.Impl(LeafArity.Literal(w))
+        val head = Arity(w) //  Arity.Impl(Const.Literal(w))
 
         prev.^ appendInner head
       }

@@ -27,7 +27,7 @@ class ReorderSpec extends BaseSpec {
       val ss = Reorder(s1, Indices >< Name("z"))
       val rr = Reorder.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
-        """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z"))"""
+        """LeafShape.Eye >< (Const.Literal[Int(3)] :<<- String("z"))"""
       )
     }
 
@@ -44,7 +44,7 @@ class ReorderSpec extends BaseSpec {
 
       typeInferShort(rr).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z")) >< (LeafArity.Literal[Int(2)] :<<- String("y"))
+          |LeafShape.Eye >< (Const.Literal[Int(3)] :<<- String("z")) >< (Const.Literal[Int(2)] :<<- String("y"))
           |""".stripMargin
       )
     }
@@ -55,7 +55,7 @@ class ReorderSpec extends BaseSpec {
       val rr = Reorder.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
         """
-          |LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z")) >< (LeafArity.Literal[Int(2)] :<<- String("y")) >< (LeafArity.Literal[Int(1)] :<<- String("x"))
+          |LeafShape.Eye >< (Const.Literal[Int(3)] :<<- String("z")) >< (Const.Literal[Int(2)] :<<- String("y")) >< (Const.Literal[Int(1)] :<<- String("x"))
           |""".stripMargin
       )
     }

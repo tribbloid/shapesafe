@@ -19,7 +19,7 @@ class GetSubscriptSpec extends BaseSpec {
     val rr = ss.eval
 
     typeInferShort(rr.shape).shouldBe(
-      """LeafShape.Eye >< (LeafArity.Literal[Int(1)] :<<- String("x"))"""
+      """LeafShape.Eye >< (Const.Literal[Int(1)] :<<- String("x"))"""
     )
   }
 
@@ -29,7 +29,7 @@ class GetSubscriptSpec extends BaseSpec {
     val rr = ss.eval
 
     typeInferShort(rr.shape).shouldBe(
-      """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("c"))"""
+      """LeafShape.Eye >< (Const.Literal[Int(3)] :<<- String("c"))"""
     )
   }
 
@@ -39,7 +39,7 @@ class GetSubscriptSpec extends BaseSpec {
     val rr = ss.eval
 
     typeInferShort(rr.shape).shouldBe(
-      """LeafShape.Eye >< (LeafArity.Literal[Int(3)] :<<- String("z"))"""
+      """LeafShape.Eye >< (Const.Literal[Int(3)] :<<- String("z"))"""
     )
   }
 
@@ -49,7 +49,7 @@ class GetSubscriptSpec extends BaseSpec {
     val rr = ss.^.eval
 
     typeInferShort(rr.shape).shouldBe(
-      """LeafShape.Eye >< (LeafArity.Literal[Int(2)] :<<- String("b"))"""
+      """LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("b"))"""
     )
   }
 
