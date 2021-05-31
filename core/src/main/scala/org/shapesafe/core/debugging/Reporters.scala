@@ -1,5 +1,6 @@
 package org.shapesafe.core.debugging
 
+import org.shapesafe.core.debugging.DebugUtil.{CanRefute, Refute, Stripe}
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.{Poly1Base, ProofScope}
@@ -25,7 +26,7 @@ class Reporters[
 
       implicit def raw[A <: Iub, VA <: XString](
           implicit
-          vizA: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[A], VA],
+          vizA: Expr2Str[Expr[A], VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
       ): A ==> mk.Out =
         forAll[A].==>(_ => mk.value)
@@ -41,8 +42,8 @@ class Reporters[
       ](
           implicit
           lemma: A |- S,
-          vizA: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[A], VA],
-          vizS: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[S], VS],
+          vizA: Expr2Str[Expr[A], VA],
+          vizS: Expr2Str[Expr[S], VS],
           mk: (PEEK.T + VS + EntailsLF + VA + "\n") { type Out <: XString }
       ): A ==> mk.Out =
         forAll[A].==>(_ => mk.value)
@@ -55,7 +56,7 @@ class Reporters[
           VS <: XString
       ](
           implicit
-          vizS: ExpressionVizCT.NoTree.InfoOf.Aux[Expr[S], VS],
+          vizS: Expr2Str[Expr[S], VS],
           op: (PEEK.T + VS + "\n") { type Out <: XString }
       ): S ==> op.Out =
         forAll[S].==>(_ => op.value)
@@ -117,6 +118,8 @@ class Reporters[
 
 object Reporters {
 
+  type Expr2Str[I, O <: String] = ExpressionVizCT.NoTree.InfoOf.Aux[I, O]
+
   trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 
     type EmitMsg[T]
@@ -151,16 +154,57 @@ object Reporters {
     }
   }
 
-  //  trait MsgBroker {
-  //    type Out <: Op
-  //  }
-  //
-  //  object MsgBroker {
-  //
-  //    class ^[O <: Op] extends MsgBroker {
-  //      type Out = O
-  //    }
-  //
-  //    def apply[O <: Op]: ^[O] = new ^[O]
-  //  }
+  trait Refutes {
+
+    type TryStripe
+
+    // TODO: remove, obsolete design
+    //    type Refute0[SELF <: CanPeek with CanRefute] =
+    //      Refute[SELF] +
+    //        TryStripe +
+    //        OpStr[SELF]
+
+    type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Case.Aux[SELF, O]
+
+    object Refute0 extends Poly1Base[CanPeek with CanRefute, Any] {
+
+      implicit def get[I <: InUB, V <: String](
+          implicit
+          expr2Str: Reporters.Expr2Str[I#_AsExpr, V]
+      ): I ==> (
+        Refute[I] +
+          TryStripe +
+          V
+      ) = forAll[I].==> { _ =>
+        null
+      }
+    }
+  }
+
+  object ForArity extends Refutes {
+
+    type TryStripe = "\n\n" + Stripe["... when proving arity"]
+
+    //    type Refute1[SELF <: CanPeek with CanRefute, C1] =
+    //      Refute[SELF] +
+    //        TryArity +
+    //        OpStr[SELF] +
+    //        FROM1.T +
+    //        C1
+    //
+    //    type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
+    //      OpStr[SELF] +
+    //        TryArity +
+    //        Refute[SELF] +
+    //        FROM2.T +
+    //        C1 +
+    //        "\n\n" +
+    //        C2
+  }
+
+  object ForShape extends Refutes {
+
+    type TryStripe = "\n\n" + Stripe["... when proving shape"]
+
+  }
 }

@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity, Utils}
-import org.shapesafe.core.debugging.OpStrs.ForArity
+import org.shapesafe.core.debugging.Reporters.ForArity
 import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
 
 import scala.collection.mutable
@@ -85,14 +85,16 @@ object Require2 extends Require2_Imp0 {
       A2 <: Arity,
       S1,
       S2,
-      OP <: Require2
+      OP <: Require2,
+      MSG
   ](
       implicit
       bound1: A1 |-< Const[S1],
       bound2: A2 |-< Const[S2],
+      refute0: ForArity.Refute0[OP#On[Const[S1], Const[S2]], MSG],
       lemma: RequireMsg[
         OP#Lemma[S1, S2],
-        ForArity.Refute0[OP#On[Const[S1], Const[S2]]]
+        MSG
       ]
   ): OP#On[A1, A2] =>> Const[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
