@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -29,11 +29,13 @@ trait NamedWith_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      N <: Names
+      N <: Names,
+      MSG
   ](
       implicit
       lemma: S1 |- P1,
-      msg: EmitError[OpStrs.ForShape.Refute0[|<<-[P1, N]]]
+      refute0: Reporters.ForShape.Refute0[|<<-[P1, N], MSG],
+      msg: EmitError[MSG]
   ): |<<-[S1, N] =>> LeafShape = {
     ???
   }

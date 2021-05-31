@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.LeafShape.><
 import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -35,11 +35,13 @@ trait GetSubscript_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      I <: Index
+      I <: Index,
+      MSG
   ](
       implicit
       lemma1: S1 |- P1,
-      msg: EmitError[OpStrs.ForShape.Refute0[GetSubscript[P1, I]]]
+      refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
+      msg: EmitError[MSG]
   ): GetSubscript[S1, I] =>> LeafShape = {
     ???
   }

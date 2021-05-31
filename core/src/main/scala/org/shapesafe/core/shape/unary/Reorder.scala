@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.{ProveShape, _}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -29,11 +29,13 @@ trait Reorder_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      II <: IndicesMagnet
+      II <: IndicesMagnet,
+      MSG
   ](
       implicit
       lemma: S1 |- P1,
-      msg: EmitError[OpStrs.ForShape.Refute0[Reorder[P1, II]]]
+      refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
+      msg: EmitError[MSG]
   ): Reorder[S1, II] =>> LeafShape = {
     ???
   }
