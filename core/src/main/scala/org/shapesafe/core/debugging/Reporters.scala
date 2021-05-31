@@ -154,7 +154,7 @@ object Reporters {
     }
   }
 
-  trait Refuters {
+  trait Refutes {
 
     type TryStripe
 
@@ -170,12 +170,13 @@ object Reporters {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
-          expr2Str: Reporters.Expr2Str[I#_AsExpr, V],
-          op: Refute[I] +
-            TryStripe +
-            V
+          expr2Str: Reporters.Expr2Str[I#_AsExpr, V]
+      ): I ==> (
+        Refute[I] +
+          TryStripe +
+          V
       ) = forAll[I].==> { _ =>
-        op.value
+        null
       }
 
 //      Dimension mismatch
@@ -186,7 +187,7 @@ object Reporters {
     }
   }
 
-  object ForArity extends Refuters {
+  object ForArity extends Refutes {
 
     type TryStripe = "\n\n" + Stripe["... when proving arity"]
 
@@ -207,7 +208,7 @@ object Reporters {
     //        C2
   }
 
-  object ForShape extends Refuters {
+  object ForShape extends Refutes {
 
     type TryStripe = "\n\n" + Stripe["... when proving shape"]
 
