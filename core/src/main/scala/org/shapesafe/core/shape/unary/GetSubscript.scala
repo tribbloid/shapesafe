@@ -36,12 +36,12 @@ trait GetSubscript_Imp0 {
       S1 <: Shape,
       P1 <: LeafShape,
       I <: Index,
-      Msg
+      MSG
   ](
       implicit
       lemma1: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], Msg],
-      msg: EmitError[Msg]
+      refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
+      msg: EmitError[MSG]
   ): GetSubscript[S1, I] =>> LeafShape = {
     ???
   }

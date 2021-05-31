@@ -159,10 +159,10 @@ object Reporters {
     type TryStripe
 
     // TODO: remove, obsolete design
-//    type Refute0[SELF <: CanPeek with CanRefute] =
-//      Refute[SELF] +
-//        TryStripe +
-//        OpStr[SELF]
+    //    type Refute0[SELF <: CanPeek with CanRefute] =
+    //      Refute[SELF] +
+    //        TryStripe +
+    //        OpStr[SELF]
 
     type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Case.Aux[SELF, O]
 
@@ -178,12 +178,6 @@ object Reporters {
       ) = forAll[I].==> { _ =>
         null
       }
-
-//      Dimension mismatch
-//
-//      ... when proving shape ░▒▓
-//
-//      1 >< 2 >< 3 >< 4 |<<- (i >< j)
     }
   }
 

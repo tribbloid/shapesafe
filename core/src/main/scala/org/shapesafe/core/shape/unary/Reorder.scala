@@ -30,12 +30,12 @@ trait Reorder_Imp0 {
       S1 <: Shape,
       P1 <: LeafShape,
       II <: IndicesMagnet,
-      Msg
+      MSG
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[Reorder[P1, II], Msg],
-      msg: EmitError[Msg]
+      refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
+      msg: EmitError[MSG]
   ): Reorder[S1, II] =>> LeafShape = {
     ???
   }

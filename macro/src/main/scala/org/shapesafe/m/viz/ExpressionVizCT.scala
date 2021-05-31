@@ -1,4 +1,5 @@
 package org.shapesafe.m.viz
+
 import org.shapesafe.graph.commons.util.reflect.format.{FormatOvrd, FormatProtos, Formats}
 import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 

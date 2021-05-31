@@ -30,12 +30,12 @@ trait NamedWith_Imp0 {
       S1 <: Shape,
       P1 <: LeafShape,
       N <: Names,
-      Msg
+      MSG
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[|<<-[P1, N], Msg],
-      msg: EmitError[Msg]
+      refute0: Reporters.ForShape.Refute0[|<<-[P1, N], MSG],
+      msg: EmitError[MSG]
   ): |<<-[S1, N] =>> LeafShape = {
     ???
   }

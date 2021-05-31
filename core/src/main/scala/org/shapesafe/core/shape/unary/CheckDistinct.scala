@@ -26,14 +26,14 @@ trait CheckDistinct_Imp0 {
   implicit def refute[
       S1 <: Shape,
       P1 <: LeafShape,
-      Msg
+      MSG
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[CheckDistinct[P1], Msg],
-      msg: EmitError[Msg]
+      refute0: Reporters.ForShape.Refute0[CheckDistinct[P1], MSG],
+      msg: EmitError[MSG]
   ): CheckDistinct[S1] =>> LeafShape = {
-    ???
+    null
   }
 }
 
