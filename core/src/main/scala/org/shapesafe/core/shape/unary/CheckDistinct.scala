@@ -1,12 +1,9 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.arity.LeafArity.Const
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.Reporters.ForArity
 import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
-import singleton.ops.RequireMsg
 
 // all names must be distinctive - no duplication allowed
 case class CheckDistinct[
@@ -36,7 +33,7 @@ trait CheckDistinct_Imp0 {
       refute0: Reporters.ForShape.Refute0[CheckDistinct[P1], MSG],
       msg: EmitError[MSG]
   ): CheckDistinct[S1] =>> LeafShape = {
-    ???
+    null
   }
 }
 

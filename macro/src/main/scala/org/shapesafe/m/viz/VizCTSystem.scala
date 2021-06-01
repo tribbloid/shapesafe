@@ -1,5 +1,6 @@
 package org.shapesafe.m.viz
 
+import com.tribbloids.graph.commons.util.reflect.Reflection
 import com.tribbloids.graph.commons.util.reflect.format.TypeFormat
 import com.tribbloids.graph.commons.util.viz.{TypeViz, TypeVizFormat}
 import com.tribbloids.graph.commons.util.{HasOuter, TreeFormat}
@@ -7,6 +8,7 @@ import org.shapesafe.m.{EmitMsg, MWithReflection}
 import shapeless.Witness
 import singleton.ops.{+, RequireMsg, RequireMsgSym}
 
+import scala.collection.mutable
 import scala.reflect.macros.whitebox
 
 trait VizCTSystem extends Product {
@@ -28,11 +30,11 @@ trait VizCTSystem extends Product {
     type Aux[T, O <: String] = InfoOf[T] { type Out = O }
     type Lt[T, O <: String] = InfoOf[T] { type Out <: O }
 
-    class ##[T, O] extends InfoOf[T] {
+    class Impl[T, O] extends InfoOf[T] {
       final type Out = O
     }
   }
-  def createInfoOf[T, O] = new InfoOf.##[T, O]
+  def createInfoOf[T, O] = new InfoOf.Impl[T, O]
 
   def apply[I]: Instance[I] = Instance[I]()
 
@@ -60,29 +62,9 @@ trait VizCTSystem extends Product {
     ): Unit = {}
 
     // TODO: impl Should_=:= at compile-time
-
-    //    def shouldBe[B]: Unit = macro Macros.shouldBe[A, B]
-
-    //    def shouldBe[A: WeakTypeTag, B: WeakTypeTag]: Tree = {
-    //
-    //      val aa: Type = weakTypeOf[A]
-    //      val bb: Type = weakTypeOf[B]
-    //
-    //      if (!(aa =:= bb)) {
-    //        val Seq(s1, s2) = Seq(aa, bb).map { v =>
-    //          Option(viz.of(v).typeTree.treeString)
-    //        }
-    //
-    //        val diff = StringDiff(s1, s2, Seq(this.getClass))
-    //
-    //        throw new AssertionError(diff.errorStr)
-    //      }
-    //
-    //      q"Unit"
-    //    }
   }
 
-  lazy val runtime = TypeViz.formattedBy(this.format)
+  lazy val runtime: TypeViz[Reflection.Runtime.type] = TypeViz.formattedBy(this.format)
 
   trait Updated extends VizCTSystem with HasOuter {
 
@@ -113,6 +95,24 @@ object VizCTSystem {
 
     import u._
 
+    private val cache = mutable.HashMap.empty[Type, (VizCTSystem, c.Tree)]
+
+    def getSystem(tt: Type): (VizCTSystem, c.Tree) = {
+
+      cache.getOrElseUpdate(
+        tt, {
+          val self: VizCTSystem = {
+
+            val r = refl.TypeView(tt).getOnlyInstance
+            r.asInstanceOf[VizCTSystem]
+          }
+          val name: String = self.getClass.getCanonicalName.stripSuffix("$")
+          val liftSelf: c.Tree = c.parse(name)
+          self -> liftSelf
+        }
+      )
+    }
+
     def infoOf[
         T: c.WeakTypeTag,
         SELF <: VizCTSystem: c.WeakTypeTag
@@ -120,14 +120,7 @@ object VizCTSystem {
 
       val tt: Type = weakTypeOf[T]
 
-      val self = {
-        val tt = weakTypeOf[SELF].dealias
-
-        val r = refl.TypeView(tt).getOnlyInstance
-        r.asInstanceOf[VizCTSystem]
-      }
-      val name: String = self.getClass.getCanonicalName.stripSuffix("$")
-      val liftSelf = c.parse(name)
+      val (self, liftSelf) = getSystem(weakTypeOf[SELF].dealias)
 
       val result =
         try {
