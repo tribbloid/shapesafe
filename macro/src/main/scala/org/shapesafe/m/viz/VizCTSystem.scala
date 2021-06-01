@@ -9,6 +9,7 @@ import shapeless.Witness
 import singleton.ops.{+, RequireMsg, RequireMsgSym}
 
 import scala.collection.mutable
+import scala.reflect.api.{Trees, Types}
 import scala.reflect.macros.whitebox
 
 trait VizCTSystem extends Product {
@@ -87,6 +88,8 @@ object VizCTSystem {
 //  type EmitWarning[T] = EmitMsg[T, EmitMsg.Warning]
   type EmitInfo[T] = EmitMsg[T, EmitMsg.Info]
 
+  private val cache = mutable.HashMap.empty[Types#Type, (VizCTSystem, Trees#Tree)]
+
   trait MBase extends MWithReflection {
 
     def outer: VizCTSystem.type = VizCTSystem.this
@@ -95,22 +98,22 @@ object VizCTSystem {
 
     import u._
 
-    private val cache = mutable.HashMap.empty[Type, (VizCTSystem, c.Tree)]
-
     def getSystem(tt: Type): (VizCTSystem, c.Tree) = {
 
-      cache.getOrElseUpdate(
-        tt, {
-          val self: VizCTSystem = {
+      cache
+        .getOrElseUpdate(
+          tt, {
+            val self: VizCTSystem = {
 
-            val r = refl.TypeView(tt).getOnlyInstance
-            r.asInstanceOf[VizCTSystem]
+              val r = refl.TypeView(tt).getOnlyInstance
+              r.asInstanceOf[VizCTSystem]
+            }
+            val name: String = self.getClass.getCanonicalName.stripSuffix("$")
+            val liftSelf: c.Tree = c.parse(name)
+            self -> liftSelf
           }
-          val name: String = self.getClass.getCanonicalName.stripSuffix("$")
-          val liftSelf: c.Tree = c.parse(name)
-          self -> liftSelf
-        }
-      )
+        )
+        .asInstanceOf[(VizCTSystem, c.Tree)]
     }
 
     def infoOf[
