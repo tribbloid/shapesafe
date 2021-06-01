@@ -105,7 +105,7 @@ object VizCTSystem {
           tt, {
             val self: VizCTSystem = {
 
-              val r = refl.TypeView(tt).getOnlyInstance
+              val r = refl.typeView(tt).getOnlyInstance
               r.asInstanceOf[VizCTSystem]
             }
             val name: String = self.getClass.getCanonicalName.stripSuffix("$")
@@ -135,7 +135,7 @@ object VizCTSystem {
             viz.formattedBy(self.format).of(tt).treeString
           } else {
 
-            refl.TypeView(tt).formattedBy(self.typeFormat).text
+            refl.typeView(tt).formattedBy(self.typeFormat).text
           }
 
           str
