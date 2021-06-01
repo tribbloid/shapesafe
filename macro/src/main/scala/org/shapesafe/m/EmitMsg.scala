@@ -94,7 +94,7 @@ object EmitMsg {
       val aa: Type = weakTypeOf[A]
 
       val ttg: Reflection.Runtime.TypeTag[A] = c.eval(c.Expr[Reflection.Runtime.TypeTag[A]](c.untypecheck(q"${_ttg}")))
-      val v = Reflection.Runtime.TypeView(ttg.tpe).getOnlyInstance
+      val v = Reflection.Runtime.typeView(ttg.tpe).getOnlyInstance
 
       val ll = emitValue[LL](v)
 
@@ -104,7 +104,7 @@ object EmitMsg {
     def weakly[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
 
       val aa: Type = weakTypeOf[A]
-      val v = refl.TypeView(aa).getOnlyInstance
+      val v = refl.typeView(aa).getOnlyInstance
 
       val ll = emitValue[LL](v)
 
