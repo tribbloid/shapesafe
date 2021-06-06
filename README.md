@@ -126,7 +126,7 @@ Most features in shapeless & singleton-ops are taken over by native compiler fea
 - Product to Tuple conversion, plus its variants:
   - shapeless.NatProductArgs
   - shapeless.SingletonProductArgs
-- ecosystem: Apache Spark, CHISEL, typelevel stack, and much more
+- ecosystem: Apache Spark, CHISEL, LMS, typelevel stack, and much more
 
 Scala 3/dotty appears to be vastly more capable as a "proof assistant", with 15~20x speed improvement over Scala 2 on implicit search. This seems to indicate that shapesafe could only achieve large scale, production-grade algebraic verification after the upgrade is finished. At this moment (with Scala 2.12), if the implicit search on your computer is too slow, consider breaking you big operand composition into multiple small ones, and evaluate in-between as often as possible.
 
