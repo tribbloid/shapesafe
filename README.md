@@ -73,7 +73,7 @@ This is a deliberate design which allows complex operand compositions to be defi
 // [INFO] 1 >< 2 >< (3 >< 4) |<<- (i >< j)
 ```
 
-The errors are only captured once the expression is evaluated (e.g. by explicitly calling `.eval` or `.reason`, which does `peek` and `eval` simultaneously), which summons all rules of algebra like a proof assistant:
+The errors are only captured once the expression is evaluated (e.g. by explicitly calling `.eval` or `.reason`, which does `peek` and `eval` simultaneously), which summons all algebraic rules like a proof assistant:
 
 ```scala
   s1.eval
@@ -85,7 +85,7 @@ The errors are only captured once the expression is evaluated (e.g. by explicitl
 // 1 >< 2 >< 3 >< 4 |<<- (i >< j)
 ```
 
-In the above example, calling `eval` instructs the compiler to summon a chain of type classes as lemmata to prove / refute the correctness of the expression:
+In the above example, calling `eval` instructs the compiler to summon a series of type classes as lemmata to prove / refute the correctness of the expression:
 
 |                                         lemma |       | expression                              |
 | --------------------------------------------: | :---: | --------------------------------------- |
@@ -93,9 +93,9 @@ In the above example, calling `eval` instructs the compiler to summon a chain of
 |                         (prove outer product) |  =    | 1 >< 2 >< 3 >< 4 **\|<<-** (i >< j)     |
 | (refute naming of tensor: Dimension mismatch) |  !    |                                         |
 
-Evidently, `eval` can only be used *iff* each shape operand in the expression (in the above example `a` and `b`)  is either already evaluated, or can be evaluated in the same scope. This is the only case when implicit type classes has to be defined by the user.
+Evidently, `eval` can only be used *iff.* each shape operand in the expression (in the above example `a` and `b`)  is either already evaluated, or can be evaluated in the same scope. This is the only case when implicit arguments has to be declared by the user.
 
-Thus, the entire shape algebra can be defined using only 2 layers of abstractions (and quite some rules to manipulate them):
+Thus, the entire shape algebra can be defined using only 2 types of expressions (and a bunch of rules to manipulate them):
 
 - **Arity** - describing 1D vectors:
 
@@ -116,13 +116,10 @@ Most features in shapeless & singleton-ops are taken over by native compiler fea
 - singleton.ops.== → inline conditions & matches
 - singleton.ops._ → scala.compiletime.ops.*
 - shapeless.HList → Tuple
+- shapeless.record → Programmatic Structural Types
 
 ... but some are still missing:
 
-- extensible & contractible Record type
-  - shapeless.record → ???
-  - used to derive output of EinSum & tensor contraction
-  - proposed a long time ago: https://github.com/lampepfl/dotty-feature-requests/issues/8, but contraction is still problematic
 - Product to Tuple conversion, plus its variants:
   - shapeless.NatProductArgs
   - shapeless.SingletonProductArgs
