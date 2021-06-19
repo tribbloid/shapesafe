@@ -61,7 +61,7 @@ You must have an installed JDK that supports Gradle 7+ before the compilation
 ### Architecture
 
 Unlike most of its predecessors, tensor operations in shapesafe are **lazily verified**, and writing expressions requires no declaration of implicit type class.
-This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex function composition, with no implicit scope )). As a trade-off, shape errors in expressions are suppressed when defined, at which time they are still represented as computation graph:
+This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex-function-composition-with-no-implicit-scope)). As a trade-off, shape errors in expressions are suppressed when defined, at which time they are still represented as computation graph:
 
 ```scala
   val a = Shape(1, 2)
