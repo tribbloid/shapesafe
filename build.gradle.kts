@@ -19,13 +19,13 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.4.30" // TODO: remove?
+    kotlin("jvm") version "1.5.20" // TODO: remove?
 
     idea
 
     `maven-publish`
 
-    id("com.github.ben-manes.versions" ) version "0.38.0"
+    id("com.github.ben-manes.versions" ) version "0.39.0"
 }
 
 val rootID = vs.projectRootID
