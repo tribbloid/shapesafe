@@ -30,7 +30,7 @@ shapesafe actively proves itself while being written. The following capabilities
 
 shapesafe started as an assignment to understand intuitionistic type theory used in compiler design, it minimally depends on [singleton-ops](https://github.com/fthomas/singleton-ops) and [shapeless](https://github.com/milessabin/shapeless).
 
-Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js will only be enforced intermittently and upon request, please create (or vote for) tickets to backport for a specific major version.
+Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js will only be enforced intermittently and upon request, please create (or vote for) tickets to backport for a specific compiler.
 
 ### Build Status
 
