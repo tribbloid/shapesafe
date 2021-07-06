@@ -4,7 +4,7 @@ import org.shapesafe.core.shape.{Shape, ShapeAPI}
 
 trait MatrixOps extends HasShape {
 
-  import org.shapesafe.core.shape.Names._
+  import org.shapesafe.core.shape.Const._
 
   def matMul[THAT <: ShapeAPI](that: THAT) = {
     val s1 = api |<<- ij

@@ -1,8 +1,6 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.debugging.CanPeek
-import org.shapesafe.core.debugging.DebugUtil.StrOrRaw
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
 import shapeless.Witness
@@ -85,9 +83,4 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
   }
 
   object Syntax extends Syntax
-
-  val i = Names("i")
-  val ij = Names("i", "j")
-  val jk = Names("j", "k")
-  val ik = Names("i", "k")
 }
