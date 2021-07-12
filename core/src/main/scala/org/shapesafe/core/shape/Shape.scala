@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.debugging.CanPeek
-import org.shapesafe.core.shape.LeafShape.Eye
+import org.shapesafe.core.shape.StaticShape.Eye
 import org.shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 
 import scala.language.implicitConversions
@@ -26,6 +26,6 @@ object Shape extends ApplyLiterals.ToShape with ShapeAPI {
 
   object Literals extends ApplyLiterals.ToShape {}
 
-  override type _Shape = LeafShape.Eye
-  override def shape: Eye = LeafShape.Eye
+  override type _Shape = StaticShape.Eye
+  override def shape: Eye = StaticShape.Eye
 }

@@ -3,9 +3,9 @@ package org.shapesafe.core.shape.binary
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, OpStrs}
-import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Shape}
+import org.shapesafe.core.shape.{Shape, StaticShape}
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -28,16 +28,16 @@ trait OuterProduct_Imp0 {
   //TODO: should leverage append, if the deadlock problem has been solved
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       S2 <: Shape,
-      P2 <: LeafShape,
+      P2 <: StaticShape,
       HO <: HList
   ](
       implicit
       lemma1: S1 |- P1,
       lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
-      toShape: LeafShape.FromStatic.Case[HO]
+      toShape: StaticShape.FromStatic.Case[HO]
   ): OuterProduct[S1, S2] =>> toShape.Out = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
@@ -56,10 +56,10 @@ object OuterProduct extends OuterProduct_Imp0 {
   // shortcut for trivial D + 1 case
   implicit def append[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       S2 <: Shape,
       A2 <: Axis,
-      P2 <: LeafShape.Eye >< A2
+      P2 <: StaticShape.Eye >< A2
   ](
       implicit
       lemma1: S1 |- P1,

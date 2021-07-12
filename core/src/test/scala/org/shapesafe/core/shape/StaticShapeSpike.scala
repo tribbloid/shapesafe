@@ -8,7 +8,7 @@ import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HNil, Witness}
 
 @Ignore
-class LeafShapeSpike extends BaseSpec {
+class StaticShapeSpike extends BaseSpec {
 
   import shapeless.record._
   import shapeless.syntax.singleton.mkSingletonOps

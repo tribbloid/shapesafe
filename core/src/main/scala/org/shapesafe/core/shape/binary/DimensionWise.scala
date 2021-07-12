@@ -1,12 +1,12 @@
 package org.shapesafe.core.shape.binary
 
-import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugSymbol, Expressions, OpStrs}
+import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
 import org.shapesafe.core.shape.unary.UnaryIndexingFn
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
 
@@ -39,8 +39,8 @@ trait DimensionWise {
     implicit def simplify[
         S1 <: Shape,
         S2 <: Shape,
-        P1 <: LeafShape,
-        P2 <: LeafShape,
+        P1 <: StaticShape,
+        P2 <: StaticShape,
         HO <: HList
     ](
         implicit

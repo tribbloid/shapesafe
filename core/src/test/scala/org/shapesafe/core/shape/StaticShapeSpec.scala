@@ -2,10 +2,10 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.shape.LeafShape.{FromRecord, FromStatic}
+import org.shapesafe.core.shape.StaticShape.{FromRecord, FromStatic}
 import shapeless.HNil
 
-class LeafShapeSpec extends BaseSpec {
+class StaticShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
@@ -82,9 +82,9 @@ class LeafShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
-      assert(shape == LeafShape.Eye)
+      assert(shape == StaticShape.Eye)
     }
 
     it("1") {
@@ -92,7 +92,7 @@ class LeafShapeSpec extends BaseSpec {
       val hh = (Arity(3) :<<- "x") ::
         HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -105,7 +105,7 @@ class LeafShapeSpec extends BaseSpec {
         (Arity(4) :<<- "y") ::
         HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -122,9 +122,9 @@ class LeafShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
-      assert(shape == LeafShape.Eye)
+      assert(shape == StaticShape.Eye)
     }
 
     it("1") {
@@ -132,7 +132,7 @@ class LeafShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3).arity) ::
         HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -145,7 +145,7 @@ class LeafShapeSpec extends BaseSpec {
         ("y" ->> Arity(4).arity) ::
         HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 

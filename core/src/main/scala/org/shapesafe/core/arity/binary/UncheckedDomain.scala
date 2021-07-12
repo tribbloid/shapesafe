@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.Unchecked
+import org.shapesafe.core.arity.UncheckedArity
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.ops.ArityOps.==!
 import org.shapesafe.core.arity.{Arity, ProveArity}
@@ -22,9 +22,9 @@ abstract class UncheckedDomain[
   type Tightest <: Arity
   def selectTightest(a1: A1, a2: A2): Tightest
 
-  def forOp2[OP <: Op2]: OP#On[A1, A2] =>> Unchecked =
+  def forOp2[OP <: Op2]: OP#On[A1, A2] =>> UncheckedArity =
     ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
-      Unchecked
+      UncheckedArity
     }
 
   val forEqual: (A1 ==! A2) =>> Tightest =
@@ -56,7 +56,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   ]()(
       implicit
       val bound1: A1 |-< TC,
-      val bound2: A2 |-< Unchecked
+      val bound2: A2 |-< UncheckedArity
   ) extends UncheckedDomain[A1, A2] {
 
     final type O1 = TC
@@ -72,6 +72,6 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
   ](
       implicit
       bound1: A1 |-< TC,
-      bound2: A2 |-< Unchecked
+      bound2: A2 |-< UncheckedArity
   ): D1[A1, A2, TC] = D1()
 }

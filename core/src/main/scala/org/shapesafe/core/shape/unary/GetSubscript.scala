@@ -5,8 +5,8 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
-import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
+import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.ops.hlist.At
@@ -34,7 +34,7 @@ trait GetSubscript_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       I <: Index,
       MSG
   ](
@@ -42,7 +42,7 @@ trait GetSubscript_Imp0 {
       lemma1: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
       msg: EmitError[MSG]
-  ): GetSubscript[S1, I] =>> LeafShape = {
+  ): GetSubscript[S1, I] =>> StaticShape = {
     ???
   }
 }
@@ -54,14 +54,14 @@ object GetSubscript extends GetSubscript_Imp0 {
 
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       I <: Index,
       O <: Axis
   ](
       implicit
       lemma1: S1 |- P1,
       lemma2: Premise.==>[GetSubscript[P1, I], O]
-  ): GetSubscript[S1, I] =>> (LeafShape.Eye >< O) = {
+  ): GetSubscript[S1, I] =>> (StaticShape.Eye >< O) = {
 
     ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)
@@ -74,7 +74,7 @@ object GetSubscript extends GetSubscript_Imp0 {
   object Premise extends Poly1Base[GetSubscript[_, _], Axis] {
 
     implicit def byName[
-        P1 <: LeafShape,
+        P1 <: StaticShape,
         N <: String,
         A <: Arity
     ](
@@ -86,12 +86,12 @@ object GetSubscript extends GetSubscript_Imp0 {
 
         val arity: A = _selector(p1.record)
         val w: Witness.Aux[N] = v.index.w
-        (arity.^ :<<- w)
+        arity.^ :<<- w
       }
     }
 
     implicit def byII[
-        P1 <: LeafShape,
+        P1 <: StaticShape,
         N <: Nat,
         O <: Axis
     ](

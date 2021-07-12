@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.args
 
-import org.shapesafe.core.shape.LeafShape
+import org.shapesafe.core.shape.StaticShape
 import org.shapesafe.core.shape.ShapeAPI.^
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, NatProductArgs}
@@ -24,9 +24,9 @@ object ApplyNats {
 
   trait ToShape extends ApplyNats {
 
-    type OUB = LeafShape
+    type OUB = StaticShape
 
-    override val fromHList: LeafShape.FromNats.type = LeafShape.FromNats
+    override val fromHList: StaticShape.FromNats.type = StaticShape.FromNats
 
     override type Result[T <: OUB] = ^[T]
     override def toResult[T <: OUB](v: T) = v.^

@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.core.shape.{Names, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
@@ -28,7 +28,7 @@ trait NamedWith_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       N <: Names,
       MSG
   ](
@@ -36,7 +36,7 @@ trait NamedWith_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[|<<-[P1, N], MSG],
       msg: EmitError[MSG]
-  ): |<<-[S1, N] =>> LeafShape = {
+  ): |<<-[S1, N] =>> StaticShape = {
     ???
   }
 }
@@ -47,7 +47,7 @@ object |<<- extends NamedWith_Imp0 {
 
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       N <: Names,
       HO <: HList
   ](
@@ -60,7 +60,7 @@ object |<<- extends NamedWith_Imp0 {
 //        //        Refute0[|<<-[P1, N]]
 //      ],
       // TODO: why this can't work?
-      toShape: LeafShape.FromRecord.Case[HO]
+      toShape: StaticShape.FromRecord.Case[HO]
   ): |<<-[S1, N] =>> toShape.Out = {
     forAll[|<<-[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
@@ -69,7 +69,7 @@ object |<<- extends NamedWith_Imp0 {
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
       val zipped: HO = values.zipWithKeys(keys)(zip)
-      LeafShape.FromRecord(zipped)
+      StaticShape.FromRecord(zipped)
     }
   }
 

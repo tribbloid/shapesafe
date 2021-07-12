@@ -28,7 +28,7 @@ trait Reorder_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       II <: IndicesMagnet,
       MSG
   ](
@@ -36,7 +36,7 @@ trait Reorder_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Reorder[S1, II] =>> LeafShape = {
+  ): Reorder[S1, II] =>> StaticShape = {
     ???
   }
 
@@ -50,7 +50,7 @@ object Reorder extends Reorder_Imp0 {
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       II <: IndicesMagnet
   ](
       implicit
@@ -66,21 +66,21 @@ object Reorder extends Reorder_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Reorder[_, _], LeafShape] {
+  object Premise extends Poly1Base[Reorder[_, _], StaticShape] {
 
     implicit def eye[
-        P1 <: LeafShape
+        P1 <: StaticShape
     ] = {
 
       forAll[Reorder[P1, Indices.Eye]].==> { v =>
-        LeafShape.Eye
+        StaticShape.Eye
       }
     }
 
     implicit def inductive[
-        P1 <: LeafShape,
+        P1 <: StaticShape,
         II_- <: Indices,
-        OO_- <: LeafShape,
+        OO_- <: StaticShape,
         I <: Index,
         O <: Axis
     ](

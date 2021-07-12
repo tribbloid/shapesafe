@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.ops.ArityOpsLike.RequireEqual
-import org.shapesafe.core.arity.{Arity, ArityFixture, Unchecked}
+import org.shapesafe.core.arity.{Arity, ArityFixture, UncheckedArity}
 
 import scala.language.existentials
 
@@ -43,7 +43,7 @@ class Require2Spec extends ArityFixture {
 
       it("a") {
 
-        val op = RequireEqual.on(Unchecked.^, a).^
+        val op = RequireEqual.on(UncheckedArity.^, a).^
 
         val out = op.eval
         out.requireEqual(3)
@@ -54,7 +54,7 @@ class Require2Spec extends ArityFixture {
       it("a + b") {
 
         val sum = a :+ b
-        val op = RequireEqual.on(sum, Unchecked.^).^
+        val op = RequireEqual.on(sum, UncheckedArity.^).^
 
         val out = op.eval
         out.requireEqual(7)

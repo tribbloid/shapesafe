@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.core.shape.{Names, Shape, StaticShape}
 import shapeless.HNil
 
 class EinSumSpec extends BaseSpec {
@@ -120,7 +120,7 @@ class EinSumSpec extends BaseSpec {
 
     it("eye") {
 
-      val s1 = LeafShape.Eye.^
+      val s1 = StaticShape.Eye.^
 
       val op = s1.einSum.all.eval
     }
@@ -168,7 +168,7 @@ class EinSumSpec extends BaseSpec {
 
     it("1") {
 
-      val s1 = LeafShape.Eye.^
+      val s1 = StaticShape.Eye.^
 
       val ops = s1.einSum(
         Shape >|<

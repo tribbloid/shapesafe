@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.NewNameAppender
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.core.shape.{Names, Shape, StaticShape}
 import org.shapesafe.m.viz.TypeVizCT
 import shapeless.{::, HList, HNil}
 
@@ -14,7 +14,7 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
   }
 
   // TODO: move to a more general 'AndThen' class
-  object ToShape extends Poly1Base[HList, LeafShape] {
+  object ToShape extends Poly1Base[HList, StaticShape] {
 
     val outer: UnaryIndexingFn.this.type = UnaryIndexingFn.this
 
@@ -24,7 +24,7 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
     ](
         implicit
         lemma1: outer.==>[I, O],
-        lemma2: LeafShape.FromRecord.Case[O]
+        lemma2: StaticShape.FromRecord.Case[O]
     ): I ==> lemma2.Out = {
       forAll[I].==> { i =>
         lemma2.apply(lemma1.apply(i))

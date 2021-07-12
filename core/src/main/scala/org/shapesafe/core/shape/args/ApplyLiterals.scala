@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.args
 
 import org.shapesafe.core.shape.ShapeAPI.^
-import org.shapesafe.core.shape.{LeafShape, Names}
+import org.shapesafe.core.shape.{Names, StaticShape}
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, SingletonProductArgs}
 
@@ -35,9 +35,9 @@ object ApplyLiterals {
 
   trait ToShape extends ApplyLiterals {
 
-    type OUB = LeafShape
+    type OUB = StaticShape
 
-    override val fromHList: LeafShape.FromLiterals.type = LeafShape.FromLiterals
+    override val fromHList: StaticShape.FromLiterals.type = StaticShape.FromLiterals
 
     override type Result[T <: OUB] = ^[T]
     override def toResult[T <: OUB](v: T) = v.^

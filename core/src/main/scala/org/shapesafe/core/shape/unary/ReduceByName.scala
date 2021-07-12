@@ -5,7 +5,7 @@ import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugSymbol, Expressions, OpStrs}
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
@@ -37,7 +37,7 @@ trait ReduceByName {
 
     implicit def simplify[
         S1 <: Shape,
-        P1 <: LeafShape
+        P1 <: StaticShape
     ](
         implicit
         lemma: S1 |- P1,
