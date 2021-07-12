@@ -15,8 +15,6 @@ trait VectorOps extends HasShape {
 
   def cross[THAT <: ShapeAPI](that: THAT) = {
 
-    val s1 = api.elementWise(shape3)
-    val s2 = that.elementWise(shape3)
-    shape3
+    api.requireEqual(that).requireEqual(shape3)
   }
 }

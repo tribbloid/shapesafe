@@ -185,7 +185,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     infix._DimensionWise.On(this, that).^
   }
 
-  def elementWise(
+  def requireEqual(
       that: ShapeAPI
   ): ^[ArityOps.==!._DimensionWise.On[_Shape, that._Shape]] = dimensionWise(ArityOps.==!, that)
 }
