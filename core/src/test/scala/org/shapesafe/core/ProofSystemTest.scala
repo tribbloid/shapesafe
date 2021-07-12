@@ -11,7 +11,7 @@ object ProofSystemTest {
   object TestSys extends ProofSystem[Conj]
 
   import TestSys._
-  import Factory._
+  import ForAll._
 
   case class P0() extends Conj
 

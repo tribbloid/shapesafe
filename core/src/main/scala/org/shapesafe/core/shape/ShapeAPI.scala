@@ -1,11 +1,11 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.arity.ops.ArityOps
-import org.shapesafe.core.arity.{Arity, Const, LeafArity}
-import org.shapesafe.core.shape.LeafShape.><^
+import org.shapesafe.core.arity.{Arity, ConstArity}
 import org.shapesafe.core.shape.ProveShape.|-
+import org.shapesafe.core.shape.StaticShape.><^
 import org.shapesafe.core.shape.binary.OuterProduct
-import org.shapesafe.core.shape.ops.{EinSumOps, LeafOps, MatrixOps, VectorOps}
+import org.shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOps, VectorOps}
 import org.shapesafe.core.shape.unary._
 import shapeless.ops.hlist.Reverse
 import shapeless.ops.nat.ToInt
@@ -63,9 +63,9 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     */
   object namedWith {
 
-    def apply[N <: Names](newNames: N): ^[|<<-[_Shape, N]] = {
+    def apply[N <: Names](newNames: N): ^[ZipWithNames[_Shape, N]] = {
 
-      new |<<-[_Shape, N](shape.^, newNames).^
+      new ZipWithNames[_Shape, N](shape.^, newNames).^
     }
   }
 
@@ -80,7 +80,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[|<<-[_Shape, lemma.Out]] = {
+    ): ^[ZipWithNames[_Shape, lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
@@ -153,9 +153,9 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     infix._SquashByName.On(this).^
   }
 
-  def transposeWith[N <: Names](names: N): ^[Reorder[CheckDistinct[_Shape], N]] = {
+  def transposeWith[N <: Names](names: N): ^[Reorder[RequireDistinct[_Shape], N]] = {
 
-    val distinct = CheckDistinct(shape)
+    val distinct = RequireDistinct(shape)
     val result = Reorder(distinct, names)
 
     result.^
@@ -169,7 +169,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[Reorder[CheckDistinct[_Shape], lemma.Out]] = {
+    ): ^[Reorder[RequireDistinct[_Shape], lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
@@ -199,12 +199,12 @@ object ShapeAPI {
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit
       toW: Witness.Aux[T]
-  ): ^[LeafShape.Eye ><^ Const.Literal[T]] = {
+  ): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {
 
     ^(Shape >|< Arity(toW))
   }
 
-  implicit def asLeaf[T <: LeafShape](v: Aux[T]): LeafOps[T] = LeafOps(v.shape)
+  implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOps[T] = StaticOps(v.shape)
 
   case class ^[SELF <: Shape](shape: SELF) extends ShapeAPI {
 

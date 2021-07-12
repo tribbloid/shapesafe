@@ -1,14 +1,14 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
+import org.shapesafe.core.shape.{LeafShape, Names, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 
-case class |<<-[
+case class ZipWithNames[
     S1 <: Shape,
     N <: Names
 ](
@@ -22,9 +22,9 @@ case class |<<-[
   override type _Refute = "Dimension mismatch"
 }
 
-trait NamedWith_Imp0 {
+trait ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -34,42 +34,36 @@ trait NamedWith_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[|<<-[P1, N], MSG],
+      refute0: Reporters.ForShape.Refute0[ZipWithNames[P1, N], MSG],
       msg: EmitError[MSG]
-  ): |<<-[S1, N] =>> LeafShape = {
+  ): ZipWithNames[S1, N] =>> LeafShape = {
     ???
   }
 }
 
-object |<<- extends NamedWith_Imp0 {
+object ZipWithNames extends ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       N <: Names,
       HO <: HList
   ](
       implicit
       lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-//      zip2: ErrorIfNotFound[
-//        ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-//        "ABC"
-//        //        Refute0[|<<-[P1, N]]
-//      ],
-      // TODO: why this can't work?
-      toShape: LeafShape.FromRecord.Case[HO]
-  ): |<<-[S1, N] =>> toShape.Out = {
-    forAll[|<<-[S1, N]].=>> { src =>
+      toShape: StaticShape.FromRecord.Case[HO]
+  ): ZipWithNames[S1, N] =>> toShape.Out = {
+    forAll[ZipWithNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
       val p1: P1 = lemma.valueOf(src.s1)
 
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
       val zipped: HO = values.zipWithKeys(keys)(zip)
-      LeafShape.FromRecord(zipped)
+      StaticShape.FromRecord(zipped)
     }
   }
 

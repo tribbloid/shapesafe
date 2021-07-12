@@ -2,28 +2,28 @@ package org.shapesafe.core.arity.nullary
 
 import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.NatAsOp
-import org.shapesafe.core.arity.{Const, ProveArity, VerifiedArity}
+import org.shapesafe.core.arity.{ConstArity, ProveArity, VerifiedArity}
 import shapeless.ops.hlist
 import shapeless.{HList, Nat}
 
 // TODO: should not carry the proof
 case class SizeOf[D <: HList](data: D) extends VerifiedArity {
 
-  override def runtimeArity: Int = data.runtimeLength
+  override def runtimeValue: Int = data.runtimeLength
 }
 
 object SizeOf {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
 
   implicit def observe[D <: HList, N <: Nat](
       implicit
       length: hlist.Length.Aux[D, N],
       simplify: NatAsOp[N]
-  ): SizeOf[D] =>> Const.Derived[simplify.type, simplify.OutInt] = {
+  ): SizeOf[D] =>> ConstArity.Derived[simplify.type, simplify.OutInt] = {
 
     ProveArity.forAll[SizeOf[D]].=>> { v =>
-      Const.Derived.summon(simplify)
+      ConstArity.Derived.summon(simplify)
     }
   }
 
@@ -36,7 +36,7 @@ object SizeOf {
   def getConst[
       D <: HList,
       N <: Nat,
-      O <: Const[_]
+      O <: ConstArity[_]
   ](data: D)(
       implicit
       self: SizeOf[D] |- O

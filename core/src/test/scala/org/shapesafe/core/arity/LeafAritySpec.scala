@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Const.{Derived, Literal}
+import org.shapesafe.core.arity.ConstArity.{Derived, Literal}
 import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.m.PeerType
 import shapeless.Witness.Lt
@@ -11,7 +11,7 @@ class LeafAritySpec extends BaseSpec {
 
   describe("big") {
 
-    def validate[S](subject: Const[S], w: Lt[Int])(
+    def validate[S](subject: ConstArity[S], w: Lt[Int])(
         implicit
         proof: Require[S == w.T],
         plus: S + w.T

@@ -2,13 +2,13 @@ package org.shapesafe.core.shape
 
 import org.scalatest.Ignore
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.Const
+import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.graph.commons.util.debug.print_@
 import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HNil, Witness}
 
 @Ignore
-class LeafShapeSpike extends BaseSpec {
+class StaticShapeSpike extends BaseSpec {
 
   import shapeless.record._
   import shapeless.syntax.singleton.mkSingletonOps
@@ -161,8 +161,8 @@ class LeafShapeSpike extends BaseSpec {
     it("zip") {
 
       val dims = {
-        (Symbol("x") ->> Const.Literal(3)) ::
-          (Symbol("y") ->> Const.Literal(4)) ::
+        (Symbol("x") ->> ConstArity.Literal(3)) ::
+          (Symbol("y") ->> ConstArity.Literal(4)) ::
           HNil
       }
 

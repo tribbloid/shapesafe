@@ -1,11 +1,11 @@
 package org.shapesafe.core.shape.ops
 
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.shape.LeafShape
-import org.shapesafe.core.shape.LeafShape.><
+import org.shapesafe.core.shape.StaticShape
+import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape.ShapeAPI.^
 
-case class LeafOps[SELF <: LeafShape](shape: SELF) extends HasShape {
+case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
 
   type _Shape = SELF
 

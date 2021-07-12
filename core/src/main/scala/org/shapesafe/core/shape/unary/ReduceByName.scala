@@ -1,18 +1,18 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugSymbol, Expressions, OpStrs}
-import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape}
+import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
+import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
 
 trait ReduceByName {
 
-  import ProveShape.Factory._
+  import ProveShape.ForAll._
   import ProveShape._
 
   type _Unary <: DebugSymbol.On1
@@ -37,11 +37,11 @@ trait ReduceByName {
 
     implicit def simplify[
         S1 <: Shape,
-        P1 <: LeafShape
+        P1 <: StaticShape
     ](
         implicit
         lemma: S1 |- P1,
-        toShape: _Indexing.ToShape.Case[P1#Record]
+        toShape: _Indexer.ToShape.Case[P1#Record]
     ): _On[S1] =>> toShape.Out = {
 
       ProveShape.forAll[_On[S1]].=>> { v =>
@@ -58,7 +58,7 @@ trait ReduceByName {
       override val s1: S1 with Shape
   ) extends _On[S1] {}
 
-  object _Indexing extends UnaryIndexingFn.Distinct {
+  object _Indexer extends RecordIndexer.DistinctLike {
 
     implicit def consOldName[
         TI <: HList,
@@ -78,5 +78,5 @@ trait ReduceByName {
     }
   }
 
-  type _Indexing = _Indexing.type
+  type _Indexing = _Indexer.type
 }

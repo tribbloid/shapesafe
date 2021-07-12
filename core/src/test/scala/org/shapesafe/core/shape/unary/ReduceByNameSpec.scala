@@ -20,18 +20,18 @@ class ReduceByNameSpec extends BaseSpec {
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._SquashByName ‣ ReduceByName.On
         | ‣ OuterProduct
-        |    ‣ |<<-┏ ➊ ><
-        |    :     ┃   x ><
-        |    :     ┃   y
-        |    :  ‣ ➊ ><
-        |    :      2:Literal ><
-        |    :      3:Literal
-        |    ‣ |<<-┏ ➊ ><
-        |          ┃   x ><
-        |          ┃   y
-        |       ‣ ➊ ><
-        |           4:Literal ><
-        |           5:Literal
+        |    ‣ ZipWithNames┏ ➊ ><
+        |    :             ┃   2:Literal ><
+        |    :             ┃   3:Literal
+        |    :             ┏ ➊ ><
+        |    :             ┃   x ><
+        |    :             ┃   y
+        |    ‣ ZipWithNames┏ ➊ ><
+        |                  ┃   4:Literal ><
+        |                  ┃   5:Literal
+        |                  ┏ ➊ ><
+        |                  ┃   x ><
+        |                  ┃   y
         |""".stripMargin
     )
   }

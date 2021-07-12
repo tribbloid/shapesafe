@@ -68,9 +68,9 @@ class NamedWithSpec extends BaseSpec {
 
         val msg = PeekShape
           .From(good.shape)
-          .getReportMsg
+          .getMessage
 
-        msg.toString.shouldBe(
+        msg.shouldBe(
           """
             |      2 :<<- a >< (3 :<<- b)
             |  :=  2 >< 3 |<<- (a >< b)

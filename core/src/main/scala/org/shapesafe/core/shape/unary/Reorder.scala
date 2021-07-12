@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.{ProveShape, _}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -24,7 +24,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 trait Reorder_Imp0 {
 
   import ProveShape._
-  import Factory._
+  import ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -45,12 +45,12 @@ trait Reorder_Imp0 {
 object Reorder extends Reorder_Imp0 {
 
   import ProveShape._
-  import Factory._
+  import ForAll._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
       S1 <: Shape,
-      P1 <: LeafShape,
+      P1 <: StaticShape,
       II <: IndicesMagnet
   ](
       implicit
@@ -66,21 +66,21 @@ object Reorder extends Reorder_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Reorder[_, _], LeafShape] {
+  object Premise extends Poly1Base[Reorder[_, _], StaticShape] {
 
     implicit def eye[
-        P1 <: LeafShape
+        P1 <: StaticShape
     ] = {
 
       forAll[Reorder[P1, Indices.Eye]].==> { v =>
-        LeafShape.Eye
+        StaticShape.Eye
       }
     }
 
     implicit def inductive[
-        P1 <: LeafShape,
+        P1 <: StaticShape,
         II_- <: Indices,
-        OO_- <: LeafShape,
+        OO_- <: StaticShape,
         I <: Index,
         O <: Axis
     ](

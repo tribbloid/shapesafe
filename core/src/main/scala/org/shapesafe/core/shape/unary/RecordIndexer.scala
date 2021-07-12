@@ -3,20 +3,19 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.NewNameAppender
-import org.shapesafe.core.shape.{LeafShape, Names, Shape}
-import org.shapesafe.m.viz.TypeVizCT
+import org.shapesafe.core.shape.StaticShape
 import shapeless.{::, HList, HNil}
 
-trait UnaryIndexingFn extends Poly1Base[HList, HList] {
+trait RecordIndexer extends Poly1Base[HList, HList] {
 
-  implicit val nil: HNil ==> HNil = forAll[HNil].==> { v =>
+  implicit val nil: HNil ==> HNil = forAll[HNil].==> { _ =>
     HNil
   }
 
   // TODO: move to a more general 'AndThen' class
-  object ToShape extends Poly1Base[HList, LeafShape] {
+  object ToShape extends Poly1Base[HList, StaticShape] {
 
-    val outer: UnaryIndexingFn.this.type = UnaryIndexingFn.this
+    val outer: RecordIndexer.this.type = RecordIndexer.this
 
     implicit def toShape[
         I <: HList,
@@ -24,8 +23,9 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
     ](
         implicit
         lemma1: outer.==>[I, O],
-        lemma2: LeafShape.FromRecord.Case[O]
+        lemma2: StaticShape.FromRecord.Case[O]
     ): I ==> lemma2.Out = {
+
       forAll[I].==> { i =>
         lemma2.apply(lemma1.apply(i))
       }
@@ -33,9 +33,9 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
   }
 }
 
-object UnaryIndexingFn {
+object RecordIndexer {
 
-  trait Distinct extends UnaryIndexingFn {
+  trait DistinctLike extends RecordIndexer {
 
     implicit def consNewName[
         TI <: HList,

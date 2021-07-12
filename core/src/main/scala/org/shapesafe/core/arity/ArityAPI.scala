@@ -72,7 +72,7 @@ object ArityAPI {
   implicit def fromIntS[T <: Int with Singleton](v: T)(
       implicit
       toW: Witness.Aux[T]
-  ): ArityAPI.^[Const.Literal[T]] = {
+  ): ArityAPI.^[ConstArity.Literal[T]] = {
 
     Arity(toW)
   }

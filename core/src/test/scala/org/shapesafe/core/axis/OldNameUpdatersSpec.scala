@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.arity.ops.ArityOps
 import shapeless.HNil
 
-class OldNameUpdaterSystemSpec extends BaseSpec {
+class OldNameUpdatersSpec extends BaseSpec {
 
   import shapeless.record._
   import shapeless.syntax.singleton.mkSingletonOps

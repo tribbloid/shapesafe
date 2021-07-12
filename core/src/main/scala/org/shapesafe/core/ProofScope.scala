@@ -36,7 +36,7 @@ trait ProofScope { // TODO: no IUB?
   )
   type |-[-I, O <: OUB] = Proof[I, root.Term.Aux[O]]
 
-  def forAll[I]: root.Factory[I]
+  def forAll[I]: root.ForAll[I]
 
   def satisfying[OB <: OUB] = new Satisfying[OB]()
 
@@ -73,18 +73,18 @@ object ProofScope {
 
     trait Proof[-I, +P <: Consequent] extends root.Proof[I, P]
 
-    override def forAll[I]: Factory[I] = new Factory[I] {}
+    override def forAll[I]: ForAll[I] = new ForAll[I]
 
-    object Factory {
+    object ForAll {
 
-      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.Factory.=>>^^[I, P]
+      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.ForAll.=>>^^[I, P]
 
-      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] with root.Factory.=>>[I, O]
+      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] with root.ForAll.=>>[I, O]
     }
 
-    trait Factory[I] extends root.Factory[I] {
+    class ForAll[I] extends root.ForAll[I] {
 
-      import Factory._
+      import ForAll._
 
       override def =>>^^[P <: Consequent](_fn: I => P) = new (I =>>^^ P) {
         override def apply(v: I): P = _fn(v)

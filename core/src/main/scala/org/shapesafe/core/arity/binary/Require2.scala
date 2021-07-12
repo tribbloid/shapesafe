@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.Const
+import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity, Utils}
@@ -19,7 +19,7 @@ trait Require2 extends Op2Like {
 
 object Require2 extends Require2_Imp0 {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
   import singleton.ops._
 
   class Impl[
@@ -48,9 +48,9 @@ object Require2 extends Require2_Imp0 {
       override type _Refute =
         DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#Complement#_AsOpStr, A2]
 
-      override lazy val runtimeArity: Int = {
-        val v1 = a1.runtimeArity
-        val v2 = a2.runtimeArity
+      override lazy val runtimeValue: Int = {
+        val v1 = a1.runtimeValue
+        val v2 = a2.runtimeValue
 
         require(sh.apply(v1, v2).getValue, "runtime Requirement failed")
         v1
@@ -89,14 +89,14 @@ object Require2 extends Require2_Imp0 {
       MSG
   ](
       implicit
-      bound1: A1 |-< Const[S1],
-      bound2: A2 |-< Const[S2],
-      refute0: ForArity.Refute0[OP#On[Const[S1], Const[S2]], MSG],
+      bound1: A1 |-< ConstArity[S1],
+      bound2: A2 |-< ConstArity[S2],
+      refute0: ForArity.Refute0[OP#On[ConstArity[S1], ConstArity[S2]], MSG],
       lemma: RequireMsg[
         OP#Lemma[S1, S2],
         MSG
       ]
-  ): OP#On[A1, A2] =>> Const[S1] = {
+  ): OP#On[A1, A2] =>> ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
       bound1.valueOf(v.a1)
     }

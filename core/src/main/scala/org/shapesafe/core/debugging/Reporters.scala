@@ -17,7 +17,7 @@ class Reporters[
 
   import Reporters._
 
-  trait ExprProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
+  trait ProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
 
     import org.shapesafe.core.debugging.DebugUtil._
     import scope._
@@ -51,7 +51,7 @@ class Reporters[
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
-      implicit def alreadyTarget[
+      implicit def alreadyEvaled[
           S <: TGT with Iub,
           VS <: XString
       ](
@@ -104,12 +104,12 @@ class Reporters[
     override object Step1 extends Step1_Imp1
   }
 
-  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
+  trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = EmitInfo[T]
   }
 
-  trait InterruptReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ExprProofReporter[IUB, TGT] {
+  trait InterruptReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = EmitError[T]
   }
@@ -130,7 +130,8 @@ object Reporters {
 
     case class From[IN <: IUB](v: IN) {
 
-      def getReportMsg[
+      // TODO: should this be part of Arity/Shape API?
+      def getMessage[
           SS <: XString
       ](
           implicit

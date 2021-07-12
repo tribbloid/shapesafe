@@ -20,12 +20,13 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
 
     final def valueOf(v: I): P#Domain = apply(v).value
   }
+  //TODO: add refute that supersedes def refute in type classes
 
-  def forAll[I]: Factory[I] = new Factory[I] {}
+  def forAll[I]: ForAll[I] = new ForAll[I]
 
-  final def forValue[I](v: I): Factory[I] = forAll[I]
+  final def forValue[I](v: I): ForAll[I] = forAll[I]
 
-  object Factory {
+  object ForAll {
 
     trait =>>^^[-I, +P <: Consequent] extends Proof[I, P]
 
@@ -49,9 +50,9 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
     trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] {}
   }
 
-  trait Factory[I] {
+  class ForAll[I] {
 
-    import Factory._
+    import ForAll._
 
     def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
       override def apply(v: I): P = _fn(v)

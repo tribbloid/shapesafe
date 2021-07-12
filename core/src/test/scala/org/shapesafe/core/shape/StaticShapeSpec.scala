@@ -2,10 +2,10 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.shape.LeafShape.{FromRecord, FromStatic}
+import org.shapesafe.core.shape.StaticShape.{FromRecord, FromStatic}
 import shapeless.HNil
 
-class LeafShapeSpec extends BaseSpec {
+class StaticShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
@@ -19,13 +19,13 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
       )
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.record.apply("x").runtimeArity == 2)
+      assert(shape.record.apply("x").runtimeValue == 2)
     }
 
     it("nameless") {
@@ -36,7 +36,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< ArityAPI.^[Const.Literal[Int(2)]] >< ArityAPI.^[Const.Literal[Int(3)]]
+          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -49,12 +49,12 @@ class LeafShapeSpec extends BaseSpec {
         Arity(3) append
         Arity(4) :<<- "z"
 
-      assert(shape.record.apply("x").runtimeArity == 2)
-      assert(shape.record.apply("z").runtimeArity == 4)
+      assert(shape.record.apply("x").runtimeValue == 2)
+      assert(shape.record.apply("z").runtimeValue == 4)
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[Const.Literal[Int(3)]] >< (Const.Literal[Int(4)] :<<- String("z"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -82,9 +82,9 @@ class LeafShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
-      assert(shape == LeafShape.Eye)
+      assert(shape == StaticShape.Eye)
     }
 
     it("1") {
@@ -92,7 +92,7 @@ class LeafShapeSpec extends BaseSpec {
       val hh = (Arity(3) :<<- "x") ::
         HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -105,7 +105,7 @@ class LeafShapeSpec extends BaseSpec {
         (Arity(4) :<<- "y") ::
         HNil
 
-      val shape = LeafShape.FromStatic(hh)
+      val shape = StaticShape.FromStatic(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -122,9 +122,9 @@ class LeafShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
-      assert(shape == LeafShape.Eye)
+      assert(shape == StaticShape.Eye)
     }
 
     it("1") {
@@ -132,7 +132,7 @@ class LeafShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3).arity) ::
         HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -145,7 +145,7 @@ class LeafShapeSpec extends BaseSpec {
         ("y" ->> Arity(4).arity) ::
         HNil
 
-      val shape = LeafShape.FromRecord(hh)
+      val shape = StaticShape.FromRecord(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -253,7 +253,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(2)] :: HNil""".stripMargin
+          |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -276,7 +276,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
+          |ConstArity.Literal[Int(3)] :: ConstArity.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 
@@ -302,7 +302,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(2)] :: HNil""".stripMargin
+          |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -325,7 +325,7 @@ class LeafShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
+          |ConstArity.Literal[Int(3)] :: ConstArity.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 

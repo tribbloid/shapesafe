@@ -300,7 +300,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.unsafe.zeros(unstableFn)
 
-      assert(v.arity.runtimeArity == 3)
+      assert(v.arity.runtimeValue == 3)
     }
   }
 }

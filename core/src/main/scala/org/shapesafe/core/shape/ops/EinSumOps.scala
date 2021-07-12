@@ -41,12 +41,6 @@ case class EinSumOps[
     checked.^
   }
 
-//  def build[S2 <: Shape](that: EinSumOps[S2]): CheckEinSum[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
-//    val direct = checked >< that.checked
-//
-//    CheckEinSum(direct.shape)
-//  }
-
   def apply[S2 <: Shape](that: ShapeAPI.^[S2]): EinSumOps[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
     val direct = checked.^ >< CheckEinSum(that.shape).^
 

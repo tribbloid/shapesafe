@@ -112,7 +112,7 @@ class Op2Spec extends ArityFixture {
 
       shouldNotCompile(
         """(Arity.Unprovable :+ c).interrupt""",
-        """.*(\?\?\? \+ 5).*"""
+        """.*(_UNPROVABLE_ \+ 5).*"""
       )
     }
   }
