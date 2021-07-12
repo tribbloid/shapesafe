@@ -61,7 +61,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     it("shouldEqual") {
 
-      s1.elementWise(s1).eval
+      s1.requireEqual(s1).eval
 
       shouldNotCompile(
         """s1.shouldEqual(s2).eval"""
