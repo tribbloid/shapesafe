@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+    if: "! contains(toJSON(github.event.commits.*.message), 'INCOMPLETE')"
 
     runs-on: ubuntu-latest
 
