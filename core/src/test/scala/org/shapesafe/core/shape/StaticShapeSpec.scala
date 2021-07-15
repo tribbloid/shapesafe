@@ -19,7 +19,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y"))
+          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
       )
 
@@ -36,7 +36,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< ArityAPI.^[Const.Literal[Int(2)]] >< ArityAPI.^[Const.Literal[Int(3)]]
+          |StaticShape.Eye >< ArityAPI.^[Const.Literal[Int(2)]] >< ArityAPI.^[Const.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -54,7 +54,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |LeafShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[Const.Literal[Int(3)]] >< (Const.Literal[Int(4)] :<<- String("z"))
+          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[Const.Literal[Int(3)]] >< (Const.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }

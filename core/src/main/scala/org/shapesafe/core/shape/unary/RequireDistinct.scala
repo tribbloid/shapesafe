@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
-import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
 // all names must be distinctive - no duplication allowed
@@ -25,14 +25,14 @@ trait CheckDistinct_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: StaticShape,
+      P1 <: LeafShape,
       MSG
   ](
       implicit
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[RequireDistinct[P1], MSG],
       msg: EmitError[MSG]
-  ): RequireDistinct[S1] =>> StaticShape = {
+  ): RequireDistinct[S1] =>> LeafShape = {
     null
   }
 }

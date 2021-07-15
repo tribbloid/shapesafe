@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{Names, Shape, StaticShape}
+import org.shapesafe.core.shape.{LeafShape, Names, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
@@ -28,7 +28,7 @@ trait NamedWith_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: StaticShape,
+      P1 <: LeafShape,
       N <: Names,
       MSG
   ](
@@ -36,7 +36,7 @@ trait NamedWith_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[|<<-[P1, N], MSG],
       msg: EmitError[MSG]
-  ): |<<-[S1, N] =>> StaticShape = {
+  ): |<<-[S1, N] =>> LeafShape = {
     ???
   }
 }

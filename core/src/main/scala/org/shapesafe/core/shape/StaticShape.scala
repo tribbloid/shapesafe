@@ -26,59 +26,6 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 
   lazy val runtimeShape: List[Axis] = asList
 
-  // TODO: merge with GetSubscript & becoming a special case
-//  object IndexLookup extends Poly1 {
-//
-//    implicit def name[S <: String](
-//        implicit
-//        _selector: Selector[Record, S] { type Out <: Arity }
-//    ) = at[Index.Name[S]] { name =>
-//      val core = _selector(record)
-//      core.^ :<<- name.w
-//    }
-//
-//    implicit def ii[N <: Nat](
-//        implicit
-//        _at: At[Static, N] { type Out <: Axis }
-//    ): Case[Index.I_th[N]] {
-//      type Result = _at.Out
-//    } = at[Index.I_th[N]] { index =>
-//      _at(static)
-//    }
-//  }
-//  type IndexLookup = IndexLookup.type
-//
-//  object Sub {
-//
-//    def apply[T <: Index](v: T): Sub1[T] = {
-//
-//      Sub1(v)
-//    }
-//
-//    def apply(i: Nat)(
-//        implicit
-//        toIntN: ToInt[i.N]
-//    ): Sub1[Index.I_th[i.N]] = {
-//
-//      apply(Index.I_th(i))
-//    }
-//
-//    def apply(w: Witness.Lt[String]): Sub1[Index.Name[w.T]] = {
-//
-//      apply(Index.Name(w))
-//    }
-//  }
-//
-//  case class Sub1[T <: Index](index: T) {
-//
-//    def axis(
-//        implicit
-//        byIndex: IndexLookup.Case[T]
-//    ): byIndex.Result = {
-//      byIndex.apply(index)
-//    }
-//  }
-
   final override def nodeString: String = this.toString
 }
 
@@ -231,5 +178,4 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def endo[T <: StaticShape]: T =>> T = ProveShape.forAll[T].=>>(identity[T])
 }

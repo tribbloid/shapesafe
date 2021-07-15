@@ -5,7 +5,7 @@ import org.shapesafe.core.shape.StaticShape
 import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape.ShapeAPI.^
 
-case class LeafOps[SELF <: StaticShape](shape: SELF) extends HasShape {
+case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
 
   type _Shape = SELF
 

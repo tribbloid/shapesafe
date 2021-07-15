@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.{Arity, Const}
 import org.shapesafe.core.shape.ProveShape.|-
 import org.shapesafe.core.shape.StaticShape.><^
 import org.shapesafe.core.shape.binary.OuterProduct
-import org.shapesafe.core.shape.ops.{EinSumOps, LeafOps, MatrixOps, VectorOps}
+import org.shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOps, VectorOps}
 import org.shapesafe.core.shape.unary._
 import shapeless.ops.hlist.Reverse
 import shapeless.ops.nat.ToInt
@@ -204,7 +204,7 @@ object ShapeAPI {
     ^(Shape >|< Arity(toW))
   }
 
-  implicit def asLeaf[T <: StaticShape](v: Aux[T]): LeafOps[T] = LeafOps(v.shape)
+  implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOps[T] = StaticOps(v.shape)
 
   case class ^[SELF <: Shape](shape: SELF) extends ShapeAPI {
 

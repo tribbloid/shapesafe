@@ -28,7 +28,7 @@ trait Reorder_Imp0 {
 
   implicit def refute[
       S1 <: Shape,
-      P1 <: StaticShape,
+      P1 <: LeafShape,
       II <: IndicesMagnet,
       MSG
   ](
@@ -36,7 +36,7 @@ trait Reorder_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Reorder[S1, II] =>> StaticShape = {
+  ): Reorder[S1, II] =>> LeafShape = {
     ???
   }
 

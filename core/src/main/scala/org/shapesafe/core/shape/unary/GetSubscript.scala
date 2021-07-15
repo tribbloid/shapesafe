@@ -42,7 +42,7 @@ trait GetSubscript_Imp0 {
       lemma1: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
       msg: EmitError[MSG]
-  ): GetSubscript[S1, I] =>> StaticShape = {
+  ): GetSubscript[S1, I] =>> LeafShape = {
     ???
   }
 }

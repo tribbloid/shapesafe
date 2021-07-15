@@ -20,6 +20,7 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
 
     final def valueOf(v: I): P#Domain = apply(v).value
   }
+  //TODO: add refute that supersedes def refute in type classes
 
   def forAll[I]: Factory[I] = new Factory[I] {}
 
