@@ -90,7 +90,7 @@ object GetSubscript extends GetSubscript_Imp0 {
       }
     }
 
-    implicit def byII[
+    implicit def byIndex[
         P1 <: StaticShape,
         N <: Nat,
         O <: Axis

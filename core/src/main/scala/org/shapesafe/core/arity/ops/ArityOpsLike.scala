@@ -3,7 +3,7 @@ package org.shapesafe.core.arity.ops
 import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.axis.OldNameUpdaterSystem
+import org.shapesafe.core.axis.OldNameUpdaters
 import org.shapesafe.core.debugging.Expressions
 import org.shapesafe.core.shape.binary.DimensionWise
 import org.shapesafe.core.shape.unary.ReduceByName
@@ -23,7 +23,7 @@ trait ArityOpsLike extends HasArity {
     final type apply[A1 <: Arity, A2 <: Arity] = On[A1, A2]
     def apply(that: ArityAPI): ArityAPI.^[On[_Arity, that._Arity]] = op.on(arity.^, that).^
 
-    object Updaters extends OldNameUpdaterSystem(op)
+    object Updaters extends OldNameUpdaters(op)
 
     trait _HasOuter extends HasOuter {
 

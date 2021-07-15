@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugUtil, Expressions, OpStrs, Reporters}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.{ProveShape, _}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 

@@ -56,6 +56,6 @@ object RequireDistinct extends CheckDistinct_Imp0 {
     }
   }
 
-  object _Indexing extends UnaryIndexingFn.Distinct
+  object _Indexing extends IndexingFn.Distinct
   type _Indexing = _Indexing.type
 }

@@ -7,7 +7,7 @@ import shapeless.ops.record.{Modifier, Selector}
 import shapeless.syntax.RecordOps
 import shapeless.{::, HList, Witness}
 
-class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
+class OldNameUpdaters[OP <: Op2Like](val op: OP) {
 
   trait Appender extends RecordUpdater {
     // TODO: should be a Poly2?
@@ -84,4 +84,4 @@ class OldNameUpdaterSystem[OP <: Op2Like](val op: OP) {
 //  object Squasher extends Squasher
 }
 
-object OldNameUpdaterSystem {}
+object OldNameUpdaters {}

@@ -1,11 +1,11 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugSymbol, Expressions, OpStrs}
+import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
 import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.{::, HList}
 
 import scala.language.implicitConversions
@@ -58,7 +58,7 @@ trait ReduceByName {
       override val s1: S1 with Shape
   ) extends _On[S1] {}
 
-  object _Indexing extends UnaryIndexingFn.Distinct {
+  object _Indexing extends IndexingFn.Distinct {
 
     implicit def consOldName[
         TI <: HList,

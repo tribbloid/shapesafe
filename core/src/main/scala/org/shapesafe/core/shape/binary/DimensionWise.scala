@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
-import org.shapesafe.core.shape.unary.UnaryIndexingFn
+import org.shapesafe.core.shape.unary.IndexingFn
 import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.ops.hlist.Zip
@@ -70,7 +70,7 @@ trait DimensionWise {
   ) extends _On[S1, S2] {}
 
   // TODO: now sure if it is too convoluted, should it extends BinaryIndexingFn?
-  object _Indexing extends UnaryIndexingFn {
+  object _Indexing extends IndexingFn {
 
     import org.shapesafe.core.arity.ProveArity.|-
 

@@ -3,11 +3,10 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.NewNameAppender
-import org.shapesafe.core.shape.{Names, Shape, StaticShape}
-import org.shapesafe.m.viz.TypeVizCT
+import org.shapesafe.core.shape.StaticShape
 import shapeless.{::, HList, HNil}
 
-trait UnaryIndexingFn extends Poly1Base[HList, HList] {
+trait IndexingFn extends Poly1Base[HList, HList] {
 
   implicit val nil: HNil ==> HNil = forAll[HNil].==> { v =>
     HNil
@@ -16,7 +15,7 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
   // TODO: move to a more general 'AndThen' class
   object ToShape extends Poly1Base[HList, StaticShape] {
 
-    val outer: UnaryIndexingFn.this.type = UnaryIndexingFn.this
+    val outer: IndexingFn.this.type = IndexingFn.this
 
     implicit def toShape[
         I <: HList,
@@ -33,9 +32,9 @@ trait UnaryIndexingFn extends Poly1Base[HList, HList] {
   }
 }
 
-object UnaryIndexingFn {
+object IndexingFn {
 
-  trait Distinct extends UnaryIndexingFn {
+  trait Distinct extends IndexingFn {
 
     implicit def consNewName[
         TI <: HList,
