@@ -15,13 +15,12 @@ class DimensionWiseSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On
-        | ‣ ➊ ><
-        | :   2:Literal ><
-        | :   3:Literal
-        | ‣ ➊ ><
-        |     4:Literal ><
-        |     5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On┏ ➊ ><
+        |                                                                      ┃   2:Literal ><
+        |                                                                      ┃   3:Literal
+        |                                                                      ┏ ➊ ><
+        |                                                                      ┃   4:Literal ><
+        |                                                                      ┃   5:Literal
         |""".stripMargin
     )
   }

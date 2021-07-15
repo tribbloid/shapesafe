@@ -26,7 +26,7 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 
   lazy val runtimeShape: List[Axis] = asList
 
-  final override def nodeString: String = this.toString
+//  final override def nodeString: String = this.toString
 }
 
 object StaticShape extends TupleSystem with CanFromStatic {

@@ -47,6 +47,7 @@ trait DimensionWise {
         lemma1: S1 |- P1,
         lemma2: S2 |- P2,
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
+        // TODO: no need, can define Indexing directly
         toShape: _Indexing.ToShape.Case[HO]
     ): _On[S1, S2] =>> toShape.Out = {
 

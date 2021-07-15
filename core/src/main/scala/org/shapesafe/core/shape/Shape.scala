@@ -1,17 +1,12 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.graph.commons.util.{TreeFormat, TreeLike}
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.core.shape.StaticShape.Eye
 import org.shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 
 import scala.language.implicitConversions
 
-trait Shape extends TreeLike with CanPeek {
-
-  override lazy val treeFormat: TreeFormat = TreeFormat.Indent2Minimal
-
-}
+trait Shape extends CanPeek {}
 
 object Shape extends ApplyLiterals.ToShape with ShapeAPI {
 

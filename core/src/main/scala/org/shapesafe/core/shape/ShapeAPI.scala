@@ -63,9 +63,9 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     */
   object namedWith {
 
-    def apply[N <: Names](newNames: N): ^[|<<-[_Shape, N]] = {
+    def apply[N <: Names](newNames: N): ^[ZipWithNames[_Shape, N]] = {
 
-      new |<<-[_Shape, N](shape.^, newNames).^
+      new ZipWithNames[_Shape, N](shape.^, newNames).^
     }
   }
 
@@ -80,7 +80,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[|<<-[_Shape, lemma.Out]] = {
+    ): ^[ZipWithNames[_Shape, lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
