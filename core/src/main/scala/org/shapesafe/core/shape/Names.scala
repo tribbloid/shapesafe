@@ -7,17 +7,17 @@ import shapeless.Witness
 
 import scala.language.implicitConversions
 
-trait Names extends IndicesMagnet with Names.proto.Tuple {}
+trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
 object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
 
   type UpperBound = String
 
-  object proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
+  object Proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
 
   type Tuple = Names
 
-  class Eye extends proto.Eye with Names {
+  class Eye extends Proto.Eye with Names {
     override type AsIndices = Indices.Eye
 
     override def asIndices: Indices.Eye = Indices.Eye
@@ -30,7 +30,7 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends proto.><[TAIL, HEAD](tail, head)
+  ) extends Proto.><[TAIL, HEAD](tail, head)
       with Tuple {
 
     val headW: Witness.Aux[HEAD] = Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]]

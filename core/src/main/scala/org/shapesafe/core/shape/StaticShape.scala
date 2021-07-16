@@ -31,8 +31,6 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 
 object StaticShape extends TupleSystem with CanFromStatic {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
-
   final type UpperBound = Axis
 
   object Proto extends StaticTuples[UpperBound]
@@ -150,7 +148,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = forTail(v.tail)
-        val head = Arity(w) //  Arity.Impl(Const.Literal(w))
+        val head = Arity(w) // Arity.Impl(Const.Literal(w))
 
         prev.^ appendInner head
       }

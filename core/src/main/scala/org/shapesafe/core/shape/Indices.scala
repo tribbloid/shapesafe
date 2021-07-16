@@ -4,7 +4,7 @@ import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
 
 import scala.language.implicitConversions
 
-trait Indices extends IndicesMagnet with Indices.proto.Tuple {
+trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
 
   final override type AsIndices = this.type
 
@@ -15,11 +15,11 @@ object Indices extends TupleSystem with CanInfix_>< {
 
   type UpperBound = Index
 
-  object proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
+  object Proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
 
   type Tuple = Indices
 
-  class Eye extends proto.Eye with Indices
+  class Eye extends Proto.Eye with Indices
   lazy val Eye = new Eye
 
   class ><[
@@ -28,7 +28,7 @@ object Indices extends TupleSystem with CanInfix_>< {
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends proto.><[TAIL, HEAD](tail, head)
+  ) extends Proto.><[TAIL, HEAD](tail, head)
       with Tuple {
 
     override type PeekHead = Head

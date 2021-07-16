@@ -12,11 +12,6 @@ trait TupleSystem {
   type Eye <: Tuple
   def Eye: Eye
 
-//  type ><[
-//      TAIL <: Impl,
-//      HEAD <: UpperBound
-//  ] <: Impl
-
   trait AbstractFromHList extends Poly1Base[HList, Tuple] {
 
     final val outer = TupleSystem.this
