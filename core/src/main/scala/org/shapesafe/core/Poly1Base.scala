@@ -55,9 +55,9 @@ trait Poly1Base[IUB, OUB] {
     override def apply(v: I): O = toOut(v)
   }
 
-  def forAll[I <: IUB] = new Factory[I]() // same as `at` in Poly1?
+  def forAll[I <: IUB] = new ForAll[I]() // same as `at` in Poly1?
 
-  protected class Factory[I <: IUB]() {
+  protected class ForAll[I <: IUB]() {
 
     def ==>[O <: OUB](fn: I => O): I ==> O = new (I ==> O)(fn)
   }

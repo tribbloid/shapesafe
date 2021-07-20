@@ -12,7 +12,7 @@ import scala.language.implicitConversions
 
 trait ReduceByName {
 
-  import ProveShape.Factory._
+  import ProveShape.ForAll._
   import ProveShape._
 
   type _Unary <: DebugSymbol.On1

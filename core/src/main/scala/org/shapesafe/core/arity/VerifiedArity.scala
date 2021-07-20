@@ -10,7 +10,7 @@ trait VerifiedArity extends Arity.Verifiable {
 
 object VerifiedArity {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
 
   implicit def endo[T <: VerifiedArity]: T =>> T =
     ProveArity.forAll[T].=>>(identity[T])

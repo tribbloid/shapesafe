@@ -30,7 +30,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 trait GetSubscript_Imp0 {
 
   import ProveShape._
-  import Factory._
+  import ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -50,7 +50,7 @@ trait GetSubscript_Imp0 {
 object GetSubscript extends GetSubscript_Imp0 {
 
   import ProveShape._
-  import Factory._
+  import ForAll._
 
   implicit def simplify[
       S1 <: Shape,

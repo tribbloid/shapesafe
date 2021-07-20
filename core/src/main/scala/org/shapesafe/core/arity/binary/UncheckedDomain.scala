@@ -12,7 +12,7 @@ abstract class UncheckedDomain[
     A2 <: Arity
 ] {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
 
   type O1 <: Arity
 

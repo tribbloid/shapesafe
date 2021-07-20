@@ -14,7 +14,7 @@ case class SizeOf[D <: HList](data: D) extends VerifiedArity {
 
 object SizeOf {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
 
   implicit def observe[D <: HList, N <: Nat](
       implicit

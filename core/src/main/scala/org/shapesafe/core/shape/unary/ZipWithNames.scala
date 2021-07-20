@@ -24,7 +24,7 @@ case class ZipWithNames[
 
 trait ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -43,7 +43,7 @@ trait ZipWithNames_Imp0 {
 
 object ZipWithNames extends ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   implicit def simplify[
       S1 <: Shape,

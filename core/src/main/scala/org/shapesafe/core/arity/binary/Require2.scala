@@ -19,7 +19,7 @@ trait Require2 extends Op2Like {
 
 object Require2 extends Require2_Imp0 {
 
-  import ProveArity.Factory._
+  import ProveArity.ForAll._
   import singleton.ops._
 
   class Impl[

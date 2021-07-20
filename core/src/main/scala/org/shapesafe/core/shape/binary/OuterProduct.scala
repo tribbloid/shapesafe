@@ -23,7 +23,7 @@ case class OuterProduct[
 
 trait OuterProduct_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   //TODO: should leverage append, if the deadlock problem has been solved
   implicit def simplify[
@@ -51,7 +51,7 @@ trait OuterProduct_Imp0 {
 
 object OuterProduct extends OuterProduct_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.Factory._
+  import org.shapesafe.core.shape.ProveShape.ForAll._
 
   // shortcut for trivial D + 1 case
   implicit def append[
