@@ -148,7 +148,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
 
       forAll[HEAD :: H_TAIL].==> { v =>
         val prev = forTail(v.tail)
-        val head = Arity(w) // Arity.Impl(Const.Literal(w))
+        val head = Arity(w) // Arity.Impl(ConstArity.Literal(w))
 
         prev.^ appendInner head
       }

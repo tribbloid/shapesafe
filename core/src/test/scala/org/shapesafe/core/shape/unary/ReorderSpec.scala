@@ -27,7 +27,7 @@ class ReorderSpec extends BaseSpec {
       val ss = Reorder(s1, Indices >< Name("z"))
       val rr = Reorder.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
-        """StaticShape.Eye >< (Const.Literal[Int(3)] :<<- String("z"))"""
+        """StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z"))"""
       )
     }
 
@@ -44,7 +44,7 @@ class ReorderSpec extends BaseSpec {
 
       typeInferShort(rr).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(3)] :<<- String("z")) >< (Const.Literal[Int(2)] :<<- String("y"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z")) >< (ConstArity.Literal[Int(2)] :<<- String("y"))
           |""".stripMargin
       )
     }
@@ -55,7 +55,7 @@ class ReorderSpec extends BaseSpec {
       val rr = Reorder.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(3)] :<<- String("z")) >< (Const.Literal[Int(2)] :<<- String("y")) >< (Const.Literal[Int(1)] :<<- String("x"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z")) >< (ConstArity.Literal[Int(2)] :<<- String("y")) >< (ConstArity.Literal[Int(1)] :<<- String("x"))
           |""".stripMargin
       )
     }

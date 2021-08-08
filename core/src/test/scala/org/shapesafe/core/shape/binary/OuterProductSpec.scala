@@ -22,7 +22,7 @@ class OuterProductSpec extends BaseSpec {
 
       typeInferShort(rr.shape).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(2)] :<<- String("i"))""".stripMargin
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
     }
 
@@ -40,8 +40,8 @@ class OuterProductSpec extends BaseSpec {
 
       typeInferShort(rr.shape).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y")) ><
-          | (Const.Literal[Int(2)] :<<- String("i")) >< (Const.Literal[Int(3)] :<<- String("j"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y")) ><
+          | (ConstArity.Literal[Int(2)] :<<- String("i")) >< (ConstArity.Literal[Int(3)] :<<- String("j"))
           |""".stripMargin.split('\n').mkString
       )
     }

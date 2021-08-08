@@ -13,7 +13,7 @@ class AxisSpec extends BaseSpec {
     typeInferShort(dim)
       .shouldBe(
         """
-          |Const.Literal[Int(3)] :<<- String("abc")""".stripMargin
+          |ConstArity.Literal[Int(3)] :<<- String("abc")""".stripMargin
       )
   }
 }

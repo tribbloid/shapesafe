@@ -19,7 +19,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< (Const.Literal[Int(3)] :<<- String("y"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
       )
 
@@ -36,7 +36,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |StaticShape.Eye >< ArityAPI.^[Const.Literal[Int(2)]] >< ArityAPI.^[Const.Literal[Int(3)]]
+          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -54,7 +54,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(shape.shape).shouldBe(
         """
-          |StaticShape.Eye >< (Const.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[Const.Literal[Int(3)]] >< (Const.Literal[Int(4)] :<<- String("z"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -253,7 +253,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(2)] :: HNil""".stripMargin
+          |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -276,7 +276,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
+          |ConstArity.Literal[Int(3)] :: ConstArity.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 
@@ -302,7 +302,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(2)] :: HNil""".stripMargin
+          |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
       assert(record.get("x") == Arity(2).arity)
@@ -325,7 +325,7 @@ class StaticShapeSpec extends BaseSpec {
 
       typeInferShort(record.values).shouldBe(
         """
-          |Const.Literal[Int(3)] :: Const.Literal[Int(2)] :: HNil
+          |ConstArity.Literal[Int(3)] :: ConstArity.Literal[Int(2)] :: HNil
           |""".stripMargin
       )
 
