@@ -75,6 +75,7 @@ class EmitMsgSpec extends BaseSpec {
 ////    )
 //  }
 
+  // TODO: how to validate compile-time emitted message by assertion?
   it("can emit warning") { // TODO: how to de-verbose?
     emitWarning.weakly["ABC"]
 

@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.Const
+import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
@@ -72,12 +72,12 @@ object Op2 extends Op2_Imp0 {
       OP <: Op2
   ](
       implicit
-      bound1: A1 |-< Const[S1], // TODO: make it similar to unsafe
-      bound2: A2 |-< Const[S2],
+      bound1: A1 |-< ConstArity[S1], // TODO: make it similar to unsafe
+      bound2: A2 |-< ConstArity[S2],
       lemma: OP#Lemma[S1, S2]
   ) = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
-      Const.Derived.summon[OP#Lemma[S1, S2]](lemma)
+      ConstArity.Derived.summon[OP#Lemma[S1, S2]](lemma)
     }
   }
 

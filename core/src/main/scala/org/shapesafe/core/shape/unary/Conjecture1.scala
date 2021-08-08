@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.shape.{Shape, ShapeConjecture}
+import org.shapesafe.core.shape.{ProveShape, Shape, ShapeConjecture, UncheckedShape}
 
 trait Conjecture1 extends ShapeConjecture {
 
@@ -9,9 +9,21 @@ trait Conjecture1 extends ShapeConjecture {
 
 object Conjecture1 {
 
+  type Aux[S1 <: Shape] = Conjecture1 {
+    type SS1 = S1
+  }
+
   trait ^[S1 <: Shape] extends Conjecture1 {
 
     final type SS1 = S1
+  }
+
+  import ProveShape.ForAll._
+
+  implicit def unchecked: Aux[UncheckedShape] =>> UncheckedShape.type = {
+    ProveShape.forAll[Aux[UncheckedShape]].=>> { _ =>
+      UncheckedShape
+    }
   }
 
 //  object Refute1 extends ShapeReporters.RefuteReporter[Conjecture1 with CanRefute] {

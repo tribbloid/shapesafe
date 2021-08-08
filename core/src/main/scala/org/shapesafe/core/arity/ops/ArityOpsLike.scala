@@ -31,13 +31,14 @@ trait ArityOpsLike extends HasArity {
     }
 
     object _AppendByName extends ReduceByName with _HasOuter {
+
       object oldNameUpdater extends Updaters.Appender
 
       type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsOpStr]
     }
-//    type AppendByName[S1 <: Shape] = AppendByName._On[S1]
 
     object _SquashByName extends ReduceByName with _HasOuter {
+
       object oldNameUpdater extends Updaters.Squasher
 
       type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsOpStr]

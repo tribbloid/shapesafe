@@ -73,7 +73,7 @@ object ProofScope {
 
     trait Proof[-I, +P <: Consequent] extends root.Proof[I, P]
 
-    override def forAll[I]: ForAll[I] = new ForAll[I] {}
+    override def forAll[I]: ForAll[I] = new ForAll[I]
 
     object ForAll {
 
@@ -82,7 +82,7 @@ object ProofScope {
       trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] with root.ForAll.=>>[I, O]
     }
 
-    trait ForAll[I] extends root.ForAll[I] {
+    class ForAll[I] extends root.ForAll[I] {
 
       import ForAll._
 

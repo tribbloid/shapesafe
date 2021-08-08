@@ -2,7 +2,7 @@ package org.shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.Const.Literal
+import org.shapesafe.core.arity.ConstArity.Literal
 import org.shapesafe.core.arity.ProveArity.{|-, |-<}
 import org.shapesafe.core.arity.nullary.SizeOf
 import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}

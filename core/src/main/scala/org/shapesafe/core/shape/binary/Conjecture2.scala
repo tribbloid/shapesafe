@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape.binary
 
-import org.shapesafe.core.shape.{Shape, ShapeConjecture}
+import org.shapesafe.core.shape.binary.Conjecture2.Aux
+import org.shapesafe.core.shape.{ProveShape, Shape, ShapeConjecture, UncheckedShape}
 
 trait Conjecture2 extends ShapeConjecture {
 
@@ -8,7 +9,25 @@ trait Conjecture2 extends ShapeConjecture {
   type SS2 <: Shape
 }
 
+trait Conjecture2_Imp0 {
+
+  import ProveShape.ForAll._
+
+  implicit def leftUnchecked: Aux[UncheckedShape, _ <: Shape] =>> UncheckedShape.type = {
+    ProveShape.forAll.=>> { _ =>
+      UncheckedShape
+    }
+  }
+
+}
+
 object Conjecture2 {
+
+  type Aux[S1 <: Shape, S2 <: Shape] = Conjecture2 {
+
+    type SS1 = S1
+    type SS2 = S2
+  }
 
   trait ^[S1 <: Shape, S2 <: Shape] extends Conjecture2 {
 
@@ -16,7 +35,15 @@ object Conjecture2 {
     final override type SS2 = S2
   }
 
-//  object Refute2 extends ShapeReporters.RefuteReporter[Conjecture2 with CanRefute] {
+  import ProveShape.ForAll._
+
+  implicit def rightUnchecked: Aux[_ <: Shape, UncheckedShape] =>> UncheckedShape.type = {
+    ProveShape.forAll.=>> { _ =>
+      UncheckedShape
+    }
+  }
+
+  //  object Refute2 extends ShapeReporters.RefuteReporter[Conjecture2 with CanRefute] {
 //
 //    override object Step1 extends Poly1Base[Iub, MsgBroker] {
 //

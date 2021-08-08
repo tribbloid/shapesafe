@@ -22,7 +22,7 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
   }
   //TODO: add refute that supersedes def refute in type classes
 
-  def forAll[I]: ForAll[I] = new ForAll[I] {}
+  def forAll[I]: ForAll[I] = new ForAll[I]
 
   final def forValue[I](v: I): ForAll[I] = forAll[I]
 
@@ -50,7 +50,7 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
     trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] {}
   }
 
-  trait ForAll[I] {
+  class ForAll[I] {
 
     import ForAll._
 

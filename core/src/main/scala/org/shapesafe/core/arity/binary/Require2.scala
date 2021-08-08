@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.Const
+import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity, Utils}
@@ -89,14 +89,14 @@ object Require2 extends Require2_Imp0 {
       MSG
   ](
       implicit
-      bound1: A1 |-< Const[S1],
-      bound2: A2 |-< Const[S2],
-      refute0: ForArity.Refute0[OP#On[Const[S1], Const[S2]], MSG],
+      bound1: A1 |-< ConstArity[S1],
+      bound2: A2 |-< ConstArity[S2],
+      refute0: ForArity.Refute0[OP#On[ConstArity[S1], ConstArity[S2]], MSG],
       lemma: RequireMsg[
         OP#Lemma[S1, S2],
         MSG
       ]
-  ): OP#On[A1, A2] =>> Const[S1] = {
+  ): OP#On[A1, A2] =>> ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
       bound1.valueOf(v.a1)
     }

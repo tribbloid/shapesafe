@@ -5,7 +5,7 @@ import org.shapesafe.core.arity.Utils.Op
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
 
-trait Const[S] extends LeafArity with IDMixin {
+trait ConstArity[S] extends LeafArity with IDMixin {
 
   type SS = S
   def singleton: S
@@ -37,11 +37,11 @@ trait Const[S] extends LeafArity with IDMixin {
   }
 }
 
-object Const {
+object ConstArity {
 
   import Witness._
 
-  class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends Const[OUT] {
+  class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends ConstArity[OUT] {
     override lazy val runtimeArity: Int = singleton
   }
 
@@ -56,7 +56,7 @@ object Const {
   }
 
   // this makes it impossible to construct directly from Int type
-  class Literal[S <: Int](val singleton: S) extends Const[S] {
+  class Literal[S <: Int](val singleton: S) extends ConstArity[S] {
 
     override def runtimeArity: Int = singleton
   }
