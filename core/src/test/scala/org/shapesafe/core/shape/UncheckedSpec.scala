@@ -19,9 +19,9 @@ class UncheckedSpec extends BaseSpec {
 
     it("in Conjecture 2") {
 
-      val conj = OuterProduct(Unchecked, Shape(3, 4).shape).^
+      val conj = OuterProduct(Unchecked, Shape(3, 4).shape)
 
-      val evaled = conj.eval.shape
+      val evaled = conj.^.eval.shape
 
       assert(evaled == Unchecked)
     }
