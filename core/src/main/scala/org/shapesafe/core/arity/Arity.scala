@@ -12,10 +12,10 @@ import scala.util.Try
 
 trait Arity extends CanPeek {
 
-  def runtimeArity: Int
-  final lazy val runtimeTry: Try[Int] = Try(runtimeArity)
+  def runtimeValue: Int
+  final lazy val runtimeValueTry: Try[Int] = Try(runtimeValue)
 
-  lazy val valueStr: String = runtimeTry
+  lazy val valueStr: String = runtimeValueTry
     .map(_.toString)
     .getOrElse("???")
 //    .recover {
@@ -37,6 +37,8 @@ object Arity {
   trait Verifiable extends Arity {}
 
   val Unprovable: ^[arity.Unprovable.type] = arity.Unprovable.^
+
+  val Unchecked: ^[arity.Unchecked.type] = arity.Unchecked.^
 
   implicit class Converters[A <: Arity](self: A) {
 

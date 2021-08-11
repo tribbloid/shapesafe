@@ -1,6 +1,6 @@
 package org.shapesafe.core.debugging
 
-object Expressions extends Expressions_Imp0 {
+object Expressions extends ExpressionsLike {
 
   trait +[A, B] extends DebugSymbol {
     type _AsOpStr = " + "

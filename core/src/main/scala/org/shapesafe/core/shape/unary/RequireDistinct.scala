@@ -13,12 +13,12 @@ case class RequireDistinct[
 ) extends Conjecture1.^[S1] {
 
   override type _AsOpStr = OpStrs.PrefixW1["Distinct", S1]
-  override type _AsExpr = Expressions.CheckDistinct[Expr[S1]]
+  override type _AsExpr = Expressions.RequireDistinct[Expr[S1]]
 
   override type _Refute = "Names has duplicates"
 }
 
-trait CheckDistinct_Imp0 {
+trait RequireDistinct_Imp0 {
 
   import ProveShape.ForAll._
   import ProveShape._
@@ -37,7 +37,7 @@ trait CheckDistinct_Imp0 {
   }
 }
 
-object RequireDistinct extends CheckDistinct_Imp0 {
+object RequireDistinct extends RequireDistinct_Imp0 {
 
   import ProveShape.ForAll._
   import ProveShape._

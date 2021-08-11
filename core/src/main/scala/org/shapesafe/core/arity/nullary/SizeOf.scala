@@ -9,7 +9,7 @@ import shapeless.{HList, Nat}
 // TODO: should not carry the proof
 case class SizeOf[D <: HList](data: D) extends VerifiedArity {
 
-  override def runtimeArity: Int = data.runtimeLength
+  override def runtimeValue: Int = data.runtimeLength
 }
 
 object SizeOf {

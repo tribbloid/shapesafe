@@ -33,7 +33,7 @@ trait ConstArity[S] extends LeafArity with IDMixin {
 
     proveEqualType[w.T]
 
-    require(w.value == runtimeArity)
+    require(w.value == runtimeValue)
   }
 }
 
@@ -42,7 +42,7 @@ object ConstArity {
   import Witness._
 
   class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends ConstArity[OUT] {
-    override lazy val runtimeArity: Int = singleton
+    override lazy val runtimeValue: Int = singleton
   }
 
   object Derived {
@@ -58,7 +58,7 @@ object ConstArity {
   // this makes it impossible to construct directly from Int type
   class Literal[S <: Int](val singleton: S) extends ConstArity[S] {
 
-    override def runtimeArity: Int = singleton
+    override def runtimeValue: Int = singleton
   }
 
   object Literal {

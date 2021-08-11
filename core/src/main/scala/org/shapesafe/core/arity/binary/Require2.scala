@@ -48,9 +48,9 @@ object Require2 extends Require2_Imp0 {
       override type _Refute =
         DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#Complement#_AsOpStr, A2]
 
-      override lazy val runtimeArity: Int = {
-        val v1 = a1.runtimeArity
-        val v2 = a2.runtimeArity
+      override lazy val runtimeValue: Int = {
+        val v1 = a1.runtimeValue
+        val v2 = a2.runtimeValue
 
         require(sh.apply(v1, v2).getValue, "runtime Requirement failed")
         v1

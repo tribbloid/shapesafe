@@ -25,7 +25,7 @@ class StaticShapeSpec extends BaseSpec {
 
 //      VizType.infer(shape.static).toString.shouldBe()
 
-      assert(shape.record.apply("x").runtimeArity == 2)
+      assert(shape.record.apply("x").runtimeValue == 2)
     }
 
     it("nameless") {
@@ -49,8 +49,8 @@ class StaticShapeSpec extends BaseSpec {
         Arity(3) append
         Arity(4) :<<- "z"
 
-      assert(shape.record.apply("x").runtimeArity == 2)
-      assert(shape.record.apply("z").runtimeArity == 4)
+      assert(shape.record.apply("x").runtimeValue == 2)
+      assert(shape.record.apply("z").runtimeValue == 4)
 
       typeInferShort(shape.shape).shouldBe(
         """

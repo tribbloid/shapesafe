@@ -40,7 +40,7 @@ object Op2 extends Op2_Imp0 {
       override type _Refute =
         DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#_AsOpStr, A2] + DebugUtil.UNDEFINED.T
 
-      override lazy val runtimeArity: Int = sh.apply(a1.runtimeArity, a2.runtimeArity).getValue
+      override lazy val runtimeValue: Int = sh.apply(a1.runtimeValue, a2.runtimeValue).getValue
     }
 
     override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)

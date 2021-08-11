@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.binary
 
-import org.shapesafe.core.shape.binary.Conjecture2.Aux
-import org.shapesafe.core.shape.{ProveShape, Shape, ShapeConjecture, UncheckedShape}
+import org.shapesafe.core.shape.binary.Conjecture2.Lt
+import org.shapesafe.core.shape.{ProveShape, Shape, ShapeConjecture, Unchecked}
 
 trait Conjecture2 extends ShapeConjecture {
 
@@ -13,9 +13,9 @@ trait Conjecture2_Imp0 {
 
   import ProveShape.ForAll._
 
-  implicit def leftUnchecked: Aux[UncheckedShape, _ <: Shape] =>> UncheckedShape.type = {
+  implicit def leftUnchecked: Lt[Unchecked, _ <: Shape] =>> Unchecked.type = {
     ProveShape.forAll.=>> { _ =>
-      UncheckedShape
+      Unchecked
     }
   }
 
@@ -23,10 +23,10 @@ trait Conjecture2_Imp0 {
 
 object Conjecture2 {
 
-  type Aux[S1 <: Shape, S2 <: Shape] = Conjecture2 {
+  type Lt[S1 <: Shape, S2 <: Shape] = Conjecture2 {
 
-    type SS1 = S1
-    type SS2 = S2
+    type SS1 <: S1
+    type SS2 <: S2
   }
 
   trait ^[S1 <: Shape, S2 <: Shape] extends Conjecture2 {
@@ -37,9 +37,9 @@ object Conjecture2 {
 
   import ProveShape.ForAll._
 
-  implicit def rightUnchecked: Aux[_ <: Shape, UncheckedShape] =>> UncheckedShape.type = {
+  implicit def rightUnchecked: Lt[_ <: Shape, Unchecked] =>> Unchecked.type = {
     ProveShape.forAll.=>> { _ =>
-      UncheckedShape
+      Unchecked
     }
   }
 

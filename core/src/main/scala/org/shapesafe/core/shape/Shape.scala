@@ -10,6 +10,8 @@ trait Shape extends CanPeek {}
 
 object Shape extends ApplyLiterals.ToShape with ShapeAPI {
 
+  val Unchecked: ShapeAPI.^[org.shapesafe.core.shape.Unchecked.type] = org.shapesafe.core.shape.Unchecked.^
+
   def box[T <: Shape](self: T): ShapeAPI.^[T] = ShapeAPI.^(self)
 
   implicit class Converters[S <: Shape](self: S) {

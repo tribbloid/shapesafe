@@ -1,6 +1,6 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.{Arity, ArityFixture, UncheckedArity}
+import org.shapesafe.core.arity.{Arity, ArityFixture, Unchecked}
 
 class Op2Spec extends ArityFixture {
 
@@ -77,7 +77,7 @@ class Op2Spec extends ArityFixture {
 
       it("a") {
 
-        val op = UncheckedArity.^ :+ a
+        val op = Unchecked.^ :+ a
 
         shouldNotCompile(
           "op.asProof"
@@ -86,7 +86,7 @@ class Op2Spec extends ArityFixture {
 
       it("a + b") {
 
-        val op = UncheckedArity.^ :+ (a :+ b)
+        val op = Unchecked.^ :+ (a :+ b)
 
         shouldNotCompile(
           "op.asProof"
@@ -112,7 +112,7 @@ class Op2Spec extends ArityFixture {
 
       shouldNotCompile(
         """(Arity.Unprovable :+ c).interrupt""",
-        """.*(\?\?\? \+ 5).*"""
+        """.*(<Unprovable> \+ 5).*"""
       )
     }
   }
