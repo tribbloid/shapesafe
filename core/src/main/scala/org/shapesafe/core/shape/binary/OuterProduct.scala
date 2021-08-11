@@ -2,10 +2,11 @@ package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs}
+import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
 import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape.ProveShape._
-import org.shapesafe.core.shape.{Shape, StaticShape}
+import org.shapesafe.core.shape.{LeafShape, Shape, StaticShape}
+import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 
@@ -19,9 +20,32 @@ case class OuterProduct[
 
   override type _AsOpStr = OpStrs.Infix[S1, " OuterProduct ", S2]
   override type _AsExpr = Expressions.><[Expr[S1], Expr[S2]]
+
+  override type _Refute = "Cannot compute outer product"
 }
 
-trait OuterProduct_Imp0 {
+trait OuterProduct_Imp1 {
+
+  import org.shapesafe.core.shape.ProveShape.ForAll._
+
+  implicit def refute[
+      S1 <: Shape,
+      P1 <: LeafShape,
+      S2 <: Shape,
+      P2 <: LeafShape,
+      MSG
+  ](
+      implicit
+      lemma1: S1 |- P1,
+      lemma2: S2 |- P2,
+      refute0: Reporters.ForShape.Refute0[OuterProduct[P1, P2], MSG],
+      msg: EmitError[MSG]
+  ): OuterProduct[S1, S2] =>> LeafShape = {
+    ???
+  }
+}
+
+trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
 
   import org.shapesafe.core.shape.ProveShape.ForAll._
 

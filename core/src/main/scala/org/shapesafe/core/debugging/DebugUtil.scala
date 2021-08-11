@@ -1,13 +1,11 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.OpStrs.OpStr
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
 object DebugUtil {
 
-  type StrOrRaw[T1] = ITE[
+  type StrOr_???[T1] = ITE[
     IsString[T1],
     T1,
     "???"
@@ -25,7 +23,7 @@ object DebugUtil {
 
     type _Refute
   }
-  type Refute[T <: CanRefute] = StrOrRaw[
+  type Refute[T <: CanRefute] = StrOr_???[
     T#_Refute
   ]
 

@@ -21,7 +21,7 @@ trait Conjecture2_Imp0 {
 
 }
 
-object Conjecture2 {
+object Conjecture2 extends Conjecture2_Imp0 {
 
   type Lt[S1 <: Shape, S2 <: Shape] = Conjecture2 {
 

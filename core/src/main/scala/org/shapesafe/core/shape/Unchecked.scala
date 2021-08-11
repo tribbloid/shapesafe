@@ -2,8 +2,7 @@ package org.shapesafe.core.shape
 
 trait Unchecked extends LeafShape {
 
-//  override type _AsOpStr = "<Unchecked>"
-  override type _AsExpr = "<Unchecked>"
+  override type _AsExpr = "_UNCHECKED_"
 }
 
 object Unchecked extends Unchecked {}

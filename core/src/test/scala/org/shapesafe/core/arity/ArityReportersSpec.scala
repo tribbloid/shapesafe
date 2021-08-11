@@ -28,7 +28,7 @@ class ArityReportersSpec extends BaseSpec {
       val i = Arity.Unchecked
 
       val m = ArityReporters.PeekArity.From(i.arity).getMessage
-      assert(m.trim == "<Unchecked>")
+      assert(m.trim == "_UNCHECKED_")
     }
 
     it("Unprovable") {
@@ -37,7 +37,7 @@ class ArityReportersSpec extends BaseSpec {
 
       val m = ArityReporters.PeekArity.From(i.arity).getMessage
 
-      assert(m.trim.endsWith("<Unprovable>"))
+      assert(m.trim.endsWith("_UNPROVABLE_"))
     }
 
 //    it("Var") {}
@@ -50,9 +50,9 @@ class ArityReportersSpec extends BaseSpec {
       assert(
         m.trim ==
           """
-          |<Unchecked>
+          |_UNCHECKED_
           |
-          |  :=  3 + <Unchecked>
+          |  :=  3 + _UNCHECKED_
           |""".stripMargin.trim
       )
     }
