@@ -1,7 +1,6 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.unary.RequireDistinct
 
 class ShapeReportersSpec extends BaseSpec {
