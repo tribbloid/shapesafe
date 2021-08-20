@@ -41,7 +41,7 @@ trait ReduceByName {
     ](
         implicit
         lemma: S1 |- P1,
-        toShape: _Indexer.ToShape.Case[P1#Record]
+        toShape: _Lemma.ToShape.Case[P1#Record]
     ): _On[S1] =>> toShape.Out = {
 
       ProveShape.forAll[_On[S1]].=>> { v =>
@@ -58,7 +58,7 @@ trait ReduceByName {
       override val s1: S1 with Shape
   ) extends _On[S1] {}
 
-  object _Indexer extends RecordIndexer.DistinctLike {
+  object _Lemma extends RecordLemma.ConsNewName {
 
     implicit def consOldName[
         TI <: HList,
@@ -78,5 +78,5 @@ trait ReduceByName {
     }
   }
 
-  type _Indexing = _Indexer.type
+  type _Indexing = _Lemma.type
 }

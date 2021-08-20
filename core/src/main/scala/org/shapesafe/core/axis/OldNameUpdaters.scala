@@ -4,7 +4,6 @@ import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.arity.{Arity, LeafArity}
 import org.shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Modifier, Selector}
-import shapeless.syntax.RecordOps
 import shapeless.{::, HList, Witness}
 
 class OldNameUpdaters[OP <: Op2Like](val op: OP) {
@@ -43,7 +42,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
       }
     }
   }
-  //  object Appender extends Appender
+  object Appender extends Appender
 
   trait Squasher extends RecordUpdater {
     // TODO: should be a Poly2?
@@ -60,7 +59,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
     ](
         implicit
         name: Witness.Aux[N],
-        selector: Selector.Aux[OLD, N, A1],
+        selector: Selector.Aux[OLD, N, A1], // TODO: how to remove this? should be implied in modifier
         lemma: op.On[A1, A2] |- O,
         modifier: Modifier[OLD, N, A1, O]
     ): (OLD, N ->> A2) ==> modifier.Out = {
@@ -82,7 +81,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
       }
     }
   }
-  //  object Squasher extends Squasher
+  object Squasher extends Squasher
 }
 
 object OldNameUpdaters {}

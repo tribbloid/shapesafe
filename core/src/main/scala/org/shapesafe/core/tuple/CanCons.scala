@@ -1,5 +1,7 @@
 package org.shapesafe.core.tuple
 
+import shapeless.{::, HList}
+
 trait CanCons {
   _self: TupleSystem =>
 
@@ -40,6 +42,26 @@ trait CanCons {
     ): ev.ConsResult = {
 
       ev.apply(tail, head)
+    }
+  }
+
+  trait ConsIntake[ELEM <: VBound] extends HListIntake {
+
+    implicit def inductive[
+        H_TAIL <: HList,
+        TAIL <: Tuple,
+        HEAD <: ELEM
+    ](
+        implicit
+        forTail: H_TAIL ==> TAIL,
+        cons: Cons[TAIL, HEAD]
+    ): (HEAD :: H_TAIL) ==> cons.ConsResult = {
+
+      forAll[HEAD :: H_TAIL].==> { v =>
+        val prev = apply(v.tail)
+
+        cons(prev, v.head)
+      }
     }
   }
 }

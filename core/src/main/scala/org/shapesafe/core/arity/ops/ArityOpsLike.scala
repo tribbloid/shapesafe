@@ -3,7 +3,7 @@ package org.shapesafe.core.arity.ops
 import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.axis.OldNameUpdaters
+import org.shapesafe.core.axis.{OldNameUpdaters, RecordUpdater}
 import org.shapesafe.core.debugging.Expressions
 import org.shapesafe.core.shape.binary.DimensionWise
 import org.shapesafe.core.shape.unary.ReduceByName
@@ -32,14 +32,14 @@ trait ArityOpsLike extends HasArity {
 
     object _AppendByName extends ReduceByName with _HasOuter {
 
-      object oldNameUpdater extends Updaters.Appender
+      val oldNameUpdater: Updaters.Appender.type = Updaters.Appender
 
       type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsOpStr]
     }
 
     object _SquashByName extends ReduceByName with _HasOuter {
 
-      object oldNameUpdater extends Updaters.Squasher
+      val oldNameUpdater: Updaters.Squasher.type = Updaters.Squasher
 
       type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsOpStr]
     }

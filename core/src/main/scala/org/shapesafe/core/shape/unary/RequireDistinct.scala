@@ -48,7 +48,7 @@ object RequireDistinct extends RequireDistinct_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      indexing: _Indexer.Case[P1#Record]
+      indexing: _Lemma.Case[P1#Record]
   ): RequireDistinct[S1] =>> P1 = {
 
     ProveShape.forAll[RequireDistinct[S1]].=>> { v =>
@@ -56,6 +56,6 @@ object RequireDistinct extends RequireDistinct_Imp0 {
     }
   }
 
-  object _Indexer extends RecordIndexer.DistinctLike
-  type _Indexing = _Indexer.type
+  object _Lemma extends RecordLemma.ConsNewName
+//  type _Lemma = _Lemma.type
 }

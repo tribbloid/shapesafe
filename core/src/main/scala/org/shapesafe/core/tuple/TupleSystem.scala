@@ -12,7 +12,8 @@ trait TupleSystem {
   type Eye <: Tuple
   def Eye: Eye
 
-  trait AbstractFromHList extends Poly1Base[HList, Tuple] {
+  trait HListIntake extends Poly1Base[HList, Tuple] {
+    // TODO: most of its subclasses are similar, should merge them
 
     final val outer = TupleSystem.this
 
@@ -22,6 +23,8 @@ trait TupleSystem {
       }
     }
   }
+
+  object HListIntake {}
 }
 
 object TupleSystem {}

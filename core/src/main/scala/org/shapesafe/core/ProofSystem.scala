@@ -4,8 +4,8 @@ import scala.language.implicitConversions
 
 /**
   * This trait forms the backbone of compile-time reasoning and should reflect our best effort in reproducing
-  * Curry-Howard isomorphism with scala compiler (regardless of how ill-suited it is), expecting drastic changes in case
-  * the implicit search algorithm was improved
+  * Curry-Howard isomorphism with scala compiler (regardless of how ill-suited it is), expecting drastic changes upon
+  * improvement over its implicit search algorithm
   * @tparam _OUB upper bound of output
   */
 // TODO: If Poly1 works smoothly it could totally supersedes this class, too bad the assumed compiler bug made it necessary

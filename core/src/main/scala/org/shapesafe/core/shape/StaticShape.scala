@@ -80,7 +80,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
       HEAD <: Arity
   ] = ><[TAIL, ArityAPI.^[HEAD]]
 
-  trait FromArity extends AbstractFromHList {
+  trait FromArities_Imp0 extends HListIntake {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
@@ -102,8 +102,9 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  object FromRecord extends FromArity {
+  object FromArities extends FromArities_Imp0 {
 
+    // TODO: merge with namelessInductive?
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
@@ -134,7 +135,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  object FromLiterals extends AbstractFromHList {
+  object FromInts extends HListIntake {
 
     implicit def inductive[
         H_TAIL <: HList,
@@ -155,7 +156,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  object FromNats extends AbstractFromHList {
+  object FromNats extends HListIntake {
 
     implicit def inductive[
         H_TAIL <: HList,

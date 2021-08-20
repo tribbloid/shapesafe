@@ -6,7 +6,7 @@ import org.shapesafe.core.axis.NewNameAppender
 import org.shapesafe.core.shape.StaticShape
 import shapeless.{::, HList, HNil}
 
-trait RecordIndexer extends Poly1Base[HList, HList] {
+trait RecordLemma extends Poly1Base[HList, HList] {
 
   implicit val nil: HNil ==> HNil = forAll[HNil].==> { _ =>
     HNil
@@ -15,7 +15,7 @@ trait RecordIndexer extends Poly1Base[HList, HList] {
   // TODO: move to a more general 'AndThen' class
   object ToShape extends Poly1Base[HList, StaticShape] {
 
-    val outer: RecordIndexer.this.type = RecordIndexer.this
+    val outer: RecordLemma.this.type = RecordLemma.this
 
     implicit def toShape[
         I <: HList,
@@ -23,7 +23,7 @@ trait RecordIndexer extends Poly1Base[HList, HList] {
     ](
         implicit
         lemma1: outer.==>[I, O],
-        lemma2: StaticShape.FromRecord.Case[O]
+        lemma2: StaticShape.FromArities.Case[O]
     ): I ==> lemma2.Out = {
 
       forAll[I].==> { i =>
@@ -33,9 +33,9 @@ trait RecordIndexer extends Poly1Base[HList, HList] {
   }
 }
 
-object RecordIndexer {
+object RecordLemma {
 
-  trait DistinctLike extends RecordIndexer {
+  trait ConsNewName extends RecordLemma {
 
     implicit def consNewName[
         TI <: HList,
