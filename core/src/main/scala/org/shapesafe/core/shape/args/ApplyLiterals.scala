@@ -37,7 +37,7 @@ object ApplyLiterals {
 
     type OUB = StaticShape
 
-    override val fromHList: StaticShape.FromLiterals.type = StaticShape.FromLiterals
+    override val fromHList: StaticShape.FromXInts.type = StaticShape.FromXInts
 
     override type Result[T <: OUB] = ^[T]
     override def toResult[T <: OUB](v: T) = v.^

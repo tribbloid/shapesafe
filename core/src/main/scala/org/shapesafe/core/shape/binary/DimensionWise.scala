@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
-import org.shapesafe.core.shape.unary.RecordIndexer
+import org.shapesafe.core.shape.unary.RecordLemma
 import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.ops.hlist.Zip
@@ -48,7 +48,7 @@ trait DimensionWise {
         lemma2: S2 |- P2,
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
-        toShape: _Indexer.ToShape.Case[HO]
+        toShape: _Lemma.ToShape.Case[HO]
     ): _On[S1, S2] =>> toShape.Out = {
 
       ProveShape.forAll[_On[S1, S2]].=>> { v =>
@@ -71,7 +71,7 @@ trait DimensionWise {
   ) extends _On[S1, S2] {}
 
   // TODO: now sure if it is too convoluted, should it extends BinaryIndexingFn?
-  object _Indexer extends RecordIndexer {
+  object _Lemma extends RecordLemma {
 
     import org.shapesafe.core.arity.ProveArity.|-
 

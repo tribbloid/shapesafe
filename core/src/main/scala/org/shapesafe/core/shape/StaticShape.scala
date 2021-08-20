@@ -1,10 +1,11 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.{XInt, XString}
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
+import org.shapesafe.core.tuple.{StaticTuples, Tuples}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
 import scala.language.implicitConversions
@@ -29,11 +30,11 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 //  final override def nodeString: String = this.toString
 }
 
-object StaticShape extends TupleSystem with CanFromStatic {
+object StaticShape extends Tuples {
 
-  final type UpperBound = Axis
+  final type VBound = Axis
 
-  object Proto extends StaticTuples[UpperBound]
+  object Proto extends StaticTuples[VBound]
   type Proto = Proto.Tuple
 
   final type Tuple = StaticShape
@@ -50,12 +51,12 @@ object StaticShape extends TupleSystem with CanFromStatic {
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
   }
-  override lazy val Eye = new Eye
+  override val Eye = new Eye
 
   // cartesian product symbol
   class ><[
       TAIL <: Tuple,
-      HEAD <: UpperBound
+      HEAD <: VBound
   ](
       override val tail: TAIL,
       override val head: HEAD
@@ -67,7 +68,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
     override lazy val record: Record = head.asField :: tail.record
 
     final override type _Names = Names.><[tail._Names, head.Name]
-    final override val names = tail.names >< head.nameSingleton
+    final override val names = new Names.><(tail.names, head.nameW.value)
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head._Arity]
     final override val dimensions = new Dimensions.><(tail.dimensions, head.arity)
@@ -75,12 +76,14 @@ object StaticShape extends TupleSystem with CanFromStatic {
     override type PeekHead = Head
   }
 
+  override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD = new ><(tail, head)
+
   final type ><^[
       TAIL <: Tuple,
       HEAD <: Arity
   ] = ><[TAIL, ArityAPI.^[HEAD]]
 
-  trait FromArity extends AbstractFromHList {
+  trait FromArities_Imp0 extends HListIntake {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
@@ -102,12 +105,13 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  object FromRecord extends FromArity {
+  object FromArities extends FromArities_Imp0 {
 
+    // TODO: merge with namelessInductive?
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
+        N <: XString, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
         C <: Arity
     ](
         implicit
@@ -127,19 +131,12 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def consAlways[TAIL <: Tuple, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-    Cons.from[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
-    }
-  }
-
-  object FromLiterals extends AbstractFromHList {
+  object FromXInts extends HListIntake {
 
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        HEAD <: Int with Singleton
+        HEAD <: XInt
     ](
         implicit
         forTail: H_TAIL ==> TAIL,
@@ -155,7 +152,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  object FromNats extends AbstractFromHList {
+  object FromNats extends HListIntake {
 
     implicit def inductive[
         H_TAIL <: HList,

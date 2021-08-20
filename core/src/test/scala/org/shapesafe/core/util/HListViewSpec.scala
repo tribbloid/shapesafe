@@ -3,14 +3,14 @@ package org.shapesafe.core.util;
 import org.shapesafe.BaseSpec
 import shapeless.HNil;
 
-class RecordViewSpec extends BaseSpec {
+class HListViewSpec extends BaseSpec {
 
   import shapeless.syntax.singleton._
 
   val record = ("a" ->> 1) ::
     ("b" ->> "x") ::
     HNil
-  val view = RecordView(record)
+  val view = HListView(record)
 
   it(classOf[view.GetV].getSimpleName) {
 

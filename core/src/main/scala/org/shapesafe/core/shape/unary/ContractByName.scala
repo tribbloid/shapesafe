@@ -17,5 +17,5 @@ object ContractByName {
 
   val op: ops.ArityOps.==!._SquashByName.type = ArityOps.==!._SquashByName
 
-  def indexing: op._Indexer.type = op._Indexer
+  def indexing: op._Lemma.type = op._Lemma
 }

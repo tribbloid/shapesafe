@@ -4,29 +4,29 @@ import org.shapesafe.graph.commons.util.{IDMixin, TextBlock}
 import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{CanPeek, Expressions}
-import org.shapesafe.core.util.RecordView
+import org.shapesafe.core.util.HListView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
 
 import scala.language.implicitConversions
 
-trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
+trait StaticTuples[VB] extends Tuples {
 
   import StaticTuples._
 
-  final type UpperBound = UB
+  final type VBound = VB
 
-  trait Tuple extends IDMixin with CanPeek { // TODO: rename to `Tuple`
+  trait Tuple extends IDMixin with CanPeek {
 
     type Static <: HList
     def static: Static
-    lazy val staticView: RecordView[Static] = RecordView(static)
+    lazy val staticView: HListView[Static] = HListView(static)
 
-    def asList: List[UB]
+    def asList: List[VB]
 
     override protected def _id: Any = asList
 
-    final type Cons[HH <: UB] = StaticTuples.this.><[this.type, UB]
+    final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
   }
 
@@ -35,7 +35,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override type Static = HNil
     override def static: HNil = HNil
 
-    override def asList: List[UB] = Nil
+    override def asList: List[VB] = Nil
 
     override lazy val toString: _AsOpStr = EYE.value
 
@@ -44,12 +44,12 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     final override type _ConsExpr[PEEK <: CanPeek] = Expr[PEEK]
     final override type _AsExpr = EYE.T
   }
-  override lazy val Eye = new Eye
+  override val Eye = new Eye
 
   // cartesian product symbol
   class ><[
       TAIL <: Tuple,
-      HEAD <: UB
+      HEAD <: VB
   ](
       val tail: TAIL,
       val head: HEAD
@@ -62,9 +62,8 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override type Static = HEAD :: tail.Static
     override def static: Static = head :: tail.static
 
-    override def asList: List[UB] = tail.asList ++ Seq(head)
+    override def asList: List[VB] = tail.asList ++ Seq(head)
 
-//    override lazy val toString = s"${tail.toString} >< $head"
     override lazy val toString: String = {
       s"""${tail.toString} ><
            |${TextBlock(head.toString).indent("  ").build}
@@ -76,25 +75,16 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     final override type _AsOpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
 
     final override type _ConsExpr[PEEK <: CanPeek] = Expressions.><[Expr[this.type], Expr[PEEK]]
-//    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
     final override type _AsExpr = TAIL#_ConsExpr[PeekHead]
   }
+
+  final override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD =
+    new ><(tail, head)
 }
 
 object StaticTuples {
 
   val EYE = Witness("➊")
-//  implicit def toEyeOps(s: TupleSystem[_]): s.Impl.InfixOps[s.Eye] = new s.Impl.InfixOps(s.Eye)
-
-  trait Total[UB] extends StaticTuples[UB] {
-
-    implicit def consAlways[TAIL <: Tuple, HEAD <: UB]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-      Cons.from[TAIL, HEAD].to { (tail, head) =>
-        new ><(tail, head)
-      }
-    }
-  }
 
   object W {
 

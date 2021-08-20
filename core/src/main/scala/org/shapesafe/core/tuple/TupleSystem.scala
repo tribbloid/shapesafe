@@ -5,14 +5,15 @@ import shapeless.{HList, HNil}
 
 trait TupleSystem {
 
-  type UpperBound
+  type VBound
 
   type Tuple
 
   type Eye <: Tuple
-  def Eye: Eye
+  val Eye: Eye
+//  final type Eye = Eye.type
 
-  trait AbstractFromHList extends Poly1Base[HList, Tuple] {
+  trait HListIntake extends Poly1Base[HList, Tuple] {
 
     final val outer = TupleSystem.this
 
@@ -22,6 +23,8 @@ trait TupleSystem {
       }
     }
   }
+
+  object HListIntake {}
 }
 
 object TupleSystem {}

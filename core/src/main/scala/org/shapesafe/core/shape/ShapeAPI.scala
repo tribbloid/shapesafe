@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.XInt
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.arity.{Arity, ConstArity}
 import org.shapesafe.core.shape.ProveShape.|-
@@ -196,7 +197,7 @@ object ShapeAPI {
 
   implicit def unbox[S <: Shape](v: Aux[S]): S = v.shape
 
-  implicit def fromIntS[T <: Int with Singleton](v: T)(
+  implicit def fromXInt[T <: XInt](v: T)(
       implicit
       toW: Witness.Aux[T]
   ): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {

@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.XString
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
@@ -9,11 +10,11 @@ import scala.language.implicitConversions
 
 trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
-object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
+object Names extends Tuples with ApplyLiterals.ToNames {
 
-  type UpperBound = String
+  type VBound = XString // expand to take all String for gradual typing?
 
-  object Proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
+  object Proto extends StaticTuples[VBound] {}
 
   type Tuple = Names
 
@@ -22,11 +23,11 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
     override def asIndices: Indices.Eye = Indices.Eye
   }
-  lazy val Eye = new Eye
+  val Eye = new Eye
 
   class ><[
       TAIL <: Tuple,
-      HEAD <: UpperBound
+      HEAD <: VBound
   ](
       override val tail: TAIL,
       override val head: HEAD
@@ -46,22 +47,11 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
     }
   }
 
-  implicit def consW[TAIL <: Tuple, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-    Cons.from[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
-    }
-  }
-
-  implicit class Infix[SELF <: Tuple](self: SELF) {
-
-    def ><(name: Witness.Lt[String]): SELF >< name.T = {
-
-      new ><(self, name.value)
-    }
-  }
-
-  implicit def toEyeInfix(s: Names.type): Infix[Eye] = Infix(Eye)
+  override def cons[TAIL <: Tuple, HEAD <: VBound](
+      tail: TAIL,
+      head: HEAD
+  ): TAIL >< HEAD =
+    new ><(tail, head)
 
   trait Syntax {
 
@@ -70,15 +60,15 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
         w: Witness.Aux[v.type]
     ): Eye >< v.type = {
 
-      Eye >< w
+      Eye >< w.value
     }
 
-    implicit def literalToInfix(v: String)(
+    implicit def literalToExtension(v: String)(
         implicit
         w: Witness.Aux[v.type]
-    ): Infix[Eye >< v.type] = {
+    ): tupleExtension[Eye >< v.type] = {
 
-      Infix(Eye >< w)
+      tupleExtension(Eye >< w.value)
     }
   }
 

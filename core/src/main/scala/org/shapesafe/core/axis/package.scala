@@ -1,7 +1,6 @@
 package org.shapesafe.core
 
 import shapeless.Witness
-import singleton.ops.XString
 
 package object axis {
 

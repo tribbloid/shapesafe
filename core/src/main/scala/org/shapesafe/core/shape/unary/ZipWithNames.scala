@@ -54,7 +54,7 @@ object ZipWithNames extends ZipWithNames_Imp0 {
       implicit
       lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-      toShape: StaticShape.FromRecord.Case[HO]
+      toShape: StaticShape.FromArities.Case[HO]
   ): ZipWithNames[S1, N] =>> toShape.Out = {
     forAll[ZipWithNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
@@ -63,7 +63,7 @@ object ZipWithNames extends ZipWithNames_Imp0 {
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
       val zipped: HO = values.zipWithKeys(keys)(zip)
-      StaticShape.FromRecord(zipped)
+      StaticShape.FromArities(zipped)
     }
   }
 

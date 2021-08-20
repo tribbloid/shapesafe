@@ -2,7 +2,7 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.shape.StaticShape.{FromRecord, FromStatic}
+import org.shapesafe.core.shape.StaticShape.ConsIntake
 import shapeless.HNil
 
 class StaticShapeSpec extends BaseSpec {
@@ -76,7 +76,7 @@ class StaticShapeSpec extends BaseSpec {
     )
   }
 
-  describe(FromStatic.getClass.getSimpleName) {
+  describe(StaticShape.FromStatic.getClass.getSimpleName) {
 
     it("from HNil") {
 
@@ -114,7 +114,7 @@ class StaticShapeSpec extends BaseSpec {
     }
   }
 
-  describe(FromRecord.getClass.getSimpleName) {
+  describe(StaticShape.FromArities.getClass.getSimpleName) {
 
     import shapeless.syntax.singleton.mkSingletonOps
 
@@ -122,7 +122,7 @@ class StaticShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = StaticShape.FromRecord(hh)
+      val shape = StaticShape.FromArities(hh)
 
       assert(shape == StaticShape.Eye)
     }
@@ -132,7 +132,7 @@ class StaticShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3).arity) ::
         HNil
 
-      val shape = StaticShape.FromRecord(hh)
+      val shape = StaticShape.FromArities(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -145,7 +145,7 @@ class StaticShapeSpec extends BaseSpec {
         ("y" ->> Arity(4).arity) ::
         HNil
 
-      val shape = StaticShape.FromRecord(hh)
+      val shape = StaticShape.FromArities(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 

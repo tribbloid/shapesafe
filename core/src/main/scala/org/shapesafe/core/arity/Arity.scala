@@ -40,7 +40,7 @@ object Arity {
 
   val Unchecked: ^[arity.Unchecked.type] = arity.Unchecked.^
 
-  implicit class Converters[A <: Arity](self: A) {
+  implicit class converters[A <: Arity](self: A) {
 
     def ^ : ^[A] = ArityAPI.^(self)
   }
