@@ -2,18 +2,17 @@ package org.shapesafe.core.tuple
 
 import shapeless.{::, HList}
 
-trait CanCons {
-  _self: TupleSystem =>
+trait CanCons extends TupleSystem {
 
   // TODO:too much boilerplate, switch to ~~> Proof pattern or Poly1/Poly2?
-  trait Cons[-TAIL <: Tuple, -HEAD <: VBound] {
+  trait ConsLemma[-TAIL <: Tuple, -HEAD <: VBound] {
 
     type ConsResult <: Tuple
 
     def apply(tail: TAIL, head: HEAD): ConsResult
   }
 
-  object Cons {
+  object ConsLemma {
 
     def from[TAIL <: Tuple, HEAD <: VBound] = new Factory[TAIL, HEAD]
 
@@ -24,7 +23,7 @@ trait CanCons {
 
     case class FromFn2[-TAIL <: Tuple, -HEAD <: VBound, O <: Tuple](
         fn: (TAIL, HEAD) => O
-    ) extends Cons[TAIL, HEAD] {
+    ) extends ConsLemma[TAIL, HEAD] {
 
       final type ConsResult = O
 
@@ -33,12 +32,12 @@ trait CanCons {
 
     def summonFor[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD)(
         implicit
-        ev: Cons[TAIL, HEAD]
+        ev: ConsLemma[TAIL, HEAD]
     ): ev.type = ev
 
     def apply[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD)(
         implicit
-        ev: Cons[TAIL, HEAD]
+        ev: ConsLemma[TAIL, HEAD]
     ): ev.ConsResult = {
 
       ev.apply(tail, head)
@@ -54,7 +53,7 @@ trait CanCons {
     ](
         implicit
         forTail: H_TAIL ==> TAIL,
-        cons: Cons[TAIL, HEAD]
+        cons: ConsLemma[TAIL, HEAD]
     ): (HEAD :: H_TAIL) ==> cons.ConsResult = {
 
       forAll[HEAD :: H_TAIL].==> { v =>
@@ -64,4 +63,8 @@ trait CanCons {
       }
     }
   }
+
+  object FromStatic extends ConsIntake[VBound] {}
+
+  object FromLiterals extends ConsIntake[VBound with Singleton] {}
 }

@@ -56,7 +56,7 @@ class NamesSpec extends BaseSpec {
 //    )
 
     val w = Witness("a")
-    val hh = implicitly[Names.Cons[Names.Eye, w.T]]
+    val hh = implicitly[Names.ConsLemma[Names.Eye, w.T]]
 
     hh.apply(Names.Eye, w.value)
       .toString

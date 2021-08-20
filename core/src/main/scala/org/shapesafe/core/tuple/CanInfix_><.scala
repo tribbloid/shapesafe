@@ -3,7 +3,6 @@ package org.shapesafe.core.tuple
 import scala.language.implicitConversions
 
 trait CanInfix_>< extends CanCons {
-  _self: TupleSystem =>
 
   trait InfixMixin[SELF <: Tuple] {
 
@@ -15,7 +14,7 @@ trait CanInfix_>< extends CanCons {
         head: HEAD
     )(
         implicit
-        cons: Cons[SELF, HEAD]
+        cons: ConsLemma[SELF, HEAD]
     ): cons.ConsResult = cons(self, head)
   }
 

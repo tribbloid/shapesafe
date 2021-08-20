@@ -9,7 +9,7 @@ import scala.language.implicitConversions
 
 trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
-object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
+object Names extends CanCons with ApplyLiterals.ToNames {
 
   type VBound = String
 
@@ -46,9 +46,9 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
     }
   }
 
-  implicit def consW[TAIL <: Tuple, HEAD <: String]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consW[TAIL <: Tuple, HEAD <: String]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-    Cons.from[TAIL, HEAD].to { (tail, head) =>
+    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }

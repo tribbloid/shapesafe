@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.tuple.{CanFromStatic, StaticTuples, TupleSystem}
+import org.shapesafe.core.tuple.{CanCons, StaticTuples, TupleSystem}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
 import scala.language.implicitConversions
@@ -29,7 +29,7 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 //  final override def nodeString: String = this.toString
 }
 
-object StaticShape extends TupleSystem with CanFromStatic {
+object StaticShape extends CanCons {
 
   final type VBound = Axis
 
@@ -128,9 +128,9 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-    Cons.from[TAIL, HEAD].to { (tail, head) =>
+    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }

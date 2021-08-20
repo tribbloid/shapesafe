@@ -10,11 +10,11 @@ import singleton.ops.+
 
 import scala.language.implicitConversions
 
-trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
+trait StaticTuples[VB] extends CanCons {
 
   import StaticTuples._
 
-  final type VBound = UB
+  final type VBound = VB
 
   trait Tuple extends IDMixin with CanPeek { // TODO: rename to `Tuple`
 
@@ -22,11 +22,11 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     def static: Static
     lazy val staticView: HListView[Static] = HListView(static)
 
-    def asList: List[UB]
+    def asList: List[VB]
 
     override protected def _id: Any = asList
 
-    final type Cons[HH <: UB] = StaticTuples.this.><[this.type, UB]
+    final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
   }
 
@@ -35,7 +35,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override type Static = HNil
     override def static: HNil = HNil
 
-    override def asList: List[UB] = Nil
+    override def asList: List[VB] = Nil
 
     override lazy val toString: _AsOpStr = EYE.value
 
@@ -49,7 +49,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
   // cartesian product symbol
   class ><[
       TAIL <: Tuple,
-      HEAD <: UB
+      HEAD <: VB
   ](
       val tail: TAIL,
       val head: HEAD
@@ -62,7 +62,7 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
     override type Static = HEAD :: tail.Static
     override def static: Static = head :: tail.static
 
-    override def asList: List[UB] = tail.asList ++ Seq(head)
+    override def asList: List[VB] = tail.asList ++ Seq(head)
 
 //    override lazy val toString = s"${tail.toString} >< $head"
     override lazy val toString: String = {
@@ -88,9 +88,9 @@ object StaticTuples {
 
   trait Total[UB] extends StaticTuples[UB] {
 
-    implicit def consAlways[TAIL <: Tuple, HEAD <: UB]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+    implicit def consAlways[TAIL <: Tuple, HEAD <: UB]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
-      Cons.from[TAIL, HEAD].to { (tail, head) =>
+      ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
         new ><(tail, head)
       }
     }

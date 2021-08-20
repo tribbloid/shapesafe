@@ -11,7 +11,7 @@ trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
   final override def asIndices: Indices.this.type = this
 }
 
-object Indices extends TupleSystem with CanInfix_>< {
+object Indices extends CanInfix_>< {
 
   type VBound = Index
 
@@ -36,7 +36,7 @@ object Indices extends TupleSystem with CanInfix_>< {
 
   implicit def consAlways[TAIL <: Tuple, HEAD <: VBound] = {
 
-    Cons.from[TAIL, HEAD].to { (tail, head) =>
+    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)
     }
   }
