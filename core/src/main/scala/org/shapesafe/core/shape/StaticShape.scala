@@ -31,9 +31,9 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 
 object StaticShape extends TupleSystem with CanFromStatic {
 
-  final type UpperBound = Axis
+  final type VBound = Axis
 
-  object Proto extends StaticTuples[UpperBound]
+  object Proto extends StaticTuples[VBound]
   type Proto = Proto.Tuple
 
   final type Tuple = StaticShape
@@ -55,7 +55,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
   // cartesian product symbol
   class ><[
       TAIL <: Tuple,
-      HEAD <: UpperBound
+      HEAD <: VBound
   ](
       override val tail: TAIL,
       override val head: HEAD
@@ -127,7 +127,7 @@ object StaticShape extends TupleSystem with CanFromStatic {
     }
   }
 
-  implicit def consAlways[TAIL <: Tuple, HEAD <: UpperBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
+  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound]: Cons.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
 
     Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)

@@ -13,9 +13,9 @@ trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
 
 object Indices extends TupleSystem with CanInfix_>< {
 
-  type UpperBound = Index
+  type VBound = Index
 
-  object Proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
+  object Proto extends StaticTuples.Total[VBound] with CanInfix_>< {}
 
   type Tuple = Indices
 
@@ -24,7 +24,7 @@ object Indices extends TupleSystem with CanInfix_>< {
 
   class ><[
       TAIL <: Indices,
-      HEAD <: UpperBound
+      HEAD <: VBound
   ](
       override val tail: TAIL,
       override val head: HEAD
@@ -34,7 +34,7 @@ object Indices extends TupleSystem with CanInfix_>< {
     override type PeekHead = Head
   }
 
-  implicit def consAlways[TAIL <: Tuple, HEAD <: UpperBound] = {
+  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound] = {
 
     Cons.from[TAIL, HEAD].to { (tail, head) =>
       new ><(tail, head)

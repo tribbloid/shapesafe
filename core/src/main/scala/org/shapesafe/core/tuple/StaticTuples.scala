@@ -4,7 +4,7 @@ import org.shapesafe.graph.commons.util.{IDMixin, TextBlock}
 import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{CanPeek, Expressions}
-import org.shapesafe.core.util.RecordView
+import org.shapesafe.core.util.HListView
 import shapeless.{::, HList, HNil, Witness}
 import singleton.ops.+
 
@@ -14,13 +14,13 @@ trait StaticTuples[UB] extends TupleSystem with CanFromStatic {
 
   import StaticTuples._
 
-  final type UpperBound = UB
+  final type VBound = UB
 
   trait Tuple extends IDMixin with CanPeek { // TODO: rename to `Tuple`
 
     type Static <: HList
     def static: Static
-    lazy val staticView: RecordView[Static] = RecordView(static)
+    lazy val staticView: HListView[Static] = HListView(static)
 
     def asList: List[UB]
 

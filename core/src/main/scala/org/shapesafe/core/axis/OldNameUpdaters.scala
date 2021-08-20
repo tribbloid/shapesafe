@@ -43,7 +43,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
       }
     }
   }
-//  object Appender extends Appender
+  //  object Appender extends Appender
 
   trait Squasher extends RecordUpdater {
     // TODO: should be a Poly2?
@@ -68,20 +68,21 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
       forAll[(OLD, N ->> A2)].==> {
 
         case (old, field) =>
-          val oldView: RecordOps[OLD] = new RecordOps(old)
+          val a2 = field: A2
 
-          val d1 = oldView.apply(name): A1
-          val d2 = field: A2
-
-          val d_new: O = lemma.apply(op.on(d1.^, d2.^)).value
-
-          val result = modifier.apply(old, _ => d_new)
+          val result = modifier.apply(
+            old,
+            { a1 =>
+              val o: O = lemma.apply(op.on(a1.^, a2.^)).value
+              o
+            }
+          )
 
           result
       }
     }
   }
-//  object Squasher extends Squasher
+  //  object Squasher extends Squasher
 }
 
 object OldNameUpdaters {}

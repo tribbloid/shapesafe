@@ -10,7 +10,7 @@ trait CanFromLiterals extends CanCons {
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        HEAD <: UpperBound with Singleton
+        HEAD <: VBound with Singleton
     ](
         implicit
         forTail: H_TAIL ==> TAIL,

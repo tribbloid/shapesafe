@@ -10,7 +10,7 @@ trait CanFromStatic extends CanCons {
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        HEAD <: UpperBound
+        HEAD <: VBound
     ](
         implicit
         forTail: H_TAIL ==> TAIL,

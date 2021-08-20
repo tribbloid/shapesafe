@@ -4,7 +4,7 @@ import shapeless.labelled.FieldType
 import shapeless.ops.record.Selector
 import shapeless.{HList, Poly1}
 
-case class RecordView[H <: HList](hh: H) {
+case class HListView[H <: HList](hh: H) {
 
   //https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
   trait GetV extends Poly1 {
@@ -31,4 +31,4 @@ case class RecordView[H <: HList](hh: H) {
 
 }
 
-object RecordView {}
+object HListView {}

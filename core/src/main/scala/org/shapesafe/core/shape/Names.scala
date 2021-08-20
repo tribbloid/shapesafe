@@ -11,9 +11,9 @@ trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
 object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLiterals.ToNames {
 
-  type UpperBound = String
+  type VBound = String
 
-  object Proto extends StaticTuples.Total[UpperBound] with CanInfix_>< {}
+  object Proto extends StaticTuples.Total[VBound] with CanInfix_>< {}
 
   type Tuple = Names
 
@@ -26,7 +26,7 @@ object Names extends TupleSystem with CanCons with CanFromLiterals with ApplyLit
 
   class ><[
       TAIL <: Tuple,
-      HEAD <: UpperBound
+      HEAD <: VBound
   ](
       override val tail: TAIL,
       override val head: HEAD

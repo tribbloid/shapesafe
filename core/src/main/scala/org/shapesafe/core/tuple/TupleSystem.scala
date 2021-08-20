@@ -5,7 +5,7 @@ import shapeless.{HList, HNil}
 
 trait TupleSystem {
 
-  type UpperBound
+  type VBound
 
   type Tuple
 

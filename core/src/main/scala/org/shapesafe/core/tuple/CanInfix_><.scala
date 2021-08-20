@@ -10,7 +10,7 @@ trait CanInfix_>< extends CanCons {
     def self: SELF
 
     def ><[
-        HEAD <: UpperBound
+        HEAD <: VBound
     ](
         head: HEAD
     )(
