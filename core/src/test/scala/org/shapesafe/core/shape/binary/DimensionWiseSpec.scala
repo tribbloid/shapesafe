@@ -15,11 +15,9 @@ class DimensionWiseSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On┏ ➊ ><
-        |                                                                      ┃   2:Literal ><
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On┏ 2:Literal ><
         |                                                                      ┃   3:Literal
-        |                                                                      ┏ ➊ ><
-        |                                                                      ┃   4:Literal ><
+        |                                                                      ┏ 4:Literal ><
         |                                                                      ┃   5:Literal
         |""".stripMargin
     )
@@ -38,8 +36,7 @@ class DimensionWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  6:Derived ><
+          |6:Derived ><
           |  8:Derived
           |""".stripMargin
       )
@@ -51,8 +48,7 @@ class DimensionWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  8:Derived ><
+          |8:Derived ><
           |  15:Derived
           |""".stripMargin
       )
@@ -80,8 +76,7 @@ class DimensionWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  7:Derived ><
+          |7:Derived ><
           |  9:Derived
           |""".stripMargin
       )
@@ -101,8 +96,7 @@ class DimensionWiseSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  10:Derived ><
+          |10:Derived ><
           |  18:Derived
           |""".stripMargin
       )

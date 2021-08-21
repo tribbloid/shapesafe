@@ -61,9 +61,13 @@ trait StaticTuples[VB] extends Tuples {
     override def asList: List[VB] = tail.asList ++ Seq(head)
 
     override lazy val toString: String = {
-      s"""${tail.toString} ><
-           |${TextBlock(head.toString).indent("  ").build}
-           | """.stripMargin.trim
+      val tailStr = tail match {
+        case _: Eye => ""
+        case _ => tail.toString + " ><\n"
+      }
+
+      s"""$tailStr${TextBlock(head.toString).indent("  ").build}
+         | """.stripMargin.trim
     }
 
     type PeekHead <: CanPeek

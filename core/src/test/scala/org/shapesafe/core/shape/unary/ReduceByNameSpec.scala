@@ -20,17 +20,13 @@ class ReduceByNameSpec extends BaseSpec {
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._SquashByName ‣ ReduceByName.On
         | ‣ OuterProduct
-        |    ‣ ZipWithNames┏ ➊ ><
-        |    :             ┃   2:Literal ><
+        |    ‣ ZipWithNames┏ 2:Literal ><
         |    :             ┃   3:Literal
-        |    :             ┏ ➊ ><
-        |    :             ┃   x ><
+        |    :             ┏ x ><
         |    :             ┃   y
-        |    ‣ ZipWithNames┏ ➊ ><
-        |                  ┃   4:Literal ><
+        |    ‣ ZipWithNames┏ 4:Literal ><
         |                  ┃   5:Literal
-        |                  ┏ ➊ ><
-        |                  ┃   x ><
+        |                  ┏ x ><
         |                  ┃   y
         |""".stripMargin
     )
@@ -50,8 +46,7 @@ class ReduceByNameSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  6:Derived :<<- x ><
+          |6:Derived :<<- x ><
           |  8:Derived :<<- y
           |""".stripMargin
       )
@@ -63,8 +58,7 @@ class ReduceByNameSpec extends BaseSpec {
 
       rr.eval.toString.shouldBe(
         """
-            |➊ ><
-            |  8:Derived :<<- x ><
+            |8:Derived :<<- x ><
             |  15:Derived :<<- y
             |""".stripMargin
       )

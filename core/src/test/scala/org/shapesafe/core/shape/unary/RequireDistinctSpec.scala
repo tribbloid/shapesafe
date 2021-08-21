@@ -86,8 +86,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  3:Literal :<<- c
+          |3:Literal :<<- c
           |""".stripMargin
       )
     }
@@ -100,8 +99,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  3:Literal :<<- c ><
+          |3:Literal :<<- c ><
           |  2:Literal :<<- b ><
           |  1:Literal :<<- a
           |""".stripMargin

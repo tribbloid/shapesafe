@@ -68,8 +68,7 @@ class StaticShapeSpec extends BaseSpec {
 
     shape.toString.shouldBe(
       """
-        |➊ ><
-        |  2:Literal :<<- x ><
+        |2:Literal :<<- x ><
         |  3:Literal ><
         |  4:Literal :<<- z
         |""".stripMargin
@@ -166,8 +165,7 @@ class StaticShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |➊ ><
-          |  4:Literal :<<- i
+          |4:Literal :<<- i
           |""".stripMargin
       )
     }
@@ -182,8 +180,7 @@ class StaticShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |➊ ><
-          |  4:Literal :<<- i ><
+          |4:Literal :<<- i ><
           |  3:Literal :<<- j ><
           |  2:Literal :<<- k
           |""".stripMargin
@@ -203,8 +200,7 @@ class StaticShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |➊ ><
-          |  4:Derived :<<- i
+          |4:Derived :<<- i
           |""".stripMargin
       )
     }
@@ -219,8 +215,7 @@ class StaticShapeSpec extends BaseSpec {
 
       nn.toString.shouldBe(
         """
-          |➊ ><
-          |  4:Derived :<<- i ><
+          |4:Derived :<<- i ><
           |  3:Derived :<<- j ><
           |  2:Derived :<<- k
           |""".stripMargin

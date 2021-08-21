@@ -61,8 +61,7 @@ class NamesSpec extends BaseSpec {
     hh.toString
       .shouldBe(
         """
-        |➊ ><
-        |  a
+        |a
         |""".stripMargin
       )
   }

@@ -22,24 +22,19 @@ class EinSumSpec extends BaseSpec {
 
     r.treeString.shouldBe(
       """
-        |Reorder┏ ➊ ><
-        |       ┃   x ><
+        |Reorder┏ x ><
         |       ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
-        |       :  ‣ ZipWithNames┏ ➊ ><
-        |       :                ┃   1:Literal ><
+        |       :  ‣ ZipWithNames┏ 1:Literal ><
         |       :                ┃   2:Literal
-        |       :                ┏ ➊ ><
-        |       :                ┃   x ><
+        |       :                ┏ x ><
         |       :                ┃   y
         |       ‣ CheckEinSum
-        |          ‣ ZipWithNames┏ ➊ ><
-        |                        ┃   3:Literal ><
+        |          ‣ ZipWithNames┏ 3:Literal ><
         |                        ┃   4:Literal
-        |                        ┏ ➊ ><
-        |                        ┃   i ><
+        |                        ┏ i ><
         |                        ┃   j
         |""".stripMargin
     )
@@ -179,8 +174,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  1:Literal :<<- i
+          |1:Literal :<<- i
           |""".stripMargin
       )
     }
@@ -200,8 +194,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  1:Literal :<<- x ><
+          |1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin
       )
@@ -221,8 +214,7 @@ class EinSumSpec extends BaseSpec {
 
       r.eval.toString.shouldBe(
         """
-          |➊ ><
-          |  1:Literal :<<- x ><
+          |1:Literal :<<- x ><
           |  3:Literal :<<- i
           |""".stripMargin
       )
