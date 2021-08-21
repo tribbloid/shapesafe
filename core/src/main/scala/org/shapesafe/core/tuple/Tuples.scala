@@ -44,7 +44,7 @@ trait Tuples extends TupleSystem {
     ): SELF >< HEAD = cons(self, head)
   }
 
-  implicit class InfixFunctions[SELF <: Tuple](val self: SELF) extends InfixMixin[SELF] {}
+  implicit class tupleExtension[SELF <: Tuple](val self: SELF) extends InfixMixin[SELF] {}
 
-  implicit def toEyeInfix(s: this.type): InfixFunctions[Eye] = InfixFunctions[Eye](Eye)
+  implicit def eyeExtension(s: this.type): tupleExtension[Eye] = tupleExtension[Eye](Eye)
 }

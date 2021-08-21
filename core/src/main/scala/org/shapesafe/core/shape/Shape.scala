@@ -14,7 +14,7 @@ object Shape extends ApplyLiterals.ToShape with ShapeAPI {
 
   def box[T <: Shape](self: T): ShapeAPI.^[T] = ShapeAPI.^(self)
 
-  implicit class Converters[S <: Shape](self: S) {
+  implicit class converters[S <: Shape](self: S) {
 
     def ^ : ShapeAPI.^[S] = ShapeAPI.^(self)
   }

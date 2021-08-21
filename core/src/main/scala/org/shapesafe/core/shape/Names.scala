@@ -63,12 +63,12 @@ object Names extends Tuples with ApplyLiterals.ToNames {
       Eye >< w.value
     }
 
-    implicit def literalToInfix(v: String)(
+    implicit def literalToExtension(v: String)(
         implicit
         w: Witness.Aux[v.type]
-    ): InfixFunctions[Eye >< v.type] = {
+    ): tupleExtension[Eye >< v.type] = {
 
-      InfixFunctions(Eye >< w.value)
+      tupleExtension(Eye >< w.value)
     }
   }
 
