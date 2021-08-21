@@ -1,5 +1,6 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.XString
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.core.shape.args.ApplyLiterals
 import org.shapesafe.core.tuple._
@@ -9,9 +10,9 @@ import scala.language.implicitConversions
 
 trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
-object Names extends CanCons with ApplyLiterals.ToNames {
+object Names extends Tuples with ApplyLiterals.ToNames {
 
-  type VBound = String with Singleton
+  type VBound = XString // expand to take all String for gradual typing?
 
   object Proto extends StaticTuples[VBound] {}
 

@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.Poly1Base
+import org.shapesafe.core.{Poly1Base, XString}
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
@@ -75,7 +75,7 @@ object GetSubscript extends GetSubscript_Imp0 {
 
     implicit def byName[
         P1 <: StaticShape,
-        N <: String with Singleton,
+        N <: XString,
         A <: Arity
     ](
         implicit

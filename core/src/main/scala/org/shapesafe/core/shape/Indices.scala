@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.tuple.{CanCons, StaticTuples}
+import org.shapesafe.core.tuple.{StaticTuples, Tuples}
 
 import scala.language.implicitConversions
 
@@ -11,7 +11,7 @@ trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
   final override def asIndices: Indices.this.type = this
 }
 
-object Indices extends CanCons {
+object Indices extends Tuples {
 
   type VBound = Index
 

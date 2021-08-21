@@ -1,5 +1,6 @@
 package org.shapesafe.core.arity
 
+import org.shapesafe.core.XInt
 import org.shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
@@ -69,7 +70,7 @@ object ArityAPI {
 //  implicit def unbox[T <: ArityAPI](v: T): v._Arity = v._arity // TODO: why is it not effective?
 //  implicit def box[T <: Arity](v: T): ^[T] = ArityAPI.^(v) // TODO: remove, type parameter is arbitrary
 
-  implicit def fromIntS[T <: Int with Singleton](v: T)(
+  implicit def fromXInt[T <: XInt](v: T)(
       implicit
       toW: Witness.Aux[T]
   ): ArityAPI.^[ConstArity.Literal[T]] = {

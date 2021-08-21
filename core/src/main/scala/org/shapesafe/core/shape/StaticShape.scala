@@ -1,10 +1,11 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.{XInt, XString}
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.tuple.{CanCons, StaticTuples}
+import org.shapesafe.core.tuple.{StaticTuples, Tuples}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
 import scala.language.implicitConversions
@@ -29,7 +30,7 @@ trait StaticShape extends LeafShape with StaticShape.Proto {
 //  final override def nodeString: String = this.toString
 }
 
-object StaticShape extends CanCons {
+object StaticShape extends Tuples {
 
   final type VBound = Axis
 
@@ -110,7 +111,7 @@ object StaticShape extends CanCons {
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        N <: String with Singleton, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
+        N <: XString, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
         C <: Arity
     ](
         implicit
@@ -130,12 +131,12 @@ object StaticShape extends CanCons {
     }
   }
 
-  object FromInts extends HListIntake {
+  object FromXInts extends HListIntake {
 
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        HEAD <: Int with Singleton
+        HEAD <: XInt
     ](
         implicit
         forTail: H_TAIL ==> TAIL,

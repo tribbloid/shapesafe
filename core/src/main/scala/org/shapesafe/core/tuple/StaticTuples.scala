@@ -10,7 +10,7 @@ import singleton.ops.+
 
 import scala.language.implicitConversions
 
-trait StaticTuples[VB] extends CanCons {
+trait StaticTuples[VB] extends Tuples {
 
   import StaticTuples._
 

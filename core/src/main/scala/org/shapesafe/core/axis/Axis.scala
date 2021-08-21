@@ -1,5 +1,6 @@
 package org.shapesafe.core.axis
 
+import org.shapesafe.core.XString
 import org.shapesafe.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.{Arity, ArityAPI}
 import org.shapesafe.core.debugging.Expressions.Expr
@@ -29,7 +30,7 @@ object Axis {
   // TODO: N can be eliminated
   final class :<<-[
       A <: Arity,
-      N <: String with Singleton
+      N <: XString
   ](
       val arity: A,
       val nameW: Witness.Aux[N]
@@ -59,7 +60,7 @@ object Axis {
 
   def apply(
       value: ArityAPI,
-      name: Witness.Lt[String with Singleton]
+      name: Witness.Lt[XString]
   ): :<<-[value._Arity, name.T] = {
 
     new :<<-(value.arity, name)
