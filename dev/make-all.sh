@@ -19,7 +19,7 @@ ${FWDIR}/gradlew -q dependencyTree "${@}" > ${FWDIR}/logs/dependencyTree/"$DATE"
 ${FWDIR}/gradlew clean testClasses publishToMavenLocal "${@}" && \
 echo "[DEMO]" && \
 cd ${FWDIR}/shapesafe-demo && \
-sbt clean compile && \
+sbt clean package && \
 cd ..
 
 #CD ${FWDIR}/shapeshape-demo/
