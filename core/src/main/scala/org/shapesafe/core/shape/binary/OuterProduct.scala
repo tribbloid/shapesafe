@@ -2,7 +2,7 @@ package org.shapesafe.core.shape.binary
 
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
+import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Shape, StaticShape}
@@ -18,7 +18,6 @@ case class OuterProduct[
     s2: S2
 ) extends Conjecture2.^[S1, S2] {
 
-  override type _AsOpStr = OpStrs.Infix[S1, " OuterProduct ", S2]
   override type _AsExpr = Expressions.><[Expr[S1], Expr[S2]]
 
   override type _Refute = "Cannot compute outer product"

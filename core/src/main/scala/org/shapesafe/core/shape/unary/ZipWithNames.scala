@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{Expressions, OpStrs, Reporters}
+import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -16,7 +16,6 @@ case class ZipWithNames[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type _AsOpStr = OpStrs.Infix[S1, " |<<- ", N]
   override type _AsExpr = Expressions.|<<-[Expr[S1], Expr[N]]
 
   override type _Refute = "Dimension mismatch"

@@ -1,8 +1,7 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.DebugUtil.{CanRefute, Refute, Stripe}
+import org.shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.OpStrs.OpStr
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import org.shapesafe.m.viz.ExpressionVizCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
@@ -65,45 +64,6 @@ class Reporters[
     override object Step1 extends Step1_Imp1
   }
 
-  trait OpProofReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends Reporter[IUB] {
-
-    import org.shapesafe.core.debugging.DebugUtil._
-    import scope._
-
-    trait Step1_Imp3 extends Poly1Base[Iub, XString] {
-
-      implicit def raw[A <: Iub](
-          implicit
-          mk: (CannotEval + OpStr[A] + "\n") { type Out <: XString }
-      ): A ==> mk.Out =
-        forAll[A].==>(_ => mk.value)
-    }
-
-    trait Step1_Imp2 extends Step1_Imp3 {
-
-      implicit def eval[
-          A <: Iub,
-          S <: TGT
-      ](
-          implicit
-          lemma: A |- S,
-          mk: (PEEK.T + OpStr[S] + EntailsLF + OpStr[A] + "\n") { type Out <: XString }
-      ): A ==> mk.Out =
-        forAll[A].==>(_ => mk.value)
-    }
-
-    trait Step1_Imp1 extends Step1_Imp2 {
-
-      implicit def alreadyTarget[S <: TGT with Iub](
-          implicit
-          mk: (PEEK.T + OpStr[S] + "\n") { type Out <: XString }
-      ): S ==> mk.Out =
-        forAll[S].==>(_ => mk.value)
-    }
-
-    override object Step1 extends Step1_Imp1
-  }
-
   trait PeekReporter[IUB <: CanPeek, TGT <: scope.OUB with CanPeek] extends ProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = EmitInfo[T]
@@ -159,19 +119,13 @@ object Reporters {
 
     type TryStripe
 
-    // TODO: remove, obsolete design
-    //    type Refute0[SELF <: CanPeek with CanRefute] =
-    //      Refute[SELF] +
-    //        TryStripe +
-    //        OpStr[SELF]
-
     type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Case.Aux[SELF, O]
 
     object Refute0 extends Poly1Base[CanPeek with CanRefute, Any] {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
-          expr2Str: Reporters.Expr2Str[I#_AsExpr, V]
+          expr2Str: Expr2Str[I#_AsExpr, V]
       ): I ==> (
         Refute[I] +
           TryStripe +
@@ -186,21 +140,6 @@ object Reporters {
 
     type TryStripe = "\n\n" + Stripe["... when proving arity"]
 
-    //    type Refute1[SELF <: CanPeek with CanRefute, C1] =
-    //      Refute[SELF] +
-    //        TryArity +
-    //        OpStr[SELF] +
-    //        FROM1.T +
-    //        C1
-    //
-    //    type Refute2[SELF <: CanPeek with CanRefute, C1, C2] =
-    //      OpStr[SELF] +
-    //        TryArity +
-    //        Refute[SELF] +
-    //        FROM2.T +
-    //        C1 +
-    //        "\n\n" +
-    //        C2
   }
 
   object ForShape extends Refutes {

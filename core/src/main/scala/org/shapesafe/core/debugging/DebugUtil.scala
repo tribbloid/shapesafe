@@ -19,10 +19,6 @@ object DebugUtil {
 //    TypeToLiteral.Type.Case[T1]
 //  ]
 
-  trait CanRefute {
-
-    type _Refute
-  }
   type Refute[T <: CanRefute] = StrOr_???[
     T#_Refute
   ]

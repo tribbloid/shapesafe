@@ -1,12 +1,12 @@
 package org.shapesafe.core.arity.ops
 
-import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.axis.{OldNameUpdaters, RecordUpdater}
+import org.shapesafe.core.axis.OldNameUpdaters
 import org.shapesafe.core.debugging.Expressions
 import org.shapesafe.core.shape.binary.DimensionWise
 import org.shapesafe.core.shape.unary.ReduceByName
+import org.shapesafe.graph.commons.util.HasOuter
 import singleton.ops
 
 trait ArityOpsLike extends HasArity {
@@ -34,21 +34,21 @@ trait ArityOpsLike extends HasArity {
 
       val oldNameUpdater: Updaters.Appender.type = Updaters.Appender
 
-      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_AsOpStr]
+      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
     object _SquashByName extends ReduceByName with _HasOuter {
 
       val oldNameUpdater: Updaters.Squasher.type = Updaters.Squasher
 
-      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_AsOpStr]
+      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 //    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
     object _DimensionWise extends DimensionWise with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_AsOpStr]
+      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
   }
 

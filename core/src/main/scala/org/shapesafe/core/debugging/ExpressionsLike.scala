@@ -1,6 +1,6 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.DebugSymbol.{On1, On2}
+import org.shapesafe.core.debugging.HasDebugSymbol.{On1, On2}
 
 trait ExpressionsLike {
 
@@ -22,12 +22,12 @@ trait ExpressionsLike {
   import singleton.ops.+
 
   trait AppendByName[O] extends On1 {
-    type _AsOpStr = "AppendByName[" + O + "]"
+    type _DebugSymbol = "AppendByName[" + O + "]"
   }
   trait SquashByName[O] extends On1 {
-    type _AsOpStr = "SquashByName[" + O + "]"
+    type _DebugSymbol = "SquashByName[" + O + "]"
   }
   trait DimensionWise[O] extends On2 {
-    type _AsOpStr = "DimensionWise[" + O + "]"
+    type _DebugSymbol = "DimensionWise[" + O + "]"
   }
 }

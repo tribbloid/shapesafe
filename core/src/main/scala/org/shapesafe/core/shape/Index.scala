@@ -26,7 +26,6 @@ object Index {
 
     override protected def _id = w.value
 
-    override type _AsOpStr = StrOr_???[S]
     override type _AsExpr = S
   }
 
@@ -40,8 +39,6 @@ object Index {
 
     override protected def _id = indexInt
 
-    // TODO: type string is too long
-    override type _AsOpStr = StrOr_???[ToString[N]]
     override type _AsExpr = ToString[N]
   }
 

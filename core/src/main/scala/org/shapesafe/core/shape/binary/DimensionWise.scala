@@ -3,7 +3,7 @@ package org.shapesafe.core.shape.binary
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.binary.Op2Like
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
+import org.shapesafe.core.debugging.HasDebugSymbol
 import org.shapesafe.core.shape.unary.RecordLemma
 import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import org.shapesafe.graph.commons.util.HasOuter
@@ -13,7 +13,7 @@ import shapeless.{::, HList, HNil}
 trait DimensionWise {
 
   val op: Op2Like
-  type _Binary <: DebugSymbol.On2
+  type _Binary <: HasDebugSymbol.On2
 
   // all names must be distinctive - no duplication allowed
   trait _On[
@@ -27,7 +27,6 @@ trait DimensionWise {
     def s1: S1 with Shape
     def s2: S2 with Shape
 
-    override type _AsOpStr = OpStrs.PrefixW2[_Binary#_AsOpStr, S1, S2]
     override type _AsExpr = _Binary#On[Expr[S1], Expr[S2]]
   }
 

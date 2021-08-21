@@ -1,11 +1,10 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
-import org.shapesafe.core.arity.{Arity, ArityAPI, ProveArity, Utils}
+import org.shapesafe.core.arity._
 import org.shapesafe.core.debugging.Reporters.ForArity
-import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
+import org.shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
 
 import scala.collection.mutable
 
@@ -24,7 +23,7 @@ object Require2 extends Require2_Imp0 {
 
   class Impl[
       ??[X1, X2] <: Op,
-      SS[A, B] <: DebugSymbol.Require
+      SS[A, B] <: HasDebugSymbol.Require
   ](
       implicit
       sh: Utils.BoolSh[??]
@@ -46,7 +45,7 @@ object Require2 extends Require2_Imp0 {
     ) extends Conjecture2[A1, A2] {
 
       override type _Refute =
-        DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#Complement#_AsOpStr, A2]
+        DebugUtil.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#Negation#_DebugSymbol + A2#_DebugSymbol
 
       override lazy val runtimeValue: Int = {
         val v1 = a1.runtimeValue
@@ -66,7 +65,7 @@ object Require2 extends Require2_Imp0 {
 
   def apply[
       ??[X1, X2] <: Op,
-      SS[A, B] <: DebugSymbol.Require
+      SS[A, B] <: HasDebugSymbol.Require
   ](
       implicit
       sh: Utils.BoolSh[??]

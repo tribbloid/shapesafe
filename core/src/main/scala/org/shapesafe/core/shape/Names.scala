@@ -42,7 +42,6 @@ object Names extends Tuples with ApplyLiterals.ToNames {
       tail.asIndices >< Index.Name(headW)
 
     trait PeekHead extends CanPeek {
-      override type _AsOpStr = Head
       override type _AsExpr = Head
     }
   }

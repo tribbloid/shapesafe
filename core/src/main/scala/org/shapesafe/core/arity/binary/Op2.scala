@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
-import org.shapesafe.core.debugging.{DebugSymbol, DebugUtil, OpStrs}
+import org.shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
 import singleton.ops.+
 
 import scala.collection.mutable
@@ -19,7 +19,7 @@ object Op2 extends Op2_Imp0 {
 
   class Impl[
       ??[X1, X2] <: Op,
-      SS[A, B] <: DebugSymbol
+      SS[A, B] <: HasDebugSymbol
   ](
       implicit
       sh: Utils.IntSh[??]
@@ -38,7 +38,7 @@ object Op2 extends Op2_Imp0 {
       // TODO: can this be VerifiedArity?
 
       override type _Refute =
-        DebugUtil.REFUTE.T + OpStrs.Infix[A1, SS[Unit, Unit]#_AsOpStr, A2] + DebugUtil.UNDEFINED.T
+        DebugUtil.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol + DebugUtil.UNDEFINED.T
 
       override lazy val runtimeValue: Int = sh.apply(a1.runtimeValue, a2.runtimeValue).getValue
     }
@@ -50,7 +50,7 @@ object Op2 extends Op2_Imp0 {
 
   def apply[
       ??[X1, X2] <: Op,
-      SS[A, B] <: DebugSymbol
+      SS[A, B] <: HasDebugSymbol
   ](
       implicit
       sh: Utils.IntSh[??]

@@ -1,7 +1,7 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.debugging.CanRefute
 import org.shapesafe.graph.commons.util.{ProductTree, TreeFormat}
-import org.shapesafe.core.debugging.DebugUtil.CanRefute
 
 trait ShapeConjecture extends Shape with CanRefute with ProductTree {
 

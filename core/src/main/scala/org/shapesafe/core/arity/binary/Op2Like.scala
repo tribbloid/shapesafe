@@ -3,7 +3,8 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
 import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{DebugSymbol, OpStrs}
+import org.shapesafe.core.debugging.HasDebugSymbol
+import singleton.ops.+
 
 trait Op2Like extends Op2Like.DebuggingSupport {
 
@@ -18,7 +19,8 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _AsOpStr = OpStrs.Infix[A1, Debug[Unit, Unit]#_AsOpStr, A2] // TODO: add Bracket
+    final override type _DebugSymbol = A1#_DebugSymbol + Debug[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
+    // TODO: add Bracket
     final override type _AsExpr = Debug[Expr[A1], Expr[A2]]
   }
 
@@ -51,7 +53,7 @@ object Op2Like {
   trait DebuggingSupport {
     self: Op2Like =>
 
-    type Debug[A1, A2] <: DebugSymbol
+    type Debug[A1, A2] <: HasDebugSymbol
 //    implicit def debug[
 //        A1 <: Arity,
 //        A2 <: Arity,

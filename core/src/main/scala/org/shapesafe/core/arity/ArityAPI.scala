@@ -5,7 +5,6 @@ import org.shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import org.shapesafe.core.arity.ProveArity.|-
 import org.shapesafe.core.arity.ops.ArityOpsLike
 import org.shapesafe.core.axis.{Axis, NoName, NoNameW}
-import org.shapesafe.core.debugging.OpStrs.OpStr
 import shapeless.Witness
 import shapeless.Witness.Aux
 
@@ -62,7 +61,6 @@ object ArityAPI {
 
     type _Axis = ^[A]
 
-    type _AsOpStr = OpStr[A]
     type _AsExpr = A#_AsExpr
   }
 
