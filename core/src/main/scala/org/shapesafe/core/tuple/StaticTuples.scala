@@ -16,7 +16,7 @@ trait StaticTuples[VB] extends CanCons {
 
   final type VBound = VB
 
-  trait Tuple extends IDMixin with CanPeek { // TODO: rename to `Tuple`
+  trait Tuple extends IDMixin with CanPeek {
 
     type Static <: HList
     def static: Static
@@ -44,7 +44,7 @@ trait StaticTuples[VB] extends CanCons {
     final override type _ConsExpr[PEEK <: CanPeek] = Expr[PEEK]
     final override type _AsExpr = EYE.T
   }
-  override lazy val Eye = new Eye
+  override val Eye = new Eye
 
   // cartesian product symbol
   class ><[
@@ -64,7 +64,6 @@ trait StaticTuples[VB] extends CanCons {
 
     override def asList: List[VB] = tail.asList ++ Seq(head)
 
-//    override lazy val toString = s"${tail.toString} >< $head"
     override lazy val toString: String = {
       s"""${tail.toString} ><
            |${TextBlock(head.toString).indent("  ").build}
@@ -76,25 +75,16 @@ trait StaticTuples[VB] extends CanCons {
     final override type _AsOpStr = OpStr[TAIL] + " >< " + OpStr[PeekHead]
 
     final override type _ConsExpr[PEEK <: CanPeek] = Expressions.><[Expr[this.type], Expr[PEEK]]
-//    final override type _Expr = Expr.><[Expr[TAIL], Expr[PeekHead]]
     final override type _AsExpr = TAIL#_ConsExpr[PeekHead]
   }
+
+  final override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD =
+    new ><(tail, head)
 }
 
 object StaticTuples {
 
   val EYE = Witness("➊")
-//  implicit def toEyeOps(s: TupleSystem[_]): s.Impl.InfixOps[s.Eye] = new s.Impl.InfixOps(s.Eye)
-
-  trait Total[UB] extends StaticTuples[UB] {
-
-    implicit def consAlways[TAIL <: Tuple, HEAD <: UB]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-      ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
-        new ><(tail, head)
-      }
-    }
-  }
 
   object W {
 

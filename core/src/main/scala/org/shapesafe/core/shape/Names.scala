@@ -11,9 +11,9 @@ trait Names extends IndicesMagnet with Names.Proto.Tuple {}
 
 object Names extends CanCons with ApplyLiterals.ToNames {
 
-  type VBound = String
+  type VBound = String with Singleton
 
-  object Proto extends StaticTuples.Total[VBound] with CanInfix_>< {}
+  object Proto extends StaticTuples[VBound] {}
 
   type Tuple = Names
 
@@ -22,7 +22,7 @@ object Names extends CanCons with ApplyLiterals.ToNames {
 
     override def asIndices: Indices.Eye = Indices.Eye
   }
-  lazy val Eye = new Eye
+  val Eye = new Eye
 
   class ><[
       TAIL <: Tuple,
@@ -46,22 +46,11 @@ object Names extends CanCons with ApplyLiterals.ToNames {
     }
   }
 
-  implicit def consW[TAIL <: Tuple, HEAD <: String]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
-    }
-  }
-
-  implicit class Infix[SELF <: Tuple](self: SELF) {
-
-    def ><(name: Witness.Lt[String]): SELF >< name.T = {
-
-      new ><(self, name.value)
-    }
-  }
-
-  implicit def toEyeInfix(s: Names.type): Infix[Eye] = Infix(Eye)
+  override def cons[TAIL <: Tuple, HEAD <: VBound](
+      tail: TAIL,
+      head: HEAD
+  ): TAIL >< HEAD =
+    new ><(tail, head)
 
   trait Syntax {
 
@@ -70,15 +59,15 @@ object Names extends CanCons with ApplyLiterals.ToNames {
         w: Witness.Aux[v.type]
     ): Eye >< v.type = {
 
-      Eye >< w
+      Eye >< w.value
     }
 
     implicit def literalToInfix(v: String)(
         implicit
         w: Witness.Aux[v.type]
-    ): Infix[Eye >< v.type] = {
+    ): InfixFunctions[Eye >< v.type] = {
 
-      Infix(Eye >< w)
+      InfixFunctions(Eye >< w.value)
     }
   }
 

@@ -75,7 +75,7 @@ object GetSubscript extends GetSubscript_Imp0 {
 
     implicit def byName[
         P1 <: StaticShape,
-        N <: String,
+        N <: String with Singleton,
         A <: Arity
     ](
         implicit

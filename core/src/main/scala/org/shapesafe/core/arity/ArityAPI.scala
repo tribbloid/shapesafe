@@ -48,7 +48,7 @@ trait ArityAPI extends ArityOpsLike with Axis {
       prove: _Arity |- O
   ): ArityAPI.^[O] = eval(prove)
 
-  final override val nameSingleton: Aux[NoName] = NoNameW
+  final override val nameW: Aux[NoName] = NoNameW
 }
 
 object ArityAPI {

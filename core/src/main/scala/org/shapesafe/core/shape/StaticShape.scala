@@ -4,7 +4,7 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.{->>, :<<-}
-import org.shapesafe.core.tuple.{CanCons, StaticTuples, TupleSystem}
+import org.shapesafe.core.tuple.{CanCons, StaticTuples}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
 import scala.language.implicitConversions
@@ -50,7 +50,7 @@ object StaticShape extends CanCons {
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
   }
-  override lazy val Eye = new Eye
+  override val Eye = new Eye
 
   // cartesian product symbol
   class ><[
@@ -67,13 +67,15 @@ object StaticShape extends CanCons {
     override lazy val record: Record = head.asField :: tail.record
 
     final override type _Names = Names.><[tail._Names, head.Name]
-    final override val names = tail.names >< head.nameSingleton
+    final override val names = new Names.><(tail.names, head.nameW.value)
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head._Arity]
     final override val dimensions = new Dimensions.><(tail.dimensions, head.arity)
 
     override type PeekHead = Head
   }
+
+  override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD = new ><(tail, head)
 
   final type ><^[
       TAIL <: Tuple,
@@ -108,7 +110,7 @@ object StaticShape extends CanCons {
     implicit def inductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        N <: String, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
+        N <: String with Singleton, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
         C <: Arity
     ](
         implicit
@@ -125,13 +127,6 @@ object StaticShape extends CanCons {
 
         result
       }
-    }
-  }
-
-  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound]: ConsLemma.FromFn2[TAIL, HEAD, TAIL >< HEAD] = {
-
-    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
     }
   }
 

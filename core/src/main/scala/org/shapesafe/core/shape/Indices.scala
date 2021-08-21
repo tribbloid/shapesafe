@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.tuple.{CanInfix_><, StaticTuples, TupleSystem}
+import org.shapesafe.core.tuple.{CanCons, StaticTuples}
 
 import scala.language.implicitConversions
 
@@ -11,16 +11,16 @@ trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
   final override def asIndices: Indices.this.type = this
 }
 
-object Indices extends CanInfix_>< {
+object Indices extends CanCons {
 
   type VBound = Index
 
-  object Proto extends StaticTuples.Total[VBound] with CanInfix_>< {}
+  object Proto extends StaticTuples[VBound] {}
 
   type Tuple = Indices
 
   class Eye extends Proto.Eye with Indices
-  lazy val Eye = new Eye
+  override val Eye = new Eye
 
   class ><[
       TAIL <: Indices,
@@ -34,11 +34,5 @@ object Indices extends CanInfix_>< {
     override type PeekHead = Head
   }
 
-  implicit def consAlways[TAIL <: Tuple, HEAD <: VBound] = {
-
-    ConsLemma.from[TAIL, HEAD].to { (tail, head) =>
-      new ><(tail, head)
-    }
-  }
-
+  override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD = new ><(tail, head)
 }

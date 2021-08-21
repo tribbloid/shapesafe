@@ -29,10 +29,10 @@ object Axis {
   // TODO: N can be eliminated
   final class :<<-[
       A <: Arity,
-      N <: String
+      N <: String with Singleton
   ](
       val arity: A,
-      val nameSingleton: Witness.Aux[N]
+      val nameW: Witness.Aux[N]
   ) extends Axis
 //      with KeyTag[N, D :<<- N]
       // TODO: remove? FieldType[] has some black magic written in macro
@@ -59,7 +59,7 @@ object Axis {
 
   def apply(
       value: ArityAPI,
-      name: Witness.Lt[String]
+      name: Witness.Lt[String with Singleton]
   ): :<<-[value._Arity, name.T] = {
 
     new :<<-(value.arity, name)
