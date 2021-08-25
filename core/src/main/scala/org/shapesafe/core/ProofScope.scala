@@ -1,98 +1,243 @@
 package org.shapesafe.core
 
 import scala.annotation.implicitNotFound
-import scala.language.implicitConversions
 
-/**
-  * If Poly1 works smoothly there will be no point in defining it, too bad the assumed compiler bug made it necessary
-  *
-  * @tparam OUB upper bound of output
-  */
-trait ProofScope { // TODO: no IUB?
+trait ProofScope extends HasTactic { // TODO: no IUB?
 
   type OUB
 
-  val root: ProofSystem[OUB]
+  type System <: ProofSystem.Aux[OUB] with Singleton
+  val system: System
 
-  type Consequent = root.Proposition
+  type Consequent = System#Proposition
 
   // TODO: this should potentially be merged with Refutation cases in MsgBroker
   //  Such that successful proof can show reasoning at runtime.
   //  At this moment, this feature is implemented in PeekReporter
   //  which is too complex for its own good
-  type Proof[-I, +P <: Consequent] <: root.Proof[I, P]
+
+  // constructive proof
+  abstract class Proof[-I, +P <: Consequent] extends ProofLike {
+    //  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
+
+    def scope: ProofScope.this.type = ProofScope.this
+
+    def consequentFor(v: I): P
+
+    final def instanceFor(v: I): P#Repr = {
+
+      val verdict: P = consequentFor(v)
+      verdict match {
+        case y: system.Aye[_] =>
+          y.asInstanceOf[system.Aye[P#Repr] with P].value // TODO: unsafe?
+        case _ =>
+          throw new UnsupportedOperationException(
+            s"$verdict is not a constructive proposition"
+          )
+      }
+    }
+
+    final def apply(v: I): P#Repr = instanceFor(v)
+
+    //    final def findApplicable(v: I): this.type = this
+  }
+
+  object Proof {
+
+    case class Chain[ // a.k.a hypothetical syllogism
+        A,
+        B <: OUB,
+        C <: OUB
+    ](
+        lemma1: A |-< B,
+        lemma2: B |-< C
+    ) extends (A |- C) {
+
+      override def consequentFor(v: A): system.Aye[C] = {
+
+        system.Aye(
+          lemma2.instanceFor(lemma1.instanceFor(v))
+        )
+      }
+    }
+  }
+
+  def coerciveUpcastFromSubScopeImpl[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      proofInSubScope: SubScope#Proof[I, P]
+  ): Proof[I, P] = { (v: I) =>
+    proofInSubScope.consequentFor(v)
+  }
+
+  implicit def coerciveUpcast[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      proofInSubScope: SubScope#Proof[I, P]
+  ): this.Proof[I, P] = coerciveUpcastFromSubScopeImpl
+
+  @implicitNotFound(
+    "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
+  )
+  final type |-<[-I, O <: OUB] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
     */
   // TODO: how to override it in subclasses?
   @implicitNotFound(
-    "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
-  )
-  type |-<[-I, O <: OUB] = Proof[I, root.Proposition.Lt[O]]
-
-  @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n${O}\n"
   )
-  type |-[-I, O <: OUB] = Proof[I, root.Proposition.Aux[O]]
+  final type |-[-I, O <: OUB] = Proof[I, system.Aye[O]]
 
-  def forAll[I]: root.ForAll[I]
+  final type |-\-[-I, O <: OUB] = Proof[I, system.Nay[O]]
 
-  def satisfying[OB <: OUB] = new Satisfying[OB]()
+  final type |-?-[-I, O <: OUB] = Proof[I, system.Abstain[O]]
 
-  class Satisfying[OB <: OUB]() {
+  final type `_|_`[-I, O <: OUB] = Proof[I, system.Absurd[O]]
 
-    case class If[I](v: I) {
+  /**
+    *  TODO: this is the counterpart of Spark polymorphic function in the proof system
+    *    required for defining axiom of induction
+    *    at this moment it is useless
+    */
+  trait GenProof {
 
-      implicit def findProof[O <: OB](
-          implicit
-          prove: I |- O
-      ): I |- O = prove
+    type Specialised[I, O <: Consequent] <: Proof[I, O]
 
-      implicit def canProve_^^[O <: OB](
-          implicit
-          prove: I |- O
-      ): root.Proposition.Aux[O] = prove.apply(v)
+    def specialise[I, O <: Consequent]: Specialised[I, O]
+  }
 
-      implicit def canProve[O <: OB](
-          implicit
-          prove: I |- O
-      ): O = {
+  object GenProof {}
 
-        canProve_^^(prove).value
-      }
+  /**
+    * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
+    * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
+    *
+    * In fact, any [[Arity]] or [[Shape]] that cannot be refuted at compile-time should subclass [[VerifiedArity]]
+    * or [[VerifiedShape]], which implies itself
+    *
+    * Programmer must ensure that no implicit subclass is defined for immediately refutable conjectures
+    *
+    * the symbol =>> is there to stress that it represents 2 morphism:
+    *
+    * - value v --> value apply(v)
+    *
+    * - domain I --> domain O
+    * @tparam I src type
+    * @tparam O tgt type
+    */
+  def =>>[I, O <: OUB](_fn: I => O): I |- O = { v =>
+    val out = _fn(v)
+    system.Aye(out)
+  }
+
+  def =\>>[I, O <: OUB](): I |-\- O = { _ =>
+    system.Nay()
+  }
+
+  def =?>>[I, O <: OUB](): I |-?- O = { _ =>
+    system.Abstain()
+  }
+
+  implicit def =>><<=[I, O <: OUB](
+      implicit
+      proving: I |- O,
+      refuting: I |-\- O
+  ): I `_|_` O = { v =>
+    system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
+  }
+
+  // equivalence, automatically implies O1 |- O2 & O2 |- O1
+  case class <==>[O1 <: OUB, O2 <: OUB](
+      forward: O1 |- O2,
+      backward: O2 |- O1
+  )
+
+  object <==> {
+
+    implicit def forward[O1 <: OUB, O2 <: OUB](
+        implicit
+        eq: O1 <==> O2
+    ): O1 |- O2 = eq.forward
+
+    implicit def backward[O1 <: OUB, O2 <: OUB](
+        implicit
+        eq: O1 <==> O2
+    ): O2 |- O1 = eq.backward
+  }
+
+  trait SubScope extends system.SubScopeInSystem {
+
+    final override type System = ProofScope.this.System
+    final override val system = ProofScope.this.system
+
+    final val outer: ProofScope.this.type = ProofScope.this
+
+    //    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
+  }
+
+  {
+    // sanity check, DO NOT DELETE!
+    implicitly[System =:= SubScope#System]
+    implicitly[Consequent =:= SubScope#Consequent]
+  }
+
+  final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
+  protected class ForAll[I, OG <: OUB] {
+
+    def =>>[O <: OG](_fn: I => O): I |- O = ProofScope.this.=>>(_fn)
+    def =\>>[O <: OG](): I |-\- O = ProofScope.this.=\>>()
+    def =?>>[O <: OG](): I |-?- O = ProofScope.this.=?>>()
+
+    // summoners
+    def prove[O <: OG](
+        implicit
+        theorem: I |- O
+    ): I |- O = theorem
+
+    def refute[O <: OG](
+        implicit
+        theorem: I |-\- O
+    ): I |-\- O = theorem
+
+    def ridicule[O <: OG](
+        implicit
+        theorem: I `_|_` O
+    ): I `_|_` O = theorem
+
+    def toGoal[O <: OUB] = new ForAll[I, O]
+
+    def useTactic[O <: OG](
+        tactic: Tactic.Empty[I, OG] => Tactic.Partial[I, O, OG]
+    ): Tactic.Partial[I, O, OG] = {
+
+      val empty = Tactic.Empty[I, OG]()
+      val partial = tactic(empty)
+
+      partial
     }
+  }
+
+  final def forTerm[I](v: I): ForTerm[I, OUB] = new ForTerm[I, OUB](v)
+  class ForTerm[I, OG <: OUB](v: I) extends ForAll[I, OG] {
+
+    def construct[O <: OG](
+        implicit
+        ev: I |- O
+    ): O = ev.instanceFor(v)
+
+    override def toGoal[O <: OUB] = new ForTerm[I, O](v)
   }
 }
 
 object ProofScope {
 
-  case class ChildScope[O](root: ProofSystem[O]) extends ProofScope {
-
-    type OUB = O
-
-    trait Proof[-I, +P <: Consequent] extends root.Proof[I, P]
-
-    override def forAll[I]: ForAll[I] = new ForAll[I]
-
-    object ForAll {
-
-//      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.ForAll.=>>^^[I, P]
-
-      trait =>>[-I, OO <: OUB] extends root.ForAll.=>>[I, OO]
-    }
-
-    class ForAll[I] extends root.ForAll[I] {
-
-      import ForAll._
-
-//      override def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
-//        override def apply(v: I): P = _fn(v)
-//      }
-
-      override def =>>[OO <: OUB](_fn: I => OO): I =>> OO = new (I =>> OO) {
-        override def apply(v: I): root.Proposition.^[OO] = root.Proposition.^[OO](_fn(v))
-      }
-    }
+  type Aux[T] = ProofSystem {
+    type OUB = T
   }
 }

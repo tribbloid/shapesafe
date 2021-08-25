@@ -1,8 +1,6 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
-import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Names, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
@@ -16,14 +14,14 @@ case class ZipWithNames[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.|<<-[Expr[S1], Expr[N]]
+  override type Expr = Expressions.|<<-[S1#Expr, N#Expr]
 
   override type _Refute = "Dimension mismatch"
 }
 
 trait ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.ForAll._
+  import org.shapesafe.core.shape.ProveShape._
 
   implicit def refute[
       S1 <: Shape,
@@ -35,14 +33,14 @@ trait ZipWithNames_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[ZipWithNames[P1, N], MSG],
       msg: EmitError[MSG]
-  ): ZipWithNames[S1, N] =>> LeafShape = {
+  ): ZipWithNames[S1, N] |- LeafShape = {
     ???
   }
 }
 
 object ZipWithNames extends ZipWithNames_Imp0 {
 
-  import org.shapesafe.core.shape.ProveShape.ForAll._
+  import org.shapesafe.core.shape.ProveShape._
 
   implicit def simplify[
       S1 <: Shape,
@@ -54,10 +52,10 @@ object ZipWithNames extends ZipWithNames_Imp0 {
       lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
       toShape: StaticShape.FromArities.Case[HO]
-  ): ZipWithNames[S1, N] =>> toShape.Out = {
+  ): ZipWithNames[S1, N] |- toShape.Out = {
     forAll[ZipWithNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
-      val p1: P1 = lemma.valueOf(src.s1)
+      val p1: P1 = lemma.instanceFor(src.s1)
 
       val values: P1#_Dimensions#Static = p1.dimensions.static
 

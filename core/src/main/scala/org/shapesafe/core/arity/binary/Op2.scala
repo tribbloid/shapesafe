@@ -1,14 +1,11 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.ConstArity
-import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
 import org.shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
 import singleton.ops.+
 
 import scala.collection.mutable
-import scala.language.implicitConversions
 
 trait Op2 extends Op2Like {
 
@@ -17,10 +14,12 @@ trait Op2 extends Op2Like {
 
 object Op2 extends Op2_Imp0 {
 
+  import org.shapesafe.core.arity.ProveArity._
+
   class Impl[
       ??[X1, X2] <: Op,
       SS[A, B] <: HasDebugSymbol
-  ](
+  ]()(
       implicit
       sh: Utils.IntSh[??]
   ) extends Op2 {
@@ -59,7 +58,7 @@ object Op2 extends Op2_Imp0 {
     cache
       .getOrElseUpdate(
         sh,
-        new Impl[??, SS]
+        new Impl[??, SS]()(sh)
       )
       .asInstanceOf[Impl[??, SS]]
   }

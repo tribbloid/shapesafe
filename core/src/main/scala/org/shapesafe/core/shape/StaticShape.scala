@@ -8,8 +8,6 @@ import org.shapesafe.core.axis.Axis.{->>, :<<-}
 import org.shapesafe.core.tuple.{StaticTuples, Tuples}
 import shapeless.{::, HList, HNil, Nat, Witness}
 
-import scala.language.implicitConversions
-
 /**
   * a thin wrapper of HList that has all proofs of constraints included
   * this saves compiler burden and reduces error

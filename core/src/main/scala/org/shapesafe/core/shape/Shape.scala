@@ -4,8 +4,6 @@ import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.core.shape.StaticShape.Eye
 import org.shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 
-import scala.language.implicitConversions
-
 trait Shape extends CanPeek {}
 
 object Shape extends ApplyLiterals.ToShape with ShapeAPI {

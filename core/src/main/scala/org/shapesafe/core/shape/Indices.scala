@@ -2,8 +2,6 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.core.tuple.{StaticTuples, Tuples}
 
-import scala.language.implicitConversions
-
 trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
 
   final override type AsIndices = this.type

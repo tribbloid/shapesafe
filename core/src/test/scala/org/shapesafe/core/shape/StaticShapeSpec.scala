@@ -2,7 +2,6 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.shape.StaticShape.ConsIntake
 import shapeless.HNil
 
 class StaticShapeSpec extends BaseSpec {

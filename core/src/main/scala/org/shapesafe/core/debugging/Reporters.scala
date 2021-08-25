@@ -1,7 +1,6 @@
 package org.shapesafe.core.debugging
 
 import org.shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.{Poly1Base, ProofScope}
 import org.shapesafe.m.viz.PeekCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
@@ -21,11 +20,13 @@ class Reporters[
     import org.shapesafe.core.debugging.DebugUtil._
     import scope._
 
+    type ExprOf[T <: CanPeek] = T#Expr
+
     trait Step1_Imp3 extends Poly1Base[Iub, XString] {
 
       implicit def raw[A <: Iub, VA <: XString](
           implicit
-          vizA: Expr2Str[Expr[A], VA],
+          vizA: PeekCTAux[A#Expr, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
       ): A ==> mk.Out =
         forAll[A].==>(_ => mk.value)
@@ -41,9 +42,9 @@ class Reporters[
       ](
           implicit
           lemma: A |- S,
-          vizA: Expr2Str[Expr[A], VA],
-          vizS: Expr2Str[Expr[S], VS],
-          mk: (PEEK.T + VS + EntailsLF + VA + "\n") { type Out <: XString }
+          vizA: PeekCTAux[A#Expr, VA],
+          vizS: PeekCTAux[ExprOf[S], VS],
+          mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
       ): A ==> mk.Out =
         forAll[A].==>(_ => mk.value)
     }
@@ -55,7 +56,7 @@ class Reporters[
           VS <: XString
       ](
           implicit
-          vizS: Expr2Str[Expr[S], VS],
+          vizS: PeekCTAux[ExprOf[S], VS],
           op: (PEEK.T + VS + "\n") { type Out <: XString }
       ): S ==> op.Out =
         forAll[S].==>(_ => op.value)
@@ -77,7 +78,7 @@ class Reporters[
 
 object Reporters {
 
-  type Expr2Str[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
+  type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
   trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 
@@ -87,7 +88,7 @@ object Reporters {
 
     val Step1: Poly1Base[IUB, XString]
 
-    case class From[IN <: IUB](v: IN) {
+    case class ForTerm[IN <: IUB](v: IN) {
 
       // TODO: should this be part of Arity/Shape API?
       def getMessage[
@@ -124,7 +125,7 @@ object Reporters {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
-          expr2Str: Expr2Str[I#_AsExpr, V]
+          expr2Str: PeekCTAux[I#Expr, V]
       ): I ==> (
         Refute[I] +
           TryStripe +

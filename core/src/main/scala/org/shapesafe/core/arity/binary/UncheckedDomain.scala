@@ -5,14 +5,12 @@ import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.ops.ArityOps.==!
 import org.shapesafe.core.arity.{Arity, ProveArity}
 
-import scala.language.existentials
-
 abstract class UncheckedDomain[
     A1 <: Arity,
     A2 <: Arity
 ] {
 
-  import ProveArity.ForAll._
+  import ProveArity._
 
   type O1 <: Arity
 
@@ -22,19 +20,19 @@ abstract class UncheckedDomain[
   type Tightest <: Arity
   def selectTightest(a1: A1, a2: A2): Tightest
 
-  def forOp2[OP <: Op2]: OP#On[A1, A2] =>> Unchecked =
+  def forOp2[OP <: Op2]: OP#On[A1, A2] |- Unchecked =
     ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
       Unchecked
     }
 
-  val forEqual: (A1 ==! A2) =>> Tightest =
+  val forEqual: (A1 ==! A2) |- Tightest =
     ProveArity.forAll[A1 ==! A2].=>> { v =>
       selectTightest(v.a1, v.a2)
     }
 
-  def forRequire2[OP <: Require2]: OP#On[A1, A2] =>> O1 =
+  def forRequire2[OP <: Require2]: OP#On[A1, A2] |- O1 =
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
-      bound1.valueOf(v.a1)
+      bound1.instanceFor(v.a1)
     }
 }
 
@@ -62,7 +60,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
     final type O1 = TC
 
     final type Tightest = TC
-    override def selectTightest(a1: A1, a2: A2): Tightest = bound1.valueOf(a1)
+    override def selectTightest(a1: A1, a2: A2): Tightest = bound1.instanceFor(a1)
   }
 
   implicit def d1[

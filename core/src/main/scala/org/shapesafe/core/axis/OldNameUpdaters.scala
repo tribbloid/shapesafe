@@ -37,7 +37,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
 
           val oped = op.on(d1.^, d2.^)
 
-          val d_new: O = lemma.apply(oped).value
+          val d_new: O = lemma.consequentFor(oped).value
           d_new.asInstanceOf[N ->> O] :: old
       }
     }
@@ -72,7 +72,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
           val result = modifier.apply(
             old,
             { a1 =>
-              val o: O = lemma.apply(op.on(a1.^, a2.^)).value
+              val o: O = lemma.consequentFor(op.on(a1.^, a2.^)).value
               o
             }
           )

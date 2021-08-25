@@ -5,4 +5,4 @@ import org.shapesafe.core.ProofSystem
 /**
   * Represents a reified Arity
   */
-object ProveArity extends ProofSystem[Arity] {}
+object ProveArity extends ProofSystem.^[Arity] {}

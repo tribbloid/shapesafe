@@ -1,9 +1,10 @@
 package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity.Arity
-import org.shapesafe.core.arity.ProveArity.|-
 
 trait Require2_Imp1 {
+
+  import org.shapesafe.core.arity.ProveArity._
 
   implicit def unchecked[
       A1 <: Arity,

@@ -1,7 +1,7 @@
 package org.shapesafe.core.axis
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.ops.ArityOps
 import shapeless.HNil
 

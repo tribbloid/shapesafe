@@ -1,32 +1,49 @@
 package org.shapesafe.core
 
-import scala.language.implicitConversions
+trait HasProposition {
 
-trait HasProposition[OUB] {
+  type OUB
 
-  trait Proposition extends Serializable {
+  sealed trait PAuxSupport[P <: Proposition] {
 
-    type Repr <: OUB
-    def value: Repr
-    // in many languages, all Propositions have a single runtime value (SProp)
-    // we don't use this design, it is still much easier to read and debug propositions in runtime
-  }
-
-  case object Proposition {
-
-    type Aux[O <: OUB] = Proposition {
+    type Aux[O <: OUB] = P {
 
       type Repr = O
     }
 
-    type Lt[+O <: OUB] = Proposition {
+    type Lt[+O <: OUB] = P {
 
       type Repr <: O
     }
 
-    case class ^[O <: OUB](value: O) extends Proposition {
+    type ^[O <: OUB] <: Aux[O]
+  }
 
+  trait Proposition extends Serializable {
+
+    type Repr <: OUB
+  }
+  case object Proposition extends PAuxSupport[Proposition] {
+
+    abstract class ^[O <: OUB] extends Proposition {
       final type Repr = O
     }
   }
+
+  case class Aye[O <: OUB](value: O) extends Proposition.^[O] {
+
+    //    def upcast[_O >: O <: OUB]: Aye[_O] = this.asInstanceOf[Aye[_O]]
+  }
+
+  case class Nay[O <: OUB]() extends Proposition.^[O] {}
+
+  case class Abstain[O <: OUB]() extends Proposition.^[O] {}
+  // TODO: for Nay & Grey, add type-level reason
+
+  case class Absurd[O <: OUB](
+      aye: Aye[O],
+      nay: Nay[O]
+  ) extends Proposition.^[O] {}
 }
+
+object HasProposition {}
