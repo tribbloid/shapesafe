@@ -2,9 +2,8 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
-import org.shapesafe.core.shape.{ProveShape, _}
+import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
@@ -15,7 +14,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.Reorder[Expr[S1], Expr[indices.AsIndices]]
+  override type Expr = Expressions.Reorder[S1#Expr, indices.AsIndices#Expr]
 
   override type _Refute = "Indices not found"
 }
@@ -23,7 +22,6 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 trait Reorder_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -35,7 +33,7 @@ trait Reorder_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Reorder[S1, II] =>> LeafShape = {
+  ): Reorder[S1, II] |- LeafShape = {
     ???
   }
 
@@ -44,7 +42,6 @@ trait Reorder_Imp0 {
 object Reorder extends Reorder_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
@@ -55,10 +52,10 @@ object Reorder extends Reorder_Imp0 {
       implicit
       lemma1: S1 |- P1,
       lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
-  ): Reorder[S1, II] =>> lemma2.Out = {
+  ): Reorder[S1, II] |- lemma2.Out = {
 
     forAll[Reorder[S1, II]].=>> { v =>
-      val p1: P1 = lemma1.valueOf(v.s1)
+      val p1: P1 = lemma1.instanceFor(v.s1)
       val vv = v.copy(s1 = p1, indices = v.indices.asIndices: II#AsIndices)
 
       lemma2.apply(vv)
@@ -88,7 +85,7 @@ object Reorder extends Reorder_Imp0 {
         forHead: GetSubscript.Premise.Case.Aux[GetSubscript[P1, I], O]
     ) = {
       forAll[Reorder[P1, Indices.><[II_-, I]]].==> { v =>
-        val tail: OO_- = forTail.valueOf(v.copy(indices = v.indices.tail))
+        val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(GetSubscript(v.s1, v.indices.head))
 

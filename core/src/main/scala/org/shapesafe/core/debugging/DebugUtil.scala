@@ -37,10 +37,10 @@ object DebugUtil {
     Witness("""¯\_(ツ)_/¯ """)
   val PEEK =
     Witness("""      """)
-  val ENTAILS =
+  val EQUIV =
     Witness("""  :=  """)
 
-  type EntailsLF = "\n\n" + ENTAILS.T
+  type EquivLF = "\n\n" + EQUIV.T
 
   type CannotEval = Stripe["cannot evaluate"]
 

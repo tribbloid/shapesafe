@@ -21,7 +21,7 @@ trait ArityAPI extends ArityOpsLike with Axis {
   ](
       implicit
       prove: _Arity |- O
-  ): ArityAPI.^[O] = prove.apply(arity).value.^
+  ): ArityAPI.^[O] = prove.consequentFor(arity).value.^
 
   def eval[
       O <: LeafArity
@@ -61,7 +61,7 @@ object ArityAPI {
 
     type _Axis = ^[A]
 
-    type _AsExpr = A#_AsExpr
+    type Expr = A#Expr
   }
 
   implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity

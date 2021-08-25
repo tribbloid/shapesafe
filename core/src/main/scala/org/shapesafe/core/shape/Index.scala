@@ -1,14 +1,10 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.graph.commons.util.IDMixin
-import org.shapesafe.graph.commons.util.reflect.format.FormatOvrd.Only
 import org.shapesafe.core.debugging.CanPeek
-import org.shapesafe.core.debugging.DebugUtil.StrOr_???
+import org.shapesafe.graph.commons.util.IDMixin
 import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
 import singleton.ops.ToString
-
-import scala.language.implicitConversions
 
 trait Index extends IDMixin with CanPeek {
 
@@ -26,7 +22,7 @@ object Index {
 
     override protected def _id = w.value
 
-    override type _AsExpr = S
+    override type Expr = S
   }
 
   object Name {
@@ -39,7 +35,7 @@ object Index {
 
     override protected def _id = indexInt
 
-    override type _AsExpr = ToString[N]
+    override type Expr = ToString[N]
   }
 
   object I_th {

@@ -2,7 +2,6 @@ package org.shapesafe.core.arity
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.ConstArity.{Derived, Literal}
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.m.PeerType
 import shapeless.Witness.Lt
 import singleton.ops.{+, ==, Require, ToInt}

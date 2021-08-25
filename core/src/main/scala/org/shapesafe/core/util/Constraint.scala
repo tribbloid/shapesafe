@@ -3,8 +3,6 @@ package org.shapesafe.core.util
 import shapeless.HList
 import shapeless.ops.hlist
 
-import scala.language.implicitConversions
-
 trait Constraint {}
 
 object Constraint {

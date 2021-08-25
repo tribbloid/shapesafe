@@ -1,6 +1,6 @@
 package org.shapesafe.core.shape.ops
 
-import org.shapesafe.core.shape.{Shape, ShapeAPI}
+import org.shapesafe.core.shape.ShapeAPI
 
 trait MatrixOps extends HasShape {
 

@@ -1,13 +1,12 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.{Poly1Base, XString}
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape._
+import org.shapesafe.core.{Poly1Base, XString}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.ops.hlist.At
 import shapeless.ops.record.Selector
@@ -21,7 +20,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.GetSubscript[Expr[S1], Expr[I]]
+  override type Expr = Expressions.GetSubscript[S1#Expr, I#Expr]
 
   override type _Refute = "Index not found"
 }
@@ -29,7 +28,6 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
 trait GetSubscript_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -41,7 +39,7 @@ trait GetSubscript_Imp0 {
       lemma1: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
       msg: EmitError[MSG]
-  ): GetSubscript[S1, I] =>> LeafShape = {
+  ): GetSubscript[S1, I] |- LeafShape = {
     ???
   }
 }
@@ -49,7 +47,6 @@ trait GetSubscript_Imp0 {
 object GetSubscript extends GetSubscript_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   implicit def simplify[
       S1 <: Shape,
@@ -60,10 +57,10 @@ object GetSubscript extends GetSubscript_Imp0 {
       implicit
       lemma1: S1 |- P1,
       lemma2: Premise.==>[GetSubscript[P1, I], O]
-  ): GetSubscript[S1, I] =>> (StaticShape.Eye >< O) = {
+  ): GetSubscript[S1, I] |- (StaticShape.Eye >< O) = {
 
     ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
-      val p1: P1 = lemma1.valueOf(v.s1)
+      val p1: P1 = lemma1.instanceFor(v.s1)
       val vv: GetSubscript[P1, I] = v.copy(s1 = p1)
 
       Shape appendInner lemma2(vv)

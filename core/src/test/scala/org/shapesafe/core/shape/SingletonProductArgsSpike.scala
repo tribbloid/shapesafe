@@ -1,9 +1,8 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.graph.commons.util.WideTyped
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.scalatest.Ignore
 import org.shapesafe.BaseSpec
+import org.shapesafe.graph.commons.util.WideTyped
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.{HList, HNil, SingletonProductArgs}
 
@@ -39,8 +38,6 @@ object SingletonProductArgsSpike {
       withKeys.apply(v)
     }
   }
-
-  import shapeless.Witness._
 
   val v1 = SingletonBroker("a", 1) // <------------------------------------------------------works
 //  val v2 = SingletonBroker.applyProduct("a".narrow :: HNil) //<-----------------------breaks!

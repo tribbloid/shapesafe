@@ -1,11 +1,11 @@
 package org.shapesafe
 
 import org.shapesafe.graph.commons.util.reflect.ScalaReflection
-import org.shapesafe.graph.commons.util.reflect.format.{Formats0, TypeFormat}
 import org.shapesafe.graph.commons.util.viz.TypeViz
+import org.shapesafe.m.viz.PeekCT
 import shapeless.{HList, Nat, Witness}
 
-trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
+trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec with TypeViz.Fixtures {
 
   val small = BaseSpec.small
   val big = BaseSpec.big
@@ -17,12 +17,13 @@ trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
 //    pprint.tokenize(v).mkString("\n")
   }
 
+  val TypeVizPeek = {
+    PeekCT.runtime
+  }
+
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
-    val format = Formats0.TypeInfo.DeAlias.HidePackage.recursively
-
-    TypeViz
-      .withFormat(format)
+    TypeVizShort
       .infer(v)
       .typeStr
   }

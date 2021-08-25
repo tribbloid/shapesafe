@@ -10,7 +10,7 @@ class ArityReportersSpec extends BaseSpec {
 
       val i = Arity(3)
 
-      val m = ArityReporters.PeekArity.From(i.arity).getMessage
+      val m = ArityReporters.PeekArity.ForTerm(i.arity).getMessage
       assert(m.trim == "3")
     }
 
@@ -18,7 +18,7 @@ class ArityReportersSpec extends BaseSpec {
 
       val i = (Arity(3) :+ Arity(4)).eval
 
-      val m = ArityReporters.PeekArity.From(i.arity).getMessage
+      val m = ArityReporters.PeekArity.ForTerm(i.arity).getMessage
       assert(m.trim == "7")
 
     }
@@ -27,7 +27,7 @@ class ArityReportersSpec extends BaseSpec {
 
       val i = Arity.Unchecked
 
-      val m = ArityReporters.PeekArity.From(i.arity).getMessage
+      val m = ArityReporters.PeekArity.ForTerm(i.arity).getMessage
       assert(m.trim == "_UNCHECKED_")
     }
 
@@ -35,7 +35,7 @@ class ArityReportersSpec extends BaseSpec {
 
       val i = Arity.Unprovable
 
-      val m = ArityReporters.PeekArity.From(i.arity).getMessage
+      val m = ArityReporters.PeekArity.ForTerm(i.arity).getMessage
 
       assert(m.trim.endsWith("_UNPROVABLE_"))
     }
@@ -45,7 +45,7 @@ class ArityReportersSpec extends BaseSpec {
     it("Conjecture2") {
       val i = Arity(3) :+ Arity.Unchecked
 
-      val m = ArityReporters.PeekArity.From(i.arity).getMessage
+      val m = ArityReporters.PeekArity.ForTerm(i.arity).getMessage
 
       assert(
         m.trim ==

@@ -1,6 +1,5 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
 import org.shapesafe.core.debugging.Reporters.ForArity
@@ -18,7 +17,7 @@ trait Require2 extends Op2Like {
 
 object Require2 extends Require2_Imp0 {
 
-  import ProveArity.ForAll._
+  import ProveArity._
   import singleton.ops._
 
   class Impl[
@@ -74,7 +73,7 @@ object Require2 extends Require2_Imp0 {
     cache
       .getOrElseUpdate(
         sh,
-        new Impl[??, SS]
+        new Impl[??, SS]()(sh)
       )
       .asInstanceOf[Impl[??, SS]]
   }
@@ -95,9 +94,9 @@ object Require2 extends Require2_Imp0 {
         OP#Lemma[S1, S2],
         MSG
       ]
-  ): OP#On[A1, A2] =>> ConstArity[S1] = {
+  ): OP#On[A1, A2] |- ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
-      bound1.valueOf(v.a1)
+      bound1.instanceFor(v.a1)
     }
   }
 }

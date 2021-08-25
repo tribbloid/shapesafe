@@ -5,6 +5,6 @@ CRDIR="$(
   pwd
 )"
 
-ARGS=${@}
+ARGS=("-PsplainVersion=" ${@})
 
 exec "${CRDIR}"/.CI.sh ${ARGS}

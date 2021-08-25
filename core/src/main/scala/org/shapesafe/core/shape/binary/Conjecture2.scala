@@ -11,9 +11,9 @@ trait Conjecture2 extends ShapeConjecture {
 
 trait Conjecture2_Imp0 {
 
-  import ProveShape.ForAll._
+  import ProveShape._
 
-  implicit def leftUnchecked: Lt[Unchecked, _ <: Shape] =>> Unchecked.type = {
+  implicit def leftUnchecked: Lt[Unchecked, _ <: Shape] |- Unchecked.type = {
     ProveShape.forAll.=>> { _ =>
       Unchecked
     }
@@ -35,9 +35,9 @@ object Conjecture2 extends Conjecture2_Imp0 {
     final override type SS2 = S2
   }
 
-  import ProveShape.ForAll._
+  import ProveShape._
 
-  implicit def rightUnchecked: Lt[_ <: Shape, Unchecked] =>> Unchecked.type = {
+  implicit def rightUnchecked: Lt[_ <: Shape, Unchecked] |- Unchecked.type = {
     ProveShape.forAll.=>> { _ =>
       Unchecked
     }

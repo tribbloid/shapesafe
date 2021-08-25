@@ -1,10 +1,10 @@
 package org.shapesafe.core.debugging
 
-import org.shapesafe.core.debugging.HasDebugSymbol.{On1, On2}
+import org.shapesafe.core.debugging.HasDebugSymbol.{ExprOn1, ExprOn2}
 
 trait ExpressionsLike {
 
-  type Expr[T <: CanPeek] = T#_AsExpr // with T
+//  type Peek[T <: CanPeek] = T#_Peek // with T
 
   trait :<<-[A, B]
   trait ><[A, B]
@@ -21,13 +21,13 @@ trait ExpressionsLike {
 
   import singleton.ops.+
 
-  trait AppendByName[O] extends On1 {
+  trait AppendByName[O] extends ExprOn1 {
     type _DebugSymbol = "AppendByName[" + O + "]"
   }
-  trait SquashByName[O] extends On1 {
+  trait SquashByName[O] extends ExprOn1 {
     type _DebugSymbol = "SquashByName[" + O + "]"
   }
-  trait DimensionWise[O] extends On2 {
+  trait DimensionWise[O] extends ExprOn2 {
     type _DebugSymbol = "DimensionWise[" + O + "]"
   }
 }

@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.{LeafShape, ProveShape, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
@@ -12,14 +11,13 @@ case class RequireDistinct[
     s1: S1 with Shape
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.RequireDistinct[Expr[S1]]
+  override type Expr = Expressions.RequireDistinct[S1#Expr]
 
   override type _Refute = "Names has duplicates"
 }
 
 trait RequireDistinct_Imp0 {
 
-  import ProveShape.ForAll._
   import ProveShape._
 
   implicit def refute[
@@ -31,14 +29,13 @@ trait RequireDistinct_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[RequireDistinct[P1], MSG],
       msg: EmitError[MSG]
-  ): RequireDistinct[S1] =>> LeafShape = {
+  ): RequireDistinct[S1] |- LeafShape = {
     null
   }
 }
 
 object RequireDistinct extends RequireDistinct_Imp0 {
 
-  import ProveShape.ForAll._
   import ProveShape._
 
   implicit def simplify[
@@ -48,10 +45,10 @@ object RequireDistinct extends RequireDistinct_Imp0 {
       implicit
       lemma: S1 |- P1,
       indexing: _Lemma.Case[P1#Record]
-  ): RequireDistinct[S1] =>> P1 = {
+  ): RequireDistinct[S1] |- P1 = {
 
     ProveShape.forAll[RequireDistinct[S1]].=>> { v =>
-      lemma.valueOf(v.s1)
+      lemma.instanceFor(v.s1)
     }
   }
 

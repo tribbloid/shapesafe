@@ -10,8 +10,19 @@ trait VerifiedArity extends Arity.Verifiable {
 
 object VerifiedArity {
 
-  import ProveArity.ForAll._
+  import ProveArity._
 
-  implicit def endo[T <: VerifiedArity]: T =>> T =
+  implicit def endo[T <: VerifiedArity]: T |- T =
     ProveArity.forAll[T].=>>(identity[T])
+
+//  implicit object Endo extends GenProof[VerifiedArity] {
+//    override type In[T] = T
+//    override type Out =
+//
+//  }
+
+//  implicit class Endo[T <: VerifiedArity] extends GenProof[T] {
+//
+//    type Proof
+//  }
 }

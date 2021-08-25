@@ -10,7 +10,7 @@ include(
     ":verify",
     ":verify:breeze",
     ":verify:djl",
-    // uses common scala features
+//    // uses common scala features
     ":shapesafe-demo"
 //    "spike"
 )

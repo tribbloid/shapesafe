@@ -9,7 +9,7 @@ buildscript {
     val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.8") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.9") // suffix is always 2.12, weird
     }
 }
 
@@ -19,7 +19,7 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.5.20" // TODO: remove?
+    kotlin("jvm") version "1.5.31" // TODO: remove?
 
     idea
 
@@ -87,8 +87,11 @@ allprojects {
         }
 
         //https://github.com/tek/splain
-        if (vs.splainV !=null)
+        if (vs.splainV != "") {
+            logger.warn("Using Splain " + vs.splainV)
+
             scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
+        }
 
 //        compileOnly(kotlin("stdlib"))
 //        compileOnly(kotlin("stdlib-jdk8"))
@@ -123,17 +126,21 @@ allprojects {
 
                 loggingLevel = "verbose"
 
-                val compilerOptions = mutableListOf(
-                    "-encoding", "UTF-8",
-                    "-unchecked",
-                    "-deprecation",
-                    "-feature",
+                val compilerOptions =
 
-                    "-language:higherKinds",
+                    mutableListOf(
+
+                        "-encoding", "UTF-8",
+                        "-unchecked",
+                        "-deprecation",
+                        "-feature",
+
+                        "-language:higherKinds",
 //                            "-Xfatal-warnings",
 
-                    "-Xlint:poly-implicit-overload",
-                    "-Xlint:option-implicit",
+                        "-Xlint:poly-implicit-overload",
+                        "-Xlint:option-implicit",
+                        "-Wunused:imports",
 
 //                        "-Ydebug",
 //                        "-Yissue-debug"
@@ -147,7 +154,7 @@ allprojects {
 //                    "-Xlint:implicit-not-found",
 //                    "-Xlint:implicit-recursion"
 
-                )
+                    )
 
                 if (vs.splainV != null) {
                     compilerOptions.addAll(

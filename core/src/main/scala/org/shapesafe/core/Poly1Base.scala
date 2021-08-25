@@ -88,39 +88,6 @@ trait Poly1Base[IUB, OUB] {
       from.apply(ii)
     }
   }
-
-//  object AsShapelessPoly2 extends Poly2 { TODO
-
-//  case class ComposeDep1[F[??] <: DepFn1[??]]() extends Poly1Base[Any, OUB] {
-//
-//    implicit def chain[
-//        S,
-//        I <: IUB
-//    ](
-//        implicit
-//        dep1: F[S] { type Out <: I },
-//        _case: Poly1Base.this.Case[I]
-//    ): S ==> _case.Out = from[S].to { ss =>
-//      val i = dep1.apply(ss)
-//      _case(i)
-//    }
-//  }
-//
-//  case class ComposeDep2[F[A, B] <: DepFn2[A, B]]() extends Poly1Base[Any, OUB] {
-//
-//    implicit def chain[
-//        S1,
-//        S2,
-//        I <: IUB
-//    ](
-//        implicit
-//        dep2: F[S1, S2] { type Out <: I },
-//        _case: Poly1Base.this.Case[I]
-//    ): (S1, S2) ==> _case.Out = from[(S1, S2)].to { ss =>
-//      val i = dep2.apply(ss._1, ss._2)
-//      _case(i)
-//    }
-//  }
 }
 
 object Poly1Base {}

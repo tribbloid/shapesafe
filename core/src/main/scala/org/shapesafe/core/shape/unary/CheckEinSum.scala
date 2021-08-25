@@ -4,8 +4,6 @@ import org.shapesafe.core.arity
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
 
-import scala.language.implicitConversions
-
 // all names must be distinctive - no duplication allowed
 case class CheckEinSum[
     S1 <: Shape

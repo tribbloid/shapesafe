@@ -1,7 +1,5 @@
 package org.shapesafe.core.arity
 
-import scala.language.implicitConversions
-
 /**
   * Irreducible
   */

@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape
@@ -67,7 +66,7 @@ class NamedWithSpec extends BaseSpec {
       it("getReportMsg") {
 
         val msg = PeekShape
-          .From(good.shape)
+          .ForTerm(good.shape)
           .getMessage
 
         msg.shouldBe(
@@ -81,6 +80,7 @@ class NamedWithSpec extends BaseSpec {
       it("1") {
 
         val s = good
+
         shouldNotCompile(
           """s.interrupt""",
           """.*(\Q:=  2 >< 3 |<<- (a >< b)\E).*"""

@@ -25,5 +25,5 @@ class Versions(self: Project) {
 
     val scalatestV: String = "3.2.3"
 
-    val splainV: String? = self.properties.get("splainVersion")?.toString()
+    val splainV: String = self.properties.get("splainVersion")?.toString() ?: ""
 }

@@ -2,8 +2,6 @@ package org.shapesafe.core.arity.binary
 
 import org.shapesafe.core.arity._
 
-import scala.language.implicitConversions
-
 trait Op2_Imp0 {
 
   implicit def unchecked[
