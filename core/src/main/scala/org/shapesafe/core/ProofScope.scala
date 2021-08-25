@@ -77,18 +77,18 @@ object ProofScope {
 
     object ForAll {
 
-      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.ForAll.=>>^^[I, P]
+//      trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.ForAll.=>>^^[I, P]
 
-      trait =>>[-I, OO <: OUB] extends =>>^^[I, root.Proposition.^[OO]] with root.ForAll.=>>[I, OO]
+      trait =>>[-I, OO <: OUB] extends root.ForAll.=>>[I, OO]
     }
 
     class ForAll[I] extends root.ForAll[I] {
 
       import ForAll._
 
-      override def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
-        override def apply(v: I): P = _fn(v)
-      }
+//      override def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
+//        override def apply(v: I): P = _fn(v)
+//      }
 
       override def =>>[OO <: OUB](_fn: I => OO): I =>> OO = new (I =>> OO) {
         override def apply(v: I): root.Proposition.^[OO] = root.Proposition.^[OO](_fn(v))

@@ -28,7 +28,7 @@ trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: 
 
   object ForAll {
 
-    trait =>>^^[-I, +P <: Consequent] extends Proof[I, P]
+//    trait =>>^^[-I, +P <: Consequent] extends Proof[I, P]
 
     /**
       * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
@@ -47,17 +47,17 @@ trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: 
       * @tparam I src type
       * @tparam O tgt type
       */
-    trait =>>[-I, O <: OUB] extends =>>^^[I, root.Proposition.^[O]] {}
+    trait =>>[-I, O <: OUB] extends Proof[I, root.Proposition.^[O]] {}
   }
 
   class ForAll[I] {
 
     import ForAll._
 
-    def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
-
-      override def apply(v: I): P = _fn(v)
-    }
+//    def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
+//
+//      override def apply(v: I): P = _fn(v)
+//    }
 
     def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
 
