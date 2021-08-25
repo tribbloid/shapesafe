@@ -15,12 +15,17 @@ trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: 
 
   final val root: this.type = this
 
-  trait Proof[-I, +P <: Consequent] {
+  trait Verdict[-I, +P <: Consequent] {}
+  //TODO: add refute that supersedes def refute in type classes
+
+  trait Proving[-I, +P <: Consequent] extends Verdict[I, P] {
+
     def apply(v: I): P
 
     final def valueOf(v: I): P#Repr = apply(v).value
   }
-  //TODO: add refute that supersedes def refute in type classes
+
+  trait Refuting[-I, +P <: Consequent] extends Verdict[I, P] {}
 
   def forAll[I]: ForAll[I] = new ForAll[I]
 
@@ -28,7 +33,7 @@ trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: 
 
   object ForAll {
 
-//    trait =>>^^[-I, +P <: Consequent] extends Proof[I, P]
+//    trait =>>^^[-I, +P <: Consequent] extends Verdict[I, P]
 
     /**
       * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
@@ -53,7 +58,7 @@ trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: 
   class ForAll[I] {
 
     import ForAll._
-
+//
 //    def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
 //
 //      override def apply(v: I): P = _fn(v)

@@ -20,7 +20,7 @@ trait ProofScope { // TODO: no IUB?
   //  Such that successful proof can show reasoning at runtime.
   //  At this moment, this feature is implemented in PeekReporter
   //  which is too complex for its own good
-  type Proof[-I, +P <: Consequent] <: root.Proof[I, P]
+  type Proof[-I, +P <: Consequent] <: root.Verdict[I, P]
 
   /**
     * entailment, logical implication used only in existential proof summoning
@@ -71,7 +71,7 @@ object ProofScope {
 
     type OUB = O
 
-    trait Proof[-I, +P <: Consequent] extends root.Proof[I, P]
+    trait Proof[-I, +P <: Consequent] extends root.Verdict[I, P]
 
     override def forAll[I]: ForAll[I] = new ForAll[I]
 
