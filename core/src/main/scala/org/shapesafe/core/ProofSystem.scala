@@ -9,7 +9,7 @@ import scala.language.implicitConversions
   * @tparam _OUB upper bound of output
   */
 // TODO: If Poly1 works smoothly it could totally supersedes this class, too bad the assumed compiler bug made it necessary
-trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: no IUB?
+trait ProofSystem[_OUB] extends HasProposition[_OUB] with ProofScope { // TODO: no IUB?
 
   type OUB = _OUB
 
@@ -18,7 +18,7 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
   trait Proof[-I, +P <: Consequent] {
     def apply(v: I): P
 
-    final def valueOf(v: I): P#Domain = apply(v).value
+    final def valueOf(v: I): P#Repr = apply(v).value
   }
   //TODO: add refute that supersedes def refute in type classes
 
@@ -47,7 +47,7 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
       * @tparam I src type
       * @tparam O tgt type
       */
-    trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] {}
+    trait =>>[-I, O <: OUB] extends =>>^^[I, root.Proposition.^[O]] {}
   }
 
   class ForAll[I] {
@@ -55,13 +55,13 @@ trait ProofSystem[_OUB] extends Propositional[_OUB] with ProofScope { // TODO: n
     import ForAll._
 
     def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
+
       override def apply(v: I): P = _fn(v)
     }
 
     def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
-//      override def valueOf(v: I): O = _fn(v)
 
-      override def apply(v: I): root.Term.^[O] = root.Term.^[O](_fn(v))
+      override def apply(v: I): root.Proposition.^[O] = root.Proposition.^[O](_fn(v))
     }
 
     def summon[O <: OUB](

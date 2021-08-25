@@ -14,7 +14,7 @@ trait ProofScope { // TODO: no IUB?
 
   val root: ProofSystem[OUB]
 
-  type Consequent = root.Term
+  type Consequent = root.Proposition
 
   // TODO: this should potentially be merged with Refutation cases in MsgBroker
   //  Such that successful proof can show reasoning at runtime.
@@ -29,12 +29,12 @@ trait ProofScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
   )
-  type |-<[-I, O <: OUB] = Proof[I, root.Term.Lt[O]]
+  type |-<[-I, O <: OUB] = Proof[I, root.Proposition.Lt[O]]
 
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n${O}\n"
   )
-  type |-[-I, O <: OUB] = Proof[I, root.Term.Aux[O]]
+  type |-[-I, O <: OUB] = Proof[I, root.Proposition.Aux[O]]
 
   def forAll[I]: root.ForAll[I]
 
@@ -52,7 +52,7 @@ trait ProofScope { // TODO: no IUB?
       implicit def canProve_^^[O <: OB](
           implicit
           prove: I |- O
-      ): root.Term.Aux[O] = prove.apply(v)
+      ): root.Proposition.Aux[O] = prove.apply(v)
 
       implicit def canProve[O <: OB](
           implicit
@@ -79,20 +79,19 @@ object ProofScope {
 
       trait =>>^^[-I, +P <: Consequent] extends Proof[I, P] with root.ForAll.=>>^^[I, P]
 
-      trait =>>[-I, O <: OUB] extends =>>^^[I, root.Term.^[O]] with root.ForAll.=>>[I, O]
+      trait =>>[-I, OO <: OUB] extends =>>^^[I, root.Proposition.^[OO]] with root.ForAll.=>>[I, OO]
     }
 
     class ForAll[I] extends root.ForAll[I] {
 
       import ForAll._
 
-      override def =>>^^[P <: Consequent](_fn: I => P) = new (I =>>^^ P) {
+      override def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
         override def apply(v: I): P = _fn(v)
       }
 
-      override def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
-//        override def valueOf(v: I): O = fn(v)
-        override def apply(v: I): root.Term.^[O] = root.Term.^[O](_fn(v))
+      override def =>>[OO <: OUB](_fn: I => OO): I =>> OO = new (I =>> OO) {
+        override def apply(v: I): root.Proposition.^[OO] = root.Proposition.^[OO](_fn(v))
       }
     }
   }
