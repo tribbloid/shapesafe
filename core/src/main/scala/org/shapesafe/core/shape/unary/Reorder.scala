@@ -34,7 +34,7 @@ trait Reorder_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Reorder[S1, II] =>> LeafShape = {
+  ): Reorder[S1, II] |- LeafShape = {
     ???
   }
 
@@ -53,7 +53,7 @@ object Reorder extends Reorder_Imp0 {
       implicit
       lemma1: S1 |- P1,
       lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
-  ): Reorder[S1, II] =>> lemma2.Out = {
+  ): Reorder[S1, II] |- lemma2.Out = {
 
     forAll[Reorder[S1, II]].=>> { v =>
       val p1: P1 = lemma1.valueOf(v.s1)

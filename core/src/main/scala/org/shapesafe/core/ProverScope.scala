@@ -25,7 +25,7 @@ trait ProverScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
   )
-  type |-<[-I, O <: OUB] = Proof[I, system.Aye.Lt[O]]
+  final type |-<[-I, O <: OUB] = Proof[I, system.Aye.Lt[O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
@@ -34,7 +34,9 @@ trait ProverScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n${O}\n"
   )
-  type |-[-I, O <: OUB] = Proof[I, system.Aye.Aux[O]]
+  final type |-[-I, O <: OUB] = Proof[I, system.Aye.Aux[O]]
+
+  final type |-\-[-I, O <: OUB] = Proof[I, system.Nay.Aux[O]]
 
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
@@ -53,25 +55,15 @@ trait ProverScope { // TODO: no IUB?
     * @tparam I src type
     * @tparam O tgt type
     */
-  type =>>[-I, O <: OUB] <: Proof[I, system.Aye.^[O]]
-  def fromFn[I, O <: OUB](_fn: I => O): I =>> O
+//  type =>>[-I, O <: OUB] <: Proof[I, system.Aye.^[O]]
+  def fromFn[I, O <: OUB](_fn: I => O): I |- O
 
   final def forAll[I]: ForAll[I] = new ForAll[I]
   final def forValue[I](v: I): ForAll[I] = forAll[I]
 
   class ForAll[I] {
 
-    //    def =>>^^[P <: Consequent](_fn: I => P): I =>>^^ P = new (I =>>^^ P) {
-    //
-    //      override def apply(v: I): P = _fn(v)
-    //    }
-
-    def =>>[O <: OUB](_fn: I => O): I =>> O = fromFn(_fn)
-
-//    def =>>[O <: OUB](_fn: I => O): I =>> O = new (I =>> O) {
-//
-//      override def apply(v: I): root.Aye.^[O] = root.Aye.^[O](_fn(v))
-//    }
+    def =>>[O <: OUB](_fn: I => O): I |- O = fromFn(_fn)
 
     def summon[O <: OUB](
         implicit
@@ -91,33 +83,6 @@ trait ProverScope { // TODO: no IUB?
     //    trait =>>^^[-I, +P <: Consequent] extends Verdict[I, P]
 
   }
-
-  // TODO: these are dead!
-//  def satisfying[OB <: OUB] = new Satisfying[OB]()
-//
-//  class Satisfying[OB <: OUB]() {
-//
-//    case class If[I](v: I) {
-//
-//      implicit def findProof[O <: OB](
-//          implicit
-//          prove: I |- O
-//      ): I |- O = prove
-//
-//      implicit def canProve_^^[O <: OB](
-//          implicit
-//          prove: I |- O
-//      ): root.Proposition.Aux[O] = prove.apply(v)
-//
-//      implicit def canProve[O <: OB](
-//          implicit
-//          prove: I |- O
-//      ): O = {
-//
-//        canProve_^^(prove).value
-//      }
-//    }
-//  }
 
   class SubScope
       extends ProverScope.SubScopeLike[OUB](
@@ -139,7 +104,7 @@ object ProverScope {
 //    trait Proof[-I, +P <: Consequent] extends outer.Proof[I, P]
     // TODO: I don't know how to combine the scope of theorems, decide it later
 
-    class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, system.Aye.^[O]] {
+    protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, system.Aye.^[O]] {
       override def apply(v: I): system.Aye.^[O] = {
         val out = _fn(v)
         system.Aye.^(out)

@@ -20,7 +20,7 @@ object Conjecture1 {
 
   import ProveShape._
 
-  implicit def unchecked: Lt[Unchecked] =>> Unchecked.type = {
+  implicit def unchecked: Lt[Unchecked] |- Unchecked.type = {
     ProveShape.forAll[Lt[Unchecked]].=>> { _ =>
       Unchecked
     }

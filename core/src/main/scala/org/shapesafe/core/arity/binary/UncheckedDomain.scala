@@ -22,17 +22,17 @@ abstract class UncheckedDomain[
   type Tightest <: Arity
   def selectTightest(a1: A1, a2: A2): Tightest
 
-  def forOp2[OP <: Op2]: OP#On[A1, A2] =>> Unchecked =
+  def forOp2[OP <: Op2]: OP#On[A1, A2] |- Unchecked =
     ProveArity.forAll[OP#On[A1, A2]].=>> { _ =>
       Unchecked
     }
 
-  val forEqual: (A1 ==! A2) =>> Tightest =
+  val forEqual: (A1 ==! A2) |- Tightest =
     ProveArity.forAll[A1 ==! A2].=>> { v =>
       selectTightest(v.a1, v.a2)
     }
 
-  def forRequire2[OP <: Require2]: OP#On[A1, A2] =>> O1 =
+  def forRequire2[OP <: Require2]: OP#On[A1, A2] |- O1 =
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
       bound1.valueOf(v.a1)
     }

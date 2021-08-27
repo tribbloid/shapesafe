@@ -33,7 +33,7 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
     }
   }
 
-  class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye.^[O]] {
+  protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye.^[O]] {
     override def apply(v: I): Aye.^[O] = {
       val out = _fn(v)
       system.Aye.^(out)

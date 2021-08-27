@@ -16,7 +16,7 @@ object ProverSystemTest {
 
   object P0 {
 
-    implicit def axiom: P0 =>> Simple = forAll[P0].=>> { p =>
+    implicit def axiom: P0 |- Simple = forAll[P0].=>> { p =>
       Simple(p.getClass.toString)
     }
   }
@@ -25,7 +25,7 @@ object ProverSystemTest {
 
   object P1 {
 
-    implicit def axiom[S <: Simple, M]: P1[S, M] =>> Simple = forAll[P1[S, M]].=>> { p =>
+    implicit def axiom[S <: Simple, M]: P1[S, M] |- Simple = forAll[P1[S, M]].=>> { p =>
       Simple(s"${p.getClass.toString} -> ${p.child.name}")
     }
 
@@ -38,7 +38,7 @@ object ProverSystemTest {
         implicit
         lemma1: T |-< S,
         lemma2: P1[S, M] |- O
-    ): P1[T, M] =>> O = forAll[P1[T, M]].=>> { p =>
+    ): P1[T, M] |- O = forAll[P1[T, M]].=>> { p =>
       lemma2.valueOf(
         p.copy(lemma1.valueOf(p.child))
       )

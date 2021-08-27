@@ -47,7 +47,7 @@ trait DimensionWise {
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
         toShape: _Lemma.ToShape.Case[HO]
-    ): _On[S1, S2] =>> toShape.Out = {
+    ): _On[S1, S2] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1, S2]].=>> { v =>
         val p1 = lemma1.valueOf(v.s1)

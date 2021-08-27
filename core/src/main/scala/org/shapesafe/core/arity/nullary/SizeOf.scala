@@ -1,6 +1,5 @@
 package org.shapesafe.core.arity.nullary
 
-import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.{ConstArity, ProveArity, VerifiedArity}
 import shapeless.ops.hlist
@@ -20,7 +19,7 @@ object SizeOf {
       implicit
       length: hlist.Length.Aux[D, N],
       simplify: NatAsOp[N]
-  ): SizeOf[D] =>> ConstArity.Derived[simplify.type, simplify.OutInt] = {
+  ): SizeOf[D] |- ConstArity.Derived[simplify.type, simplify.OutInt] = {
 
     ProveArity.forAll[SizeOf[D]].=>> { v =>
       ConstArity.Derived.summon(simplify)

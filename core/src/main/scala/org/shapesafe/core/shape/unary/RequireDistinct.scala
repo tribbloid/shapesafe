@@ -30,7 +30,7 @@ trait RequireDistinct_Imp0 {
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[RequireDistinct[P1], MSG],
       msg: EmitError[MSG]
-  ): RequireDistinct[S1] =>> LeafShape = {
+  ): RequireDistinct[S1] |- LeafShape = {
     null
   }
 }
@@ -46,7 +46,7 @@ object RequireDistinct extends RequireDistinct_Imp0 {
       implicit
       lemma: S1 |- P1,
       indexing: _Lemma.Case[P1#Record]
-  ): RequireDistinct[S1] =>> P1 = {
+  ): RequireDistinct[S1] |- P1 = {
 
     ProveShape.forAll[RequireDistinct[S1]].=>> { v =>
       lemma.valueOf(v.s1)

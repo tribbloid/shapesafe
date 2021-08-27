@@ -4,7 +4,6 @@ import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.StaticShape.><
-import org.shapesafe.core.shape.ProveShape._
 import org.shapesafe.core.shape.{LeafShape, Shape, StaticShape}
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
@@ -39,7 +38,7 @@ trait OuterProduct_Imp1 {
       lemma2: S2 |- P2,
       refute0: Reporters.ForShape.Refute0[OuterProduct[P1, P2], MSG],
       msg: EmitError[MSG]
-  ): OuterProduct[S1, S2] =>> LeafShape = {
+  ): OuterProduct[S1, S2] |- LeafShape = {
     ???
   }
 }
@@ -61,7 +60,7 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
       lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
       toShape: StaticShape.FromStatic.Case[HO]
-  ): OuterProduct[S1, S2] =>> toShape.Out = {
+  ): OuterProduct[S1, S2] |- toShape.Out = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)
@@ -87,7 +86,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       implicit
       lemma1: S1 |- P1,
       lemma2: S2 |- P2
-  ): OuterProduct[S1, S2] =>> (P1 >< A2) = {
+  ): OuterProduct[S1, S2] |- (P1 >< A2) = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.valueOf(direct.s1)

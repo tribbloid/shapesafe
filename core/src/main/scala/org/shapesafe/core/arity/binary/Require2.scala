@@ -1,6 +1,5 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.core.arity.ProveArity.|-<
 import org.shapesafe.core.arity.Utils.Op
 import org.shapesafe.core.arity._
 import org.shapesafe.core.debugging.Reporters.ForArity
@@ -95,7 +94,7 @@ object Require2 extends Require2_Imp0 {
         OP#Lemma[S1, S2],
         MSG
       ]
-  ): OP#On[A1, A2] =>> ConstArity[S1] = {
+  ): OP#On[A1, A2] |- ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
       bound1.valueOf(v.a1)
     }

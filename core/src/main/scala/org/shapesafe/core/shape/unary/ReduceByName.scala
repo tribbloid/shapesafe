@@ -40,7 +40,7 @@ trait ReduceByName {
         implicit
         lemma: S1 |- P1,
         toShape: _Lemma.ToShape.Case[P1#Record]
-    ): _On[S1] =>> toShape.Out = {
+    ): _On[S1] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1]].=>> { v =>
         val p1 = lemma.valueOf(v.s1)

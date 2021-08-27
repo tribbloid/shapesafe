@@ -14,7 +14,7 @@ trait Require2_Imp1 {
   ](
       implicit
       domain: UncheckedDomain[A1, A2]
-  ): OP#On[A1, A2] =>> domain.O1 = {
+  ): OP#On[A1, A2] |- domain.O1 = {
     domain.forRequire2[OP]
   }
 }

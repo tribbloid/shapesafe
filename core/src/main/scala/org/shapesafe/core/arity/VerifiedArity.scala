@@ -12,6 +12,6 @@ object VerifiedArity {
 
   import ProveArity._
 
-  implicit def endo[T <: VerifiedArity]: T =>> T =
+  implicit def endo[T <: VerifiedArity]: T |- T =
     ProveArity.forAll[T].=>>(identity[T])
 }
