@@ -19,7 +19,6 @@ case class RequireDistinct[
 
 trait RequireDistinct_Imp0 {
 
-  import ProveShape.ForAll._
   import ProveShape._
 
   implicit def refute[
@@ -38,7 +37,6 @@ trait RequireDistinct_Imp0 {
 
 object RequireDistinct extends RequireDistinct_Imp0 {
 
-  import ProveShape.ForAll._
   import ProveShape._
 
   implicit def simplify[

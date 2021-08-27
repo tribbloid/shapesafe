@@ -23,7 +23,6 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
 trait Reorder_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   implicit def refute[
       S1 <: Shape,
@@ -44,7 +43,6 @@ trait Reorder_Imp0 {
 object Reorder extends Reorder_Imp0 {
 
   import ProveShape._
-  import ForAll._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[

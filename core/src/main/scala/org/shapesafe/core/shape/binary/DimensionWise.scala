@@ -32,8 +32,7 @@ trait DimensionWise {
 
   object _On {
 
-    import ProveShape.ForAll._
-    import ProveShape.|-
+    import ProveShape._
 
     implicit def simplify[
         S1 <: Shape,

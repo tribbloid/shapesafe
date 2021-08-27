@@ -2,16 +2,15 @@ package org.shapesafe.core
 
 import org.shapesafe.BaseSpec
 
-object ProofSystemTest {
+object ProverSystemTest {
 
   trait Conj
 
   case class Simple(name: String) extends Conj
 
-  object TestSys extends ProofSystem[Conj]
+  object TestSys extends ProverSystem[Conj]
 
   import TestSys._
-  import ForAll._
 
   case class P0() extends Conj
 
@@ -48,9 +47,9 @@ object ProofSystemTest {
 
 }
 
-class ProofSystemTest extends BaseSpec {
+class ProverSystemTest extends BaseSpec {
 
-  import ProofSystemTest._
+  import ProverSystemTest._
 
   it("can prove P1") {
 

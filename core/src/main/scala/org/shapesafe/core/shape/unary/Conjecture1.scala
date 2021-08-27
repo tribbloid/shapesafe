@@ -18,7 +18,7 @@ object Conjecture1 {
     final type SS1 = S1
   }
 
-  import ProveShape.ForAll._
+  import ProveShape._
 
   implicit def unchecked: Lt[Unchecked] =>> Unchecked.type = {
     ProveShape.forAll[Lt[Unchecked]].=>> { _ =>
