@@ -23,8 +23,8 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
 
       val verdict: P = apply(v)
       verdict match {
-        case y: Aye =>
-          y.asInstanceOf[Aye with P].value // TODO: unsafe?
+        case y: Aye[_] =>
+          y.asInstanceOf[Aye[P#Repr] with P].value // TODO: unsafe?
         case _ =>
           throw new UnsupportedOperationException(
             s"$verdict is not a constructive proposition"
@@ -33,10 +33,10 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
     }
   }
 
-  protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye.^[O]] {
-    override def apply(v: I): Aye.^[O] = {
+  protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye[O]] {
+    override def apply(v: I): Aye[O] = {
       val out = _fn(v)
-      system.Aye.^(out)
+      system.Aye(out)
     }
   }
   override def fromFn[I, O <: _OUB](_fn: I => O): I =>> O = new =>>(_fn)

@@ -8,7 +8,12 @@ trait HasPropositions[OUB] {
 
     type Repr <: OUB
   }
-  case object Proposition extends CompanionOf[Proposition] {}
+  case object Proposition extends CompanionOf[Proposition] {
+
+    abstract class ^[O <: OUB] extends Proposition {
+      final type Repr = O
+    }
+  }
 
   sealed trait CompanionOf[P <: Proposition] {
 
@@ -25,31 +30,16 @@ trait HasPropositions[OUB] {
     type ^[O <: OUB] <: Aux[O]
   }
 
-  trait Aye extends Proposition {
+  case class Aye[O <: OUB](value: O) extends Proposition.^[O] {}
 
-    def value: Repr
-  }
-  case object Aye extends CompanionOf[Aye] {
+  case class Nay[O <: OUB](reason: Option[String] = None) extends Proposition.^[O] {}
 
-    case class ^[O <: OUB](override val value: O) extends Aye {
+  case class Incapable[O <: OUB]() extends Proposition.^[O] {}
 
-      final type Repr = O
-    }
-  }
-
-  trait Nay extends Proposition {
-    // add reasons
-  }
-  case object Nay extends CompanionOf[Nay]
-
-  trait Incapable extends Proposition {}
-  case object Incapable extends CompanionOf[Incapable]
-
-  trait Absurd extends Proposition {
-    def aye: Aye.Aux[Repr]
-    def nay: Nay.Aux[Repr]
-  }
-  case object Absurd extends CompanionOf[Absurd]
+  case class Absurd[O <: OUB](
+      aye: Aye[O],
+      nay: Nay[O]
+  ) extends Proposition.^[O] {}
 }
 
 object HasPropositions {}

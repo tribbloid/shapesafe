@@ -25,7 +25,7 @@ trait ProverScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
   )
-  final type |-<[-I, O <: OUB] = Proof[I, system.Aye.Lt[O]]
+  final type |-<[-I, O <: OUB] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
@@ -34,9 +34,9 @@ trait ProverScope { // TODO: no IUB?
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n${O}\n"
   )
-  final type |-[-I, O <: OUB] = Proof[I, system.Aye.Aux[O]]
+  final type |-[-I, O <: OUB] = Proof[I, system.Aye[O]]
 
-  final type |-\-[-I, O <: OUB] = Proof[I, system.Nay.Aux[O]]
+  final type |-\-[-I, O <: OUB] = Proof[I, system.Nay[O]]
 
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
@@ -104,10 +104,10 @@ object ProverScope {
 //    trait Proof[-I, +P <: Consequent] extends outer.Proof[I, P]
     // TODO: I don't know how to combine the scope of theorems, decide it later
 
-    protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, system.Aye.^[O]] {
-      override def apply(v: I): system.Aye.^[O] = {
+    protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, system.Aye[O]] {
+      override def apply(v: I): system.Aye[O] = {
         val out = _fn(v)
-        system.Aye.^(out)
+        system.Aye(out)
       } // TODO: simplify
     }
 
