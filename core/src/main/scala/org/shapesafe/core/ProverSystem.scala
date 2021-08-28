@@ -14,7 +14,7 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
 
   final val system: this.type = this
 
-  trait Proof[-I, +P <: Consequent] {
+  abstract class Proof[-I, +P <: Consequent] {
 
     def apply(v: I): P
 

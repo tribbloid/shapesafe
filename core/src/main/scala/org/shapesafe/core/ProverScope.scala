@@ -100,7 +100,7 @@ object ProverScope {
 
     final override type OUB = _OUB
 
-    trait Proof[-I, +P <: Consequent] extends system.Proof[I, P]
+    abstract class Proof[-I, +P <: Consequent] extends system.Proof[I, P]
 //    trait Proof[-I, +P <: Consequent] extends outer.Proof[I, P]
     // TODO: I don't know how to combine the scope of theorems, decide it later
 

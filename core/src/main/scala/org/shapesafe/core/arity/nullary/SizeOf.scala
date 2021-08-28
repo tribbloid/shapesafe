@@ -19,7 +19,7 @@ object SizeOf {
       implicit
       length: hlist.Length.Aux[D, N],
       simplify: NatAsOp[N]
-  ): SizeOf[D] |- ConstArity.Derived[simplify.type, simplify.OutInt] = {
+  ): SizeOf[D] |- ConstArity.Derived[NatAsOp[N], simplify.OutInt] = {
 
     ProveArity.forAll[SizeOf[D]].=>> { v =>
       ConstArity.Derived.summon(simplify)
