@@ -32,9 +32,10 @@ trait HasPropositions[OUB] {
 
   case class Aye[O <: OUB](value: O) extends Proposition.^[O] {}
 
-  case class Nay[O <: OUB](reason: Option[String] = None) extends Proposition.^[O] {}
+  case class Nay[O <: OUB]() extends Proposition.^[O] {}
 
-  case class Incapable[O <: OUB]() extends Proposition.^[O] {}
+  case class Grey[O <: OUB]() extends Proposition.^[O] {}
+  // TODO: for Nay & Grey, add type-level reason
 
   case class Absurd[O <: OUB](
       aye: Aye[O],

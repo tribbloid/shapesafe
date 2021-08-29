@@ -38,6 +38,8 @@ trait ProverScope { // TODO: no IUB?
 
   final type |-\-[-I, O <: OUB] = Proof[I, system.Nay[O]]
 
+  final type |-?-[-I, O <: OUB] = Proof[I, system.Grey[O]]
+
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
     * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
@@ -55,15 +57,18 @@ trait ProverScope { // TODO: no IUB?
     * @tparam I src type
     * @tparam O tgt type
     */
-//  type =>>[-I, O <: OUB] <: Proof[I, system.Aye.^[O]]
-  def fromFn[I, O <: OUB](_fn: I => O): I |- O
+  def =>>[I, O <: OUB](_fn: I => O): I |- O
+
+//  def =\>>[I, O <: OUB](): I |-\- O
+//
+//  def =?>>[I, O <: OUB](): I |-?- O
 
   final def forAll[I]: ForAll[I] = new ForAll[I]
   final def forValue[I](v: I): ForAll[I] = forAll[I]
 
   class ForAll[I] {
 
-    def =>>[O <: OUB](_fn: I => O): I |- O = fromFn(_fn)
+    def =>>[O <: OUB](_fn: I => O): I |- O = ProverScope.this.=>>(_fn) // TODO: reflective call!
 
     def summon[O <: OUB](
         implicit
@@ -79,38 +84,19 @@ trait ProverScope { // TODO: no IUB?
           prove: I |- O
       ): I |- O = prove
     }
-
-    //    trait =>>^^[-I, +P <: Consequent] extends Verdict[I, P]
-
   }
 
-  class SubScope
-      extends ProverScope.SubScopeLike[OUB](
-        this
-      )
-}
+  abstract class SubScope extends ProverScope {
 
-object ProverScope {
+    final val outer: ProverScope.this.type = ProverScope.this
+    final override val system: outer.system.type = outer.system
 
-  case class SubScopeLike[_OUB](
-      outer: ProverScope { type OUB = _OUB }
-  ) extends ProverScope {
+    final override type OUB = outer.OUB
 
-    override val system: outer.system.type = outer.system
+    override type Proof[-I, +P <: Consequent] <: outer.Proof[I, P]
 
-    final override type OUB = _OUB
-
-    abstract class Proof[-I, +P <: Consequent] extends system.Proof[I, P]
-//    trait Proof[-I, +P <: Consequent] extends outer.Proof[I, P]
-    // TODO: I don't know how to combine the scope of theorems, decide it later
-
-    protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, system.Aye[O]] {
-      override def apply(v: I): system.Aye[O] = {
-        val out = _fn(v)
-        system.Aye(out)
-      } // TODO: simplify
-    }
-
-    override def fromFn[I, O <: _OUB](_fn: I => O): I =>> O = new =>>(_fn)
+//    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
   }
 }
+
+object ProverScope {}

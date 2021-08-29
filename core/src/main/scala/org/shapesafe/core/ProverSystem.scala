@@ -33,13 +33,19 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
     }
   }
 
-  protected class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye[O]] {
+  case class =>>[-I, O <: _OUB](_fn: I => O) extends Proof[I, Aye[O]] {
     override def apply(v: I): Aye[O] = {
       val out = _fn(v)
       system.Aye(out)
     }
   }
-  override def fromFn[I, O <: _OUB](_fn: I => O): I =>> O = new =>>(_fn)
+  def =>>[I, O <: _OUB](_fn: I => O) = new =>>(_fn)
+
+//  case class =\>>[-I, O <: _OUB]() extends Proof[I, Nay[O]] {
+//    override def apply(v: I): Nay[O] = {
+//      system.Nay()
+//    }
+//  }
 }
 
 object ProverSystem {}
