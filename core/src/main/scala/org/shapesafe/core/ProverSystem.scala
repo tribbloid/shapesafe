@@ -33,19 +33,26 @@ trait ProverSystem[_OUB] extends HasPropositions[_OUB] with ProverScope { // TOD
     }
   }
 
-  def =>>[I, O <: _OUB](_fn: I => O): I |- O = { v =>
+  def =>>[I, O <: OUB](_fn: I => O): I |- O = { v =>
     val out = _fn(v)
     system.Aye(out)
   }
 
-  def =\>>[I, O <: _OUB](): I |-\- O = { _ =>
+  def =\>>[I, O <: OUB](): I |-\- O = { _ =>
     system.Nay()
   }
 
-  def =?>>[I, O <: _OUB](): I |-?- O = { _ =>
+  def =?>>[I, O <: OUB](): I |-?- O = { _ =>
     system.Grey()
   }
 
+  implicit def adAbsurdum[I, O <: OUB](
+      implicit
+      proving: I |- O,
+      refuting: I |-\- O
+  ): I `_|_` O = { v =>
+    system.Absurd(proving(v), refuting(v))
+  }
 }
 
 object ProverSystem {}

@@ -40,6 +40,8 @@ trait ProverScope { // TODO: no IUB?
 
   final type |-?-[-I, O <: OUB] = Proof[I, system.Grey[O]]
 
+  final type `_|_`[-I, O <: OUB] = Proof[I, system.Absurd[O]]
+
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
     * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
