@@ -59,9 +59,9 @@ trait ProverScope { // TODO: no IUB?
     */
   def =>>[I, O <: OUB](_fn: I => O): I |- O
 
-//  def =\>>[I, O <: OUB](): I |-\- O
-//
-//  def =?>>[I, O <: OUB](): I |-?- O
+  def =\>>[I, O <: OUB](): I |-\- O
+
+  def =?>>[I, O <: OUB](): I |-?- O
 
   final def forAll[I]: ForAll[I] = new ForAll[I]
   final def forValue[I](v: I): ForAll[I] = forAll[I]
