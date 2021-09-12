@@ -96,7 +96,7 @@ object Require2 extends Require2_Imp0 {
       ]
   ): OP#On[A1, A2] |- ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
-      bound1.valueOf(v.a1)
+      bound1.instanceFor(v.a1)
     }
   }
 }

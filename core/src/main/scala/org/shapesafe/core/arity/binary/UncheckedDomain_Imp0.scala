@@ -21,7 +21,7 @@ trait UncheckedDomain_Imp0 {
     final type O1 = Unchecked
 
     final type Tightest = TC
-    override def selectTightest(a1: A1, a2: A2): Tightest = bound2.valueOf(a2)
+    override def selectTightest(a1: A1, a2: A2): Tightest = bound2.instanceFor(a2)
   }
 
   implicit def d2[

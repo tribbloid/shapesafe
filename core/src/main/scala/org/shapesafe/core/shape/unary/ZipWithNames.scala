@@ -56,7 +56,7 @@ object ZipWithNames extends ZipWithNames_Imp0 {
   ): ZipWithNames[S1, N] |- toShape.Out = {
     forAll[ZipWithNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
-      val p1: P1 = lemma.valueOf(src.s1)
+      val p1: P1 = lemma.instanceFor(src.s1)
 
       val values: P1#_Dimensions#Static = p1.dimensions.static
 

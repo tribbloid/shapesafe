@@ -34,7 +34,7 @@ abstract class UncheckedDomain[
 
   def forRequire2[OP <: Require2]: OP#On[A1, A2] |- O1 =
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
-      bound1.valueOf(v.a1)
+      bound1.instanceFor(v.a1)
     }
 }
 
@@ -62,7 +62,7 @@ object UncheckedDomain extends UncheckedDomain_Imp0 {
     final type O1 = TC
 
     final type Tightest = TC
-    override def selectTightest(a1: A1, a2: A2): Tightest = bound1.valueOf(a1)
+    override def selectTightest(a1: A1, a2: A2): Tightest = bound1.instanceFor(a1)
   }
 
   implicit def d1[

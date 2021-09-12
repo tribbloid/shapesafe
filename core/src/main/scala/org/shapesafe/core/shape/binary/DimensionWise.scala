@@ -50,8 +50,8 @@ trait DimensionWise {
     ): _On[S1, S2] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1, S2]].=>> { v =>
-        val p1 = lemma1.valueOf(v.s1)
-        val p2 = lemma2.valueOf(v.s2)
+        val p1 = lemma1.instanceFor(v.s1)
+        val p2 = lemma2.instanceFor(v.s2)
         val zipped = zip.apply(p1.dimensions.static :: p2.dimensions.static :: HNil)
 
         val result = toShape.apply(zipped)
@@ -89,7 +89,7 @@ trait DimensionWise {
         val to = consTail(ti)
 
         val hi = v.head
-        val ho = proveArity.valueOf(op.on(hi._1.^, hi._2.^))
+        val ho = proveArity.instanceFor(op.on(hi._1.^, hi._2.^))
 
         ho :: to
       }

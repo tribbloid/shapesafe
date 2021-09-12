@@ -56,7 +56,7 @@ object Reorder extends Reorder_Imp0 {
   ): Reorder[S1, II] |- lemma2.Out = {
 
     forAll[Reorder[S1, II]].=>> { v =>
-      val p1: P1 = lemma1.valueOf(v.s1)
+      val p1: P1 = lemma1.instanceFor(v.s1)
       val vv = v.copy(s1 = p1, indices = v.indices.asIndices: II#AsIndices)
 
       lemma2.apply(vv)
@@ -86,7 +86,7 @@ object Reorder extends Reorder_Imp0 {
         forHead: GetSubscript.Premise.Case.Aux[GetSubscript[P1, I], O]
     ) = {
       forAll[Reorder[P1, Indices.><[II_-, I]]].==> { v =>
-        val tail: OO_- = forTail.valueOf(v.copy(indices = v.indices.tail))
+        val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(GetSubscript(v.s1, v.indices.head))
 

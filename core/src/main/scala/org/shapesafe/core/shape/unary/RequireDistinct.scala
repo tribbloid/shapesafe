@@ -49,7 +49,7 @@ object RequireDistinct extends RequireDistinct_Imp0 {
   ): RequireDistinct[S1] |- P1 = {
 
     ProveShape.forAll[RequireDistinct[S1]].=>> { v =>
-      lemma.valueOf(v.s1)
+      lemma.instanceFor(v.s1)
     }
   }
 

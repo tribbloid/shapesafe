@@ -2,7 +2,9 @@ package org.shapesafe.core
 
 import scala.language.implicitConversions
 
-trait HasPropositions[OUB] {
+trait HasPropositions {
+
+  type OUB
 
   trait Proposition extends Serializable {
 
@@ -30,7 +32,10 @@ trait HasPropositions[OUB] {
     type ^[O <: OUB] <: Aux[O]
   }
 
-  case class Aye[O <: OUB](value: O) extends Proposition.^[O] {}
+  case class Aye[O <: OUB](value: O) extends Proposition.^[O] {
+
+//    def upcast[_O >: O <: OUB]: Aye[_O] = this.asInstanceOf[Aye[_O]]
+  }
 
   case class Nay[O <: OUB]() extends Proposition.^[O] {}
 

@@ -1,5 +1,5 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.core.ProverSystem
+import org.shapesafe.core.ProofSystem
 
-object ProveShape extends ProverSystem[Shape] {}
+object ProveShape extends ProofSystem.^[Shape] {}

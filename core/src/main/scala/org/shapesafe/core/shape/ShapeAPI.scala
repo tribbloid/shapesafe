@@ -25,7 +25,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   ](
       implicit
       prove: _Shape |- O
-  ): ^[O] = prove.valueOf(shape).^
+  ): ^[O] = prove.instanceFor(shape).^
 
 //  final def simplify[ // TODO: no use at the moment
 //      O <: LeafShape

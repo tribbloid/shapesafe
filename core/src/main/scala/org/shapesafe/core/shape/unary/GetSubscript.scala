@@ -61,7 +61,7 @@ object GetSubscript extends GetSubscript_Imp0 {
   ): GetSubscript[S1, I] |- (StaticShape.Eye >< O) = {
 
     ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
-      val p1: P1 = lemma1.valueOf(v.s1)
+      val p1: P1 = lemma1.instanceFor(v.s1)
       val vv: GetSubscript[P1, I] = v.copy(s1 = p1)
 
       Shape appendInner lemma2(vv)

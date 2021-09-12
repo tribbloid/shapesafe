@@ -48,11 +48,11 @@ class DoubleVector[A1 <: Arity](
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
 
     val op = this.arity :+ that.arity
-    val proof = lemma(op)
+    val v = lemma.instanceFor(op)
 
     val data = DenseVector.vertcat(this.data.toDenseVector, that.data.toDenseVector)
 
-    new DoubleVector(proof.value.^, data)
+    new DoubleVector(v.^, data)
   }
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
@@ -62,8 +62,8 @@ class DoubleVector[A1 <: Arity](
 
     val _padding = Arity(padding)
     val op = this.arity :+ (_padding :* Arity._2)
-    val proof = lemma(op)
-    val out = proof.value.^
+    val v = lemma.instanceFor(op)
+    val out = v.^
 
     val fill = DenseVector.fill(out.runtimeValue)(0.0)
 
@@ -86,8 +86,8 @@ class DoubleVector[A1 <: Arity](
     val _stride = Arity(stride)
 
     val op = (this.arity :- kernel.arity :+ Arity._1) :/ _stride
-    val proof = lemma(op)
-    val out = proof.value.^
+    val v = lemma.instanceFor(op)
+    val out = v.^
 
     val range = 0.to(this.data.size - kernel.data.size, stride.value)
 
@@ -128,7 +128,7 @@ object DoubleVector extends ProductArgs {
     }
 
     val size = SizeOf(data)
-    new DoubleVector(proofOfSize.valueOf(size).^, Vec.apply(list.toArray))
+    new DoubleVector(proofOfSize.instanceFor(size).^, Vec.apply(list.toArray))
   }
 
   @transient object from {

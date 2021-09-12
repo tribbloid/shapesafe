@@ -41,6 +41,6 @@ object SizeOf {
       self: SizeOf[D] |- O
   ): O = {
     val raw = SizeOf[D](data)
-    self.apply(raw).value
+    self.consequentFor(raw).value
   }
 }

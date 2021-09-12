@@ -21,7 +21,7 @@ trait ArityAPI extends ArityOpsLike with Axis {
   ](
       implicit
       prove: _Arity |- O
-  ): ArityAPI.^[O] = prove.apply(arity).value.^
+  ): ArityAPI.^[O] = prove.consequentFor(arity).value.^
 
   def eval[
       O <: LeafArity

@@ -63,8 +63,8 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
   ): OuterProduct[S1, S2] |- toShape.Out = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
-      val p1: P1 = lemma1.valueOf(direct.s1)
-      val p2: P2 = lemma2.valueOf(direct.s2)
+      val p1: P1 = lemma1.instanceFor(direct.s1)
+      val p2: P2 = lemma2.instanceFor(direct.s2)
 
       toShape(concat(p2.static, p1.static))
     }
@@ -89,8 +89,8 @@ object OuterProduct extends OuterProduct_Imp0 {
   ): OuterProduct[S1, S2] |- (P1 >< A2) = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
-      val p1: P1 = lemma1.valueOf(direct.s1)
-      val p2: P2 = lemma2.valueOf(direct.s2)
+      val p1: P1 = lemma1.instanceFor(direct.s1)
+      val p2: P2 = lemma2.instanceFor(direct.s2)
       val a2: A2 = p2.head
 
       val result = p1.^ appendInner a2

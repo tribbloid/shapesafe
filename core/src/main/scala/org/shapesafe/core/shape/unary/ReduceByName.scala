@@ -43,7 +43,7 @@ trait ReduceByName {
     ): _On[S1] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1]].=>> { v =>
-        val p1 = lemma.valueOf(v.s1)
+        val p1 = lemma.instanceFor(v.s1)
         val result = toShape.apply(p1.record)
         result
       }
