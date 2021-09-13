@@ -9,13 +9,73 @@ trait ProofScope { // TODO: no IUB?
 
   val system: ProofSystem.Aux[OUB]
 
-  type Consequent = system.Proposition
+  final type Consequent = system.Proposition
 
   // TODO: this should potentially be merged with Refutation cases in MsgBroker
   //  Such that successful proof can show reasoning at runtime.
   //  At this moment, this feature is implemented in PeekReporter
   //  which is too complex for its own good
-  type Proof[-I, +P <: Consequent] <: system.Proof[I, P]
+
+  // constructive proof
+  abstract class Proof[-I, +P <: system.Consequent] {
+//  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
+
+    def consequentFor(v: I): P
+
+    final def instanceFor(v: I): P#Repr = {
+
+      val verdict: P = consequentFor(v)
+      verdict match {
+        case y: system.Aye[_] =>
+          y.asInstanceOf[system.Aye[P#Repr] with P].value // TODO: unsafe?
+        case _ =>
+          throw new UnsupportedOperationException(
+            s"$verdict is not a constructive proposition"
+          )
+      }
+    }
+
+    final def apply(v: I): P#Repr = instanceFor(v)
+
+    //    final def findApplicable(v: I): this.type = this
+  }
+
+  object Proof {
+
+    implicit def coerciveUpcast[I, P <: system.Proposition](
+        implicit
+        proofInSubScope: SubScope#Proof[I, P]
+    ): Proof[I, P] = { (v: I) =>
+      proofInSubScope.consequentFor(v)
+    }
+
+    case class Chain[ // a.k.a hypothetical syllogism
+        A,
+        B <: OUB,
+        C <: OUB
+    ](
+        lemma1: A |-< B,
+        lemma2: B |-< C
+    ) extends (A |- C) {
+
+      override def consequentFor(v: A): system.Aye[C] = {
+
+        system.Aye(
+          lemma2.instanceFor(lemma1.instanceFor(v))
+        )
+      }
+    }
+
+    //    implicit def chain[
+    //        A,
+    //        B <: OUB,
+    //        C <: OUB
+    //    ](
+    //        implicit
+    //        lemma1: A |-< B,
+    //        lemma2: B |-< C
+    //    ) = Chain(lemma1, lemma2)
+  }
 
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
@@ -63,11 +123,26 @@ trait ProofScope { // TODO: no IUB?
     * @tparam I src type
     * @tparam O tgt type
     */
-  def =>>[I, O <: OUB](_fn: I => O): I |- O
+  def =>>[I, O <: OUB](_fn: I => O): I |- O = { v =>
+    val out = _fn(v)
+    system.Aye(out)
+  }
 
-  def =\>>[I, O <: OUB](): I |-\- O
+  def =\>>[I, O <: OUB](): I |-\- O = { _ =>
+    system.Nay()
+  }
 
-  def =?>>[I, O <: OUB](): I |-?- O
+  def =?>>[I, O <: OUB](): I |-?- O = { _ =>
+    system.Grey()
+  }
+
+  implicit def =>><<=[I, O <: OUB](
+      implicit
+      proving: I |- O,
+      refuting: I |-\- O
+  ): I `_|_` O = { v =>
+    system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
+  }
 
   // equivalence, automatically implies O1 |- O2 & O2 |- O1
   case class <==>[O1 <: OUB, O2 <: OUB](
@@ -87,8 +162,28 @@ trait ProofScope { // TODO: no IUB?
     ): O2 |- O1 = eq.backward
   }
 
+  abstract class SubScope extends ProofScope {
+
+    final val outer: ProofScope.this.type = ProofScope.this
+    final override val system: ProofScope.this.system.type = ProofScope.this.system
+
+    final override type OUB = outer.OUB
+
+    //    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
+  }
+
+  trait TacticOverlay[I, SUBG, OG <: OUB] {
+
+    def withGoal[O <: OUB]: TacticOverlay[I, SUBG, O]
+
+    def citing[_SUBG <: OG](lemma: SUBG |- _SUBG): TacticOverlay[I, _SUBG, OG]
+
+    type SubGoal = SUBG
+    type OutputGoal = OG
+  }
+
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
-  protected class ForAll[I, OG <: OUB] { // OG = output goal
+  protected class ForAll[I, OG <: OUB] extends TacticOverlay[I, I, OG] {
 
     def =>>[O <: OG](_fn: I => O): I |- O = ProofScope.this.=>>(_fn)
     def =\>>[O <: OG](): I |-\- O = ProofScope.this.=\>>()
@@ -114,7 +209,7 @@ trait ProofScope { // TODO: no IUB?
 
     // tactic mode! https://leanprover-community.github.io/extras/conv.html
 
-    def citing[O <: OG](lemma: I |- O): ProofBuilder[I, O, OG] = {
+    override def citing[O <: OG](lemma: I |- O): ProofBuilder[I, O, OG] = {
 
       ProofBuilder(lemma)
     }
@@ -123,7 +218,7 @@ trait ProofScope { // TODO: no IUB?
   // tactic mode!
   case class ProofBuilder[I, SUBG <: OUB, OG <: OUB](
       antecedent: I |- SUBG
-  ) extends ForAll[SUBG, OG] {
+  ) extends TacticOverlay[I, SUBG, OG] {
 
     override def withGoal[O <: OUB]: ProofBuilder[I, SUBG, O] = {
       ProofBuilder[I, SUBG, O](antecedent)
@@ -132,7 +227,7 @@ trait ProofScope { // TODO: no IUB?
     override def citing[O <: OG](lemma: SUBG |- O): ProofBuilder[I, O, OG] = {
 
       ProofBuilder(
-        system.Proof.Chain[I, SUBG, O](antecedent, lemma)
+        Proof.Chain[I, SUBG, O](antecedent, lemma)
       )
     }
 
@@ -151,18 +246,6 @@ trait ProofScope { // TODO: no IUB?
     ): O = ev.instanceFor(v)
 
     override def withGoal[O <: OUB] = new ForTerm[I, O](v)
-  }
-
-  abstract class SubScope extends ProofScope {
-
-    final val outer: ProofScope.this.type = ProofScope.this
-    final override val system: outer.system.type = outer.system
-
-    final override type OUB = outer.OUB
-
-    override type Proof[-I, +P <: Consequent] <: outer.Proof[I, P]
-
-//    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
   }
 }
 

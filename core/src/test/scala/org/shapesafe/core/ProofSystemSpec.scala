@@ -4,7 +4,10 @@ import org.shapesafe.BaseSpec
 
 object ProofSystemSpec {
 
-  trait Nat
+  trait Nat {
+
+    type Self <: Nat
+  }
 
   object ProveNat extends ProofSystem.^[Stuff]
 
@@ -17,10 +20,16 @@ object ProofSystemSpec {
     }
   }
 
-  object _0 extends Nat {}
+  object _0 extends Nat {
+
+    type Self = _0
+  }
   type _0 = _0.type
 
-  case class ++[T <: Nat](`--`: T) extends Nat {}
+  case class ++[T <: Nat](`--`: T) extends Nat {
+
+    type Self = ++[T]
+  }
 
   abstract class Stuff {
     def tier: Int
@@ -58,20 +67,30 @@ class ProofSystemSpec extends BaseSpec {
     assert(ProveNat.forTerm(_4).construct.tier == 4)
   }
 
-//  it("can refute and ridicule") {
-//
-//    import ProveNat._
-//
-//    implicit def bogusAxiom[N <: _2.type](
-//        implicit
-//        prev: N |- NatStuff[N]
-//    ): ++[N] |-\- NatStuff[++[N]] = forAll[++[N]].=\>>()
-//
-//    ProveNat.forTerm(_1).refute
-//    ProveNat.forTerm(_2).refute
-//    ProveNat.forTerm(_3).refute
-//    ProveNat.forTerm(_4).refute
-//  }
+  it("can refute or ridicule") {
+
+    import ProveNat._
+
+    implicit def bogusAxiom[N <: _2.Self](
+        implicit
+        prev: N |- NatStuff[N]
+    ): ++[N] |-\- NatStuff[++[N]] = forAll[++[N]].=\>>()
+
+    this.shouldNotCompile(
+      "ProveNat.forTerm(_1).refute"
+    )
+    this.shouldNotCompile(
+      "ProveNat.forTerm(_2).refute"
+    )
+    this.shouldNotCompile(
+      "ProveNat.forTerm(_4).refute"
+    )
+
+    val for3 = ProveNat.forTerm(_3)
+    for3.refute
+    for3.ridicule
+
+  }
 
   it("can prove using bidirectional lemma") {
     // TODO
@@ -80,9 +99,12 @@ class ProofSystemSpec extends BaseSpec {
 
   describe("forAll") {
 
-    it("can summon specialised proof") {
+    it("citing specific proof") {
 
-      ProveNat.forAll[++[_0]].citing(++.axiom1)
+      val v = ProveNat.forAll[++[_0]].citing(++.axiom1)
+
+      TypeViz[v.OutputGoal].toString.shouldBe(
+      )
     }
   }
 }
