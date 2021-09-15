@@ -1,13 +1,13 @@
 package org.shapesafe.m.viz
 
-import org.shapesafe.graph.commons.util.reflect.format.{EnableOvrd, Formats}
+import org.shapesafe.graph.commons.util.reflect.format.{EnableOvrd, Formats0}
 import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 
 import scala.language.experimental.macros
 
 case object KindVizCT extends VizCTSystem {
 
-  override def format: TypeVizFormat = Formats.KindName.HidePackage.recursively
+  override def format: TypeVizFormat = Formats0.KindName.HidePackage.recursively
   override def useTree: Boolean = true
 
   implicit def infoOf[I]: InfoOf[I] = macro VizCTSystem.Macros.infoOf[I, this.type]

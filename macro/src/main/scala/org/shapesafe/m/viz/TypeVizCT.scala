@@ -1,6 +1,6 @@
 package org.shapesafe.m.viz
 
-import org.shapesafe.graph.commons.util.reflect.format.{Formats, TypeFormat}
+import org.shapesafe.graph.commons.util.reflect.format.{Formats0, TypeFormat}
 import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 
 import scala.language.experimental.macros

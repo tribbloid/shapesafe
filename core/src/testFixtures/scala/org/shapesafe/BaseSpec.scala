@@ -1,8 +1,7 @@
 package org.shapesafe
 
 import org.shapesafe.graph.commons.util.reflect.ScalaReflection
-import org.shapesafe.graph.commons.util.reflect.format.{Formats, TypeFormat}
-import org.shapesafe.graph.commons.util.viz.TypeViz
+import org.shapesafe.graph.commons.util.reflect.format.Formats0
 import shapeless.{HList, Nat, Witness}
 
 trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
@@ -17,12 +16,16 @@ trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
 //    pprint.tokenize(v).mkString("\n")
   }
 
+  val TypeViz = org.shapesafe.graph.commons.util.viz.TypeViz
+  val TypeVizShort = {
+
+    val format = Formats0.TypeInfo.DeAlias.HidePackage.recursively
+    TypeViz.formattedBy(format)
+  }
+
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
-    val format = Formats.TypeInfo.DeAlias.HidePackage.recursively
-
-    TypeViz
-      .formattedBy(format)
+    TypeVizShort
       .infer(v)
       .typeStr
   }

@@ -2,7 +2,7 @@ package org.shapesafe.m.viz
 
 import org.shapesafe.graph.commons.testlib.BaseSpec
 import org.shapesafe.graph.commons.util.reflect.Reflection
-import org.shapesafe.graph.commons.util.reflect.format.FormatProtos.{DeAlias, Hide}
+import org.shapesafe.graph.commons.util.reflect.format.Formats1.{DeAlias, Hide}
 import org.shapesafe.graph.commons.util.reflect.format.FormatOvrd.{~~, Only}
 import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.Witness
@@ -108,7 +108,7 @@ class KindVizCTSpec extends BaseSpec {
 object KindVizCTSpec {
 
   val viz: TypeViz[Reflection.Runtime.type] = TypeViz.formattedBy {
-    import org.shapesafe.graph.commons.util.reflect.format.Formats._
+    import org.shapesafe.graph.commons.util.reflect.format.Formats0._
 
     TypeInfo ~ DeAlias ~ Hide.Package
   }

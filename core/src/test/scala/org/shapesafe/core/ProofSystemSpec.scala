@@ -99,12 +99,18 @@ class ProofSystemSpec extends BaseSpec {
 
   describe("forAll") {
 
-    it("citing specific proof") {
+    it("can cite specific proof") {
 
       val v = ProveNat.forAll[++[_0]].citing(++.axiom1)
 
-      TypeViz[v.OutputGoal].toString.shouldBe(
+//      TypeViz[v.SubGoal].toString.shouldBe(
+//      )
+
+      TypeVizShort[v.SubGoal].typeStr.shouldBe(
+        "ProofSystemSpec.NatStuff[ProofSystemSpec.++[ProofSystemSpec._0.type]]"
       )
     }
+
+    it("... twice") {}
   }
 }

@@ -134,6 +134,7 @@ allprojects {
 
                     "-Xlint:poly-implicit-overload",
                     "-Xlint:option-implicit",
+                    "-Wunused:imports",
 
 //                        "-Ydebug",
                     "-Yissue-debug"
