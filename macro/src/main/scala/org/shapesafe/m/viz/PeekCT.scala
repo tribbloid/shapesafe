@@ -10,10 +10,10 @@ import scala.language.experimental.macros
 case object PeekCT extends VizCTSystem {
 
   override lazy val format: TypeVizFormat = RecursiveForm(
-    TypeInfo.DeAlias,
+    TypeInfo,
     { v =>
       Trials(
-        FormatOvrd.Only,
+        FormatOvrd.Only.DeAlias,
         v.HideStatic.DeAlias
       )
     }

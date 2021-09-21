@@ -4,6 +4,7 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape
 import org.shapesafe.core.shape.{Names, Shape}
+import org.shapesafe.m.viz.PeekCT
 
 class NamedWithSpec extends BaseSpec {
 
@@ -80,6 +81,7 @@ class NamedWithSpec extends BaseSpec {
       it("1") {
 
         val s = good
+
         shouldNotCompile(
           """s.interrupt""",
           """.*(\Q:=  2 >< 3 |<<- (a >< b)\E).*"""

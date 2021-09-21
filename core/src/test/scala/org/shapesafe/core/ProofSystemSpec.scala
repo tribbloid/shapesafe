@@ -141,7 +141,7 @@ class ProofSystemSpec extends BaseSpec {
       val v = ProveNat.forAll[++[_0]].citing(++.axiom1)
 
       TypeVizShort[v.SubGoal].typeStr.shouldBe(
-        "ProofSystemSpec.S1[ProofSystemSpec.++[ProofSystemSpec._0]]"
+        "ProofSystemSpec.S1[ProofSystemSpec.++[ProofSystemSpec._0.type]]"
       )
 
     }
