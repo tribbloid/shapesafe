@@ -3,7 +3,6 @@ package org.shapesafe.core.shape.unary
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.axis.Axis
 import org.shapesafe.core.axis.Axis.:<<-
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
 import org.shapesafe.core.shape.StaticShape.><
 import org.shapesafe.core.shape._
@@ -21,7 +20,7 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.GetSubscript[Expr[S1], Expr[I]]
+  override type Expr = Expressions.GetSubscript[S1#Expr, I#Expr]
 
   override type _Refute = "Index not found"
 }

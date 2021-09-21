@@ -7,7 +7,6 @@ import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.debugging.{CanPeek, HasDebugSymbol}
 import shapeless.{Nat, Witness}
 
-import scala.language.implicitConversions
 import scala.util.Try
 
 trait Arity extends CanPeek with HasDebugSymbol {

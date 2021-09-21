@@ -1,9 +1,8 @@
 package org.shapesafe.core.arity.binary
 
-import org.shapesafe.graph.commons.util.HasOuter
 import org.shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.HasDebugSymbol
+import org.shapesafe.graph.commons.util.HasOuter
 import singleton.ops.+
 
 trait Op2Like extends Op2Like.DebuggingSupport {
@@ -21,7 +20,7 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final override type _DebugSymbol = A1#_DebugSymbol + Debug[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
     // TODO: add Bracket
-    final override type _AsExpr = Debug[Expr[A1], Expr[A2]]
+    final override type Expr = Debug[A1#Expr, A2#Expr]
   }
 
   type On[

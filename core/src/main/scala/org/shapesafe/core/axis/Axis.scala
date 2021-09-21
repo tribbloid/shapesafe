@@ -1,14 +1,11 @@
 package org.shapesafe.core.axis
 
 import org.shapesafe.core.XString
-import org.shapesafe.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.{Arity, ArityAPI}
-import org.shapesafe.core.debugging.Expressions.Expr
-import org.shapesafe.core.debugging.{CanPeek, DebugUtil, Expressions}
+import org.shapesafe.core.debugging.{CanPeek, Expressions}
+import org.shapesafe.graph.commons.util.IDMixin
 import shapeless.Witness
 import shapeless.labelled.FieldType
-
-import scala.language.implicitConversions
 
 trait Axis extends AxisLike with IDMixin with CanPeek {
   //TODO:; can be a subclass of shapeless KeyTag
@@ -45,10 +42,10 @@ object Axis {
 
     trait CanPeekName extends CanPeek {
 
-      override type _AsExpr = Name
+      override type Expr = Name
     }
 
-    override type _AsExpr = Expressions.:<<-[Expr[A], Expr[CanPeekName]]
+    override type Expr = Expressions.:<<-[A#Expr, CanPeekName#Expr]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arity"

@@ -7,12 +7,15 @@ import java.util.logging.Logger
 import scala.language.experimental.macros
 import scala.reflect.macros.whitebox
 
-class EmitMsg[T, SS <: EmitMsg.EmitLevel] {
+/**
+  * An alternative to RequireMsgSym in singleton-ops
+  */
+class GenericMsgEmitter[T, SS <: GenericMsgEmitter.EmitLevel] {
 
 //  def emit: Unit = macro EmitMsg.Macros.emit[T, SS]
 }
 
-object EmitMsg {
+object GenericMsgEmitter {
 
   trait EmitLevel
 
@@ -21,34 +24,35 @@ object EmitMsg {
   trait Error extends EmitLevel
   trait Abort extends EmitLevel
 
-  def create[A, SS <: EmitMsg.EmitLevel]: EmitMsg[A, SS] = new EmitMsg[A, SS]
+  def create[A, SS <: GenericMsgEmitter.EmitLevel]: GenericMsgEmitter[A, SS] = new GenericMsgEmitter[A, SS]
 
-  def apply[SS <: EmitMsg.EmitLevel]: Level[SS] = Level[SS]()
+  def apply[SS <: GenericMsgEmitter.EmitLevel]: Level[SS] = Level[SS]()
 
-  case class Level[SS <: EmitMsg.EmitLevel]() {
+  case class Level[SS <: GenericMsgEmitter.EmitLevel]() {
 
     def byOp[A <: Op](
         implicit
         _op: A
-    ): EmitMsg[A, SS] =
+    ): GenericMsgEmitter[A, SS] =
       macro Macros.byOp[A, SS]
 
-    def byType[A, SS <: EmitMsg.EmitLevel](
+    def byType[A, SSS <: GenericMsgEmitter.EmitLevel](
         implicit
         _ttg: Reflection.Runtime.TypeTag[A]
-    ): EmitMsg[A, SS] =
-      macro Macros.byTypeTag[A, SS]
+    ): GenericMsgEmitter[A, SSS] =
+      macro Macros.byTypeTag[A, SSS]
 
-    def weakly[A]: EmitMsg[A, SS] = macro Macros.weakly[A, SS]
+    def byOnlyInstance[A]: GenericMsgEmitter[A, SS] = macro Macros.byOnlyInstance[A, SS]
   }
 
-  implicit def weakly[SS <: EmitMsg.EmitLevel, A]: EmitMsg[A, SS] = macro Macros.weakly[A, SS]
+  implicit def byOnlyInstance[A, SS <: GenericMsgEmitter.EmitLevel]: GenericMsgEmitter[A, SS] =
+    macro Macros.byOnlyInstance[A, SS]
 
   final class Macros(val c: whitebox.Context) extends MWithReflection {
 
     import u._
 
-    def outer: EmitMsg.type = EmitMsg.this
+    def outer: GenericMsgEmitter.type = GenericMsgEmitter.this
 
     def byOp[A: c.WeakTypeTag, LL: c.WeakTypeTag](_op: c.Tree): c.Tree = {
 
@@ -81,6 +85,7 @@ object EmitMsg {
         Logger.getLogger(this.getClass.getName).info(ss)
         c.info(c.enclosingPosition, ss, force = true)
       } else {
+
         throw new UnsupportedOperationException(
           s"type $ll is not an EmitLevel"
         )
@@ -101,7 +106,7 @@ object EmitMsg {
       q"$liftOuter.create[$aa, $ll]"
     }
 
-    def weakly[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
+    def byOnlyInstance[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
 
       val aa: Type = weakTypeOf[A]
       val v = refl.typeView(aa).getOnlyInstance

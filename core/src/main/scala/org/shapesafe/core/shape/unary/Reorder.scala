@@ -2,9 +2,8 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.Poly1Base
 import org.shapesafe.core.axis.Axis
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.{Expressions, Reporters}
-import org.shapesafe.core.shape.{ProveShape, _}
+import org.shapesafe.core.shape._
 import org.shapesafe.m.viz.VizCTSystem.EmitError
 
 case class Reorder[ // last step of einsum, contract, transpose, etc.
@@ -15,7 +14,7 @@ case class Reorder[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.^[S1] {
 
-  override type _AsExpr = Expressions.Reorder[Expr[S1], Expr[indices.AsIndices]]
+  override type Expr = Expressions.Reorder[S1#Expr, indices.AsIndices#Expr]
 
   override type _Refute = "Indices not found"
 }

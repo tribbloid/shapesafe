@@ -15,7 +15,7 @@ class CommutativeRingProofSpike extends Spike {
 
     Prove
       .forAll[Sq[A :+ B]]
-      .withGoal[Sq[A] :+ Sq[B] :+ (A :* B) :+ (A :* B)]
+      .toGoal[Sq[A] :+ Sq[B] :+ (A :* B) :+ (A :* B)]
 //      .prove {
 //
 //        val input = null: Sq[A :+ B]

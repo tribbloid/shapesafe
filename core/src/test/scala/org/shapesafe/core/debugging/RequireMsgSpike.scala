@@ -28,8 +28,6 @@ object RequireMsgSpike {
 
 class RequireMsgSpike extends Spike {
 
-  import RequireMsgSpike._
-
   describe("interpolation of Msg") {
 
     it("1") {

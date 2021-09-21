@@ -6,7 +6,6 @@ import org.shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
 import singleton.ops.+
 
 import scala.collection.mutable
-import scala.language.implicitConversions
 
 trait Op2 extends Op2Like {
 

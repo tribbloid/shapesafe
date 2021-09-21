@@ -9,7 +9,7 @@ buildscript {
     val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.8") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.9") // suffix is always 2.12, weird
     }
 }
 
@@ -19,7 +19,7 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.5.20" // TODO: remove?
+    kotlin("jvm") version "1.5.31" // TODO: remove?
 
     idea
 

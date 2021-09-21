@@ -3,8 +3,6 @@ package org.shapesafe.core.arity.binary
 import org.shapesafe.core.arity.ops.ArityOpsLike.RequireEqual
 import org.shapesafe.core.arity.{Arity, ArityFixture, Unchecked}
 
-import scala.language.existentials
-
 class Require2Spec extends ArityFixture {
 
   describe("can prove") {

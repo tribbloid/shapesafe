@@ -2,19 +2,16 @@ package org.shapesafe.core.shape.unary
 
 import org.shapesafe.core.axis.Axis.UB_->>
 import org.shapesafe.core.axis.RecordUpdater
-import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.debugging.HasDebugSymbol
 import org.shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import org.shapesafe.graph.commons.util.HasOuter
 import shapeless.{::, HList}
 
-import scala.language.implicitConversions
-
 trait ReduceByName {
 
   import ProveShape._
 
-  type _Unary <: HasDebugSymbol.On1
+  type _Unary <: HasDebugSymbol.ExprOn1
 
   val oldNameUpdater: RecordUpdater
 
@@ -28,7 +25,7 @@ trait ReduceByName {
 
     def s1: S1 with Shape
 
-    override type _AsExpr = _Unary#On[Expr[S1]]
+    override type Expr = _Unary#Apply[S1]
   }
 
   object _On {

@@ -1,6 +1,5 @@
 package org.shapesafe.core.shape
 
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.shape.Index.Name
 import org.shapesafe.core.shape.Indices.tupleExtension

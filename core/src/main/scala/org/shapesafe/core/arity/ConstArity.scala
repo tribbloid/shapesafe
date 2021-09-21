@@ -1,7 +1,7 @@
 package org.shapesafe.core.arity
 
-import org.shapesafe.graph.commons.util.IDMixin
 import org.shapesafe.core.arity.Utils.Op
+import org.shapesafe.graph.commons.util.IDMixin
 import shapeless.Witness
 import singleton.ops.{==, Require, ToString}
 
@@ -11,7 +11,7 @@ trait ConstArity[S] extends LeafArity with IDMixin {
   def singleton: S
 
   final override type _DebugSymbol = ToString[S]
-  final override type _AsExpr = S
+  final override type Expr = S
 
   override lazy val _id: S = singleton
 
@@ -38,8 +38,6 @@ trait ConstArity[S] extends LeafArity with IDMixin {
 }
 
 object ConstArity {
-
-  import Witness._
 
   class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends ConstArity[OUT] {
     override lazy val runtimeValue: Int = singleton

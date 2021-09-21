@@ -1,13 +1,13 @@
 package org.shapesafe.core.axis
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import shapeless.HNil
 
 class NewNameAppenderSpec extends BaseSpec {
 
-  import shapeless.syntax.singleton.mkSingletonOps
   import shapeless.record._
+  import shapeless.syntax.singleton.mkSingletonOps
 
   Record // Don't remove! IDE can't figure out the proper import
 

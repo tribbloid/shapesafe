@@ -1,11 +1,9 @@
 package org.shapesafe.core.shape.unary
 
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.arity.{Arity, ArityAPI}
+import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.Index.Name
 import org.shapesafe.core.shape.{Indices, Names, Shape}
-import org.shapesafe.m.viz.TypeVizCT
 
 class ReorderSpec extends BaseSpec {
 

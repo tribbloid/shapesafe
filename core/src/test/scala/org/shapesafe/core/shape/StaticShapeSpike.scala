@@ -4,7 +4,6 @@ import org.scalatest.Ignore
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.ConstArity
 import org.shapesafe.graph.commons.util.debug.print_@
-import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HNil, Witness}
 
 @Ignore

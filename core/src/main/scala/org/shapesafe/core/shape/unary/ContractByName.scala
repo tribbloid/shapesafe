@@ -4,8 +4,6 @@ import org.shapesafe.core.arity.ops
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.shape.Shape
 
-import scala.language.implicitConversions
-
 // TODO: useless, EinSum handles every thing, remove?
 case class ContractByName[
     S1 <: Shape

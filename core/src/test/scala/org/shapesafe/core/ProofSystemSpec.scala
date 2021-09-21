@@ -9,18 +9,24 @@ object ProofSystemSpec {
     type Self <: Nat
   }
 
+  abstract class Stuff {
+    def tier: Int
+  }
+
+  case class S1[SRC <: Nat](tier: Int) extends Stuff
+
   object ProveNat extends ProofSystem.^[Stuff]
 
   import ProveNat._
 
   object Nat {
 
-    implicit def axiom0: _0 |- NatStuff[_0] = forAll[_0].=>> { _ =>
-      NatStuff(0)
+    implicit def axiom0: _0 |- S1[_0] = forAll[_0].=>> { _ =>
+      S1(0)
     }
   }
 
-  object _0 extends Nat {
+  case object _0 extends Nat {
 
     type Self = _0
   }
@@ -31,21 +37,15 @@ object ProofSystemSpec {
     type Self = ++[T]
   }
 
-  abstract class Stuff {
-    def tier: Int
-  }
-
-  case class NatStuff[SRC <: Nat](tier: Int) extends Stuff
-
   object ++ {
 
     implicit def axiom1[N <: Nat](
         implicit
-        prev: N |- NatStuff[N]
-    ): ++[N] |- NatStuff[++[N]] = forAll[++[N]].=>> { nPlus =>
+        prev: N |- S1[N]
+    ): ++[N] |- S1[++[N]] = forAll[++[N]].=>> { nPlus =>
       // TODO: output is not specialised enough
       val n = nPlus.--
-      NatStuff(prev(n).tier + 1)
+      S1(prev(n).tier + 1)
     }
   }
 
@@ -61,10 +61,10 @@ class ProofSystemSpec extends BaseSpec {
 
   it("can prove recursively") {
 
-    assert(ProveNat.forTerm(_1).construct.tier == 1)
-    assert(ProveNat.forTerm(_2).construct.tier == 2)
-    assert(ProveNat.forTerm(_3).construct.tier == 3)
-    assert(ProveNat.forTerm(_4).construct.tier == 4)
+    assert(ProveNat.forTerm(_1).construct == S1(1))
+    assert(ProveNat.forTerm(_2).construct == S1(2))
+    assert(ProveNat.forTerm(_3).construct == S1(3))
+    assert(ProveNat.forTerm(_4).construct == S1(4))
   }
 
   it("can refute or ridicule") {
@@ -73,8 +73,8 @@ class ProofSystemSpec extends BaseSpec {
 
     implicit def bogusAxiom[N <: _2.Self](
         implicit
-        prev: N |- NatStuff[N]
-    ): ++[N] |-\- NatStuff[++[N]] = forAll[++[N]].=\>>()
+        prev: N |- S1[N]
+    ): ++[N] |-\- S1[++[N]] = forAll[++[N]].=\>>()
 
     this.shouldNotCompile(
       "ProveNat.forTerm(_1).refute"
@@ -97,18 +97,53 @@ class ProofSystemSpec extends BaseSpec {
 
   }
 
+  describe("coercive upcasting for proof") {
+
+    case class S2[SRC <: Nat](tier: Int) extends Stuff
+    case class S3[SRC <: Nat](tier: Int) extends Stuff
+
+    object SubProveNat extends ProveNat.SubScope
+
+    object SubSubProvenat extends SubProveNat.SubScope
+
+    it("in a sub-scope") {
+
+      import SubProveNat._
+
+      implicit def axiom2[N <: Nat](
+          implicit
+          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
+      ): ++[N] |- S2[++[N]] = forAll[++[N]].=>> { nPlus =>
+        val n = nPlus.--
+        S2(prev(n).tier + 1)
+      }
+
+      // TODO: remove
+//      TypeVizShort[_1.Self].toString().shouldBe()
+
+      val s2 = ProveNat
+        .forTerm(_1)
+        .toGoal[S2[_1.Self]]
+        .construct
+
+      assert(s2 == S2(1))
+    }
+
+    it("in a sub-sub-scope") {}
+
+    it(" ... with diamond Heyting algebra") {}
+  }
+
   describe("forAll") {
 
     it("can cite specific proof") {
 
       val v = ProveNat.forAll[++[_0]].citing(++.axiom1)
 
-//      TypeViz[v.SubGoal].toString.shouldBe(
-//      )
-
       TypeVizShort[v.SubGoal].typeStr.shouldBe(
-        "ProofSystemSpec.NatStuff[ProofSystemSpec.++[ProofSystemSpec._0.type]]"
+        "ProofSystemSpec.S1[ProofSystemSpec.++[ProofSystemSpec._0]]"
       )
+
     }
 
     it("... twice") {}

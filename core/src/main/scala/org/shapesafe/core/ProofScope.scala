@@ -172,18 +172,18 @@ trait ProofScope { // TODO: no IUB?
     //    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
   }
 
-  trait TacticOverlay[I, SUBG, OG <: OUB] {
+  trait TacticalStage[I, SUBG, OG <: OUB] {
 
-    def withGoal[O <: OUB]: TacticOverlay[I, SUBG, O]
+    def toGoal[O <: OUB]: TacticalStage[I, SUBG, O]
 
-    def citing[_SUBG <: OG](lemma: SUBG |- _SUBG): TacticOverlay[I, _SUBG, OG]
+    def citing[_SUBG <: OG](lemma: SUBG |- _SUBG): TacticalStage[I, _SUBG, OG]
 
     type SubGoal = SUBG
     type OutputGoal = OG
   }
 
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
-  protected class ForAll[I, OG <: OUB] extends TacticOverlay[I, I, OG] {
+  protected class ForAll[I, OG <: OUB] extends TacticalStage[I, I, OG] {
 
     def =>>[O <: OG](_fn: I => O): I |- O = ProofScope.this.=>>(_fn)
     def =\>>[O <: OG](): I |-\- O = ProofScope.this.=\>>()
@@ -205,7 +205,7 @@ trait ProofScope { // TODO: no IUB?
         ev: I `_|_` O
     ): `_|_`[I, O] = ev
 
-    def withGoal[O <: OUB] = new ForAll[I, O]
+    def toGoal[O <: OUB] = new ForAll[I, O]
 
     // tactic mode! https://leanprover-community.github.io/extras/conv.html
 
@@ -218,9 +218,9 @@ trait ProofScope { // TODO: no IUB?
   // tactic mode!
   case class ProofBuilder[I, SUBG <: OUB, OG <: OUB](
       antecedent: I |- SUBG
-  ) extends TacticOverlay[I, SUBG, OG] {
+  ) extends TacticalStage[I, SUBG, OG] {
 
-    override def withGoal[O <: OUB]: ProofBuilder[I, SUBG, O] = {
+    override def toGoal[O <: OUB]: ProofBuilder[I, SUBG, O] = {
       ProofBuilder[I, SUBG, O](antecedent)
     }
 
@@ -245,7 +245,7 @@ trait ProofScope { // TODO: no IUB?
         ev: I |- O
     ): O = ev.instanceFor(v)
 
-    override def withGoal[O <: OUB] = new ForTerm[I, O](v)
+    override def toGoal[O <: OUB] = new ForTerm[I, O](v)
   }
 }
 
