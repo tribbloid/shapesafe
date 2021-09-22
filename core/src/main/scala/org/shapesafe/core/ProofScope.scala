@@ -8,6 +8,9 @@ trait ProofScope { // TODO: no IUB?
   type OUB
 
   val system: ProofSystem.Aux[OUB]
+  type System = system.type
+
+  type SameSystemScope = ProofScope { type System = ProofScope.this.System }
 
   final type Consequent = system.Proposition
 
@@ -17,7 +20,7 @@ trait ProofScope { // TODO: no IUB?
   //  which is too complex for its own good
 
   // constructive proof
-  abstract class Proof[-I, +P <: system.Consequent] {
+  abstract class Proof[-I, +P <: system.Consequent] extends ProofLike {
 //  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
 
     def consequentFor(v: I): P
@@ -40,14 +43,21 @@ trait ProofScope { // TODO: no IUB?
     //    final def findApplicable(v: I): this.type = this
   }
 
+//  implicit def coerciveUpcast[I, P <: system.Proposition](
+//      implicit
+//      proofInSubScope: SubScope#Proof[I, P]
+//  ): Proof[I, P] = { (v: I) =>
+//    proofInSubScope.consequentFor(v)
+//  }
+
   object Proof {
 
-    implicit def coerciveUpcast[I, P <: system.Proposition](
-        implicit
-        proofInSubScope: SubScope#Proof[I, P]
-    ): Proof[I, P] = { (v: I) =>
-      proofInSubScope.consequentFor(v)
-    }
+//    implicit def coerciveUpcast[I, P <: system.Proposition](
+//        implicit
+//        proofInSubScope: SubScope#Proof[I, P]
+//    ): Proof[I, P] = { (v: I) =>
+//      proofInSubScope.consequentFor(v)
+//    }
 
     case class Chain[ // a.k.a hypothetical syllogism
         A,
@@ -249,4 +259,9 @@ trait ProofScope { // TODO: no IUB?
   }
 }
 
-object ProofScope {}
+object ProofScope {
+
+  type Aux[T] = ProofSystem {
+    type OUB = T
+  }
+}

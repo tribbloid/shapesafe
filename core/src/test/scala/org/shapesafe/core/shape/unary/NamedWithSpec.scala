@@ -4,7 +4,6 @@ import org.shapesafe.BaseSpec
 import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.shape.ShapeReporters.PeekShape
 import org.shapesafe.core.shape.{Names, Shape}
-import org.shapesafe.m.viz.PeekCT
 
 class NamedWithSpec extends BaseSpec {
 

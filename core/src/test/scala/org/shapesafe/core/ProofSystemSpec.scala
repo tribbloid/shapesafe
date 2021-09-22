@@ -97,14 +97,15 @@ class ProofSystemSpec extends BaseSpec {
 
   }
 
-  describe("coercive upcasting for proof") {
+  describe("coercive upcasting of proof") {
 
     case class S2[SRC <: Nat](tier: Int) extends Stuff
     case class S3[SRC <: Nat](tier: Int) extends Stuff
 
     object SubProveNat extends ProveNat.SubScope
+    object SubProveNat2 extends ProveNat.SubScope
 
-    object SubSubProvenat extends SubProveNat.SubScope
+    object SubSubProveNat extends SubProveNat.SubScope // with SubProveNat2.SubScope
 
     it("in a sub-scope") {
 
@@ -118,18 +119,38 @@ class ProofSystemSpec extends BaseSpec {
         S2(prev(n).tier + 1)
       }
 
-      // TODO: remove
-//      TypeVizShort[_1.Self].toString().shouldBe()
-
       val s2 = ProveNat
         .forTerm(_1)
-        .toGoal[S2[_1.Self]]
+        .toGoal[S2[_]]
         .construct
 
       assert(s2 == S2(1))
     }
 
-    it("in a sub-sub-scope") {}
+    it("in a sub-sub-scope") {
+
+      import SubSubProveNat._
+
+      implicit def axiom3[N <: Nat](
+          implicit
+          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
+      ): ++[N] |- S3[++[N]] = forAll[++[N]].=>> { nPlus =>
+        val n = nPlus.--
+        S3(prev(n).tier + 2)
+      }
+
+//      implicit def upcasted[N <: Nat](
+//          implicit
+//          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
+//      ) = ProveNat.Proof.coerciveUpcast(SubProveNat.Proof.coerciveUpcast(axiom3))
+
+      val s2 = ProveNat
+        .forTerm(_1)
+        .toGoal[S3[_]]
+        .construct
+
+      assert(s2 == S3(2))
+    }
 
     it(" ... with diamond Heyting algebra") {}
   }

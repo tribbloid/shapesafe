@@ -10,6 +10,13 @@ import scala.language.implicitConversions
 trait ProofSystem extends HasPropositions with ProofScope { // TODO: no IUB?
 
   final val system: this.type = this
+
+  implicit def coerciveUpcast[I, P <: Proposition, S <: SameSystemScope](
+      implicit
+      proofInSubScope: S#SubScope#Proof[I, P]
+  ): S#Proof[I, P] = { (v: I) =>
+    proofInSubScope.consequentFor(v)
+  }
 }
 
 object ProofSystem {
