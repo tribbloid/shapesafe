@@ -5,8 +5,6 @@ import org.shapesafe.core.arity.ProveArity._
 import org.shapesafe.core.arity.ops.ArityOps.==!
 import org.shapesafe.core.arity.{Arity, ProveArity}
 
-import scala.language.existentials
-
 abstract class UncheckedDomain[
     A1 <: Arity,
     A2 <: Arity

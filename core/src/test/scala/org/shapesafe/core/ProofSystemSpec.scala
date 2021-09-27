@@ -139,10 +139,9 @@ class ProofSystemSpec extends BaseSpec {
         S3(prev(n).tier + 2)
       }
 
-//      implicit def upcasted[N <: Nat](
-//          implicit
-//          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
-//      ) = ProveNat.Proof.coerciveUpcast(SubProveNat.Proof.coerciveUpcast(axiom3))
+      import SubProveNat.{coerciveUpcast => up1}
+      import ProveNat.{coerciveUpcast => u2}
+      // TODO: the above 2 imports should totally be automatic, coerciveUpcast should be improved to allow this
 
       val s2 = ProveNat
         .forTerm(_1)

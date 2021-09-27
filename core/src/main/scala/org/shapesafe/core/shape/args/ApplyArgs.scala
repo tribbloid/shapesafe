@@ -1,7 +1,6 @@
 package org.shapesafe.core.shape.args
 
 import org.shapesafe.core.Poly1Base
-import org.shapesafe.core.shape.Names
 import shapeless.HList
 
 trait ApplyArgs {

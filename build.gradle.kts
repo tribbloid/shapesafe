@@ -87,8 +87,11 @@ allprojects {
         }
 
         //https://github.com/tek/splain
-        if (vs.splainV !=null)
+        if (vs.splainV !=null) {
+            logger.warn("Using Splain " + vs.splainV.toString())
+
             scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
+        }
 
 //        compileOnly(kotlin("stdlib"))
 //        compileOnly(kotlin("stdlib-jdk8"))
@@ -123,21 +126,24 @@ allprojects {
 
                 loggingLevel = "verbose"
 
-                val compilerOptions = mutableListOf(
-                    "-encoding", "UTF-8",
-                    "-unchecked",
-                    "-deprecation",
-                    "-feature",
+                val compilerOptions =
 
-                    "-language:higherKinds",
+                    mutableListOf(
+
+                        "-encoding", "UTF-8",
+                        "-unchecked",
+                        "-deprecation",
+                        "-feature",
+
+                        "-language:higherKinds",
 //                            "-Xfatal-warnings",
 
-                    "-Xlint:poly-implicit-overload",
-                    "-Xlint:option-implicit",
-                    "-Wunused:imports",
+                        "-Xlint:poly-implicit-overload",
+                        "-Xlint:option-implicit",
+                        "-Wunused:imports",
 
 //                        "-Ydebug",
-                    "-Yissue-debug"
+                        "-Yissue-debug"
 //                    ,
 //                    "-Ytyper-debug",
 //                    "-Vtyper"
@@ -148,7 +154,7 @@ allprojects {
 //                    "-Xlint:implicit-not-found",
 //                    "-Xlint:implicit-recursion"
 
-                )
+                    )
 
                 if (vs.splainV != null) {
                     compilerOptions.addAll(

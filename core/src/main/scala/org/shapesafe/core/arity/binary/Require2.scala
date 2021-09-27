@@ -73,7 +73,7 @@ object Require2 extends Require2_Imp0 {
     cache
       .getOrElseUpdate(
         sh,
-        new Impl[??, SS]
+        new Impl[??, SS]()(sh)
       )
       .asInstanceOf[Impl[??, SS]]
   }

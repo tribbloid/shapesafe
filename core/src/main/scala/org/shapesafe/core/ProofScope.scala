@@ -1,18 +1,15 @@
 package org.shapesafe.core
 
 import scala.annotation.implicitNotFound
-import scala.language.implicitConversions
 
 trait ProofScope { // TODO: no IUB?
 
   type OUB
 
-  val system: ProofSystem.Aux[OUB]
-  type System = system.type
+  type System <: ProofSystem.Aux[OUB] with Singleton
+  val system: System
 
-  type SameSystemScope = ProofScope { type System = ProofScope.this.System }
-
-  final type Consequent = system.Proposition
+  type Consequent = System#Proposition
 
   // TODO: this should potentially be merged with Refutation cases in MsgBroker
   //  Such that successful proof can show reasoning at runtime.
@@ -20,8 +17,10 @@ trait ProofScope { // TODO: no IUB?
   //  which is too complex for its own good
 
   // constructive proof
-  abstract class Proof[-I, +P <: system.Consequent] extends ProofLike {
-//  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
+  abstract class Proof[-I, +P <: Consequent] extends ProofLike {
+    //  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
+
+    def scope: ProofScope.this.type = ProofScope.this
 
     def consequentFor(v: I): P
 
@@ -43,21 +42,7 @@ trait ProofScope { // TODO: no IUB?
     //    final def findApplicable(v: I): this.type = this
   }
 
-//  implicit def coerciveUpcast[I, P <: system.Proposition](
-//      implicit
-//      proofInSubScope: SubScope#Proof[I, P]
-//  ): Proof[I, P] = { (v: I) =>
-//    proofInSubScope.consequentFor(v)
-//  }
-
   object Proof {
-
-//    implicit def coerciveUpcast[I, P <: system.Proposition](
-//        implicit
-//        proofInSubScope: SubScope#Proof[I, P]
-//    ): Proof[I, P] = { (v: I) =>
-//      proofInSubScope.consequentFor(v)
-//    }
 
     case class Chain[ // a.k.a hypothetical syllogism
         A,
@@ -87,6 +72,24 @@ trait ProofScope { // TODO: no IUB?
     //    ) = Chain(lemma1, lemma2)
   }
 
+  def coerciveUpcastFromSubScopeImpl[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      proofInSubScope: SubScope#Proof[I, P]
+  ): Proof[I, P] = { (v: I) =>
+    proofInSubScope.consequentFor(v)
+  }
+
+  implicit def coerciveUpcast[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      proofInSubScope: SubScope#Proof[I, P]
+  ): this.Proof[I, P] = coerciveUpcastFromSubScopeImpl
+
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
   )
@@ -107,6 +110,11 @@ trait ProofScope { // TODO: no IUB?
 
   final type `_|_`[-I, O <: OUB] = Proof[I, system.Absurd[O]]
 
+  /**
+    *  TODO: this is the counterpart of Spark polymorphic function in the proof system
+    *    required for defining axiom of induction
+    *    at this moment it is useless
+    */
   trait GenProof {
 
     type Specialised[I, O <: Consequent] <: Proof[I, O]
@@ -168,18 +176,25 @@ trait ProofScope { // TODO: no IUB?
     ): O1 |- O2 = eq.forward
 
     implicit def backward[O1 <: OUB, O2 <: OUB](
+        implicit
         eq: O1 <==> O2
     ): O2 |- O1 = eq.backward
   }
 
-  abstract class SubScope extends ProofScope {
+  abstract class SubScope extends system.SubScopeInSystem {
+
+    final override type System = ProofScope.this.System
+    final override val system = ProofScope.this.system
 
     final val outer: ProofScope.this.type = ProofScope.this
-    final override val system: ProofScope.this.system.type = ProofScope.this.system
-
-    final override type OUB = outer.OUB
 
     //    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
+  }
+
+  {
+    // sanity check, DO NOT DELETE!
+    implicitly[System =:= SubScope#System]
+    implicitly[Consequent =:= SubScope#Consequent]
   }
 
   trait TacticalStage[I, SUBG, OG <: OUB] {

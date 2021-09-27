@@ -4,8 +4,6 @@ import org.shapesafe.core.arity.Arity
 import org.shapesafe.core.arity.Unchecked
 import org.shapesafe.core.arity.ProveArity._
 
-import scala.language.existentials
-
 trait UncheckedDomain_Imp0 {
 
   case class D2[
@@ -32,5 +30,5 @@ trait UncheckedDomain_Imp0 {
       implicit
       bound1: A1 |-< Unchecked,
       bound2: A2 |-< TC
-  ): D2[A1, A2, TC] = D2()
+  ): D2[A1, A2, TC] = D2()(bound1, bound2)
 }

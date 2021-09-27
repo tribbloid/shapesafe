@@ -1,23 +1,10 @@
 package org.shapesafe.core
 
-import scala.language.implicitConversions
-
-trait HasPropositions {
+trait AxiomaticSystem {
 
   type OUB
 
-  trait Proposition extends Serializable {
-
-    type Repr <: OUB
-  }
-  case object Proposition extends CompanionOf[Proposition] {
-
-    abstract class ^[O <: OUB] extends Proposition {
-      final type Repr = O
-    }
-  }
-
-  sealed trait CompanionOf[P <: Proposition] {
+  sealed trait PAuxSupport[P <: Proposition] {
 
     type Aux[O <: OUB] = P {
 
@@ -32,9 +19,20 @@ trait HasPropositions {
     type ^[O <: OUB] <: Aux[O]
   }
 
+  trait Proposition extends Serializable {
+
+    type Repr <: OUB
+  }
+  case object Proposition extends PAuxSupport[Proposition] {
+
+    abstract class ^[O <: OUB] extends Proposition {
+      final type Repr = O
+    }
+  }
+
   case class Aye[O <: OUB](value: O) extends Proposition.^[O] {
 
-//    def upcast[_O >: O <: OUB]: Aye[_O] = this.asInstanceOf[Aye[_O]]
+    //    def upcast[_O >: O <: OUB]: Aye[_O] = this.asInstanceOf[Aye[_O]]
   }
 
   case class Nay[O <: OUB]() extends Proposition.^[O] {}
@@ -48,4 +46,4 @@ trait HasPropositions {
   ) extends Proposition.^[O] {}
 }
 
-object HasPropositions {}
+object AxiomaticSystem {}

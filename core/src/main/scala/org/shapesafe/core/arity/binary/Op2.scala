@@ -19,7 +19,7 @@ object Op2 extends Op2_Imp0 {
   class Impl[
       ??[X1, X2] <: Op,
       SS[A, B] <: HasDebugSymbol
-  ](
+  ]()(
       implicit
       sh: Utils.IntSh[??]
   ) extends Op2 {
@@ -58,7 +58,7 @@ object Op2 extends Op2_Imp0 {
     cache
       .getOrElseUpdate(
         sh,
-        new Impl[??, SS]
+        new Impl[??, SS]()(sh)
       )
       .asInstanceOf[Impl[??, SS]]
   }
