@@ -1,94 +1,79 @@
 package org.shapesafe.core
 
 import org.shapesafe.BaseSpec
+import org.shapesafe.core.fixtures.Nat
 
 object ProofSystemSpec {
-
-  trait Nat {
-
-    type Self <: Nat
-  }
 
   abstract class Stuff {
     def tier: Int
   }
 
-  case class S1[SRC <: Nat](tier: Int) extends Stuff
+  object Stuff {
 
-  object ProveNat extends ProofSystem.^[Stuff]
+    import Nat._
+    import ProveNat._
 
-  import ProveNat._
-
-  object Nat {
-
-    implicit def axiom0: _0 |- S1[_0] = forAll[_0].=>> { _ =>
-      S1(0)
+    implicit def axiom0: _0 |- ID[_0] = forAll[_0].=>> { _ =>
+      ID(0)
     }
-  }
 
-  case object _0 extends Nat {
-
-    type Self = _0
-  }
-  type _0 = _0.type
-
-  case class ++[T <: Nat](`--`: T) extends Nat {
-
-    type Self = ++[T]
-  }
-
-  object ++ {
-
-    implicit def axiom1[N <: Nat](
+    implicit def theorem0[N <: Nat](
         implicit
-        prev: N |- S1[N]
-    ): ++[N] |- S1[++[N]] = forAll[++[N]].=>> { nPlus =>
-      // TODO: output is not specialised enough
-      val n = nPlus.--
-      S1(prev(n).tier + 1)
+        prev: N |- ID[N]
+    ): ^[N] |- ID[^[N]] = forAll[^[N]].=>> { nPlus =>
+      val p = nPlus.prev
+      ID(prev.apply(p).tier + 1)
     }
   }
 
-  val _1 = ++(_0)
-  val _2 = ++(_1)
-  val _3 = ++(_2)
-  val _4 = ++(_3)
+  case class ID[SRC <: Nat](tier: Int) extends Stuff
+
+  case class Fibb[SRC <: Nat](tier: Int) extends Stuff
+
+  object ProveNat extends ProofSystem.^[Stuff] with NaturalDeductionMixin
 }
 
 class ProofSystemSpec extends BaseSpec {
 
+  import Nat._
   import ProofSystemSpec._
 
   it("can prove recursively") {
 
-    assert(ProveNat.forTerm(_1).construct == S1(1))
-    assert(ProveNat.forTerm(_2).construct == S1(2))
-    assert(ProveNat.forTerm(_3).construct == S1(3))
-    assert(ProveNat.forTerm(_4).construct == S1(4))
+    assert(ProveNat.forTerm(new _1()).construct.tier == 1)
+    assert(ProveNat.forTerm(new _2()).construct.tier == 2)
+    assert(ProveNat.forTerm(new _3()).construct.tier == 3)
+    assert(ProveNat.forTerm(new _4()).construct.tier == 4)
   }
 
   it("can refute or ridicule") {
 
     import ProveNat._
 
-    implicit def bogusAxiom[N <: _2.Self](
+    implicit def bogus[N <: _2](
         implicit
-        prev: N |- S1[N]
-    ): ++[N] |-\- S1[++[N]] = forAll[++[N]].=\>>()
+        prev: N |- ID[N]
+    ): ^[N] |-\- ID[^[N]] = forAll[^[N]].=\>>()
+
+    val for1 = ProveNat.forTerm(new _1)
+    val for2 = ProveNat.forTerm(new _2)
+    val for3 = ProveNat.forTerm(new _3)
+    val for4 = ProveNat.forTerm(new _4)
 
     this.shouldNotCompile(
-      "ProveNat.forTerm(_1).refute"
+      "for1.refute"
     )
     this.shouldNotCompile(
-      "ProveNat.forTerm(_2).refute"
-    )
-    this.shouldNotCompile(
-      "ProveNat.forTerm(_4).refute"
+      "for2.refute"
     )
 
-    val for3 = ProveNat.forTerm(_3)
     for3.refute
     for3.ridicule
+
+    this.shouldNotCompile(
+      "for4.refute"
+    )
 
   }
 
@@ -99,73 +84,92 @@ class ProofSystemSpec extends BaseSpec {
 
   describe("coercive upcasting of proof") {
 
-    case class S2[SRC <: Nat](tier: Int) extends Stuff
-    case class S3[SRC <: Nat](tier: Int) extends Stuff
-
     object SubProveNat extends ProveNat.SubScope
-    object SubProveNat2 extends ProveNat.SubScope
-
-    object SubSubProveNat extends SubProveNat.SubScope // with SubProveNat2.SubScope
 
     it("in a sub-scope") {
 
       import SubProveNat._
 
-      implicit def axiom2[N <: Nat](
-          implicit
-          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
-      ): ++[N] |- S2[++[N]] = forAll[++[N]].=>> { nPlus =>
-        val n = nPlus.--
-        S2(prev(n).tier + 1)
+      case class ID2[SRC <: Nat](tier: Int) extends Stuff
+
+      implicit def axiom2[N <: Nat]: ID[^[N]] |- ID2[^[N]] = forAll[ID[^[N]]].=>> { id =>
+        ID2(id.tier)
       }
 
       val s2 = ProveNat
-        .forTerm(_1)
-        .toGoal[S2[_]]
+        .forTerm(new _1)
+        .toGoal[ID2[_]]
         .construct
 
-      assert(s2 == S2(1))
+      assert(s2 == ID2(1))
     }
+
+    object SubSubProveNat extends SubProveNat.SubScope
 
     it("in a sub-sub-scope") {
 
       import SubSubProveNat._
 
-      implicit def axiom3[N <: Nat](
+      case class ID3[SRC <: Nat](tier: Int) extends Stuff
+
+      implicit def theorem3[N <: Nat](
           implicit
-          prev: ProveNat.|-[N, S1[N]] // TODO: can this be infixed?
-      ): ++[N] |- S3[++[N]] = forAll[++[N]].=>> { nPlus =>
-        val n = nPlus.--
-        S3(prev(n).tier + 2)
+          prev: ProveNat.|-[N, ID[N]] // TODO: can this be infixed?
+      ): ^[N] |- ID3[^[N]] = forAll[^[N]].=>> { nPlus =>
+        val n = nPlus.prev
+        ID3[^[N]](prev(n).tier + 2)
       }
 
       import SubProveNat.{coerciveUpcast => up1}
       import ProveNat.{coerciveUpcast => u2}
-      // TODO: the above 2 imports should totally be automatic, coerciveUpcast should be improved to allow this
+      // TODO: the above 2 imports (with renaming) of implicit should totally be automatic
+      //  unfortunately, the current generation of compiler doesn't have the capability of
+      //  resolving anonymous implicit function or renaming conflicting ones
+      //  this has to be introduced after scala 3
 
       val s2 = ProveNat
-        .forTerm(_1)
-        .toGoal[S3[_]]
+        .forTerm(new _1)
+        .toGoal[ID3[_]]
         .construct
 
-      assert(s2 == S3(2))
+      assert(s2 == ID3(2))
     }
 
-    it(" ... with diamond Heyting algebra") {}
+    ignore(" ... with diamond type hierarchy") {
+
+      object SubProveNat2 extends ProveNat.SubScope
+
+//      object SubSubProveNat extends SubProveNat.SubScope with SubProveNat2.SubScope
+      // TODO: at this moment, compiler says "class SubScope is inherited twice"
+    }
   }
 
-  describe("forAll") {
+  describe("Tactic") {
 
-    it("can cite specific proof") {
+    it("can cite once") {
 
-      val v = ProveNat.forAll[++[_0]].citing(++.axiom1)
+      val v = ProveNat
+        .forAll[_1]
+        .useTactic { tt =>
+          tt
+            .cite(Stuff.theorem0(Stuff.axiom0))
+        }
 
       TypeVizShort[v.SubGoal].typeStr.shouldBe(
-        "ProofSystemSpec.S1[ProofSystemSpec.++[ProofSystemSpec._0.type]]"
+        "ProofSystemSpec.ID[Nat.^[Nat._0.type]]"
       )
-
     }
 
-    it("... twice") {}
+    it("... twice") {
+
+//      val v = ProveNat
+//        .forAll[_1.Self]
+//        .cite(Nat.axiom1)
+//
+//      TypeVizShort[v.SubGoal].typeStr.shouldBe(
+//        "ProofSystemSpec.S1[ProofSystemSpec.++[ProofSystemSpec._0.type]]"
+//      )
+
+    }
   }
 }

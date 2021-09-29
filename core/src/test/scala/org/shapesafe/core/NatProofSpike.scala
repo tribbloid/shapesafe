@@ -2,11 +2,9 @@ package org.shapesafe.core
 
 import org.shapesafe.Spike
 import org.shapesafe.core.NatProofSpike.InductiveOn1
-import org.shapesafe.core.fixtures.NatNumAxioms
-import org.shapesafe.core.fixtures.NatNumAxioms.Nat
+import org.shapesafe.core.fixtures.Nat
 
 object NatProofSpike extends ProofSystem.^[Any] {
-  import NatNumAxioms._
 
   trait InductiveOn1[T <: Nat]
 
@@ -16,8 +14,8 @@ object NatProofSpike extends ProofSystem.^[Any] {
       FREE <: Nat
   ](
       implicit
-      i1: P1[_0],
-      i2: (FREE, P1[FREE]) |- P1[S[FREE]] // this should be a "polymorphic" proof
+      i1: P1[Nat._0],
+      i2: (FREE, P1[FREE]) |- P1[Nat.^[FREE]] // this should be a "polymorphic" proof
   ): K |- P1[K] = {
     forAll[K].=>>[P1[K]] { v =>
       ???

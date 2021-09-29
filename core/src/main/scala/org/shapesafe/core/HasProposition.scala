@@ -1,6 +1,6 @@
 package org.shapesafe.core
 
-trait AxiomaticSystem {
+trait HasProposition {
 
   type OUB
 
@@ -37,7 +37,7 @@ trait AxiomaticSystem {
 
   case class Nay[O <: OUB]() extends Proposition.^[O] {}
 
-  case class Grey[O <: OUB]() extends Proposition.^[O] {}
+  case class Abstain[O <: OUB]() extends Proposition.^[O] {}
   // TODO: for Nay & Grey, add type-level reason
 
   case class Absurd[O <: OUB](
@@ -46,4 +46,4 @@ trait AxiomaticSystem {
   ) extends Proposition.^[O] {}
 }
 
-object AxiomaticSystem {}
+object HasProposition {}

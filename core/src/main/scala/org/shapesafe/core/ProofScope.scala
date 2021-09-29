@@ -2,7 +2,7 @@ package org.shapesafe.core
 
 import scala.annotation.implicitNotFound
 
-trait ProofScope { // TODO: no IUB?
+trait ProofScope extends HasTactic { // TODO: no IUB?
 
   type OUB
 
@@ -60,16 +60,6 @@ trait ProofScope { // TODO: no IUB?
         )
       }
     }
-
-    //    implicit def chain[
-    //        A,
-    //        B <: OUB,
-    //        C <: OUB
-    //    ](
-    //        implicit
-    //        lemma1: A |-< B,
-    //        lemma2: B |-< C
-    //    ) = Chain(lemma1, lemma2)
   }
 
   def coerciveUpcastFromSubScopeImpl[
@@ -106,7 +96,7 @@ trait ProofScope { // TODO: no IUB?
 
   final type |-\-[-I, O <: OUB] = Proof[I, system.Nay[O]]
 
-  final type |-?-[-I, O <: OUB] = Proof[I, system.Grey[O]]
+  final type |-?-[-I, O <: OUB] = Proof[I, system.Abstain[O]]
 
   final type `_|_`[-I, O <: OUB] = Proof[I, system.Absurd[O]]
 
@@ -151,7 +141,7 @@ trait ProofScope { // TODO: no IUB?
   }
 
   def =?>>[I, O <: OUB](): I |-?- O = { _ =>
-    system.Grey()
+    system.Abstain()
   }
 
   implicit def =>><<=[I, O <: OUB](
@@ -181,7 +171,7 @@ trait ProofScope { // TODO: no IUB?
     ): O2 |- O1 = eq.backward
   }
 
-  abstract class SubScope extends system.SubScopeInSystem {
+  trait SubScope extends system.SubScopeInSystem {
 
     final override type System = ProofScope.this.System
     final override val system = ProofScope.this.system
@@ -197,18 +187,8 @@ trait ProofScope { // TODO: no IUB?
     implicitly[Consequent =:= SubScope#Consequent]
   }
 
-  trait TacticalStage[I, SUBG, OG <: OUB] {
-
-    def toGoal[O <: OUB]: TacticalStage[I, SUBG, O]
-
-    def citing[_SUBG <: OG](lemma: SUBG |- _SUBG): TacticalStage[I, _SUBG, OG]
-
-    type SubGoal = SUBG
-    type OutputGoal = OG
-  }
-
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
-  protected class ForAll[I, OG <: OUB] extends TacticalStage[I, I, OG] {
+  protected class ForAll[I, OG <: OUB] {
 
     def =>>[O <: OG](_fn: I => O): I |- O = ProofScope.this.=>>(_fn)
     def =\>>[O <: OG](): I |-\- O = ProofScope.this.=\>>()
@@ -217,49 +197,30 @@ trait ProofScope { // TODO: no IUB?
     // summoners
     def prove[O <: OG](
         implicit
-        ev: I |- O
-    ): I |- O = ev
+        theorem: I |- O
+    ): I |- O = theorem
 
     def refute[O <: OG](
         implicit
-        ev: I |-\- O
-    ): I |-\- O = ev
+        theorem: I |-\- O
+    ): I |-\- O = theorem
 
     def ridicule[O <: OG](
         implicit
-        ev: I `_|_` O
-    ): `_|_`[I, O] = ev
+        theorem: I `_|_` O
+    ): I `_|_` O = theorem
 
     def toGoal[O <: OUB] = new ForAll[I, O]
 
-    // tactic mode! https://leanprover-community.github.io/extras/conv.html
+    def useTactic[O <: OG](
+        tactic: Tactic.Empty[I, OG] => Tactic.Partial[I, O, OG]
+    ): Tactic.Partial[I, O, OG] = {
 
-    override def citing[O <: OG](lemma: I |- O): ProofBuilder[I, O, OG] = {
+      val empty = Tactic.Empty[I, OG]()
+      val partial = tactic(empty)
 
-      ProofBuilder(lemma)
+      partial
     }
-  }
-
-  // tactic mode!
-  case class ProofBuilder[I, SUBG <: OUB, OG <: OUB](
-      antecedent: I |- SUBG
-  ) extends TacticalStage[I, SUBG, OG] {
-
-    override def toGoal[O <: OUB]: ProofBuilder[I, SUBG, O] = {
-      ProofBuilder[I, SUBG, O](antecedent)
-    }
-
-    override def citing[O <: OG](lemma: SUBG |- O): ProofBuilder[I, O, OG] = {
-
-      ProofBuilder(
-        Proof.Chain[I, SUBG, O](antecedent, lemma)
-      )
-    }
-
-    def build(
-        implicit
-        canUpcast: SUBG <:< OG
-    ): I |- OG = antecedent.asInstanceOf[I |- OG]
   }
 
   final def forTerm[I](v: I): ForTerm[I, OUB] = new ForTerm[I, OUB](v)

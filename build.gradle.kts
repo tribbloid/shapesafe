@@ -159,6 +159,7 @@ allprojects {
                 if (vs.splainV != null) {
                     compilerOptions.addAll(
                         listOf(
+//                            "-Vimplicits", "-Vtype-diffs",
                             //splain
                             "-P:splain:tree",
                             "-P:splain:breakinfix:200",
