@@ -3,7 +3,7 @@ package org.shapesafe.core.debugging
 import org.shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
 import org.shapesafe.core.debugging.Expressions.Expr
 import org.shapesafe.core.{Poly1Base, ProofScope}
-import org.shapesafe.m.viz.ExpressionVizCT
+import org.shapesafe.m.viz.PeekCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
 import singleton.ops.{+, XString}
 
@@ -73,12 +73,11 @@ class Reporters[
 
     override type EmitMsg[T] = EmitError[T]
   }
-
 }
 
 object Reporters {
 
-  type Expr2Str[I, O <: String] = ExpressionVizCT.NoTree.InfoOf.Aux[I, O]
+  type Expr2Str[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
   trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
 

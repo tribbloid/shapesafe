@@ -8,7 +8,7 @@ DATE=$(date --iso-8601=second)
 
 echo "[SUBMODULE(S)]" && \
 cd ${FWDIR}/splain && \
-sbt clean publishM2 && \
+./dev/make-all.sh && \
 cd ..
 
 mkdir -p ${FWDIR}/logs

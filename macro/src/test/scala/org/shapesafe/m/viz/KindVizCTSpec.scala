@@ -1,70 +1,117 @@
 package org.shapesafe.m.viz
 
-import org.shapesafe.graph.commons.testlib.BaseSpec
-import org.shapesafe.graph.commons.util.reflect.Reflection
-import org.shapesafe.graph.commons.util.reflect.format.FormatProtos.{DeAlias, Hide}
 import org.shapesafe.graph.commons.util.reflect.format.FormatOvrd.{~~, Only}
-import org.shapesafe.graph.commons.util.viz.TypeViz
+import org.shapesafe.m.GenericMsgEmitter
 import shapeless.Witness
+import singleton.ops.+
 
-class KindVizCTSpec extends BaseSpec {
+class KindVizCTSpec extends VizCTSpec {
+
+  lazy val VizCT: KindVizCT.type = KindVizCT
 
   import KindVizCTSpec._
 
-  val gd = viz.infer(Witness("Int").value)
+  describe(VizCT.toString) {
 
-  describe("Stub") {
+    it("1") {
 
-    it("ground truth") {
+      val w1 = VizCT.infoOf[Int]
 
-      gd.typeStr.shouldBe(
-        """String("Int")"""
+      type T1 = w1.Out
+      implicitly[T1 + ""].value.toString.shouldBe(
+        """
+          |-+ Int
+          | !-+ AnyVal
+          |   !-- Any
+          |""".stripMargin
       )
-    }
-
-    it("Int") {
-
-      val w1 = stub.infoOf[Int]
-      viz[w1.Out].should_=:=(gd)
     }
 
     it(" ... implicitly") {
 
-      val w1 = stub[Int].summon
+      val w1 = VizCT[Int].summonInfo
+
+      type T1 = w1.Out
+      implicitly[T1 + ""].value.toString.shouldBe(
+        """
+          |-+ Int
+          | !-+ AnyVal
+          |   !-- Any
+          |""".stripMargin
+      )
+    }
+  }
+
+  describe(NoTree.toString) {
+
+    val groundTruth = TypeVizShort.infer(Witness("Int").value)
+
+    it("ground truth") {
+
+      groundTruth.typeStr.shouldBe(
+        """String("Int")"""
+      )
+    }
+
+    it("1") {
+
+      val w1 = NoTree.infoOf[Int]
+      TypeVizShort[w1.Out].should_=:=(groundTruth)
+    }
+
+    it(" ... implicitly") {
+
+      val w1 = NoTree[Int].summonInfo
 
       //      viz.infer(w1).should_=:=()
-      viz[w1.Out].should_=:=(gd)
+      TypeVizShort[w1.Out].should_=:=(groundTruth)
     }
 
     it("generic 1") {
 
-      val w1 = stub.infoOf[Dummy[_, _]]
+      val w1 = NoTree.infoOf[Dummy[_, _]]
 
-      viz[w1.Out].typeStr
+      TypeVizShort[w1.Out].typeStr
         .shouldBe(
           s"""String("KindVizCTSpec.Dummy")"""
         )
     }
 
-    //TODO: for some reason, not working
-    ignore("generic 2") {
+    it("summonStr") {
 
-      val e1 = Dummy[Int, String]()
+      val str = NoTree[Int].summonStr
+      str.shouldBe("Int")
+    }
 
-      viz[e1.infoOf.type#Out].typeStr
-        .shouldBe(
-          s"""String("KindVizCTSpec.Dummy")"""
-        )
+    it("peek (explicit)") {
+
+      val info = NoTree[Int].summonInfo
+
+      GenericMsgEmitter.byOnlyInstance[info.Out, GenericMsgEmitter.Info]
+    }
+
+    it("peek") {
+
+      NoTree[Int].peek
+    }
+
+    it("interrupt") {
+
+      val viz = NoTree[Int]
+      shouldNotCompile(
+        """viz.interrupt""",
+        ".*(Int).*"
+      )
     }
   }
 
-  describe("Ovrd") {
+  describe(WithOvrd.toString) {
 
     it("1") {
 
-      val w1 = ovrd.infoOf[Dummy[Int, String]]
+      val w1 = WithOvrd.infoOf[Dummy[Int, String]]
 
-      viz[w1.Out].typeStr
+      TypeVizShort[w1.Out].typeStr
         .shouldBe(
           s"""String("Int a b String")"""
         )
@@ -72,9 +119,9 @@ class KindVizCTSpec extends BaseSpec {
 
     it(" ... implicitly") {
 
-      val w1 = ovrd[Dummy[Int, String]].summon
+      val w1 = WithOvrd[Dummy[Int, String]].summonInfo
 
-      viz[w1.Out].typeStr
+      TypeVizShort[w1.Out].typeStr
         .shouldBe(
           s"""String("Int a b String")"""
         )
@@ -86,41 +133,35 @@ class KindVizCTSpec extends BaseSpec {
 
       it("1") {
 
-        val w1 = ovrd.infoOf[Only[localV.type]]
-        viz[w1.Out].typeStr
+        val w1 = WithOvrd.infoOf[Only[localV.type]]
+        TypeVizShort[w1.Out].typeStr
           .shouldBe(
             s"""String("FormatOvrd.Only")"""
           )
       }
 
       it("2") {
-        val w1 = ovrd.infoOf[Only[nonFinalV.type]]
-        viz[w1.Out].typeStr
+        val w1 = WithOvrd.infoOf[Only[nonFinalV.type]]
+        TypeVizShort[w1.Out].typeStr
           .shouldBe(
             s"""String("FormatOvrd.Only")"""
           )
       }
-
     }
   }
 }
 
 object KindVizCTSpec {
 
-  val viz: TypeViz[Reflection.Runtime.type] = TypeViz.formattedBy {
-    import org.shapesafe.graph.commons.util.reflect.format.Formats._
-
-    TypeInfo ~ DeAlias ~ Hide.Package
-  }
-  val stub = KindVizCT.NoTree
-  val ovrd = KindVizCT.Ovrd
+  val NoTree = KindVizCT.NoTree
+  val WithOvrd = KindVizCT.WithOvrd
 
   final val finalV = "b"
   val nonFinalV = "b"
 
   case class Dummy[T1, T2]() extends (T1 ~~ Only["a"] ~~ Only[finalV.type] ~~ T2) {
 
-    final val infoOf = stub.infoOf[Dummy[T1, T2]]
+//    final val infoOf = KindVizCT.infoOf[Dummy[T1, T2]]
   }
 
   object Dummy {

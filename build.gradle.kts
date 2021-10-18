@@ -96,10 +96,10 @@ allprojects {
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.9")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.10")
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
 
@@ -136,7 +136,7 @@ allprojects {
                     "-Xlint:option-implicit",
 
 //                        "-Ydebug",
-                    "-Yissue-debug"
+//                        "-Yissue-debug"
 //                    ,
 //                    "-Ytyper-debug",
 //                    "-Vtyper"
@@ -152,12 +152,9 @@ allprojects {
                 if (vs.splainV != null) {
                     compilerOptions.addAll(
                         listOf(
-                            //splain
-                            "-P:splain:tree",
-                            "-P:splain:breakinfix:200",
-                            "-P:splain:bounds:true",
-                            "-P:splain:boundsimplicits:true",
-                            "-P:splain:keepmodules:2"
+                            "-Vimplicits",
+                            "-Vimplicits-verbose-tree",
+                            "-Vtype-diffs"
                         )
                     )
                 }
@@ -193,13 +190,6 @@ allprojects {
             minHeapSize = "1024m"
             maxHeapSize = "4096m"
 
-            useJUnitPlatform {
-                includeEngines("scalatest")
-                testLogging {
-                    events("passed", "skipped", "failed")
-                }
-            }
-
             testLogging {
 //                events = setOf(org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED, org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED, org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED, org.gradle.api.tasks.testing.logging.TestLogEvent.STANDARD_OUT)
 //                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
@@ -210,6 +200,14 @@ allprojects {
                 // stdout is used for occasional manual verification
                 showStandardStreams = true
             }
+
+            useJUnitPlatform {
+                includeEngines("scalatest")
+                testLogging {
+                    events("passed", "skipped", "failed")
+                }
+            }
+
         }
     }
 
@@ -222,8 +220,9 @@ allprojects {
 //    }
 
     publishing {
-        val moduleID = if (project.name.startsWith(rootID)) project.name
-        else rootID + "-" + project.name
+        val moduleID =
+            if (project.name.startsWith(rootID)) project.name
+            else rootID + "-" + project.name
 
         publications {
             create<MavenPublication>("maven") {
@@ -238,7 +237,6 @@ allprojects {
             }
         }
     }
-
 
     idea {
 

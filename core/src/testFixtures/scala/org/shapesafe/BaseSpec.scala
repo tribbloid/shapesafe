@@ -1,7 +1,7 @@
 package org.shapesafe
 
 import org.shapesafe.graph.commons.util.reflect.ScalaReflection
-import org.shapesafe.graph.commons.util.reflect.format.{Formats, TypeFormat}
+import org.shapesafe.graph.commons.util.reflect.format.{Formats0, TypeFormat}
 import org.shapesafe.graph.commons.util.viz.TypeViz
 import shapeless.{HList, Nat, Witness}
 
@@ -19,10 +19,10 @@ trait BaseSpec extends org.shapesafe.graph.commons.testlib.BaseSpec {
 
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
 
-    val format = Formats.TypeInfo.DeAlias.HidePackage.recursively
+    val format = Formats0.TypeInfo.DeAlias.HidePackage.recursively
 
     TypeViz
-      .formattedBy(format)
+      .withFormat(format)
       .infer(v)
       .typeStr
   }
