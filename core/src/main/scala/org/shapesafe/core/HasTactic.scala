@@ -51,12 +51,12 @@ trait HasTactic {
       def fulfil(
           implicit
           canUpcast: SUBG <:< OG
-      ): I |- OG = antecedent.asInstanceOf[I |- OG]
+      ): I |- SUBG = antecedent.asInstanceOf[I |- SUBG]
 
-      def complement(
+      def complement[SUBG2 <: OG](
           implicit
-          trivialLemma: SUBG |- OG
-      ): I |- OG = {
+          trivialLemma: SUBG |- SUBG2
+      ): I |- SUBG2 = {
         cite(trivialLemma).fulfil
       }
     }

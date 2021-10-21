@@ -10,9 +10,15 @@ trait ProofSystem extends HasProposition with ProofScope { // TODO: no IUB?
   final type System = this.type
   final val system = this
 
-  trait SubScopeInSystem extends ProofScope {
+  trait UpcastEvidence
+
+  trait ScopeInSystem extends ProofScope {
 
     final override type OUB = ProofSystem.this.OUB
+
+//    final override type System = ProofSystem.this.System
+//    final override val system = ProofSystem.this.system
+
   }
 }
 

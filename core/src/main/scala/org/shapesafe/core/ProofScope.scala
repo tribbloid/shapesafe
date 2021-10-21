@@ -6,6 +6,8 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
 
   type OUB
 
+  type UpcastEvidence
+
   type System <: ProofSystem.Aux[OUB] with Singleton
   val system: System
 
@@ -18,7 +20,6 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
 
   // constructive proof
   abstract class Proof[-I, +P <: Consequent] extends ProofLike {
-    //  abstract class Proof[-I, +P <: Consequent] { // why this doesn't work?
 
     def scope: ProofScope.this.type = ProofScope.this
 
@@ -61,24 +62,6 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
       }
     }
   }
-
-  def coerciveUpcastFromSubScopeImpl[
-      I,
-      P <: Consequent
-  ](
-      implicit
-      proofInSubScope: SubScope#Proof[I, P]
-  ): Proof[I, P] = { (v: I) =>
-    proofInSubScope.consequentFor(v)
-  }
-
-  implicit def coerciveUpcast[
-      I,
-      P <: Consequent
-  ](
-      implicit
-      proofInSubScope: SubScope#Proof[I, P]
-  ): this.Proof[I, P] = coerciveUpcastFromSubScopeImpl
 
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
@@ -144,13 +127,19 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
     system.Abstain()
   }
 
-  implicit def =>><<=[I, O <: OUB](
+  def =>><<=[I, O <: OUB](
       implicit
       proving: I |- O,
       refuting: I |-\- O
   ): I `_|_` O = { v =>
     system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
   }
+
+  implicit def contradicting[I, O <: OUB](
+      implicit
+      proving: I |- O,
+      refuting: I |-\- O
+  ): `_|_`[I, O] = =>><<=[I, O]
 
   // equivalence, automatically implies O1 |- O2 & O2 |- O1
   case class <==>[O1 <: OUB, O2 <: OUB](
@@ -171,20 +160,46 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
     ): O2 |- O1 = eq.backward
   }
 
-  trait SubScope extends system.SubScopeInSystem {
+  trait SubScope extends system.ScopeInSystem {
+
+    override type UpcastEvidence <: ProofScope.this.UpcastEvidence
 
     final override type System = ProofScope.this.System
     final override val system = ProofScope.this.system
 
     final val outer: ProofScope.this.type = ProofScope.this
-
-    //    override def fromFn[I, O <: OUB](_fn: I => O): Proof[I, system.Aye[O]]
   }
 
   {
     // sanity check, DO NOT DELETE!
     implicitly[System =:= SubScope#System]
     implicitly[Consequent =:= SubScope#Consequent]
+  }
+
+  type OffspringScope = system.ScopeInSystem {
+    type UpcastEvidence <: ProofScope.this.UpcastEvidence
+
+    type System = ProofScope.this.System
+  }
+
+  protected def coerciveUpcastImpl[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      inSubScope: OffspringScope#Proof[I, P]
+  ): Proof[I, P] = { (v: I) =>
+    inSubScope.consequentFor(v)
+  }
+
+  implicit def coerciveUpcast[
+      I,
+      P <: Consequent
+  ](
+      implicit
+      inSubScope: OffspringScope#Proof[I, P]
+  ): Proof[I, P] = { (v: I) =>
+    inSubScope.consequentFor(v)
   }
 
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
@@ -207,8 +222,8 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
 
     def ridicule[O <: OG](
         implicit
-        theorem: I `_|_` O
-    ): I `_|_` O = theorem
+        contradiction: I `_|_` O
+    ): I `_|_` O = contradiction
 
     def toGoal[O <: OUB] = new ForAll[I, O]
 

@@ -25,6 +25,7 @@ object Nat {
 
   // Zero type
   object _0 extends Nat {
+
     type Add[A <: Nat] = A // 0 + A = A
     type SubFrom[A <: Nat] = A // A - 0 = A
     type Mult[A <: Nat] = _0 // 0 * A = 0
@@ -41,18 +42,19 @@ object Nat {
   type _0 = _0.type
 
   // Successor type
-  case class ^[N <: Nat]()(
+  case class Inc[N <: Nat]()(
       implicit
       val prev: N
   ) extends Nat {
-    type Add[A <: Nat] = ^[N#Add[A]] // S(N) + A = S(N + A)
+
+    type Add[A <: Nat] = Inc[N#Add[A]] // S(N) + A = S(N + A)
     type SubFrom[A <: Nat] = N#SubFrom[A#Pre] // A - S(N) = A#Pre - N
     type Mult[A <: Nat] = A#Add[A#Mult[N]] // S(N) * A = A + (A * N)
     type Div[A <: Nat] =
-      ^[N]#IfLt[A, _0, ^[A#SubFrom[^[N]]#Div[A]]] // S(N) / A = S((S(N) - A )/ A) if S(N) >= A
+      Inc[N]#IfLt[A, _0, Inc[A#SubFrom[Inc[N]]#Div[A]]] // S(N) / A = S((S(N) - A )/ A) if S(N) >= A
 
     // Euclidean algorithm: gcd(a, b) = gcd(b, a mod b)
-    type Gcd[A <: Nat] = GCD[A, ^[N] % A]
+    type Gcd[A <: Nat] = GCD[A, Inc[N] % A]
 
     type Pre = N
     type IfZero[T <: Nat, F <: Nat] = F
@@ -66,7 +68,7 @@ object Nat {
   implicit def autoN[N <: Nat](
       implicit
       prev: N
-  ): ^[N] = ^()(prev)
+  ): Inc[N] = Inc()(prev)
 
   // Basic Operations
   type +[A <: Nat, B <: Nat] = A#Add[B]
@@ -79,29 +81,29 @@ object Nat {
   type GCD[A <: Nat, B <: Nat] = A#Gcd[B]
 
   // Type aliases for low numbers
-  type _1 = ^[_0]
-  type _2 = ^[_1]
-  type _3 = ^[_2]
-  type _4 = ^[_3]
-  type _5 = ^[_4]
-  type _6 = ^[_5]
-  type _7 = ^[_6]
-  type _8 = ^[_7]
-  type _9 = ^[_8]
-  type _10 = ^[_9]
-  type _11 = ^[_10]
-  type _12 = ^[_11]
-  type _13 = ^[_12]
-  type _14 = ^[_13]
-  type _15 = ^[_14]
-  type _16 = ^[_15]
-  type _17 = ^[_16]
-  type _18 = ^[_17]
-  type _19 = ^[_18]
-  type _20 = ^[_19]
-  type _21 = ^[_20]
-  type _22 = ^[_21]
-  type _23 = ^[_22]
-  type _24 = ^[_23]
-  type _25 = ^[_24]
+  type _1 = Inc[_0]
+  type _2 = Inc[_1]
+  type _3 = Inc[_2]
+  type _4 = Inc[_3]
+  type _5 = Inc[_4]
+  type _6 = Inc[_5]
+  type _7 = Inc[_6]
+  type _8 = Inc[_7]
+  type _9 = Inc[_8]
+  type _10 = Inc[_9]
+  type _11 = Inc[_10]
+  type _12 = Inc[_11]
+  type _13 = Inc[_12]
+  type _14 = Inc[_13]
+  type _15 = Inc[_14]
+  type _16 = Inc[_15]
+  type _17 = Inc[_16]
+  type _18 = Inc[_17]
+  type _19 = Inc[_18]
+  type _20 = Inc[_19]
+  type _21 = Inc[_20]
+  type _22 = Inc[_21]
+  type _23 = Inc[_22]
+  type _24 = Inc[_23]
+  type _25 = Inc[_24]
 }
