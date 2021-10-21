@@ -50,8 +50,8 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
         B <: OUB,
         C <: OUB
     ](
-        lemma1: A |-< B,
-        lemma2: B |-< C
+        lemma1: A |- B,
+        lemma2: B |- C
     ) extends (A |- C) {
 
       override def consequentFor(v: A): system.Aye[C] = {
