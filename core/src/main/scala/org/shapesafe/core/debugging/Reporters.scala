@@ -1,7 +1,7 @@
 package org.shapesafe.core.debugging
 
 import org.shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
-import org.shapesafe.core.{Poly1Base, ProofScope}
+import org.shapesafe.core.{AxiomSet, Poly1Base}
 import org.shapesafe.m.viz.PeekCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
 import singleton.ops.{+, XString}
@@ -10,7 +10,7 @@ import singleton.ops.{+, XString}
 //  singleton-ops RequireMsg only cache the last message in the implicit search
 //  so step 1 is isolated to avoid triggering RequireMsg prematurely
 class Reporters[
-    PS <: ProofScope
+    PS <: AxiomSet
 ](val scope: PS) {
 
   import Reporters._

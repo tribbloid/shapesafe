@@ -5,20 +5,21 @@ package org.shapesafe.core
   * Curry-Howard isomorphism with scala compiler (regardless of how ill-suited it is), expecting drastic changes upon
   * improvement over its implicit search algorithm
   */
-trait ProofSystem extends HasProposition with ProofScope { // TODO: no IUB?
+trait ProofSystem extends HasProposition with AxiomSet { // TODO: no IUB?
 
   final type System = this.type
   final val system = this
 
-  trait UpcastEvidence
+  trait Bound
 
-  trait ScopeInSystem extends ProofScope {
+  trait ExtensionLike extends AxiomSet {
 
     final override type OUB = ProofSystem.this.OUB
 
-//    final override type System = ProofSystem.this.System
-//    final override val system = ProofSystem.this.system
+//    override type Bound <: ProofSystem.this.ExtensionBound
 
+    final override type System = ProofSystem.this.type
+    final override val system = ProofSystem.this
   }
 }
 

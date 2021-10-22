@@ -3,7 +3,7 @@ package org.shapesafe.core
 // TODO: DO NOT USE! A |- B is a diverging branch from A |- C
 @Deprecated
 trait NaturalDeductionMixin {
-  self: ProofScope =>
+  self: AxiomSet =>
 
   implicit def chain[
       A,

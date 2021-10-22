@@ -1,7 +1,7 @@
 package org.shapesafe.core
 
 trait HasTactic {
-  self: ProofScope =>
+  self: AxiomSet =>
 
   // similar to https://leanprover-community.github.io/extras/conv.html
   trait Tactic[I, SUBG, OG <: OUB] {

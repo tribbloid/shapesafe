@@ -7,11 +7,11 @@ include(
     ":macro",
     // uses unstable & experimental scala features, should be modified very slowly & carefully
     ":core",
-//    ":verify",
-//    ":verify:breeze",
-//    ":verify:djl",
+    ":verify",
+    ":verify:breeze",
+    ":verify:djl",
 //    // uses common scala features
-//    ":shapesafe-demo"
+    ":shapesafe-demo"
 //    "spike"
 )
 

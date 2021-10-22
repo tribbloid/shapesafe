@@ -87,8 +87,8 @@ allprojects {
         }
 
         //https://github.com/tek/splain
-        if (vs.splainV !=null) {
-            logger.warn("Using Splain " + vs.splainV.toString())
+        if (vs.splainV != "") {
+            logger.warn("Using Splain " + vs.splainV)
 
             scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
         }

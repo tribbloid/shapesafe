@@ -2,14 +2,15 @@ package org.shapesafe.core
 
 import scala.annotation.implicitNotFound
 
-trait ProofScope extends HasTactic { // TODO: no IUB?
+trait AxiomSet extends HasTactic { // TODO: no IUB?
 
   type OUB
 
-  type UpcastEvidence
-
   type System <: ProofSystem.Aux[OUB] with Singleton
   val system: System
+
+  type Bound
+  type ExtensionBound <: Bound
 
   type Consequent = System#Proposition
 
@@ -21,7 +22,7 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
   // constructive proof
   abstract class Proof[-I, +P <: Consequent] extends ProofLike {
 
-    def scope: ProofScope.this.type = ProofScope.this
+    def scope: AxiomSet.this.type = AxiomSet.this
 
     def consequentFor(v: I): P
 
@@ -160,26 +161,20 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
     ): O2 |- O1 = eq.backward
   }
 
-  trait SubScope extends system.ScopeInSystem {
+//  {
+//    // sanity check, DO NOT DELETE!
+//    implicitly[System =:= SubScope#System]
+//    implicitly[Consequent =:= SubScope#Consequent]
+//  }
 
-    override type UpcastEvidence <: ProofScope.this.UpcastEvidence
+  trait Extension extends system.ExtensionLike {
 
-    final override type System = ProofScope.this.System
-    final override val system = ProofScope.this.system
-
-    final val outer: ProofScope.this.type = ProofScope.this
+    override type Bound <: AxiomSet.this.ExtensionBound
   }
 
-  {
-    // sanity check, DO NOT DELETE!
-    implicitly[System =:= SubScope#System]
-    implicitly[Consequent =:= SubScope#Consequent]
-  }
+  type OffspringScope = System#ExtensionLike {
 
-  type OffspringScope = system.ScopeInSystem {
-    type UpcastEvidence <: ProofScope.this.UpcastEvidence
-
-    type System = ProofScope.this.System
+    type Bound <: AxiomSet.this.ExtensionBound
   }
 
   protected def coerciveUpcastImpl[
@@ -205,9 +200,9 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
   protected class ForAll[I, OG <: OUB] {
 
-    def =>>[O <: OG](_fn: I => O): I |- O = ProofScope.this.=>>(_fn)
-    def =\>>[O <: OG](): I |-\- O = ProofScope.this.=\>>()
-    def =?>>[O <: OG](): I |-?- O = ProofScope.this.=?>>()
+    def =>>[O <: OG](_fn: I => O): I |- O = AxiomSet.this.=>>(_fn)
+    def =\>>[O <: OG](): I |-\- O = AxiomSet.this.=\>>()
+    def =?>>[O <: OG](): I |-?- O = AxiomSet.this.=?>>()
 
     // summoners
     def prove[O <: OG](
@@ -250,7 +245,7 @@ trait ProofScope extends HasTactic { // TODO: no IUB?
   }
 }
 
-object ProofScope {
+object AxiomSet {
 
   type Aux[T] = ProofSystem {
     type OUB = T

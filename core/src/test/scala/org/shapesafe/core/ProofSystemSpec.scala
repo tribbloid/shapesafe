@@ -8,8 +8,8 @@ object ProofSystemSpec {
 
   import org.shapesafe.core.util.Nat2ID._
 
-  object SubProveNat extends ProveNat.SubScope
-  object SubSubProveNat extends SubProveNat.SubScope
+  object SubProveNat extends ProveNat.Extension {}
+  object SubSubProveNat extends SubProveNat.Extension {}
 
   trait HasSubProve extends Nat2ID {}
 
@@ -98,11 +98,6 @@ class ProofSystemSpec extends BaseSpec {
         ID3(nPlus.value)
       }
 
-      // TODO: the above 2 imports (with renaming) of implicit should totally be automatic
-      //  unfortunately, the current generation of compiler doesn't have the capability of
-      //  resolving anonymous implicit function or renaming conflicting ones
-      //  this has to be introduced after scala 3
-
       val s2 = ProveNat
         .forTerm(new _1)
         .toGoal[ID3[_]]
@@ -113,7 +108,7 @@ class ProofSystemSpec extends BaseSpec {
 
     ignore(" ... with diamond type hierarchy") {
 
-      object SubProveNat2 extends ProveNat.SubScope
+      object SubProveNat2 extends ProveNat.ExtensionLike
 
       //      object SubSubProveNat extends SubProveNat.SubScope with SubProveNat2.SubScope
       // TODO: at this moment, compiler says "class SubScope is inherited twice"
