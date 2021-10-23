@@ -10,9 +10,9 @@ object NaturalDeductionMixin {
         C <: OUB
     ](
         implicit
-        lemma2: Axiom[B |- C],
-        lemma1: A |- B
-    ): A |- C = Proof.Chain(lemma1, lemma2)
+        minorPremise: Axiom[B |- C],
+        majorPremise: A |- B
+    ): A |- C = Proof.Chain(majorPremise, minorPremise)
   }
 }
 
@@ -25,7 +25,7 @@ trait NaturalDeductionMixin extends NaturalDeductionMixin._Imp0 {
       C <: OUB
   ](
       implicit
-      lemma1: Axiom[A |- B],
-      lemma2: B |- C
-  ): A |- C = Proof.Chain(lemma1, lemma2)
+      majorPremise: Axiom[A |- B],
+      minorPremise: B |- C
+  ): A |- C = Proof.Chain(majorPremise, minorPremise)
 }
