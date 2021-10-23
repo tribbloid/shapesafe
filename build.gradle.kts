@@ -156,7 +156,7 @@ allprojects {
 
                     )
 
-                if (vs.splainV != null) {
+                if (vs.splainV != "") {
                     compilerOptions.addAll(
                         listOf(
                             "-Vimplicits",
