@@ -5,8 +5,8 @@ import org.shapesafe.core.fixtures.Nat
 
 trait Nat2ID {
 
-  object ProveNat extends ProofSystem.^[Stuff]
-  import ProveNat._
+  object ProveStuff extends ProofSystem.^[Stuff]
+  import ProveStuff._
 
   abstract class Stuff {
     def v: Int

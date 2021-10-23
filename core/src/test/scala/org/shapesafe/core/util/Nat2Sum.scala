@@ -5,7 +5,7 @@ import org.shapesafe.core.fixtures.Nat._0
 
 trait Nat2Sum extends Nat2ID {
 
-  import ProveNat._
+  import ProveStuff._
 
   case class Sum[SRC <: Nat](v: Int) extends Stuff
 

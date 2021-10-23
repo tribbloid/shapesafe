@@ -1,5 +1,7 @@
 package org.shapesafe.core
 
+import org.shapesafe.core.ProofLike.AxiomTag
+
 import scala.annotation.implicitNotFound
 
 trait AxiomSet extends HasTactic { // TODO: no IUB?
@@ -98,6 +100,8 @@ trait AxiomSet extends HasTactic { // TODO: no IUB?
 
   object GenProof {}
 
+  type Axiom[T <: Proof[_, _]] = T with AxiomTag
+
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
     * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
@@ -115,32 +119,48 @@ trait AxiomSet extends HasTactic { // TODO: no IUB?
     * @tparam I src type
     * @tparam O tgt type
     */
-  def =>>[I, O <: OUB](_fn: I => O): I |- O = { v =>
-    val out = _fn(v)
-    system.Aye(out)
+  def =>>[I, O <: OUB](_fn: I => O): Axiom[I |- O] = {
+    new (I |- O) with AxiomTag {
+      override def consequentFor(v: I): system.Aye[O] = {
+        val out = _fn(v)
+        system.Aye(out)
+      }
+    }
   }
 
-  def =\>>[I, O <: OUB](): I |-\- O = { _ =>
-    system.Nay()
+  def =\>>[I, O <: OUB](): Axiom[I |-\- O] = {
+    new (I |-\- O) with AxiomTag {
+      override def consequentFor(v: I): system.Nay[O] = {
+        system.Nay()
+      }
+    }
   }
 
-  def =?>>[I, O <: OUB](): I |-?- O = { _ =>
-    system.Abstain()
+  def =?>>[I, O <: OUB](): Axiom[I |-?- O] = {
+    new (I |-?- O) with AxiomTag {
+      override def consequentFor(v: I): system.Abstain[O] = {
+        system.Abstain()
+      }
+    }
   }
 
   def =>><<=[I, O <: OUB](
       implicit
       proving: I |- O,
       refuting: I |-\- O
-  ): I `_|_` O = { v =>
-    system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
+  ): Axiom[I `_|_` O] = {
+    new (I `_|_` O) with AxiomTag {
+      override def consequentFor(v: I): system.Absurd[O] = {
+        system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
+      }
+    }
   }
 
   implicit def contradicting[I, O <: OUB](
       implicit
       proving: I |- O,
       refuting: I |-\- O
-  ): `_|_`[I, O] = =>><<=[I, O]
+  ): Axiom[I `_|_` O] = =>><<=[I, O]
 
   // equivalence, automatically implies O1 |- O2 & O2 |- O1
   case class <==>[O1 <: OUB, O2 <: OUB](
@@ -160,12 +180,6 @@ trait AxiomSet extends HasTactic { // TODO: no IUB?
         eq: O1 <==> O2
     ): O2 |- O1 = eq.backward
   }
-
-//  {
-//    // sanity check, DO NOT DELETE!
-//    implicitly[System =:= SubScope#System]
-//    implicitly[Consequent =:= SubScope#Consequent]
-//  }
 
   trait Extension extends system.ExtensionLike {
 
@@ -200,9 +214,9 @@ trait AxiomSet extends HasTactic { // TODO: no IUB?
   final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
   protected class ForAll[I, OG <: OUB] {
 
-    def =>>[O <: OG](_fn: I => O): I |- O = AxiomSet.this.=>>(_fn)
-    def =\>>[O <: OG](): I |-\- O = AxiomSet.this.=\>>()
-    def =?>>[O <: OG](): I |-?- O = AxiomSet.this.=?>>()
+    def =>>[O <: OG](_fn: I => O): Axiom[I |- O] = AxiomSet.this.=>>(_fn)
+    def =\>>[O <: OG](): Axiom[I |-\- O] = AxiomSet.this.=\>>()
+    def =?>>[O <: OG](): Axiom[I |-?- O] = AxiomSet.this.=?>>()
 
     // summoners
     def prove[O <: OG](

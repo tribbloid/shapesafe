@@ -8,8 +8,8 @@ object ProofSystemSpec {
 
   import org.shapesafe.core.util.Nat2ID._
 
-  object SubProveNat extends ProveNat.Extension {}
-  object SubSubProveNat extends SubProveNat.Extension {}
+  object ExtProveStuff extends ProveStuff.Extension {}
+  object ExtExtProveStuff extends ExtProveStuff.Extension {}
 
   trait HasSubProve extends Nat2ID {}
 
@@ -23,22 +23,22 @@ class ProofSystemSpec extends BaseSpec {
 
   it("can prove recursively") {
 
-    assert(ProveNat.forTerm(new _1()).toGoal[ID[_]].construct.v == 1)
-    assert(ProveNat.forTerm(new _2()).toGoal[ID[_]].construct.v == 2)
-    assert(ProveNat.forTerm(new _3()).toGoal[ID[_]].construct.v == 3)
-    assert(ProveNat.forTerm(new _4()).toGoal[ID[_]].construct.v == 4)
+    assert(ProveStuff.forTerm(new _1()).toGoal[ID[_]].construct.v == 1)
+    assert(ProveStuff.forTerm(new _2()).toGoal[ID[_]].construct.v == 2)
+    assert(ProveStuff.forTerm(new _3()).toGoal[ID[_]].construct.v == 3)
+    assert(ProveStuff.forTerm(new _4()).toGoal[ID[_]].construct.v == 4)
   }
 
   it("can refute or ridicule") {
 
-    import ProveNat._
+    import ProveStuff._
 
     implicit def bogus[N <: _3]: N |-\- ID[N] = forAll[N].=\>>()
 
-    val for1 = ProveNat.forTerm(new _1).toGoal[ID[_]]
-    val for2 = ProveNat.forTerm(new _2).toGoal[ID[_]]
-    val for3 = ProveNat.forTerm(new _3).toGoal[ID[_]]
-    val for4 = ProveNat.forTerm(new _4).toGoal[ID[_]]
+    val for1 = ProveStuff.forTerm(new _1).toGoal[ID[_]]
+    val for2 = ProveStuff.forTerm(new _2).toGoal[ID[_]]
+    val for3 = ProveStuff.forTerm(new _3).toGoal[ID[_]]
+    val for4 = ProveStuff.forTerm(new _4).toGoal[ID[_]]
 
     this.shouldNotCompile(
       "for1.refute"
@@ -62,21 +62,21 @@ class ProofSystemSpec extends BaseSpec {
 
   describe("coercive upcasting of proof") {
 
-    it("in a sub-scope") {
+    it("in an extended axiom set") {
 
-      import org.shapesafe.core.ProofSystemSpec.SubProveNat._
+      import org.shapesafe.core.ProofSystemSpec.ExtProveStuff._
 
       case class ID2[SRC <: Nat](v: Int) extends Stuff
 
       implicit def theorem2[N <: Nat](
           // depends on theorem in Parent scope
           implicit
-          lemma1: ProveNat.|-[N, ID[N]]
+          lemma1: ProveStuff.|-[N, ID[N]]
       ): N |- ID2[N] = forAll[N].=>> { nPlus =>
         ID2(nPlus.value)
       }
 
-      val s2 = ProveNat
+      val s2 = ProveStuff
         .forTerm(new _1)
         .toGoal[ID2[_]]
         .construct
@@ -84,21 +84,21 @@ class ProofSystemSpec extends BaseSpec {
       assert(s2 == ID2(1))
     }
 
-    it("in a sub-sub-scope") {
+    it("in an extended extended axiom set") {
 
-      import org.shapesafe.core.ProofSystemSpec.SubSubProveNat._
+      import org.shapesafe.core.ProofSystemSpec.ExtExtProveStuff._
 
       case class ID3[SRC <: Nat](v: Int) extends Stuff
 
       implicit def theorem3[N <: Nat](
           // depends on theorem in Parent scope
           implicit
-          lemma1: ProveNat.|-[N, ID[N]]
+          lemma1: ProveStuff.|-[N, ID[N]]
       ): N |- ID3[N] = forAll[N].=>> { nPlus =>
         ID3(nPlus.value)
       }
 
-      val s2 = ProveNat
+      val s2 = ProveStuff
         .forTerm(new _1)
         .toGoal[ID3[_]]
         .construct
@@ -108,7 +108,7 @@ class ProofSystemSpec extends BaseSpec {
 
     ignore(" ... with diamond type hierarchy") {
 
-      object SubProveNat2 extends ProveNat.ExtensionLike
+      object SubProveStuff2 extends ProveStuff.ExtensionLike
 
       //      object SubSubProveNat extends SubProveNat.SubScope with SubProveNat2.SubScope
       // TODO: at this moment, compiler says "class SubScope is inherited twice"
@@ -119,7 +119,7 @@ class ProofSystemSpec extends BaseSpec {
 
     it("can cite once") {
 
-      val v = ProveNat
+      val v = ProveStuff
         .forAll[_1]
         .toGoal[ID[_]]
         .useTactic { tt =>
@@ -132,7 +132,7 @@ class ProofSystemSpec extends BaseSpec {
         .infer(v)
         .typeStr
         .shouldBe(
-          "Nat2ID.ProveNat.Proof[Nat.Inc[Nat._0],Nat2ID.ProveNat.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
+          "Nat2ID.ProveStuff.Proof[Nat.Inc[Nat._0],Nat2ID.ProveStuff.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
         )
     }
 
