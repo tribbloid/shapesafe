@@ -36,5 +36,5 @@ object NaturalDeductionMixinSpec {
   case class N1[T <: Nat](v: Int) extends Stuff
   case class N2[T <: Nat](v: Int) extends Stuff
 
-  object ProveStuff extends ProofSystem.^[Stuff] with NaturalDeductionMixin {}
+  object ProveStuff extends ProofSystem with NaturalDeductionMixin {}
 }

@@ -14,8 +14,6 @@ trait ProofSystem extends HasProposition with Theory { // TODO: no IUB?
 
   trait ExtensionLike extends Theory {
 
-    final override type OUB = ProofSystem.this.OUB
-
 //    override type Bound <: ProofSystem.this.ExtensionBound
 
     final override type System = ProofSystem.this.type
@@ -23,13 +21,4 @@ trait ProofSystem extends HasProposition with Theory { // TODO: no IUB?
   }
 }
 
-object ProofSystem {
-
-  type Aux[T] = ProofSystem {
-    type OUB = T
-  }
-
-  trait ^[T] extends ProofSystem {
-    final override type OUB = T
-  }
-}
+object ProofSystem {}

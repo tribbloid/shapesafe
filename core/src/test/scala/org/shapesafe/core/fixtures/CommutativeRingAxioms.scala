@@ -25,7 +25,7 @@ object CommutativeRingAxioms {
 
   type Sq[A <: Stuff] = A :* A
 
-  object Prove extends ProofSystem.^[Stuff]
+  object Prove extends ProofSystem
 
   object Stuff {
 

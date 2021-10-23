@@ -23,10 +23,10 @@ class ProofSystemSpec extends BaseSpec {
 
   it("can prove recursively") {
 
-    assert(ProveStuff.forTerm(new _1()).toGoal[ID[_]].construct.v == 1)
-    assert(ProveStuff.forTerm(new _2()).toGoal[ID[_]].construct.v == 2)
-    assert(ProveStuff.forTerm(new _3()).toGoal[ID[_]].construct.v == 3)
-    assert(ProveStuff.forTerm(new _4()).toGoal[ID[_]].construct.v == 4)
+    assert(ProveStuff.forTerm(new _1).toGoal[ID[_]].construct.v == 1)
+    assert(ProveStuff.forTerm(new _2).toGoal[ID[_]].construct.v == 2)
+    assert(ProveStuff.forTerm(new _3).toGoal[ID[_]].construct.v == 3)
+    assert(ProveStuff.forTerm(new _4).toGoal[ID[_]].construct.v == 4)
   }
 
   it("can refute or ridicule") {
@@ -47,6 +47,7 @@ class ProofSystemSpec extends BaseSpec {
       "for2.refute"
     )
 
+    for3.prove
     for3.refute
     for3.ridicule
 

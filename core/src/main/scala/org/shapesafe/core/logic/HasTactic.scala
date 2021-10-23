@@ -4,13 +4,13 @@ trait HasTactic {
   self: Theory =>
 
   // similar to https://leanprover-community.github.io/extras/conv.html
-  trait Tactic[I, SUBG, OG <: OUB] {
+  trait Tactic[I, SUBG, OG] {
 
     import Tactic._
 
     type SubGoal = SUBG
 
-    def toGoal[O <: OUB]: Tactic[I, SUBG, O]
+    def toGoal[O]: Tactic[I, SUBG, O]
 
     def cite[O <: OG](lemma: SUBG |- O): Partial[I, O, OG]
 
@@ -22,10 +22,10 @@ trait HasTactic {
 
   object Tactic {
 
-    case class Empty[I, OG <: OUB](
+    case class Empty[I, OG](
     ) extends Tactic[I, I, OG] {
 
-      override def toGoal[O <: OUB]: Empty[I, O] = new Empty[I, O]()
+      override def toGoal[O]: Empty[I, O] = new Empty[I, O]()
 
       override def cite[O <: OG](lemma: I |- O): Partial[I, O, OG] = {
 
@@ -33,15 +33,15 @@ trait HasTactic {
       }
     }
 
-    case class Partial[I, SUBG <: OUB, OG <: OUB](
+    case class Partial[I, SUBG, OG](
         antecedent: I |- SUBG
     ) extends Tactic[I, SUBG, OG] {
 
-      def toGoal[O <: OUB]: Partial[I, SUBG, O] = {
+      def toGoal[O]: Partial[I, SUBG, O] = {
         Partial[I, SUBG, O](antecedent)
       }
 
-      def cite[O <: OUB](lemma: SUBG |- O): Partial[I, O, OG] = {
+      def cite[O](lemma: SUBG |- O): Partial[I, O, OG] = {
 
         Partial(
           Proof.Chain[I, SUBG, O](antecedent, lemma)

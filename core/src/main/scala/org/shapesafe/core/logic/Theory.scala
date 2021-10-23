@@ -6,12 +6,8 @@ import org.shapesafe.core.ProofLike.AxiomTag
 import scala.annotation.implicitNotFound
 
 trait Theory extends HasTactic {
-  // TODO: no IUB?
-  // TODO: should be named "Theory"?
 
-  type OUB
-
-  type System <: ProofSystem.Aux[OUB] with Singleton
+  type System <: ProofSystem with Singleton
   val system: System
 
   type Bound
@@ -53,8 +49,8 @@ trait Theory extends HasTactic {
 
     case class Chain[ // a.k.a hypothetical syllogism
         A,
-        B <: OUB,
-        C <: OUB
+        B,
+        C
     ](
         lemma1: A |- B,
         lemma2: B |- C
@@ -72,7 +68,7 @@ trait Theory extends HasTactic {
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
   )
-  final type |-<[-I, O <: OUB] = Proof[I, system.Aye[_ <: O]]
+  final type |-<[-I, O] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
@@ -81,13 +77,13 @@ trait Theory extends HasTactic {
   @implicitNotFound(
     "[NO PROOF]\n${I}\n    |-\n${O}\n"
   )
-  final type |-[-I, O <: OUB] = Proof[I, system.Aye[O]]
+  final type |-[-I, O] = Proof[I, system.Aye[O]]
 
-  final type |-\-[-I, O <: OUB] = Proof[I, system.Nay[O]]
+  final type |-\-[-I, O] = Proof[I, system.Nay[O]]
 
-  final type |-?-[-I, O <: OUB] = Proof[I, system.Abstain[O]]
+  final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 
-  final type `_|_`[-I, O <: OUB] = Proof[I, system.Absurd[O]]
+  final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]
 
   /**
     *  TODO: this is the counterpart of Spark polymorphic function in the proof system
@@ -122,7 +118,7 @@ trait Theory extends HasTactic {
     * @tparam I src type
     * @tparam O tgt type
     */
-  def =>>[I, O <: OUB](_fn: I => O): Axiom[I |- O] = {
+  def =>>[I, O](_fn: I => O): Axiom[I |- O] = {
     new (I |- O) with AxiomTag {
       override def consequentFor(v: I): system.Aye[O] = {
         val out = _fn(v)
@@ -131,7 +127,7 @@ trait Theory extends HasTactic {
     }
   }
 
-  def =\>>[I, O <: OUB](): Axiom[I |-\- O] = {
+  def =\>>[I, O](): Axiom[I |-\- O] = {
     new (I |-\- O) with AxiomTag {
       override def consequentFor(v: I): system.Nay[O] = {
         system.Nay()
@@ -139,7 +135,7 @@ trait Theory extends HasTactic {
     }
   }
 
-  def =?>>[I, O <: OUB](): Axiom[I |-?- O] = {
+  def =?>>[I, O](): Axiom[I |-?- O] = {
     new (I |-?- O) with AxiomTag {
       override def consequentFor(v: I): system.Abstain[O] = {
         system.Abstain()
@@ -147,7 +143,7 @@ trait Theory extends HasTactic {
     }
   }
 
-  def =>><<=[I, O <: OUB](
+  def =>><<=[I, O](
       implicit
       proving: I |- O,
       refuting: I |-\- O
@@ -159,26 +155,20 @@ trait Theory extends HasTactic {
     }
   }
 
-  implicit def contradicting[I, O <: OUB](
-      implicit
-      proving: I |- O,
-      refuting: I |-\- O
-  ): Axiom[I `_|_` O] = =>><<=[I, O]
-
   // equivalence, automatically implies O1 |- O2 & O2 |- O1
-  case class <==>[O1 <: OUB, O2 <: OUB](
+  case class <==>[O1, O2](
       forward: O1 |- O2,
       backward: O2 |- O1
   )
 
   object <==> {
 
-    implicit def forward[O1 <: OUB, O2 <: OUB](
+    implicit def forward[O1, O2](
         implicit
         eq: O1 <==> O2
     ): O1 |- O2 = eq.forward
 
-    implicit def backward[O1 <: OUB, O2 <: OUB](
+    implicit def backward[O1, O2](
         implicit
         eq: O1 <==> O2
     ): O2 |- O1 = eq.backward
@@ -213,8 +203,8 @@ trait Theory extends HasTactic {
     inSubTheory.consequentFor(v)
   }
 
-  final def forAll[I]: ForAll[I, OUB] = new ForAll[I, OUB]
-  protected class ForAll[I, OG <: OUB] {
+  final def forAll[I]: ForAll[I, Any] = new ForAll[I, Any]
+  protected class ForAll[I, OG] {
 
     def =>>[O <: OG](_fn: I => O): Axiom[I |- O] = Theory.this.=>>(_fn)
     def =\>>[O <: OG](): Axiom[I |-\- O] = Theory.this.=\>>()
@@ -236,7 +226,7 @@ trait Theory extends HasTactic {
         contradiction: I `_|_` O
     ): I `_|_` O = contradiction
 
-    def toGoal[O <: OUB] = new ForAll[I, O]
+    def toGoal[O] = new ForAll[I, O]
 
     def useTactic[O <: OG](
         tactic: Tactic.Empty[I, OG] => Tactic.Partial[I, O, OG]
@@ -249,15 +239,15 @@ trait Theory extends HasTactic {
     }
   }
 
-  final def forTerm[I](v: I): ForTerm[I, OUB] = new ForTerm[I, OUB](v)
-  class ForTerm[I, OG <: OUB](v: I) extends ForAll[I, OG] {
+  final def forTerm[I](v: I): ForTerm[I, Any] = new ForTerm[I, Any](v)
+  class ForTerm[I, OG](v: I) extends ForAll[I, OG] {
 
     def construct[O <: OG](
         implicit
         ev: I |- O
     ): O = ev.instanceFor(v)
 
-    override def toGoal[O <: OUB] = new ForTerm[I, O](v)
+    override def toGoal[O] = new ForTerm[I, O](v)
   }
 }
 

@@ -6,8 +6,8 @@ object NaturalDeductionMixin {
 
     implicit def hypotheticalSyllogism_backward[
         A,
-        B <: OUB,
-        C <: OUB
+        B,
+        C
     ](
         implicit
         minorPremise: Axiom[B |- C],
@@ -21,8 +21,8 @@ trait NaturalDeductionMixin extends NaturalDeductionMixin._Imp0 {
 
   implicit def hypotheticalSyllogism_forward[
       A,
-      B <: OUB,
-      C <: OUB
+      B,
+      C
   ](
       implicit
       majorPremise: Axiom[A |- B],

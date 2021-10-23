@@ -5,7 +5,7 @@ import org.shapesafe.core.logic.ProofSystem
 
 object RatProofSpike {
 
-  object Sys extends ProofSystem.^[Any]
+  object Sys extends ProofSystem
 
   import Sys._
 
