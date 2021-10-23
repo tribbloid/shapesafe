@@ -1,25 +1,26 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.fixtures.Nat
-import org.shapesafe.core.util.Nat2ID
+import org.shapesafe.core.fixtures.Peano
+import org.shapesafe.core.util.Peano2ID
 
 object ProofSystemSpec {
 
-  import org.shapesafe.core.util.Nat2ID._
+  import org.shapesafe.core.util.Peano2ID._
 
   object ProveStuffX extends ProveStuff.SuperTheory {}
   object ProveStuffXX extends ProveStuffX.SuperTheory {}
 
-  trait HasSubProve extends Nat2ID {}
+  trait HasSubProve extends Peano2ID {}
 
   trait HasSubSubProve extends HasSubProve {}
 }
 
 class ProofSystemSpec extends BaseSpec {
 
-  import Nat._
-  import org.shapesafe.core.util.Nat2ID._
+  import Peano._
+  import org.shapesafe.core.util.Peano2ID._
+  import ProveStuff._
 
   it("can prove recursively") {
 
@@ -30,8 +31,6 @@ class ProofSystemSpec extends BaseSpec {
   }
 
   it("can refute or ridicule") {
-
-    import ProveStuff._
 
     implicit def bogus[N <: _3]: N |-\- ID[N] = forAll[N].=\>>()
 
@@ -65,11 +64,9 @@ class ProofSystemSpec extends BaseSpec {
 
     it("in a sub-thoery") {
 
-      import org.shapesafe.core.ProofSystemSpec.ProveStuffX._
+      case class ID2[SRC <: Peano](v: Int) extends Stuff
 
-      case class ID2[SRC <: Nat](v: Int) extends Stuff
-
-      implicit def theorem2[N <: Nat](
+      implicit def theorem2[N <: Peano](
           // depends on theorem in Parent scope
           implicit
           lemma1: ProveStuff.|-[N, ID[N]]
@@ -86,11 +83,9 @@ class ProofSystemSpec extends BaseSpec {
 
     it("in a sub-sub-theory") {
 
-      import org.shapesafe.core.ProofSystemSpec.ProveStuffXX._
+      case class ID3[SRC <: Peano](v: Int) extends Stuff
 
-      case class ID3[SRC <: Nat](v: Int) extends Stuff
-
-      implicit def theorem3[N <: Nat](
+      implicit def theorem3[N <: Peano](
           // depends on theorem in Parent scope
           implicit
           lemma1: ProveStuff.|-[N, ID[N]]
@@ -109,7 +104,7 @@ class ProofSystemSpec extends BaseSpec {
 
       object SubProveStuff2 extends ProveStuff.ExtensionLike
 
-      //      object SubSubProveNat extends SubProveNat.SubScope with SubProveNat2.SubScope
+      //      object SubSubProveNat extends SubProvePeano.SubScope with SubProveNat2.SubScope
       // TODO: at this moment, compiler says "class SubScope is inherited twice"
     }
   }
@@ -131,7 +126,7 @@ class ProofSystemSpec extends BaseSpec {
         .infer(v)
         .typeStr
         .shouldBe(
-          "Nat2ID.ProveStuff.Proof[Nat.Inc[Nat._0],Nat2ID.ProveStuff.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
+          "Peano2ID.ProveStuff.theory.Proof[Peano.Inc[Peano._0],Peano2ID.ProveStuff.theory.system.Aye[Peano2ID.ID[Peano.Inc[Peano._0.type]]]]"
         )
     }
 
@@ -146,7 +141,7 @@ class ProofSystemSpec extends BaseSpec {
 //        }
 //
 //      TypeVizShort[v.SubGoal].typeStr.shouldBe(
-//        "ProofSystemSpec.ID[Nat.^[Nat.^[Nat._0.type]]]"
+//        "ProofSystemSpec.ID[Peano.^[Peano.^[Peano._0.type]]]"
 //      )
 //    }
   }

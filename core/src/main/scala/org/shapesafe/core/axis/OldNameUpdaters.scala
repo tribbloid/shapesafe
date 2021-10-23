@@ -25,9 +25,9 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
         name: Witness.Aux[N],
         selector: Selector.Aux[OLD, N, A1],
         lemma: op.On[A1, A2] |- O
-    ): (OLD, N ->> A2) ==> ((N ->> O) :: OLD) = {
+    ): (OLD, N ->> A2) =>> ((N ->> O) :: OLD) = {
 
-      forAll[(OLD, N ->> A2)].==> {
+      forAll[(OLD, N ->> A2)].=>> {
 
         case (old, field) =>
           import shapeless.record._
@@ -62,9 +62,9 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
         selector: Selector.Aux[OLD, N, A1], // TODO: how to remove this? should be implied in modifier
         lemma: op.On[A1, A2] |- O,
         modifier: Modifier[OLD, N, A1, O]
-    ): (OLD, N ->> A2) ==> modifier.Out = {
+    ): (OLD, N ->> A2) =>> modifier.Out = {
 
-      forAll[(OLD, N ->> A2)].==> {
+      forAll[(OLD, N ->> A2)].=>> {
 
         case (old, field) =>
           val a2 = field: A2

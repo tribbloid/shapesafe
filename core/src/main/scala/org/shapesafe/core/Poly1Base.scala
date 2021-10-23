@@ -12,10 +12,6 @@ trait Poly1Base[IUB, OUB] {
   final type _IUB = IUB
   final type _OUB = OUB
 
-  // TODO: how to override it in subclasses?
-  @implicitNotFound(
-    "[MISSING]:\n${I}\n    ==>\n???\n"
-  )
   trait Case[-I <: IUB] {
 
     type Out <: OUB
@@ -23,28 +19,7 @@ trait Poly1Base[IUB, OUB] {
     def apply(v: I): Out
   }
 
-  object Case {
-
-    type Aux[
-        I <: IUB,
-        O <: OUB
-    ] = Case[I] {
-      type Out = O
-    }
-
-    // only use as an implicit type parameter if Output type doesn't depends on O!
-    type Lt[
-        I <: IUB,
-        O <: OUB
-    ] = Case[I] {
-      type Out <: O
-    }
-  }
-
-  @implicitNotFound(
-    "[MISSING]:\n${I}\n    ==>\n${O}\n"
-  )
-  class ==>[
+  class =>>[
       -I <: IUB,
       O <: OUB
   ](val toOut: I => O)
@@ -55,11 +30,57 @@ trait Poly1Base[IUB, OUB] {
     override def apply(v: I): O = toOut(v)
   }
 
+  object Auxs {
+
+    final type =>>[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] {
+      type Out = O
+    }
+
+    final type =>>:<[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] {
+      type Out <: O
+    }
+  }
+
+  object AuxsWithNotFoundMsg {
+
+    @implicitNotFound(
+      "${I}\t =/=>> \t??? <: ${OUB}"
+    )
+    final type Case[I <: IUB] = Poly1Base.this.Case[I]
+
+    @implicitNotFound(
+      "${I}\t =/=>> \t${O}"
+    )
+    final type =>>[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] {
+      type Out = O
+    }
+
+    // only use as an implicit type parameter if Output type doesn't depends on O!
+    @implicitNotFound(
+      "${I}\t =/=>> \t??? <: ${O}"
+    )
+    final type =>>:<[
+        I <: IUB,
+        O <: OUB
+    ] = Case[I] {
+      type Out <: O
+    }
+  }
+
   def forAll[I <: IUB] = new ForAll[I]() // same as `at` in Poly1?
 
   protected class ForAll[I <: IUB]() {
 
-    def ==>[O <: OUB](fn: I => O): I ==> O = new (I ==> O)(fn)
+    def =>>[O <: OUB](fn: I => O): I =>> O = new (I =>> O)(fn)
   }
 
   def summon[I <: IUB](
@@ -83,7 +104,7 @@ trait Poly1Base[IUB, OUB] {
 
     implicit def delegate[I <: IUB, O <: OUB](
         implicit
-        from: I ==> O
+        from: I =>> O
     ): Case.Aux[I, O] = at[I].apply { ii =>
       from.apply(ii)
     }

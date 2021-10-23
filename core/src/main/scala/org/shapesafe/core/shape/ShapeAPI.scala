@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.XInt
+import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.arity.{Arity, ConstArity}
 import org.shapesafe.core.shape.ProveShape.|-
@@ -9,7 +10,6 @@ import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOps, VectorOps}
 import org.shapesafe.core.shape.unary._
 import shapeless.ops.hlist.Reverse
-import shapeless.ops.nat.ToInt
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 
 import scala.language.implicitConversions
@@ -126,8 +126,8 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
     def apply(i: Nat)(
         implicit
-        toIntN: ToInt[i.N]
-    ): ^[GetSubscript[_Shape, Index.I_th[i.N]]] = {
+        asOp: NatAsOp[i.N]
+    ): ^[GetSubscript[_Shape, Index.I_th[i.N, asOp.OutInt]]] = {
 
       apply(Index.I_th(i))
     }
@@ -215,13 +215,13 @@ object ShapeAPI {
   // TODO: only support LeafShape, remove
 //  object Vector {
 //
-//    type Aux[T <: Axis] = ^[➊ >< T]
+//    type Aux[T <: Axis] = ^[∅ >< T]
 //  }
 //  type Vector = Vector.Aux[_]
 //
 //  object Matrix {
 //
-//    type Aux[T1 <: Axis, T2 <: Axis] = ^[➊ >< T1 >< T2]
+//    type Aux[T1 <: Axis, T2 <: Axis] = ^[∅ >< T1 >< T2]
 //  }
 //  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
 }

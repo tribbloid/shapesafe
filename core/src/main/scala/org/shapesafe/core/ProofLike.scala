@@ -4,5 +4,5 @@ trait ProofLike {}
 
 object ProofLike {
 
-  trait AxiomTag extends ProofLike
+  trait TheoremTag extends ProofLike
 }

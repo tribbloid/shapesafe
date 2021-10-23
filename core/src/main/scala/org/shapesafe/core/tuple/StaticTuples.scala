@@ -79,7 +79,7 @@ trait StaticTuples[VB] extends Tuples {
 
 object StaticTuples {
 
-  val EYE = Witness("➊")
+  val EYE = Witness("∅")
 
   object W {
 

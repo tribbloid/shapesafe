@@ -1,10 +1,9 @@
 package org.shapesafe.core.shape
 
+import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.graph.commons.util.IDMixin
-import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
-import singleton.ops.ToString
 
 trait Index extends IDMixin with CanPeek {
 
@@ -30,19 +29,21 @@ object Index {
     def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
-  class I_th[N <: Nat](val index: N, indexInt: Int) extends Name_<:[Nothing] {
+  class I_th[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
     type Ordinal = N
 
-    override protected def _id = indexInt
+    override protected def _id = value
 
-    override type Expr = ToString[N]
+    override type Expr = S
   }
 
   object I_th {
 
+//    import shapeless.ops.nat.ToInt
+
     def apply(i: Nat)(
         implicit
-        toIntN: ToInt[i.N]
-    ) = new I_th[i.N](i.asInstanceOf[i.N], toIntN.apply())
+        asOp: NatAsOp[i.N]
+    ) = new I_th[i.N, asOp.OutInt](i.asInstanceOf[i.N], asOp.value.asInstanceOf[asOp.OutInt])
   }
 }

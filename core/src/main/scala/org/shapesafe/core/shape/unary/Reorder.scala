@@ -68,7 +68,7 @@ object Reorder extends Reorder_Imp0 {
         P1 <: StaticShape
     ] = {
 
-      forAll[Reorder[P1, Indices.Eye]].==> { v =>
+      forAll[Reorder[P1, Indices.Eye]].=>> { v =>
         StaticShape.Eye
       }
     }
@@ -82,9 +82,9 @@ object Reorder extends Reorder_Imp0 {
     ](
         implicit
         forTail: Reorder[P1, II_-] |- OO_-,
-        forHead: GetSubscript.Premise.Case.Aux[GetSubscript[P1, I], O]
+        forHead: GetSubscript.Premise.Auxs.=>>[GetSubscript[P1, I], O]
     ) = {
-      forAll[Reorder[P1, Indices.><[II_-, I]]].==> { v =>
+      forAll[Reorder[P1, Indices.><[II_-, I]]].=>> { v =>
         val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(GetSubscript(v.s1, v.indices.head))

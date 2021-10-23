@@ -29,8 +29,8 @@ class Reporters[
           implicit
           vizA: PeekCTAux[A#Expr, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
-      ): A ==> mk.Out =
-        forAll[A].==>(_ => mk.value)
+      ): A =>> mk.Out =
+        forAll[A].=>>(_ => mk.value)
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -46,8 +46,8 @@ class Reporters[
           vizA: PeekCTAux[A#Expr, VA],
           vizS: PeekCTAux[ExprOf[S], VS],
           mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
-      ): A ==> mk.Out =
-        forAll[A].==>(_ => mk.value)
+      ): A =>> mk.Out =
+        forAll[A].=>>(_ => mk.value)
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
@@ -59,8 +59,8 @@ class Reporters[
           implicit
           vizS: PeekCTAux[ExprOf[S], VS],
           op: (PEEK.T + VS + "\n") { type Out <: XString }
-      ): S ==> op.Out =
-        forAll[S].==>(_ => op.value)
+      ): S =>> op.Out =
+        forAll[S].=>>(_ => op.value)
     }
 
     override object Step1 extends Step1_Imp1
@@ -96,7 +96,7 @@ object Reporters {
           SS <: XString
       ](
           implicit
-          step1: Step1.Case.Aux[IN, SS]
+          step1: Step1.Auxs.=>>[IN, SS]
       ): SS = {
 
         step1.apply(v)
@@ -108,9 +108,9 @@ object Reporters {
         SS <: XString
     ](
         implicit
-        step1: Step1.Case.Aux[IN, SS],
+        step1: Step1.Auxs.=>>[IN, SS],
         step2: EmitMsg[SS]
-    ): IN ==> Unit = forAll[IN].==> { _ =>
+    ): IN =>> Unit = forAll[IN].=>> { _ =>
       //      val emit = new EmitMsg[SS, EmitMsg.Error]
       //      emit.emit
     }
@@ -120,18 +120,18 @@ object Reporters {
 
     type TryStripe
 
-    type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Case.Aux[SELF, O]
+    type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
 
     object Refute0 extends Poly1Base[CanPeek with CanRefute, Any] {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
           expr2Str: PeekCTAux[I#Expr, V]
-      ): I ==> (
+      ): I =>> (
         Refute[I] +
           TryStripe +
           V
-      ) = forAll[I].==> { _ =>
+      ) = forAll[I].=>> { _ =>
         null
       }
     }

@@ -80,10 +80,10 @@ trait DimensionWise {
         AO <: Arity
     ](
         implicit
-        consTail: TI ==> TO,
+        consTail: TI =>> TO,
         proveArity: op.On[A1, A2] |- AO
-    ): ((A1, A2) :: TI) ==> (AO :: TO) = {
-      forAll[(A1, A2) :: TI].==> { v =>
+    ): ((A1, A2) :: TI) =>> (AO :: TO) = {
+      forAll[(A1, A2) :: TI].=>> { v =>
         val ti = v.tail
         val to = consTail(ti)
 

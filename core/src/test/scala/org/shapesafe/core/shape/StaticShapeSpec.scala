@@ -361,7 +361,7 @@ class StaticShapeSpec extends BaseSpec {
 
       shouldNotCompile(
         """Shape.interrupt""",
-        """.*(➊).*"""
+        """.*(∅).*"""
       )
     }
 

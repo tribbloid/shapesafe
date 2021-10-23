@@ -8,7 +8,7 @@ import shapeless.{::, HList, HNil}
 
 trait RecordLemma extends Poly1Base[HList, HList] {
 
-  implicit val nil: HNil ==> HNil = forAll[HNil].==> { _ =>
+  implicit val nil: HNil =>> HNil = forAll[HNil].=>> { _ =>
     HNil
   }
 
@@ -22,11 +22,11 @@ trait RecordLemma extends Poly1Base[HList, HList] {
         O <: HList
     ](
         implicit
-        lemma1: outer.==>[I, O],
+        lemma1: outer.=>>[I, O],
         lemma2: StaticShape.FromArities.Case[O]
-    ): I ==> lemma2.Out = {
+    ): I =>> lemma2.Out = {
 
-      forAll[I].==> { i =>
+      forAll[I].=>> { i =>
         lemma2.apply(lemma1.apply(i))
       }
     }
@@ -43,10 +43,10 @@ object RecordLemma {
         HI <: UB_->>
     ](
         implicit
-        consTail: TI ==> TO,
+        consTail: TI =>> TO,
         newName: NewNameAppender.Case[(TO, HI)]
-    ): (HI :: TI) ==> newName.Out = {
-      forAll[HI :: TI].==> { v =>
+    ): (HI :: TI) =>> newName.Out = {
+      forAll[HI :: TI].=>> { v =>
         val ti = v.tail
         val to = consTail(ti)
         newName(to -> v.head)

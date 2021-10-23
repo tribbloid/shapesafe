@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
 
-    val vs = versions()
+//    val vs = versions()
 
     dependencies {
         classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.9") // suffix is always 2.12, weird
@@ -160,8 +160,8 @@ allprojects {
                     compilerOptions.addAll(
                         listOf(
                             "-Vimplicits",
-                            "-Vimplicits-verbose-tree",
-                            "-Vtype-diffs"
+                            "-Vimplicits-verbose-tree"
+//                            "-Vtype-diffs"
                         )
                     )
                 }
@@ -226,6 +226,10 @@ allprojects {
 //        this.zincVersion
 //    }
 
+}
+
+subprojects {
+
     publishing {
         val moduleID =
             if (project.name.startsWith(rootID)) project.name
@@ -237,46 +241,47 @@ allprojects {
                 artifactId = moduleID
                 version = version
 
-                from(components["java"])
+                val javaComponent = components["java"] as AdhocComponentWithVariants
+                from(javaComponent)
 
-                suppressPomMetadataWarningsFor("testFixturesApiElements")
-                suppressPomMetadataWarningsFor("testFixturesRuntimeElements")
+                javaComponent.withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
+                javaComponent.withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
             }
         }
     }
+}
 
-    idea {
+idea {
 
-        targetVersion = "2020"
+    targetVersion = "2020"
 
-        module {
+    module {
 
-            excludeDirs = excludeDirs + listOf(
-                file(".gradle"),
-                file(".github"),
+        excludeDirs = excludeDirs + listOf(
+            file(".gradle"),
+            file(".github"),
 
-                file ("target"),
+            file ("target"),
 //                        file ("out"),
 
-                file(".idea"),
-                file(".vscode"),
-                file(".bloop"),
-                file(".bsp"),
-                file(".metals"),
-                file(".ammonite"),
+            file(".idea"),
+            file(".vscode"),
+            file(".bloop"),
+            file(".bsp"),
+            file(".metals"),
+            file(".ammonite"),
 
-                file("logs"),
+            file("logs"),
 
-                // apache spark
-                file("warehouse"),
+            // apache spark
+            file("warehouse"),
 
-                file("spike"),
+            file("spike"),
 
-                file("splain")
-            )
+            file("splain")
+        )
 
-            isDownloadJavadoc = true
-            isDownloadSources = true
-        }
+        isDownloadJavadoc = true
+        isDownloadSources = true
     }
 }

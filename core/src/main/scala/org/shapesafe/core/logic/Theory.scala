@@ -1,11 +1,13 @@
 package org.shapesafe.core.logic
 
 import org.shapesafe.core.ProofLike
-import org.shapesafe.core.ProofLike.AxiomTag
+import org.shapesafe.core.ProofLike.TheoremTag
 
 import scala.annotation.implicitNotFound
 
-trait Theory extends HasTactic {
+trait Theory extends HasTheory with HasTactic {
+
+  final override val theory: this.type = this
 
   type System <: ProofSystem with Singleton
   val system: System
@@ -66,21 +68,26 @@ trait Theory extends HasTactic {
   }
 
   @implicitNotFound(
-    "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
+    "[NO PROOF]: ${I}\t |- \t??? <: ${O}"
   )
   final type |-<[-I, O] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
     */
-  // TODO: how to override it in subclasses?
   @implicitNotFound(
-    "[NO PROOF]\n${I}\n    |-\n${O}\n"
+    "[NO PROOF]: ${I}\t |- \t${O}"
   )
   final type |-[-I, O] = Proof[I, system.Aye[O]]
 
+  @implicitNotFound(
+    "[NO REFUTATION]: ${I}\t |-\\- \t${O}"
+  )
   final type |-\-[-I, O] = Proof[I, system.Nay[O]]
 
+  @implicitNotFound(
+    "[NO ABSTENTION]: ${I}\t |-?- \t${O}"
+  )
   final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 
   final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]
@@ -99,7 +106,7 @@ trait Theory extends HasTactic {
 
   object GenProof {}
 
-  type Axiom[T <: Proof[_, _]] = T with AxiomTag
+  type Theorem[T <: Proof[_, _]] = T with TheoremTag
 
   /**
     * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
@@ -118,8 +125,8 @@ trait Theory extends HasTactic {
     * @tparam I src type
     * @tparam O tgt type
     */
-  def =>>[I, O](_fn: I => O): Axiom[I |- O] = {
-    new (I |- O) with AxiomTag {
+  def =>>[I, O](_fn: I => O): Theorem[I |- O] = {
+    new (I |- O) with TheoremTag {
       override def consequentFor(v: I): system.Aye[O] = {
         val out = _fn(v)
         system.Aye(out)
@@ -127,16 +134,16 @@ trait Theory extends HasTactic {
     }
   }
 
-  def =\>>[I, O](): Axiom[I |-\- O] = {
-    new (I |-\- O) with AxiomTag {
+  def =\>>[I, O](): Theorem[I |-\- O] = {
+    new (I |-\- O) with TheoremTag {
       override def consequentFor(v: I): system.Nay[O] = {
         system.Nay()
       }
     }
   }
 
-  def =?>>[I, O](): Axiom[I |-?- O] = {
-    new (I |-?- O) with AxiomTag {
+  def =?>>[I, O](): Theorem[I |-?- O] = {
+    new (I |-?- O) with TheoremTag {
       override def consequentFor(v: I): system.Abstain[O] = {
         system.Abstain()
       }
@@ -147,8 +154,8 @@ trait Theory extends HasTactic {
       implicit
       proving: I |- O,
       refuting: I |-\- O
-  ): Axiom[I `_|_` O] = {
-    new (I `_|_` O) with AxiomTag {
+  ): Theorem[I `_|_` O] = {
+    new (I `_|_` O) with TheoremTag {
       override def consequentFor(v: I): system.Absurd[O] = {
         system.Absurd(proving.consequentFor(v), refuting.consequentFor(v))
       }
@@ -186,29 +193,12 @@ trait Theory extends HasTactic {
     }
   }
 
-  object SubTheory {
-    type Aux = System#ExtensionLike {
-
-      type ExtensionBound >: Theory.this.Bound
-    }
-  }
-
-  implicit def coerciveUpcast[
-      I,
-      P <: Consequent
-  ](
-      implicit
-      inSubTheory: SubTheory.Aux#Proof[I, P]
-  ): Proof[I, P] = { (v: I) =>
-    inSubTheory.consequentFor(v)
-  }
-
   final def forAll[I]: ForAll[I, Any] = new ForAll[I, Any]
-  protected class ForAll[I, OG] {
+  class ForAll[I, OG] {
 
-    def =>>[O <: OG](_fn: I => O): Axiom[I |- O] = Theory.this.=>>(_fn)
-    def =\>>[O <: OG](): Axiom[I |-\- O] = Theory.this.=\>>()
-    def =?>>[O <: OG](): Axiom[I |-?- O] = Theory.this.=?>>()
+    def =>>[O <: OG](_fn: I => O): Theorem[I |- O] = Theory.this.=>>(_fn)
+    def =\>>[O <: OG](): Theorem[I |-\- O] = Theory.this.=\>>()
+    def =?>>[O <: OG](): Theorem[I |-?- O] = Theory.this.=?>>()
 
     // summoners
     def prove[O <: OG](
@@ -216,11 +206,18 @@ trait Theory extends HasTactic {
         theorem: I |- O
     ): I |- O = theorem
 
+    // TODO: this shouldn't be required if implicit search works flawlessly
+//    def proveDirectly(
+//        implicit
+//        theorem: I |- OG
+//    ): I |- OG = theorem
+
     def refute[O <: OG](
         implicit
         theorem: I |-\- O
     ): I |-\- O = theorem
 
+    // remember to mixin [[ContradictionDeduction]] before calling it
     def ridicule[O <: OG](
         implicit
         contradiction: I `_|_` O
