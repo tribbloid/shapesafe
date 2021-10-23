@@ -2,6 +2,7 @@ package org.shapesafe.core
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.fixtures.Nat
+import org.shapesafe.core.logic.{NaturalDeductionMixin, ProofSystem}
 
 class NaturalDeductionMixinSpec extends BaseSpec {
 

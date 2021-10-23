@@ -1,7 +1,7 @@
 package org.shapesafe.core.util
 
-import org.shapesafe.core.ProofSystem
 import org.shapesafe.core.fixtures.Nat
+import org.shapesafe.core.logic.ProofSystem
 
 trait Nat2ID {
 

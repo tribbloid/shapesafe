@@ -1,7 +1,7 @@
 package org.shapesafe.core.fixtures
 
-import org.shapesafe.core.ProofSystem
 import org.shapesafe.core.fixtures.CommutativeRingAxioms.Prove.{|-, forAll}
+import org.shapesafe.core.logic.ProofSystem
 
 object CommutativeRingAxioms {
 

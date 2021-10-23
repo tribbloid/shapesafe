@@ -1,4 +1,4 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
 /**
   * This trait forms the backbone of compile-time reasoning and should reflect our best effort in reproducing

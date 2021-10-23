@@ -1,4 +1,4 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
 trait HasProposition {
 

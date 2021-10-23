@@ -1,7 +1,8 @@
 package org.shapesafe.core.debugging
 
 import org.shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
-import org.shapesafe.core.{AxiomSet, Poly1Base}
+import org.shapesafe.core.Poly1Base
+import org.shapesafe.core.logic.AxiomSet
 import org.shapesafe.m.viz.PeekCT
 import org.shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
 import singleton.ops.{+, XString}

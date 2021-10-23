@@ -1,6 +1,7 @@
 package org.shapesafe.core
 
 import org.shapesafe.Spike
+import org.shapesafe.core.logic.ProofSystem
 
 object RatProofSpike {
 

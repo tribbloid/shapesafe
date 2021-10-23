@@ -1,5 +1,6 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
+import org.shapesafe.core.ProofLike
 import org.shapesafe.core.ProofLike.AxiomTag
 
 import scala.annotation.implicitNotFound
