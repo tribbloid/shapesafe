@@ -160,8 +160,8 @@ allprojects {
                     compilerOptions.addAll(
                         listOf(
                             "-Vimplicits",
-                            "-Vimplicits-verbose-tree",
-                            "-Vtype-diffs"
+                            "-Vimplicits-verbose-tree"
+//                            "-Vtype-diffs"
                         )
                     )
                 }

@@ -1,6 +1,6 @@
 package org.shapesafe.m.viz
 
-import org.shapesafe.graph.commons.util.reflect.format.TypeFormat
+import org.shapesafe.graph.commons.util.reflect.format.{Formats0, TypeFormat}
 import org.shapesafe.graph.commons.util.viz.TypeVizFormat
 
 import scala.language.experimental.macros
@@ -14,11 +14,10 @@ case object TypeVizCT extends VizCTSystem {
 
   implicit def infoOf[I]: Info[I] = macro VizCTSystem.Macros.infoOf[I, this.type]
 
-//  case object Stub extends VizCTSystem {
-//
-//    override def vizFormat: TypeVizFormat = Formats.TypeInfo.Short
-//    override def useTree: Boolean = false
-//
-//    implicit def infoOf[I]: InfoOf[I] = macro VizCTSystem.Macros.infoOf[I, this.type]
-//  }
+  case object Short extends SubSystem {
+
+    override lazy val format: TypeVizFormat = Formats0.TypeInfo.HidePackage.recursively.DeAlias
+
+    implicit def infoOf[I]: Info[I] = macro VizCTSystem.Macros.infoOf[I, this.type]
+  }
 }

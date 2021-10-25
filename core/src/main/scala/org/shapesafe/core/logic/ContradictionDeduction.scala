@@ -1,24 +1,24 @@
 package org.shapesafe.core.logic
 
-object ContradictionMixin {
+object ContradictionDeduction {
 
-  trait _Imp0 {
-    self: Theory =>
+  trait _Imp0 extends HasTheory {
+    import theory._
 
     implicit def contradicting2[I, O](
         implicit
         refuting: I |-\- O,
         proving: I |- O
-    ): Axiom[I `_|_` O] = =>><<=[I, O]
+    ): Theorem[I `_|_` O] = =>><<=[I, O]
   }
 }
 
-trait ContradictionMixin extends ContradictionMixin._Imp0 {
-  self: Theory =>
+trait ContradictionDeduction extends ContradictionDeduction._Imp0 {
+  import theory._
 
   implicit def contradicting1[I, O](
       implicit
       proving: I |- O,
       refuting: I |-\- O
-  ): Axiom[I `_|_` O] = =>><<=[I, O]
+  ): Theorem[I `_|_` O] = =>><<=[I, O]
 }

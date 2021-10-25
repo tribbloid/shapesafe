@@ -1,4 +1,4 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.fixtures.Nat
@@ -20,6 +20,7 @@ class ProofSystemSpec extends BaseSpec {
 
   import Nat._
   import org.shapesafe.core.util.Nat2ID._
+  import ProveStuff._
 
   it("can prove recursively") {
 
@@ -30,8 +31,6 @@ class ProofSystemSpec extends BaseSpec {
   }
 
   it("can refute or ridicule") {
-
-    import ProveStuff._
 
     implicit def bogus[N <: _3]: N |-\- ID[N] = forAll[N].=\>>()
 
@@ -65,8 +64,6 @@ class ProofSystemSpec extends BaseSpec {
 
     it("in a sub-thoery") {
 
-      import org.shapesafe.core.ProofSystemSpec.ProveStuffX._
-
       case class ID2[SRC <: Nat](v: Int) extends Stuff
 
       implicit def theorem2[N <: Nat](
@@ -85,8 +82,6 @@ class ProofSystemSpec extends BaseSpec {
     }
 
     it("in a sub-sub-theory") {
-
-      import org.shapesafe.core.ProofSystemSpec.ProveStuffXX._
 
       case class ID3[SRC <: Nat](v: Int) extends Stuff
 

@@ -1,11 +1,11 @@
 package org.shapesafe.core.util
 
 import org.shapesafe.core.fixtures.Nat
-import org.shapesafe.core.logic.{ContradictionMixin, ProofSystem}
+import org.shapesafe.core.logic.{ContradictionDeduction, ProofSystem}
 
 trait Nat2ID {
 
-  object ProveStuff extends ProofSystem with ContradictionMixin
+  object ProveStuff extends ProofSystem with ContradictionDeduction
   import ProveStuff._
 
   abstract class Stuff {

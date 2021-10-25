@@ -1,13 +1,11 @@
-package org.shapesafe.core
+package org.shapesafe.core.logic
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.fixtures.Nat
-import org.shapesafe.core.logic.{NaturalDeductionMixin, ProofSystem}
 
-class NaturalDeductionMixinSpec extends BaseSpec {
+class NaturalDeductionSpec extends BaseSpec {
 
-  import NaturalDeductionMixinSpec._
-//  import org.shapesafe.core.fixtures.NatAxioms._
+  import NaturalDeductionSpec._
 
   it("should not cause diverging implicit") {
 
@@ -29,12 +27,12 @@ class NaturalDeductionMixinSpec extends BaseSpec {
   }
 }
 
-object NaturalDeductionMixinSpec {
+object NaturalDeductionSpec {
 
   import org.shapesafe.core.util.Nat2ID._
 
   case class N1[T <: Nat](v: Int) extends Stuff
   case class N2[T <: Nat](v: Int) extends Stuff
 
-  object ProveStuff extends ProofSystem with NaturalDeductionMixin {}
+  object ProveStuff extends ProofSystem with NaturalDeduction {}
 }

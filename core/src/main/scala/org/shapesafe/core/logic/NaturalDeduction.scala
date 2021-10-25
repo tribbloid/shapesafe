@@ -1,8 +1,9 @@
 package org.shapesafe.core.logic
 
-object NaturalDeductionMixin {
-  trait _Imp0 {
-    self: Theory =>
+object NaturalDeduction {
+  trait _Imp0 extends HasTheory {
+
+    import theory._
 
     implicit def hypotheticalSyllogism_backward[
         A,
@@ -10,14 +11,15 @@ object NaturalDeductionMixin {
         C
     ](
         implicit
-        minorPremise: Axiom[B |- C],
+        minorPremise: Theorem[B |- C],
         majorPremise: A |- B
     ): A |- C = Proof.Chain(majorPremise, minorPremise)
   }
 }
 
-trait NaturalDeductionMixin extends NaturalDeductionMixin._Imp0 {
-  self: Theory =>
+trait NaturalDeduction extends NaturalDeduction._Imp0 {
+
+  import theory._
 
   implicit def hypotheticalSyllogism_forward[
       A,
@@ -25,7 +27,7 @@ trait NaturalDeductionMixin extends NaturalDeductionMixin._Imp0 {
       C
   ](
       implicit
-      majorPremise: Axiom[A |- B],
+      majorPremise: Theorem[A |- B],
       minorPremise: B |- C
   ): A |- C = Proof.Chain(majorPremise, minorPremise)
 }

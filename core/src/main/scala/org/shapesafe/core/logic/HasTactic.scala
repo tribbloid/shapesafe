@@ -1,7 +1,8 @@
 package org.shapesafe.core.logic
 
-trait HasTactic {
-  self: Theory =>
+trait HasTactic extends HasTheory {
+
+  import theory._
 
   // similar to https://leanprover-community.github.io/extras/conv.html
   trait Tactic[I, SUBG, OG] {
@@ -12,9 +13,9 @@ trait HasTactic {
 
     def toGoal[O]: Tactic[I, SUBG, O]
 
-    def cite[O <: OG](lemma: SUBG |- O): Partial[I, O, OG]
+    def cite[O](lemma: SUBG |- O): Partial[I, O, OG]
 
-    def >>[O <: OG](lemma: SUBG |- O): Partial[I, O, OG] = {
+    def >>[O](lemma: SUBG |- O): Partial[I, O, OG] = {
 
       cite(lemma)
     }
@@ -27,7 +28,7 @@ trait HasTactic {
 
       override def toGoal[O]: Empty[I, O] = new Empty[I, O]()
 
-      override def cite[O <: OG](lemma: I |- O): Partial[I, O, OG] = {
+      override def cite[O](lemma: I |- O): Partial[I, O, OG] = {
 
         Partial[I, O, OG](lemma)
       }

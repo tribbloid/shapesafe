@@ -1,19 +1,26 @@
 package org.shapesafe.core.logic.binary
 
-class RingAxioms[:+[A, B], :*[A, B], _0, _1] {
+import org.shapesafe.core.logic.HasTheory
 
-  trait Ring_+ extends AbelianUnder[:+, _0] {}
+trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _1 <: D] extends HasTheory {
 
-  trait Ring_* extends MonoidalUnder[:+, _1] {
+  trait Ring_+ extends AbelianUnder[D, :+, _0] {
+
+    final override val theory: RingAxioms.this.theory.type = RingAxioms.this.theory
+  }
+
+  trait Ring_* extends MonoidalUnder[D, :*, _1] {
+
+    final override val theory: RingAxioms.this.theory.type = RingAxioms.this.theory
 
     val ring_+ : Ring_+
 
-    import prove._
+    import theory._
 
     implicit def distributiveL[
-        A,
-        B,
-        C
+        A <: D,
+        B <: D,
+        C <: D
     ] = forAll[A :* (B :+ C)].=>> { v =>
       val (l, r) = deconstruct(v)
       val (rl, rr) = ring_+.deconstruct(r)
@@ -25,9 +32,9 @@ class RingAxioms[:+[A, B], :*[A, B], _0, _1] {
     }
 
     implicit def distributiveR[
-        A,
-        B,
-        C
+        A <: D,
+        B <: D,
+        C <: D
     ] = forAll[(A :+ B) :* C].=>> { v =>
       val (l, r) = deconstruct(v)
       val (ll, lr) = ring_+.deconstruct(l)
@@ -39,5 +46,5 @@ class RingAxioms[:+[A, B], :*[A, B], _0, _1] {
     }
   }
 
-  trait CommutativeRing_* extends Ring_* with AbelianUnder[:*, _1] {}
+  trait CommutativeRing_* extends Ring_* with AbelianUnder[D, :*, _1] {}
 }
