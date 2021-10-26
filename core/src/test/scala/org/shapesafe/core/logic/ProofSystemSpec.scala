@@ -126,7 +126,7 @@ class ProofSystemSpec extends BaseSpec {
         .infer(v)
         .typeStr
         .shouldBe(
-          "Nat2ID.ProveStuff.Proof[Nat.Inc[Nat._0],Nat2ID.ProveStuff.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
+          "Nat2ID.ProveStuff.theory.Proof[Nat.Inc[Nat._0],Nat2ID.ProveStuff.theory.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
         )
     }
 

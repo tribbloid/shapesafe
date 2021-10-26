@@ -188,24 +188,6 @@ trait Theory extends HasTheory with HasTactic {
     }
   }
 
-  object SubTheory {
-    type Aux = System#ExtensionLike {
-
-      type ExtensionBound >: Theory.this.Bound
-    }
-  }
-
-  implicit def coerciveUpcast[
-      I,
-      P <: Consequent
-  ](
-      implicit
-      proofInSubTheory: SubTheory.Aux#Proof[I, P]
-      // proof defined for SubTheory can be used directly
-  ): Proof[I, P] = { (v: I) =>
-    proofInSubTheory.consequentFor(v)
-  }
-
   final def forAll[I]: ForAll[I, Any] = new ForAll[I, Any]
   class ForAll[I, OG] {
 
@@ -218,6 +200,12 @@ trait Theory extends HasTheory with HasTactic {
         implicit
         theorem: I |- O
     ): I |- O = theorem
+
+    // TODO: this shouldn't be required if implicit search works flawlessly
+//    def proveDirectly(
+//        implicit
+//        theorem: I |- OG
+//    ): I |- OG = theorem
 
     def refute[O <: OG](
         implicit

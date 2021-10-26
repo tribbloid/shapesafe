@@ -4,28 +4,6 @@ trait MonoidalUnder[D, ??[A <: D, B <: D] <: D, Eye <: D] extends Op2Under[D, ??
 
   import theory._
 
-//    implicit def composite1[
-//        A ,
-//        B ,
-//        AO
-//    ](
-//        implicit
-//        lemma1: A |- AO
-//    ) = forAll[??[A, B]].=>> { v =>
-//      apply(lemma1.valueOf(v.a), v.b)
-//    }
-//
-//    implicit def composite2[
-//        A ,
-//        B ,
-//        BO
-//    ](
-//        implicit
-//        lemma2: B |- BO
-//    ) = forAll[??[A, B]].=>> { v =>
-//      apply(v.a, lemma2.valueOf(v.b))
-//    }
-
   implicit def eyeL[A <: D]: Theorem[A ?? Eye |- A] = forAll[A ?? Eye].=>> { v =>
     deconstruct(v)._1
   }

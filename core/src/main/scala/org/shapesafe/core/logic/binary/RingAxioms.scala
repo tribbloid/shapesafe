@@ -1,19 +1,12 @@
 package org.shapesafe.core.logic.binary
 
-import org.shapesafe.core.logic.HasTheory
-
-trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _1 <: D] extends HasTheory {
-
-  trait Ring_+ extends AbelianUnder[D, :+, _0] {
-
-    final override val theory: RingAxioms.this.theory.type = RingAxioms.this.theory
-  }
+trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _1 <: D] extends GroupAxioms[D, :+, _0] {
 
   trait Ring_* extends MonoidalUnder[D, :*, _1] {
 
     final override val theory: RingAxioms.this.theory.type = RingAxioms.this.theory
 
-    val ring_+ : Ring_+
+    val group_+ : Group_+
 
     import theory._
 
@@ -23,9 +16,9 @@ trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _
         C <: D
     ] = forAll[A :* (B :+ C)].=>> { v =>
       val (l, r) = deconstruct(v)
-      val (rl, rr) = ring_+.deconstruct(r)
+      val (rl, rr) = group_+.deconstruct(r)
 
-      ring_+.construct(
+      group_+.construct(
         construct(l, rl),
         construct(l, rr)
       )
@@ -37,9 +30,9 @@ trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _
         C <: D
     ] = forAll[(A :+ B) :* C].=>> { v =>
       val (l, r) = deconstruct(v)
-      val (ll, lr) = ring_+.deconstruct(l)
+      val (ll, lr) = group_+.deconstruct(l)
 
-      ring_+.construct(
+      group_+.construct(
         construct(ll, r),
         construct(lr, r)
       )

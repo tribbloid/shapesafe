@@ -16,11 +16,7 @@ mkdir -p ${FWDIR}/logs/dependencyTree
 
 ${FWDIR}/gradlew -q dependencyTree "${@}" > ${FWDIR}/logs/dependencyTree/"$DATE".log
 
-${FWDIR}/gradlew clean testClasses publishToMavenLocal "${@}" && \
-echo "[DEMO]" && \
-cd ${FWDIR}/shapesafe-demo && \
-sbt clean package && \
-cd ..
+${FWDIR}/gradlew clean testClasses publishToMavenLocal "${@}"
 
 #CD ${FWDIR}/shapeshape-demo/
 #

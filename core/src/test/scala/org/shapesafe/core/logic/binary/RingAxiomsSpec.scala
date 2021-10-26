@@ -2,6 +2,7 @@ package org.shapesafe.core.logic.binary
 
 import org.shapesafe.BaseSpec
 import org.shapesafe.core.logic.ProofSystem
+import org.shapesafe.graph.commons.util.debug.print_@
 
 object RingAxiomsSpec {
 
@@ -16,7 +17,7 @@ object RingAxiomsSpec {
 
     object ProveVar extends ProofSystem with RingAxioms[Var, :+, :*, _0.type, _1.type] {}
 
-    object :+ extends ProveVar.Ring_+ {
+    object :+ extends ProveVar.Group_+ {
 
       override def construct[A <: Var, B <: Var](a: A, b: B): A :+ B = :+(a, b)
 
@@ -25,21 +26,21 @@ object RingAxiomsSpec {
 
     object :* extends ProveVar.Ring_* {
 
-      override val ring_+ : ProveVar.Ring_+ = :+
+      override val group_+ : ProveVar.Group_+ = :+
 
       override def construct[A <: Var, B <: Var](a: A, b: B): A :* B = :*(a, b)
 
       override def deconstruct[A <: Var, B <: Var](v: A :* B): (A, B) = (v.a, v.b)
     }
 
-    trait A extends Var
-    trait B extends Var
-    trait C extends Var
+    trait X extends Var
+    trait Y extends Var
+    trait Z extends Var
 
-    type AB = A :+ B
-    type AB2_1 = AB :* AB
+    type XY = X :+ Y
+    type XY2 = XY :* XY
 
-    type AB2_2 = (A :* A) :+ (A :* B) :+ (B :* A) :+ (B :* B)
+    type XY2_1 = (X :* X) :+ (X :* Y) :+ (Y :* X) :+ (Y :* Y)
   }
 
   object DummyRing extends DummyRing
@@ -53,7 +54,7 @@ class RingAxiomsSpec extends BaseSpec {
 
   it("A + B =>> B + A") {
 
-    val tt = forAll[AB].toGoal[B :+ A]
+    val tt = forAll[XY].toGoal[Y :+ X]
 
     // manually
     val p1 = tt.useTactic { v =>
@@ -67,7 +68,7 @@ class RingAxiomsSpec extends BaseSpec {
   it("A + B + C =>> C + B + A") {
     // have to use hypothetical syllogism & substitution
 
-    val tt = forAll[AB :+ C].toGoal[C :+ B :+ A]
+    val tt = forAll[XY :+ Z].toGoal[Z :+ Y :+ X]
 
     val p1 = tt.useTactic { t =>
       val t1 = t
@@ -84,7 +85,12 @@ class RingAxiomsSpec extends BaseSpec {
       t1
     }.fulfil
 
-    val p = tt.prove
+    print_@(p1.toString)
+
+//    val pp = tt.prove // TODO: not working, implicit search is too week
+//    val pp = tt.proveDirectly
+//
+//    print_@(pp.toString)
   }
 
   it("(A + B)^2 =>> AA + 2AB + BB") {}

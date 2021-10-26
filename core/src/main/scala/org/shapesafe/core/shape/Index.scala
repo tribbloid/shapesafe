@@ -2,7 +2,6 @@ package org.shapesafe.core.shape
 
 import org.shapesafe.core.debugging.CanPeek
 import org.shapesafe.graph.commons.util.IDMixin
-import shapeless.ops.nat.ToInt
 import shapeless.{Nat, Witness}
 import singleton.ops.ToString
 
@@ -35,10 +34,12 @@ object Index {
 
     override protected def _id = indexInt
 
-    override type Expr = ToString[N]
+    override type Expr = ToString[singleton.ops.ToInt[N]]
   }
 
   object I_th {
+
+    import shapeless.ops.nat.ToInt
 
     def apply(i: Nat)(
         implicit

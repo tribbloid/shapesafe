@@ -34,16 +34,17 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 & scala-js 
 
 ### Build Status
 
-| branch \ profile | scala-2.12 | scala-2.13 |
-| ---- | ---- | ---- |
-| master | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master) |
-| (latest in-progress) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg) |
+| branch \ profile | Scala-2.12 | Scala-2.13 | Scala-2.13 w/ splain plugin |
+| ---- | ---- | ---- | ---- |
+| master | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master) |
+| (latest in-progress) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg) |
 
 ### Roadmap
 
 ##### High priority
 
 - DJL integration
+- Symbolic reasoning for variable dimensions, using Ring/Field axioms and natural deduction
 
 ##### Low priority
 

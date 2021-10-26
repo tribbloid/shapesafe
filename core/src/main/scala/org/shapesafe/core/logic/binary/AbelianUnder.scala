@@ -1,6 +1,5 @@
 package org.shapesafe.core.logic.binary
 
-// TODO: I don't like this name, should be "CommutativeUnder"
 trait AbelianUnder[D, ??[A <: D, B <: D] <: D, Eye <: D] extends MonoidalUnder[D, ??, Eye] {
 
   import theory._
