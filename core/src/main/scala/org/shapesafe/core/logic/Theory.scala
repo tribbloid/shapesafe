@@ -68,21 +68,26 @@ trait Theory extends HasTheory with HasTactic {
   }
 
   @implicitNotFound(
-    "[NO PROOF]\n${I}\n    |-\n??? <: ${O}\n"
+    "[NO PROOF]: ${I}\t |- \t??? <: ${O}"
   )
   final type |-<[-I, O] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
     */
-  // TODO: how to override it in subclasses?
   @implicitNotFound(
-    "[NO PROOF]\n${I}\n    |-\n${O}\n"
+    "[NO PROOF]: ${I}\t |- \t${O}"
   )
   final type |-[-I, O] = Proof[I, system.Aye[O]]
 
+  @implicitNotFound(
+    "[NO REFUTATION]: ${I}\t |-\\- \t${O}"
+  )
   final type |-\-[-I, O] = Proof[I, system.Nay[O]]
 
+  @implicitNotFound(
+    "[NO ABSTENTION]: ${I}\t |-?- \t${O}"
+  )
   final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 
   final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]

@@ -17,8 +17,8 @@ trait TupleSystem {
 
     final val outer = TupleSystem.this
 
-    implicit val toEye: HNil ==> Eye = {
-      forAll[HNil].==> { _ =>
+    implicit val toEye: HNil =>> Eye = {
+      forAll[HNil].=>> { _ =>
         Eye
       }
     }

@@ -108,9 +108,9 @@ class NamedWithSpec extends BaseSpec {
 //        msg.toString.shouldBe(
 //          """
 //            |Dimension mismatch
-//            |➊ >< 2 >< 3 |<<- ➊ >< a >< b
+//            |∅ >< 2 >< 3 |<<- ∅ >< a >< b
 //            |    -<< derived from 1 condition >>-
-//            ||>    ➊ >< 2 >< 3
+//            ||>    ∅ >< 2 >< 3
 //            |""".stripMargin
 //        )
 //      }

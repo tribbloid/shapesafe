@@ -56,7 +56,7 @@ object GetSubscript extends GetSubscript_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      lemma2: Premise.==>[GetSubscript[P1, I], O]
+      lemma2: Premise.=>>[GetSubscript[P1, I], O]
   ): GetSubscript[S1, I] |- (StaticShape.Eye >< O) = {
 
     ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
@@ -76,8 +76,8 @@ object GetSubscript extends GetSubscript_Imp0 {
     ](
         implicit
         _selector: Selector.Aux[P1#Record, N, A]
-    ): GetSubscript[P1, Index.Name[N]] ==> (A :<<- N) = {
-      forAll[GetSubscript[P1, Index.Name[N]]].==> { v =>
+    ): GetSubscript[P1, Index.Name[N]] =>> (A :<<- N) = {
+      forAll[GetSubscript[P1, Index.Name[N]]].=>> { v =>
         val p1: P1 = v.s1
 
         val arity: A = _selector(p1.record)
@@ -94,8 +94,8 @@ object GetSubscript extends GetSubscript_Imp0 {
     ](
         implicit
         _at: At.Aux[P1#Static, N, O]
-    ): GetSubscript[P1, Index.I_th[N, S]] ==> O = {
-      forAll[GetSubscript[P1, Index.I_th[N, S]]].==> { v =>
+    ): GetSubscript[P1, Index.I_th[N, S]] =>> O = {
+      forAll[GetSubscript[P1, Index.I_th[N, S]]].=>> { v =>
         val p1 = v.s1
 
         _at(p1.static)

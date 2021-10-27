@@ -17,9 +17,9 @@ trait NewNameAppender extends RecordUpdater {
       name: Witness.Aux[N],
       keys: Keys.Aux[OLD, OLDNS],
       isNew: NotContainsConstraint[OLDNS, N]
-  ): (OLD, N ->> A1) ==> ((N ->> A1) :: OLD) = {
+  ): (OLD, N ->> A1) =>> ((N ->> A1) :: OLD) = {
 
-    forAll[(OLD, N ->> A1)].==> {
+    forAll[(OLD, N ->> A1)].=>> {
       case (old, field) =>
         field :: old
     }

@@ -61,11 +61,11 @@ trait ReduceByName {
         HI <: UB_->>
     ](
         implicit
-        consTail: TI ==> TO,
+        consTail: TI =>> TO,
         oldName: oldNameUpdater.Case[(TO, HI)]
-    ): (HI :: TI) ==> oldName.Out = {
+    ): (HI :: TI) =>> oldName.Out = {
 
-      forAll[HI :: TI].==> { v =>
+      forAll[HI :: TI].=>> { v =>
         val ti = v.tail
         val to = consTail(ti)
         oldName(to, v.head)

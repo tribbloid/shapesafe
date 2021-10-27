@@ -18,10 +18,10 @@ trait Tuples extends TupleSystem {
         HEAD <: B
     ](
         implicit
-        forTail: H_TAIL ==> TAIL
-    ): (HEAD :: H_TAIL) ==> ><[TAIL, HEAD] = {
+        forTail: H_TAIL =>> TAIL
+    ): (HEAD :: H_TAIL) =>> ><[TAIL, HEAD] = {
 
-      forAll[HEAD :: H_TAIL].==> { v =>
+      forAll[HEAD :: H_TAIL].=>> { v =>
         val prev = apply(v.tail)
 
         cons(prev, v.head)

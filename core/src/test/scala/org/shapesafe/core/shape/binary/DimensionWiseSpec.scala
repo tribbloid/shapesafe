@@ -83,7 +83,7 @@ class DimensionWiseSpec extends BaseSpec {
 
 //      shouldNotCompile(
 //        "rr.eval",
-//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
+//        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
 //      )
     }
 
@@ -103,12 +103,12 @@ class DimensionWiseSpec extends BaseSpec {
 
 //      shouldNotCompile(
 //        "rr.eval",
-//        ".*(\\Q|>    ➊ >< 2 >< 3\\E)"
+//        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
 //      )
 //
 //      shouldNotCompile(
 //        "s.eval",
-//        ".*(\\Q  :=  ➊ >< (2 :<<- a) >< (3 :<<- b)\\E)"
+//        ".*(\\Q  :=  ∅ >< (2 :<<- a) >< (3 :<<- b)\\E)"
 //      )
     }
   }

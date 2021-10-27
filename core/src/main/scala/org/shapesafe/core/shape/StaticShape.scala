@@ -89,10 +89,10 @@ object StaticShape extends Tuples {
         C <: Arity
     ](
         implicit
-        forTail: H_TAIL ==> TAIL
-    ): (C :: H_TAIL) ==> (TAIL ><^ C) = {
+        forTail: H_TAIL =>> TAIL
+    ): (C :: H_TAIL) =>> (TAIL ><^ C) = {
 
-      forAll[C :: H_TAIL].==> { v =>
+      forAll[C :: H_TAIL].=>> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: C
         val head: ArityAPI.^[C] = vHead.^
@@ -113,11 +113,11 @@ object StaticShape extends Tuples {
         C <: Arity
     ](
         implicit
-        forTail: H_TAIL ==> TAIL,
+        forTail: H_TAIL =>> TAIL,
         w: Witness.Aux[N]
-    ): ((N ->> C) :: H_TAIL) ==> (TAIL >< (C :<<- N)) = {
+    ): ((N ->> C) :: H_TAIL) =>> (TAIL >< (C :<<- N)) = {
 
-      forAll[(N ->> C) :: H_TAIL].==> { v =>
+      forAll[(N ->> C) :: H_TAIL].=>> { v =>
         val prev = apply(v.tail)
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
@@ -137,11 +137,11 @@ object StaticShape extends Tuples {
         HEAD <: XInt
     ](
         implicit
-        forTail: H_TAIL ==> TAIL,
+        forTail: H_TAIL =>> TAIL,
         w: Witness.Aux[HEAD]
-    ): (HEAD :: H_TAIL) ==> (TAIL ><^ ConstArity.Literal[HEAD]) = {
+    ): (HEAD :: H_TAIL) =>> (TAIL ><^ ConstArity.Literal[HEAD]) = {
 
-      forAll[HEAD :: H_TAIL].==> { v =>
+      forAll[HEAD :: H_TAIL].=>> { v =>
         val prev = forTail(v.tail)
         val head = Arity(w) // Arity.Impl(ConstArity.Literal(w))
 
@@ -158,11 +158,11 @@ object StaticShape extends Tuples {
         HEAD <: Nat
     ](
         implicit
-        forTail: H_TAIL ==> TAIL,
+        forTail: H_TAIL =>> TAIL,
         asOp: NatAsOp[HEAD]
     ) = {
 
-      forAll[HEAD :: H_TAIL].==> { v =>
+      forAll[HEAD :: H_TAIL].=>> { v =>
         val prev = apply(v.tail)
         val head = Arity.FromNat(v.head)
 

@@ -215,13 +215,13 @@ object ShapeAPI {
   // TODO: only support LeafShape, remove
 //  object Vector {
 //
-//    type Aux[T <: Axis] = ^[➊ >< T]
+//    type Aux[T <: Axis] = ^[∅ >< T]
 //  }
 //  type Vector = Vector.Aux[_]
 //
 //  object Matrix {
 //
-//    type Aux[T1 <: Axis, T2 <: Axis] = ^[➊ >< T1 >< T2]
+//    type Aux[T1 <: Axis, T2 <: Axis] = ^[∅ >< T1 >< T2]
 //  }
 //  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
 }
