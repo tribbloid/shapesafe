@@ -104,7 +104,7 @@ class ProofSystemSpec extends BaseSpec {
 
       object SubProveStuff2 extends ProveStuff.ExtensionLike
 
-      //      object SubSubProveNat extends SubProveNat.SubScope with SubProveNat2.SubScope
+      //      object SubSubProveNat extends SubProvePeano.SubScope with SubProveNat2.SubScope
       // TODO: at this moment, compiler says "class SubScope is inherited twice"
     }
   }
@@ -126,7 +126,7 @@ class ProofSystemSpec extends BaseSpec {
         .infer(v)
         .typeStr
         .shouldBe(
-          "Nat2ID.ProveStuff.theory.Proof[Nat.Inc[Nat._0],Nat2ID.ProveStuff.theory.system.Aye[Nat2ID.ID[Nat.Inc[Nat._0.type]]]]"
+          "Peano2ID.ProveStuff.theory.Proof[Peano.Inc[Peano._0],Peano2ID.ProveStuff.theory.system.Aye[Peano2ID.ID[Peano.Inc[Peano._0.type]]]]"
         )
     }
 
@@ -141,7 +141,7 @@ class ProofSystemSpec extends BaseSpec {
 //        }
 //
 //      TypeVizShort[v.SubGoal].typeStr.shouldBe(
-//        "ProofSystemSpec.ID[Nat.^[Nat.^[Nat._0.type]]]"
+//        "ProofSystemSpec.ID[Peano.^[Peano.^[Peano._0.type]]]"
 //      )
 //    }
   }
