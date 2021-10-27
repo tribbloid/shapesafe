@@ -1,25 +1,25 @@
 package org.shapesafe.core.logic
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.fixtures.Nat
-import org.shapesafe.core.util.Nat2ID
+import org.shapesafe.core.fixtures.Peano
+import org.shapesafe.core.util.Peano2ID
 
 object ProofSystemSpec {
 
-  import org.shapesafe.core.util.Nat2ID._
+  import org.shapesafe.core.util.Peano2ID._
 
   object ProveStuffX extends ProveStuff.SuperTheory {}
   object ProveStuffXX extends ProveStuffX.SuperTheory {}
 
-  trait HasSubProve extends Nat2ID {}
+  trait HasSubProve extends Peano2ID {}
 
   trait HasSubSubProve extends HasSubProve {}
 }
 
 class ProofSystemSpec extends BaseSpec {
 
-  import Nat._
-  import org.shapesafe.core.util.Nat2ID._
+  import Peano._
+  import org.shapesafe.core.util.Peano2ID._
   import ProveStuff._
 
   it("can prove recursively") {
@@ -64,9 +64,9 @@ class ProofSystemSpec extends BaseSpec {
 
     it("in a sub-thoery") {
 
-      case class ID2[SRC <: Nat](v: Int) extends Stuff
+      case class ID2[SRC <: Peano](v: Int) extends Stuff
 
-      implicit def theorem2[N <: Nat](
+      implicit def theorem2[N <: Peano](
           // depends on theorem in Parent scope
           implicit
           lemma1: ProveStuff.|-[N, ID[N]]
@@ -83,9 +83,9 @@ class ProofSystemSpec extends BaseSpec {
 
     it("in a sub-sub-theory") {
 
-      case class ID3[SRC <: Nat](v: Int) extends Stuff
+      case class ID3[SRC <: Peano](v: Int) extends Stuff
 
-      implicit def theorem3[N <: Nat](
+      implicit def theorem3[N <: Peano](
           // depends on theorem in Parent scope
           implicit
           lemma1: ProveStuff.|-[N, ID[N]]

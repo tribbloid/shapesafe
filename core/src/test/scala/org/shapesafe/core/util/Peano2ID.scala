@@ -1,9 +1,9 @@
 package org.shapesafe.core.util
 
-import org.shapesafe.core.fixtures.Nat
+import org.shapesafe.core.fixtures.Peano
 import org.shapesafe.core.logic.{CanUseSubTheory, ContradictionDeduction, ProofSystem}
 
-trait Nat2ID {
+trait Peano2ID {
 
   object ProveStuff extends ProofSystem with ContradictionDeduction with CanUseSubTheory
   import ProveStuff._
@@ -14,13 +14,13 @@ trait Nat2ID {
 
   object Stuff {
 
-    import Nat._
+    import Peano._
 
     implicit def idAxiom: _0 |- ID[_0] = forAll[_0].=>> { _ =>
       ID(0)
     }
 
-    implicit def idTheorem[N <: Nat](
+    implicit def idTheorem[N <: Peano](
         implicit
         lemma: N |- ID[N]
     ): Inc[N] |- ID[Inc[N]] = forAll[Inc[N]].=>> { nPlus =>
@@ -40,8 +40,8 @@ trait Nat2ID {
     //    }
   }
 
-  case class ID[SRC <: Nat](v: Int) extends Stuff
+  case class ID[SRC <: Peano](v: Int) extends Stuff
 
 }
 
-object Nat2ID extends Nat2ID
+object Peano2ID extends Peano2ID

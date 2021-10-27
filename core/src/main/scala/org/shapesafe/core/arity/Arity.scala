@@ -60,10 +60,10 @@ object Arity {
 
     def apply[N <: Nat](v: N)(
         implicit
-        ev: NatAsOp[N]
-    ): ^[Derived[NatAsOp[N], ev.OutInt]] = {
+        asOp: NatAsOp[N]
+    ): ^[Derived[NatAsOp[N], asOp.OutInt]] = {
 
-      ^(Derived.summon[NatAsOp[N]](ev))
+      ^(Derived.summon[NatAsOp[N]](asOp))
     }
   }
 }

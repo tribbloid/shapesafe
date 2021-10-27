@@ -1,7 +1,7 @@
 package org.shapesafe.core.logic
 
 import org.shapesafe.BaseSpec
-import org.shapesafe.core.fixtures.Nat
+import org.shapesafe.core.fixtures.Peano
 
 class NaturalDeductionSpec extends BaseSpec {
 
@@ -11,17 +11,17 @@ class NaturalDeductionSpec extends BaseSpec {
 
     import ProveStuff._
 
-    implicit def n1[T <: Nat] = forAll[T].=>> { n =>
+    implicit def n1[T <: Peano] = forAll[T].=>> { n =>
       N1[T](n.value)
     }
 
-    implicit def n2[T <: Nat] = forAll[N1[T]].=>> { n1 =>
+    implicit def n2[T <: Peano] = forAll[N1[T]].=>> { n1 =>
       N2[T](n1.v)
     }
 
-    val proof = forAll[Nat._5].toGoal[N2[_]].prove
+    val proof = forAll[Peano._5].toGoal[N2[_]].prove
 
-    val out = proof(new Nat._5)
+    val out = proof(new Peano._5)
 
     assert(out.v == 5)
   }
@@ -29,10 +29,10 @@ class NaturalDeductionSpec extends BaseSpec {
 
 object NaturalDeductionSpec {
 
-  import org.shapesafe.core.util.Nat2ID._
+  import org.shapesafe.core.util.Peano2ID._
 
-  case class N1[T <: Nat](v: Int) extends Stuff
-  case class N2[T <: Nat](v: Int) extends Stuff
+  case class N1[T <: Peano](v: Int) extends Stuff
+  case class N2[T <: Peano](v: Int) extends Stuff
 
   object ProveStuff extends ProofSystem with NaturalDeduction {}
 }

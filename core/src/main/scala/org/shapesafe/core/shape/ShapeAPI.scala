@@ -1,6 +1,7 @@
 package org.shapesafe.core.shape
 
 import org.shapesafe.core.XInt
+import org.shapesafe.core.arity.Utils.NatAsOp
 import org.shapesafe.core.arity.ops.ArityOps
 import org.shapesafe.core.arity.{Arity, ConstArity}
 import org.shapesafe.core.shape.ProveShape.|-
@@ -9,7 +10,6 @@ import org.shapesafe.core.shape.binary.OuterProduct
 import org.shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOps, VectorOps}
 import org.shapesafe.core.shape.unary._
 import shapeless.ops.hlist.Reverse
-import shapeless.ops.nat.ToInt
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 
 import scala.language.implicitConversions
@@ -126,7 +126,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
     def apply(i: Nat)(
         implicit
-        toIntN: ToInt[i.N]
+        asOp: NatAsOp[i.N] { type Out <: Int }
     ): ^[GetSubscript[_Shape, Index.I_th[i.N]]] = {
 
       apply(Index.I_th(i))
