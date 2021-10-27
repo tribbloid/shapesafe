@@ -89,12 +89,13 @@ object GetSubscript extends GetSubscript_Imp0 {
     implicit def byIndex[
         P1 <: StaticShape,
         N <: Nat,
+        S <: Int,
         O <: Axis
     ](
         implicit
         _at: At.Aux[P1#Static, N, O]
-    ): GetSubscript[P1, Index.I_th[N]] ==> O = {
-      forAll[GetSubscript[P1, Index.I_th[N]]].==> { v =>
+    ): GetSubscript[P1, Index.I_th[N, S]] ==> O = {
+      forAll[GetSubscript[P1, Index.I_th[N, S]]].==> { v =>
         val p1 = v.s1
 
         _at(p1.static)

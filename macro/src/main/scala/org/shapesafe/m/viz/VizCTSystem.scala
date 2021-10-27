@@ -15,8 +15,6 @@ import scala.reflect.macros.whitebox
 
 trait VizCTSystem extends Product {
 
-  final val VizCT = KindVizCT
-
   def format: TypeVizFormat
 
   def useTree: Boolean

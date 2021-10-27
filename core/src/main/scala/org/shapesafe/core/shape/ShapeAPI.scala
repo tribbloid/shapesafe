@@ -126,8 +126,8 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
     def apply(i: Nat)(
         implicit
-        asOp: NatAsOp[i.N] { type Out <: Int }
-    ): ^[GetSubscript[_Shape, Index.I_th[i.N]]] = {
+        asOp: NatAsOp[i.N]
+    ): ^[GetSubscript[_Shape, Index.I_th[i.N, asOp.OutInt]]] = {
 
       apply(Index.I_th(i))
     }

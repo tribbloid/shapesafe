@@ -29,12 +29,12 @@ object Index {
     def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
-  class I_th[N <: Nat](val index: N, val asOp: NatAsOp[N] { type Out <: Int }) extends Name_<:[Nothing] {
+  class I_th[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
     type Ordinal = N
 
-    override protected def _id = asOp.value
+    override protected def _id = value
 
-    override type Expr = asOp.Out
+    override type Expr = S
   }
 
   object I_th {
@@ -43,8 +43,7 @@ object Index {
 
     def apply(i: Nat)(
         implicit
-//        toIntN: ToInt[i.N],
-        asOp: NatAsOp[i.N] { type Out <: Int }
-    ) = new I_th[i.N](i.asInstanceOf[i.N], asOp)
+        asOp: NatAsOp[i.N]
+    ) = new I_th[i.N, asOp.OutInt](i.asInstanceOf[i.N], asOp.value.asInstanceOf[asOp.OutInt])
   }
 }
