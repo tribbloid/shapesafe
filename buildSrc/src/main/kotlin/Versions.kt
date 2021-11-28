@@ -19,7 +19,7 @@ class Versions(self: Project) {
     val scalaBinaryV: String = scalaVParts.subList(0, 2).joinToString(".")
     val scalaMinorV: String = scalaVParts[2]
 
-    val shapelessV: String = "2.3.3"
+    val shapelessV: String = "2.3.7"
 
     val sparkV: String = self.properties.get("sparkVersion").toString()
 

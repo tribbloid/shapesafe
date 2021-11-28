@@ -19,13 +19,13 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.6.0" // TODO: remove?
+    kotlin("jvm") version "1.6.10" // TODO: remove?
 
     idea
 
     `maven-publish`
 
-    id("com.github.ben-manes.versions" ) version "0.39.0"
+    id("com.github.ben-manes.versions") version "0.40.0"
 }
 
 val rootID = vs.projectRootID
@@ -79,22 +79,14 @@ allprojects {
             testFixturesImplementation(constraintNotation)
         }
 
-        constraints {
-
-            bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-            bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-            bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
-        }
-
-        //https://github.com/tek/splain
-        if (vs.splainV != "") {
-            logger.warn("Using Splain " + vs.splainV)
-
-            scalaCompilerPlugins("io.tryp:splain_${vs.scalaV}:${vs.splainV}")
-        }
+//        constraints {}
 
 //        compileOnly(kotlin("stdlib"))
 //        compileOnly(kotlin("stdlib-jdk8"))
+
+        bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
@@ -105,7 +97,13 @@ allprojects {
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.10")
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
+        //https://github.com/tek/splain
+        if (vs.splainV != "") {
+            val splainD = "io.tryp:splain_${vs.scalaV}:${vs.splainV}"
+            logger.warn("Using " + splainD)
 
+            scalaCompilerPlugins(splainD)
+        }
     }
 
     task("dependencyTree") {
@@ -142,11 +140,12 @@ allprojects {
                         "-Xlint:option-implicit",
                         "-Wunused:imports",
 
+                        "-g:line",
+
+//                        "-Ylog",
 //                        "-Ydebug",
-//                        "-Yissue-debug"
-//                    ,
-//                    "-Ytyper-debug",
-//                    "-Vtyper"
+                        "-Vissue",
+                        "-Yissue-debug"
 
 //                    ,
 //                    "-Xlog-implicits",
@@ -159,8 +158,8 @@ allprojects {
                 if (vs.splainV != "") {
                     compilerOptions.addAll(
                         listOf(
-                            "-Vimplicits",
-                            "-Vimplicits-verbose-tree"
+//                            "-Vimplicits"
+//                            "-Vimplicits-verbose-tree"
 //                            "-Vtype-diffs"
                         )
                     )
@@ -290,7 +289,7 @@ idea {
         excludeDirs = excludeDirs + files(
 
             // submodules
-            "graph-commons",
+//            "graph-commons",
             "splain"
         )
     }

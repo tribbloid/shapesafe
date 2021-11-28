@@ -8,6 +8,6 @@ CRDIR="$(
 echo "[COMPILING]" && \
 "${CRDIR}"/make-all.sh "${@}" && \
 echo "[COMPILING DEMO]" && \
-"${CRDIR}"/../shapesafe-demo/dev/make-all.sh && \
+"${CRDIR}"/../shapesafe-demo/dev/make-all.sh "${@}" && \
 echo "[RUNNING TESTS]" && \
 "${CRDIR}"/test.sh "${@}"
