@@ -19,7 +19,7 @@ plugins {
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.5.31" // TODO: remove?
+    kotlin("jvm") version "1.6.0" // TODO: remove?
 
     idea
 
@@ -66,7 +66,7 @@ allprojects {
             substitute(
                 module("com.chuusai:shapeless_${vs.scalaBinaryV}")
             ).apply {
-                with(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
             }
         }
     }
@@ -98,8 +98,8 @@ allprojects {
 
         api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalatestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.10")
@@ -226,6 +226,37 @@ allprojects {
 //        this.zincVersion
 //    }
 
+
+    idea {
+
+        module {
+
+            excludeDirs = excludeDirs + files(
+                "target",
+                "out",
+
+                ".gradle",
+                ".github",
+
+                ".idea",
+                ".vscode",
+                ".bloop",
+                ".bsp",
+                ".metals",
+                ".ammonite",
+
+                "logs",
+
+                // apache spark
+                "warehouse",
+
+                "spike"
+            )
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
+        }
+    }
 }
 
 subprojects {
@@ -251,37 +282,16 @@ subprojects {
     }
 }
 
-idea {
 
-    targetVersion = "2020"
+idea {
 
     module {
 
-        excludeDirs = excludeDirs + listOf(
-            file(".gradle"),
-            file(".github"),
+        excludeDirs = excludeDirs + files(
 
-            file ("target"),
-//                        file ("out"),
-
-            file(".idea"),
-            file(".vscode"),
-            file(".bloop"),
-            file(".bsp"),
-            file(".metals"),
-            file(".ammonite"),
-
-            file("logs"),
-
-            // apache spark
-            file("warehouse"),
-
-            file("spike"),
-
-            file("splain")
+            // submodules
+            "graph-commons",
+            "splain"
         )
-
-        isDownloadJavadoc = true
-        isDownloadSources = true
     }
 }

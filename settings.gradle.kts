@@ -1,9 +1,9 @@
-//val versions = gradle.rootProject.versions()
 
+include("graph-commons-core")
+project(":graph-commons-core").projectDir = file("graph-commons/core")
 
 include(
     // should be skipped on CI, contains local experiments only
-    ":graph-commons",
     ":macro",
     // uses unstable & experimental scala features, should be modified very slowly & carefully
     ":core",
