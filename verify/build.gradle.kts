@@ -1,5 +1,6 @@
 val vs: Versions = versions()
 
+// work in progress
 dependencies {
 
     api(project(":core"))
