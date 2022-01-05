@@ -1,6 +1,6 @@
 
-include("graph-commons-core")
-project(":graph-commons-core").projectDir = file("graph-commons/core")
+include("graph-commons")
+project(":graph-commons").projectDir = file("graph-commons/core")
 
 include(
     // should be skipped on CI, contains local experiments only
