@@ -3,7 +3,7 @@ import org.gradle.api.Project
 class Versions(self: Project) {
 
     // TODO : how to group them?
-    val projectGroup = "org.shapesafe"
+    val projectGroup = "ai.acyclic.shapesafe"
     val projectRootID = "shapesafe"
 
     val projectV = "0.1.0-SNAPSHOT"
