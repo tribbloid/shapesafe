@@ -272,7 +272,7 @@ subprojects {
                         }
 
                         name.set("shapesafe")
-                        description.set("proving correctness of tensor operations with scala compiler")
+                        description.set("a static typechecker for (named) tensor operations in scala")
 
                         val github = "https://github.com/tribbloid"
                         val repo = github + "/shapesafe"
