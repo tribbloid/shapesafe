@@ -1,7 +1,7 @@
-package org.shapesafe.breeze.tensor
+package shapesafe.breeze.tensor
 
-import org.shapesafe.core.arity.Arity
-import org.shapesafe.graph.commons.util.debug.print_@
+import shapesafe.core.arity.Arity
+import ai.acyclic.graph.commons.debug.print_@
 
 object DoubleVectorDemo extends App {
 

@@ -1,4 +1,4 @@
-package org.shapesafe.djl.tensor
+package shapesafe.djl.tensor
 
 case class Tensor[D](
-    ) {}
+) {}

@@ -1,3 +1,3 @@
-package org.shapesafe.djl
+package shapesafe.djl
 
 package object tensor {}

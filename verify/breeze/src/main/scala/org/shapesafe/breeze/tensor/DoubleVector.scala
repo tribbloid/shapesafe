@@ -1,12 +1,12 @@
-package org.shapesafe.breeze.tensor
+package shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
-import org.shapesafe.core.arity.ConstArity.Literal
-import org.shapesafe.core.arity.ProveArity.{|-, |-<}
-import org.shapesafe.core.arity.nullary.SizeOf
-import org.shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}
-import org.shapesafe.core.util.Constraint.ElementOfType
+import shapesafe.core.arity.ConstArity.Literal
+import shapesafe.core.arity.ProveArity.{|-, |-<}
+import shapesafe.core.arity.nullary.SizeOf
+import shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}
+import shapesafe.core.util.Constraint.ElementOfType
 import shapeless.{HList, ProductArgs, Witness}
 
 import scala.language.implicitConversions
@@ -17,7 +17,7 @@ class DoubleVector[A1 <: Arity](
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import org.shapesafe.core.arity.ops.ArityOps._
+  import shapesafe.core.arity.ops.ArityOps._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {

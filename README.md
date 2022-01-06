@@ -106,7 +106,7 @@ Thus, the entire shape algebra can be defined using only 2 types of expressions 
 
 ![Shape](doc/ShapeTypeHierarchy.png)
 
-Shapesafe works most efficiently if dimensions of all tensors are either constants (represented by `org.shapesafe.core.arity.Const`), or unchecked (represented by `org.shapesafe.core.arity.Unchecked`,  meaning that it has no constraint or symbol, and should be ignored in validation). In practice, this can reliably support the majority of applied linear algebra / ML use cases. Support for algebra of variable shapes (with symbol, represented by `org.shapesafe.core.arity.Var`) will be gradually enabled in future releases.
+Shapesafe works most efficiently if dimensions of all tensors are either constants (represented by `shapesafe.core.arity.Const`), or unchecked (represented by `shapesafe.core.arity.Unchecked`,  meaning that it has no constraint or symbol, and should be ignored in validation). In practice, this can reliably support the majority of applied linear algebra / ML use cases. Support for algebra of variable shapes (with symbol, represented by `shapesafe.core.arity.Var`) will be gradually enabled in future releases.
 
 **For more about the idea behind this project**, check the following resources
 

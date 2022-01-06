@@ -1,7 +1,7 @@
-package org.shapesafe.breeze.tensor
+package shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
-import org.shapesafe.BaseSpec
+import shapesafe.BaseSpec
 import shapeless.{HNil, ProductArgs, Witness}
 
 class DoubleVectorSpec extends BaseSpec {
@@ -199,7 +199,7 @@ class DoubleVectorSpec extends BaseSpec {
 ////
 ////          print_@(VizType[aa.type])
 ////
-////          import org.shapesafe.graph.commons.util.reflect.ScalaReflection.universe
+////          import ai.acyclic.graph.commons.reflect.ScalaReflection.universe
 ////
 ////          def sniff[T](v: T)(implicit ttag: universe.TypeTag[T]) = ttag
 ////

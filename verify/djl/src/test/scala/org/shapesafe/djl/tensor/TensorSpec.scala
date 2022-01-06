@@ -1,5 +1,5 @@
-package org.shapesafe.djl.tensor
+package shapesafe.djl.tensor
 
-import org.shapesafe.BaseSpec
+import shapesafe.BaseSpec
 
 class TensorSpec extends BaseSpec {}

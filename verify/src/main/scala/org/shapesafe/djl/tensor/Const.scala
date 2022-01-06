@@ -1,3 +1,3 @@
-package org.shapesafe.djl.tensor
+package shapesafe.djl.tensor
 
 object Const {}

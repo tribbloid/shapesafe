@@ -1,4 +1,4 @@
-package org.shapesafe.breeze
+package shapesafe.breeze
 
 import breeze.linalg
 
