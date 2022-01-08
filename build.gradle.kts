@@ -16,10 +16,11 @@ buildscript {
 plugins {
 //    base
     java
+    `java-library`
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.6.10" // TODO: remove?
+//    kotlin("jvm") version "1.6.10" // TODO: remove?
 
     idea
 
@@ -27,7 +28,7 @@ plugins {
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 
-    id("com.github.ben-manes.versions") version "0.40.0"
+    id("com.github.ben-manes.versions") version "0.41.0"
 }
 
 val sonatypeApiUser = providers.gradleProperty("sonatypeApiUser")
@@ -37,8 +38,8 @@ if (sonatypeApiUser.isPresent && sonatypeApiKey.isPresent) {
         repositories {
             sonatype {
 
-//                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-//                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+                nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
 
                 username.set(sonatypeApiUser)
                 password.set(sonatypeApiKey)
@@ -61,7 +62,7 @@ allprojects {
     // Cannot add extension with name 'bloop', as there is an extension already registered with that name
 
     apply(plugin = "scala")
-    apply(plugin = "kotlin")
+//    apply(plugin = "kotlin")
 
     apply(plugin = "idea")
 
@@ -181,17 +182,17 @@ allprojects {
 
 subprojects {
 
-    // resolving jar hells
-    configurations.all {
-        resolutionStrategy.dependencySubstitution {
-            // TODO: use `constraints` as below
-            substitute(
-                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
-            ).apply {
-                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
-            }
-        }
-    }
+    // resolving version conflicts
+    // TODO: remove, already defined in `constraints` as below
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(
+//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+//            ).apply {
+//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+//            }
+//        }
+//    }
 
     dependencies {
 
@@ -201,11 +202,13 @@ subprojects {
             testFixturesImplementation(constraintNotation)
         }
 
+        constraints {
+            bothImpl("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}")
+        }
+
         bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
         bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
         bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
-
-        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
@@ -222,7 +225,6 @@ subprojects {
             scalaCompilerPlugins(splainD)
         }
     }
-
 
     // https://stackoverflow.com/a/66352905/1772342
     val signingSecretKey = providers.gradleProperty("signing.gnupg.secretKey")

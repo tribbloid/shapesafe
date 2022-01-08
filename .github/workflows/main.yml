@@ -8,6 +8,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      max-parallel: 2
+      fail-fast: false
+      matrix:
+        scalaVersion: ["2.13.7"]
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -17,9 +23,25 @@ jobs:
       - name: build & test
         run: |
           ./dev/CI-latest.sh
+
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always()
         with:
           files: |
             **/test-results/**/*.xml
+
+      - name: Pre-release on github
+        uses: "marvinpinto/action-automatic-releases@latest"
+        if: contains(github.ref_name, 'Release/')
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "${{github.ref_name}}-${{matrix.scalaVersion}}"
+          title: "${{github.ref_name}}-${{matrix.scalaVersion}}"
+          prerelease: true
+          files: |
+            LICENSE
+            graph-commons/core/build/libs/*.jar
+            macro/build/libs/*.jar
+            core/build/libs/*.jar
+#            verify/build/libs/*.jar
