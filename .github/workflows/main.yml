@@ -41,6 +41,7 @@ jobs:
           prerelease: true
           files: |
             LICENSE
+            graph-commons/core/build/libs/*.jar
             macro/build/libs/*.jar
             core/build/libs/*.jar
-            verify/build/libs/*.jar
+#            verify/build/libs/*.jar
