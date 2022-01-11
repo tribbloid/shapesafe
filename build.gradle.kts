@@ -16,10 +16,11 @@ buildscript {
 plugins {
 //    base
     java
+    `java-library`
     `java-test-fixtures`
 
     scala
-    kotlin("jvm") version "1.6.10" // TODO: remove?
+//    kotlin("jvm") version "1.6.10" // TODO: remove?
 
     idea
 
@@ -27,7 +28,7 @@ plugins {
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 
-    id("com.github.ben-manes.versions") version "0.40.0"
+    id("com.github.ben-manes.versions") version "0.41.0"
 }
 
 val sonatypeApiUser = providers.gradleProperty("sonatypeApiUser")
@@ -61,7 +62,7 @@ allprojects {
     // Cannot add extension with name 'bloop', as there is an extension already registered with that name
 
     apply(plugin = "scala")
-    apply(plugin = "kotlin")
+//    apply(plugin = "kotlin")
 
     apply(plugin = "idea")
 
@@ -209,8 +210,6 @@ subprojects {
         bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
         bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
-        api("eu.timepit:singleton-ops_${vs.scalaBinaryV}:0.5.2") // used by all modules
-
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 
@@ -226,7 +225,6 @@ subprojects {
             scalaCompilerPlugins(splainD)
         }
     }
-
 
     // https://stackoverflow.com/a/66352905/1772342
     val signingSecretKey = providers.gradleProperty("signing.gnupg.secretKey")

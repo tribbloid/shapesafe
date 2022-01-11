@@ -3,7 +3,7 @@ val vs: Versions = versions()
 dependencies {
 
     api(project(":verify"))
-    testApi(testFixtures(project(":verify")))
+    testImplementation(testFixtures(project(":verify")))
 
     // TODO: the following are too specialised and should only be used in testing
     api("ai.djl.pytorch:pytorch-engine:0.14.0")
