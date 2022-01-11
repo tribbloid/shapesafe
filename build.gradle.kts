@@ -37,8 +37,8 @@ if (sonatypeApiUser.isPresent && sonatypeApiKey.isPresent) {
         repositories {
             sonatype {
 
-//                nexusUrl.set(uri("https://oss.sonatype.org/service/local/"))
-//                snapshotRepositoryUrl.set(uri("https://oss.sonatype.org/content/repositories/snapshots/"))
+                nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
 
                 username.set(sonatypeApiUser)
                 password.set(sonatypeApiKey)
@@ -181,17 +181,17 @@ allprojects {
 
 subprojects {
 
-    // resolving jar hells
-    configurations.all {
-        resolutionStrategy.dependencySubstitution {
-            // TODO: use `constraints` as below
-            substitute(
-                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
-            ).apply {
-                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
-            }
-        }
-    }
+    // resolving version conflicts
+    // TODO: remove, already defined in `constraints` as below
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(
+//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+//            ).apply {
+//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+//            }
+//        }
+//    }
 
     dependencies {
 
@@ -199,6 +199,10 @@ subprojects {
         fun bothImpl(constraintNotation: Any) {
             implementation(constraintNotation)
             testFixturesImplementation(constraintNotation)
+        }
+
+        constraints {
+            bothImpl("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}")
         }
 
         bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
