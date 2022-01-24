@@ -2,12 +2,12 @@ package shapesafe.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal
+import shapeless.{HList, ProductArgs, Witness}
 import shapesafe.core.arity.ConstArity.Literal
 import shapesafe.core.arity.ProveArity.{|-, |-<}
 import shapesafe.core.arity.nullary.SizeOf
 import shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}
 import shapesafe.core.util.Constraint.ElementOfType
-import shapeless.{HList, ProductArgs, Witness}
 
 import scala.language.implicitConversions
 import scala.util.Random

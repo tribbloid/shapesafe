@@ -3,7 +3,7 @@ package shapesafe.breeze.tensor
 import shapesafe.core.arity.Arity
 import ai.acyclic.graph.commons.debug.print_@
 
-object DoubleVectorDemo extends App {
+object DoubleVectorDemo {
 
   val x3 = DoubleVector(1.0, 2.0, 3.0)
 
