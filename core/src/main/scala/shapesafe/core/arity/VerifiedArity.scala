@@ -3,7 +3,7 @@ package shapesafe.core.arity
 /**
   * always successful, no need to verify
   */
-trait VerifiedArity extends Arity.Verifiable {
+trait VerifiedArity extends ArityType.Verifiable {
 
 //  final def in: this.type = this
 }

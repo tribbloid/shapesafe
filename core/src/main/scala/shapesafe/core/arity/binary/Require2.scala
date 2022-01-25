@@ -36,8 +36,8 @@ object Require2 extends Require2_Imp0 {
     import singleton.ops._
 
     case class On[
-        A1 <: Arity,
-        A2 <: Arity
+        A1 <: ArityType,
+        A2 <: ArityType
     ](
         a1: A1,
         a2: A2
@@ -55,8 +55,8 @@ object Require2 extends Require2_Imp0 {
       }
     }
 
-    override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = {
-      On(a1.arity, a2.arity)
+    override def on(a1: Arity, a2: Arity): On[a1._ArityType, a2._ArityType] = {
+      On(a1.arityType, a2.arityType)
     }
   }
 
@@ -79,8 +79,8 @@ object Require2 extends Require2_Imp0 {
   }
 
   implicit def invar[
-      A1 <: Arity,
-      A2 <: Arity,
+      A1 <: ArityType,
+      A2 <: ArityType,
       S1,
       S2,
       OP <: Require2,

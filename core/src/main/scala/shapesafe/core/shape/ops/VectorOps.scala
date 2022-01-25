@@ -1,20 +1,20 @@
 package shapesafe.core.shape.ops
 
-import shapesafe.core.shape.{Names, ShapeAPI}
+import shapesafe.core.shape.{Names, Shape}
 
 trait VectorOps extends HasShape {
 
   import shapesafe.core.shape.Const._
 
-  def dot[THAT <: ShapeAPI](that: THAT) = {
-    val s1 = api |<<- i
-    val s2 = that |<<- i
+  def dot[THAT <: Shape](that: THAT) = {
+    val s1 = shape :<<= i
+    val s2 = that :<<= i
 
     s1.einSum(s2) --> Names.Eye
   }
 
-  def cross[THAT <: ShapeAPI](that: THAT) = {
+  def cross[THAT <: Shape](that: THAT) = {
 
-    api.requireEqual(that).requireEqual(shape3)
+    shape.requireEqual(that).requireEqual(shape3)
   }
 }

@@ -13,7 +13,7 @@ trait ExpressionsLike {
   //  trait PrefixW1[S, A] extends (Only[S] ~~ A)
   //  trait PrefixW2[S, A, B] extends (Only[S] ~~ A ~~ B)
 
-  trait |<<-[A, B]
+  trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
   trait RequireDistinct[A]
   trait GetSubscript[A, B]
@@ -24,10 +24,10 @@ trait ExpressionsLike {
   trait AppendByName[O] extends ExprOn1 {
     type _DebugSymbol = "AppendByName[" + O + "]"
   }
-  trait SquashByName[O] extends ExprOn1 {
-    type _DebugSymbol = "SquashByName[" + O + "]"
+  trait ReduceByName[O] extends ExprOn1 {
+    type _DebugSymbol = "ReduceByName[" + O + "]"
   }
-  trait DimensionWise[O] extends ExprOn2 {
-    type _DebugSymbol = "DimensionWise[" + O + "]"
+  trait Op2ByDim[O] extends ExprOn2 {
+    type _DebugSymbol = "Op2PerDim[" + O + "]"
   }
 }

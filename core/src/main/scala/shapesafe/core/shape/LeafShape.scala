@@ -1,7 +1,7 @@
 package shapesafe.core.shape
 
 // TODO: add VerifiedShape
-trait LeafShape extends Shape {}
+trait LeafShape extends ShapeType {}
 
 object LeafShape {
 

@@ -178,6 +178,30 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
     }
+
+    idea {
+
+        module {
+
+            excludeDirs = excludeDirs + files(
+
+                "target",
+                "out",
+
+                ".idea",
+                ".vscode",
+                ".bloop",
+                ".bsp",
+                ".metals",
+                "bin",
+
+                ".ammonite",
+
+                "logs",
+
+            )
+        }
+    }
 }
 
 subprojects {
@@ -304,20 +328,7 @@ idea {
     module {
 
         excludeDirs = excludeDirs + files(
-            "target",
-            "out",
-
             ".gradle",
-            ".github",
-
-            ".idea",
-            ".vscode",
-            ".bloop",
-            ".bsp",
-            ".metals",
-            ".ammonite",
-
-            "logs",
 
             // apache spark
             "warehouse",
@@ -331,7 +342,6 @@ idea {
         isDownloadSources = true
     }
 }
-
 
 //idea {
 //

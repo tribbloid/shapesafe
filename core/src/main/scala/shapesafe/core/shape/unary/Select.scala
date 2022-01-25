@@ -6,11 +6,11 @@ import shapesafe.core.debugging.{Expressions, Reporters}
 import shapesafe.core.shape._
 import shapesafe.m.viz.VizCTSystem.EmitError
 
-case class Reorder[ // last step of einsum, contract, transpose, etc.
-    S1 <: Shape,
+case class Select[ // last step of einsum, contract, transpose, etc.
+    S1 <: ShapeType,
     II <: IndicesMagnet
 ](
-    s1: S1 with Shape,
+    s1: S1 with ShapeType,
     indices: II
 ) extends Conjecture1.^[S1] {
 
@@ -24,37 +24,37 @@ trait Reorder_Imp0 {
   import ProveShape._
 
   implicit def refute[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: LeafShape,
       II <: IndicesMagnet,
       MSG
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[Reorder[P1, II], MSG],
+      refute0: Reporters.ForShape.Refute0[Select[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Reorder[S1, II] |- LeafShape = {
+  ): Select[S1, II] |- LeafShape = {
     ???
   }
 
 }
 
-object Reorder extends Reorder_Imp0 {
+object Select extends Reorder_Imp0 {
 
   import ProveShape._
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: StaticShape,
       II <: IndicesMagnet
   ](
       implicit
       lemma1: S1 |- P1,
-      lemma2: Premise.Case[Reorder[P1, II#AsIndices]]
-  ): Reorder[S1, II] |- lemma2.Out = {
+      lemma2: Premise.Case[Select[P1, II#AsIndices]]
+  ): Select[S1, II] |- lemma2.Out = {
 
-    forAll[Reorder[S1, II]].=>> { v =>
+    forAll[Select[S1, II]].=>> { v =>
       val p1: P1 = lemma1.instanceFor(v.s1)
       val vv = v.copy(s1 = p1, indices = v.indices.asIndices: II#AsIndices)
 
@@ -62,13 +62,13 @@ object Reorder extends Reorder_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Reorder[_, _], StaticShape] {
+  object Premise extends Poly1Base[Select[_, _], StaticShape] {
 
     implicit def eye[
         P1 <: StaticShape
     ] = {
 
-      forAll[Reorder[P1, Indices.Eye]].=>> { v =>
+      forAll[Select[P1, Indices.Eye]].=>> { v =>
         StaticShape.Eye
       }
     }
@@ -81,15 +81,15 @@ object Reorder extends Reorder_Imp0 {
         O <: Axis
     ](
         implicit
-        forTail: Reorder[P1, II_-] |- OO_-,
+        forTail: Select[P1, II_-] |- OO_-,
         forHead: GetSubscript.Premise.Auxs.=>>[GetSubscript[P1, I], O]
     ) = {
-      forAll[Reorder[P1, Indices.><[II_-, I]]].=>> { v =>
+      forAll[Select[P1, Indices.><[II_-, I]]].=>> { v =>
         val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(GetSubscript(v.s1, v.indices.head))
 
-        tail.^ appendInner head
+        tail.^ _and head
       }
     }
   }

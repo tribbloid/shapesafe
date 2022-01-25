@@ -42,6 +42,12 @@ trait Tuples extends TupleSystem {
     ](
         head: HEAD
     ): SELF >< HEAD = cons(self, head)
+
+    def &[
+        HEAD <: VBound
+    ](
+        head: HEAD
+    ): SELF >< HEAD = cons(self, head)
   }
 
   implicit class tupleExtension[SELF <: Tuple](val self: SELF) extends InfixMixin[SELF] {}

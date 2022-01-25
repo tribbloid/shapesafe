@@ -1,14 +1,14 @@
 package shapesafe.core.shape.unary
 
 import shapesafe.core.debugging.{Expressions, Reporters}
-import shapesafe.core.shape.{LeafShape, ProveShape, Shape, StaticShape}
+import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
 import shapesafe.m.viz.VizCTSystem.EmitError
 
 // all names must be distinctive - no duplication allowed
 case class RequireDistinct[
-    S1 <: Shape
+    S1 <: ShapeType
 ](
-    s1: S1 with Shape
+    s1: S1 with ShapeType
 ) extends Conjecture1.^[S1] {
 
   override type Expr = Expressions.RequireDistinct[S1#Expr]
@@ -21,7 +21,7 @@ trait RequireDistinct_Imp0 {
   import ProveShape._
 
   implicit def refute[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: LeafShape,
       MSG
   ](
@@ -39,7 +39,7 @@ object RequireDistinct extends RequireDistinct_Imp0 {
   import ProveShape._
 
   implicit def simplify[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: StaticShape
   ](
       implicit

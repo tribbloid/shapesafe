@@ -6,18 +6,18 @@ import shapeless.{HList, ProductArgs, Witness}
 import shapesafe.core.arity.ConstArity.Literal
 import shapesafe.core.arity.ProveArity.{|-, |-<}
 import shapesafe.core.arity.nullary.SizeOf
-import shapesafe.core.arity.{Arity, ArityAPI, LeafArity, Var}
+import shapesafe.core.arity.{Arity, ArityType, LeafArity}
 import shapesafe.core.util.Constraint.ElementOfType
 
 import scala.language.implicitConversions
 import scala.util.Random
 
-class DoubleVector[A1 <: Arity](
-    val arity: ArityAPI.^[A1],
+class DoubleVector[A1 <: ArityType](
+    val arity: Arity.^[A1],
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import shapesafe.core.arity.ops.ArityOps._
+  import shapesafe.core.Ops._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {
@@ -33,7 +33,7 @@ class DoubleVector[A1 <: Arity](
     new DoubleVector(evaled, data)
   }
 
-  def dot_*[A2 <: Arity](that: DoubleVector[A2])(
+  def dot_*[A2 <: ArityType](that: DoubleVector[A2])(
       implicit
       proof: A1 ==! A2 |-< _
   ): Double = {
@@ -42,7 +42,7 @@ class DoubleVector[A1 <: Arity](
     result
   }
 
-  def concat[A2 <: Arity, O <: LeafArity](that: DoubleVector[A2])(
+  def concat[A2 <: ArityType, O <: LeafArity](that: DoubleVector[A2])(
       implicit
       lemma: (A1 :+ A2) |- O
   ): DoubleVector[O] = { // TODO: always successful, can execute lazily without lemma
@@ -57,7 +57,7 @@ class DoubleVector[A1 <: Arity](
 
   def pad[O <: LeafArity](padding: Witness.Lt[Int])(
       implicit
-      lemma: (A1 :+ (Literal[padding.T] :* Arity._2._Arity)) |- O
+      lemma: (A1 :+ (Literal[padding.T] :* Arity._2._ArityType)) |- O
   ): DoubleVector[O] = {
 
     val _padding = Arity(padding)
@@ -73,14 +73,14 @@ class DoubleVector[A1 <: Arity](
   }
 
   def conv[
-      A2 <: Arity,
+      A2 <: ArityType,
       O <: LeafArity
   ](
       kernel: DoubleVector[A2],
       stride: Witness.Lt[Int]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1._Arity) :/ Literal[stride.T]) |- O
+      lemma: ((A1 :- A2 :+ Arity._1._ArityType) :/ Literal[stride.T]) |- O
   ): DoubleVector[O] = {
 
     val _stride = Arity(stride)
@@ -102,13 +102,13 @@ class DoubleVector[A1 <: Arity](
   }
 
   def conv[
-      A2 <: Arity,
+      A2 <: ArityType,
       O <: LeafArity
   ](
       kernel: DoubleVector[A2]
   )(
       implicit
-      lemma: ((A1 :- A2 :+ Arity._1._Arity) :/ Arity._1._Arity) |- O
+      lemma: ((A1 :- A2 :+ Arity._1._ArityType) :/ Arity._1._ArityType) |- O
   ): DoubleVector[O] = {
 
     conv(kernel, 1)
@@ -156,17 +156,17 @@ object DoubleVector extends ProductArgs {
     new DoubleVector(Arity(lit), list)
   }
 
-  @transient object unsafe {
-
-    def zeros(number: Int): DoubleVector[Var] = {
-
-      new DoubleVector(Var(number).^, DenseVector.fill(number)(0.0))
-    }
-  }
+//  @transient object unsafe {
+//
+//    def zeros(number: Int): DoubleVector[ArityVar#Var] = {
+//
+//      new DoubleVector(ArityVar(number), DenseVector.fill(number)(0.0))
+//    }
+//  }
 
   case class Reified[A1 <: LeafArity](self: DoubleVector[A1]) {
 
-    val arity = self.arity
+    val arity: Arity.^[A1] = self.arity
 
     def crossValidate(): Unit = {
 
@@ -176,7 +176,7 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  implicit def asReified[A1 <: Arity, O <: LeafArity](v: DoubleVector[A1])(
+  implicit def asReified[A1 <: ArityType, O <: LeafArity](v: DoubleVector[A1])(
       implicit
       prove: A1 |- O
   ): Reified[O] = {

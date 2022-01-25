@@ -1,24 +1,24 @@
 package shapesafe.core.shape.binary
 
 import shapesafe.BaseSpec
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
-class DimensionWiseSpec extends BaseSpec {
+class Op2ByDimSpec extends BaseSpec {
 
   it("treeString") {
     val s1 = Shape(2, 3)
 
     val s2 = Shape(4, 5)
 
-    val rr = s1.dimensionWise(ArityOps.:+, s2)
+    val rr = s1.applyPerDim(Ops.:+, s2)
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._DimensionWise ‣ DimensionWise.On┏ 2:Literal ><
-        |                                                                      ┃   3:Literal
-        |                                                                      ┏ 4:Literal ><
-        |                                                                      ┃   5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim ‣ Op2ByDim.On┏ 2:Literal ><
+        |                                                            ┃   3:Literal
+        |                                                            ┏ 4:Literal ><
+        |                                                            ┃   5:Literal
         |""".stripMargin
     )
   }
@@ -30,7 +30,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     it("direct sum") {
 
-      val rr = s1.dimensionWise(ArityOps.:+, s2)
+      val rr = s1.applyPerDim(Ops.:+, s2)
 
 //      TypeVizCT.infer(rr.shape).show
 
@@ -44,7 +44,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     it("Kronecker product") {
 
-      val rr = s1.dimensionWise(ArityOps.:*, s2)
+      val rr = s1.applyPerDim(Ops.:*, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -72,7 +72,7 @@ class DimensionWiseSpec extends BaseSpec {
       val s1 = Shape(2, 3)
       val s2 = Shape(4, 5, 6)
 
-      val rr = s1.dimensionWise(ArityOps.:+, s2)
+      val rr = s1.applyPerDim(Ops.:+, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -89,10 +89,10 @@ class DimensionWiseSpec extends BaseSpec {
 
     it(" ... even if both operands are a conjectures") {
 
-      val s1 = Shape(2, 3).|<<-*("a", "b")
-      val s2 = Shape(4, 5, 6).|<<-*("a", "b", "c")
+      val s1 = Shape(2, 3).:<<=*("a", "b")
+      val s2 = Shape(4, 5, 6).:<<=*("a", "b", "c")
 
-      val rr = s1.dimensionWise(ArityOps.:*, s2)
+      val rr = s1.applyPerDim(Ops.:*, s2)
 
       rr.eval.toString.shouldBe(
         """

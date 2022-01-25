@@ -8,15 +8,15 @@ class StaticShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
-  describe("create") {
+  describe("construct") {
 
     it("named") {
 
-      val shape = Shape >|<
-        Arity(2) :<<- "x" append
+      val shape = Shape &
+        Arity(2) :<<- "x" and
         Arity(3) :<<- "y"
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
@@ -29,13 +29,13 @@ class StaticShapeSpec extends BaseSpec {
 
     it("nameless") {
 
-      val shape = Shape >|<
-        Arity(2) append
+      val shape = Shape &
+        Arity(2) and
         Arity(3)
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
-          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
+          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -43,26 +43,36 @@ class StaticShapeSpec extends BaseSpec {
 
     it("mixed") {
 
-      val shape = Shape >|<
-        Arity(2) :<<- "x" >|<
-        Arity(3) append
+      val shape = Shape &
+        Arity(2) :<<- "x" &
+        Arity(3) and
         Arity(4) :<<- "z"
 
       assert(shape.record.apply("x").runtimeValue == 2)
       assert(shape.record.apply("z").runtimeValue == 4)
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
-          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< Arity.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
+          |""".stripMargin
+      )
+    }
+
+    it("nameless shortcut") {
+
+      val shape = Shape & 2 & 3
+      typeInferShort(shape.shapeType).shouldBe(
+        """
+          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
     }
   }
 
   it("toString") {
-    val shape = Shape >|<
-      Arity(2) :<<- "x" >|<
-      Arity(3) append
+    val shape = Shape &
+      Arity(2) :<<- "x" &
+      Arity(3) and
       Arity(4) :<<- "z"
 
     shape.toString.shouldBe(
@@ -127,7 +137,7 @@ class StaticShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = ("x" ->> Arity(3).arity) ::
+      val hh = ("x" ->> Arity(3).arityType) ::
         HNil
 
       val shape = StaticShape.FromArities(hh)
@@ -139,8 +149,8 @@ class StaticShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = ("x" ->> Arity(3).arity) ::
-        ("y" ->> Arity(4).arity) ::
+      val hh = ("x" ->> Arity(3).arityType) ::
+        ("y" ->> Arity(4).arityType) ::
         HNil
 
       val shape = StaticShape.FromArities(hh)
@@ -160,7 +170,7 @@ class StaticShapeSpec extends BaseSpec {
       ss.dimensions.static.head.requireEqual(4)
       ss.dimensions.static.last.requireEqual(4)
 
-      val nn = (ss |<<- (Names >< "i")).eval
+      val nn = (ss :<<= (Names >< "i")).eval
 
       nn.toString.shouldBe(
         """
@@ -175,7 +185,7 @@ class StaticShapeSpec extends BaseSpec {
       ss.dimensions.static.head.requireEqual(2)
       ss.dimensions.static.last.requireEqual(4)
 
-      val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
+      val nn = (ss :<<= (Names >< "i" >< "j" >< "k")).eval
 
       nn.toString.shouldBe(
         """
@@ -195,7 +205,7 @@ class StaticShapeSpec extends BaseSpec {
       ss.dimensions.static.head.requireEqual(4)
       ss.dimensions.static.last.requireEqual(4)
 
-      val nn = (ss |<<- (Names >< "i")).eval
+      val nn = (ss :<<= (Names >< "i")).eval
 
       nn.toString.shouldBe(
         """
@@ -210,7 +220,7 @@ class StaticShapeSpec extends BaseSpec {
       ss.dimensions.static.head.requireEqual(2)
       ss.dimensions.static.last.requireEqual(4)
 
-      val nn = (ss |<<- (Names >< "i" >< "j" >< "k")).eval
+      val nn = (ss :<<= (Names >< "i" >< "j" >< "k")).eval
 
       nn.toString.shouldBe(
         """
@@ -222,7 +232,7 @@ class StaticShapeSpec extends BaseSpec {
     }
 
 //    it("3") {
-//      val ss = (Shape.Literals(4, 3, 2) |<<- (Names >< "i" >< "j" >< "k")).eval
+//      val ss = (Shape.Literals(4, 3, 2) :<<= (Names >< "i" >< "j" >< "k")).eval
 //
 //      ss.dimensions.static.head.core.requireEqual(2)
 //      ss.dimensions.static.last.core.requireEqual(4)
@@ -233,7 +243,7 @@ class StaticShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val shape = Shape >|<
+      val shape = Shape &
         Arity(2) :<<- "x"
 
       val record = shape.record
@@ -250,13 +260,13 @@ class StaticShapeSpec extends BaseSpec {
           |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
 
     it("2") {
 
-      val shape = Shape >|<
-        Arity(2) :<<- "x" >|<
+      val shape = Shape &
+        Arity(2) :<<- "x" &
         Arity(3) :<<- "y"
 
       val record = shape.record
@@ -282,7 +292,7 @@ class StaticShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val shape = Shape >|<
+      val shape = Shape &
         Arity(2) :<<- "x"
 
       val record = shape.record
@@ -299,13 +309,13 @@ class StaticShapeSpec extends BaseSpec {
           |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
 
     it("2") {
 
-      val shape = Shape >|<
-        Arity(2) :<<- "x" >|<
+      val shape = Shape &
+        Arity(2) :<<- "x" &
         Arity(3) :<<- "y"
 
       val record = shape.record
@@ -323,14 +333,14 @@ class StaticShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
   }
 
   describe("names") {
 
-    val shape = Shape >|<
-      Arity(2) :<<- "x" append
+    val shape = Shape &
+      Arity(2) :<<- "x" and
       Arity(3) :<<- "y"
 
     it("1") {
@@ -343,15 +353,15 @@ class StaticShapeSpec extends BaseSpec {
 
   describe("values") {
 
-    val shape = Shape >|<
-      Arity(2) :<<- "x" >|<
+    val shape = Shape &
+      Arity(2) :<<- "x" &
       Arity(3) :<<- "y"
 
     it("1") {
 
       val vv = shape.dimensions
 
-      assert(vv.head == Arity(3).arity)
+      assert(vv.head == Arity(3).arityType)
     }
   }
 
@@ -377,7 +387,7 @@ class StaticShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val s = Shape(1, 2).|<<-*("a", "b").eval
+      val s = Shape(1, 2).:<<=*("a", "b").eval
 
       shouldNotCompile(
         """s.interrupt""",

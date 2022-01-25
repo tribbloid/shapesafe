@@ -1,9 +1,9 @@
 package shapesafe.core.shape.unary
 
+import shapeless.HNil
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
 import shapesafe.core.shape.{Names, Shape, StaticShape}
-import shapeless.HNil
 
 class EinSumSpec extends BaseSpec {
 
@@ -13,17 +13,17 @@ class EinSumSpec extends BaseSpec {
     import Names.Syntax._
 
     val s1 =
-      Shape(1, 2) |<<- ("x" >< "y")
+      Shape(1, 2) :<<= ("x" >< "y")
 
     val s2 =
-      Shape(3, 4) |<<- ("i" >< "j")
+      Shape(3, 4) :<<= ("i" >< "j")
 
     val r = (s1 einSum s2) --> ("x" >< "i")
 
     r.treeString.shouldBe(
       """
-        |Reorder┏ x ><
-        |       ┃   i
+        |Select┏ x ><
+        |      ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
@@ -50,7 +50,7 @@ class EinSumSpec extends BaseSpec {
 
         //      val eye = EinSumOperand.Eye
 
-        val h1 = indexing(("i" ->> Arity(3).arity) :: HNil)
+        val h1 = indexing(("i" ->> Arity(3).arityType) :: HNil)
         h1.toString.shouldBe(
           """3:Literal :: HNil"""
         )
@@ -59,13 +59,13 @@ class EinSumSpec extends BaseSpec {
       it("if names has no duplicate") {
 
         val h1 = indexing(
-          ("i" ->> Arity(3).arity) ::
-            ("j" ->> Arity(4).arity) ::
+          ("i" ->> Arity(3).arityType) ::
+            ("j" ->> Arity(4).arityType) ::
             HNil
         )
 
         val h2 = indexing(
-          ("k" ->> Arity(5).arity) ::
+          ("k" ->> Arity(5).arityType) ::
             h1
         )
 
@@ -74,22 +74,22 @@ class EinSumSpec extends BaseSpec {
 
       it("if name --> dimension has no conflict") {
 
-        val ss = ("i" ->> Arity(3).arity) ::
-          ("j" ->> Arity(4).arity) ::
+        val ss = ("i" ->> Arity(3).arityType) ::
+          ("j" ->> Arity(4).arityType) ::
           HNil
 
         //      VizType[op.Static].toString.shouldBe()
         //      val v1 = EinSumCondition.apply(op.static --> ("j" ->> Arity(4)))
         //      VizType.infer(v1).toString.shouldBe()
 
-        val h1 = indexing(("j" ->> Arity(4).arity) :: ss)
+        val h1 = indexing(("j" ->> Arity(4).arityType) :: ss)
         h1.toString.shouldBe(
-          """4:Literal :: 3:Literal :: 4:Literal :: HNil"""
+          """3:Literal :: 4:Literal :: HNil"""
         )
 
-        val h2 = indexing(("i" ->> Arity(3).arity) :: ss)
+        val h2 = indexing(("i" ->> Arity(3).arityType) :: ss)
         h2.toString.shouldBe(
-          """3:Literal :: 3:Literal :: 4:Literal :: HNil"""
+          """3:Literal :: 4:Literal :: HNil"""
         )
       }
     }
@@ -98,11 +98,11 @@ class EinSumSpec extends BaseSpec {
 
       it("if name --> dimension has conflict") {
 
-        val ss = ("i" ->> Arity(3).arity) ::
+        val ss = ("i" ->> Arity(3).arityType) ::
           ("j" ->> Arity(4)) ::
           HNil
 
-        val h1 = ("j" ->> Arity(3).arity) :: ss
+        val h1 = ("j" ->> Arity(3).arityType) :: ss
 
         shouldNotCompile(
           """indexing(h1)"""
@@ -122,7 +122,7 @@ class EinSumSpec extends BaseSpec {
 
     it("1") {
 
-      val s1 = Shape >|<
+      val s1 = Shape &
         (Arity(1) :<<- "x")
 
       val op = s1.einSum.all.eval
@@ -130,8 +130,8 @@ class EinSumSpec extends BaseSpec {
 
     it("2") {
 
-      val s1 = Shape >|<
-        (Arity(1) :<<- "x") >|<
+      val s1 = Shape &
+        (Arity(1) :<<- "x") &
         (Arity(2) :<<- "y")
 
 //      TypeVizCT[s1.Record].show
@@ -141,8 +141,8 @@ class EinSumSpec extends BaseSpec {
 
     it("3") {
 
-      val s1 = Shape >|<
-        (Arity(1) :<<- "x") >|<
+      val s1 = Shape &
+        (Arity(1) :<<- "x") &
         (Arity(1) :<<- "x")
 
       val op = s1.einSum.all.eval
@@ -150,9 +150,9 @@ class EinSumSpec extends BaseSpec {
 
     it("4") {
 
-      val s1 = Shape >|<
-        (Arity(1) :<<- "x") >|<
-        (Arity(2) :<<- "y") >|<
+      val s1 = Shape &
+        (Arity(1) :<<- "x") &
+        (Arity(2) :<<- "y") &
         (Arity(1) :<<- "x")
 
       val op = s1.einSum.all.eval
@@ -166,7 +166,7 @@ class EinSumSpec extends BaseSpec {
       val s1 = StaticShape.Eye.^
 
       val ops = s1.einSum(
-        Shape >|<
+        Shape &
           (Arity(1) :<<- "i")
       )
 
@@ -180,13 +180,13 @@ class EinSumSpec extends BaseSpec {
     }
 
     it("2") {
-      val s1 = Shape >|<
-        (Arity(1) :<<- "x") >|<
+      val s1 = Shape &
+        (Arity(1) :<<- "x") &
         Arity(2) :<<- "y"
 
       val ops = s1.einSum(
-        Shape >|<
-          (Arity(3) :<<- "i") >|<
+        Shape &
+          (Arity(3) :<<- "i") &
           Arity(4) :<<- "j"
       )
 
@@ -205,10 +205,10 @@ class EinSumSpec extends BaseSpec {
       import Names.Syntax._
 
       val s1 =
-        Shape(1, 2) |<<- ("x" >< "y")
+        Shape(1, 2) :<<= ("x" >< "y")
 
       val s2 =
-        Shape(3, 4) |<<- ("i" >< "j")
+        Shape(3, 4) :<<= ("i" >< "j")
 
       val r = (s1 einSum s2) --> ("x" >< "i")
 
@@ -227,8 +227,8 @@ class EinSumSpec extends BaseSpec {
 
       import Names.Syntax._
 
-      val s1 = Shape(1, 2, 3) |<<- ("x" >< "y" >< "y")
-      val s2 = Shape(3, 4) |<<- ("i" >< "j")
+      val s1 = Shape(1, 2, 3) :<<= ("x" >< "y" >< "y")
+      val s2 = Shape(3, 4) :<<= ("i" >< "j")
       val r = (s1 einSum s2).all
 
       shouldNotCompile(
@@ -241,9 +241,9 @@ class EinSumSpec extends BaseSpec {
 
       import Names.Syntax._
 
-      val s1 = Shape(1, 2) |<<-
+      val s1 = Shape(1, 2) :<<=
         ("x" >< "y")
-      val s2 = Shape(3, 4) |<<-
+      val s2 = Shape(3, 4) :<<=
         ("i" >< "i")
       val r = (s1 einSum s2).all
 
@@ -257,9 +257,9 @@ class EinSumSpec extends BaseSpec {
 
       import Names.Syntax._
 
-      val s1 = Shape(1, 2) |<<-
+      val s1 = Shape(1, 2) :<<=
         ("x" >< "y")
-      val s2 = Shape(3, 4) |<<-
+      val s2 = Shape(3, 4) :<<=
         ("y" >< "z")
       val r = (s1 einSum s2).all
 
@@ -274,11 +274,11 @@ class EinSumSpec extends BaseSpec {
       import Names.Syntax._
 
       val s1 =
-        Shape(1, 2) |<<-
+        Shape(1, 2) :<<=
           ("x" >< "y")
 
       val s2 =
-        Shape(3, 4) |<<-
+        Shape(3, 4) :<<=
           ("i" >< "j")
 
       val r = (s1 einSum s2) --> ("x" >< "k")

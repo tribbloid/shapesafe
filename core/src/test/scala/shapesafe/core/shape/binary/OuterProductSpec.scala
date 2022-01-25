@@ -10,17 +10,17 @@ class OuterProductSpec extends BaseSpec {
 
     it("1") {
 
-      val s1 = Shape >|<
+      val s1 = Shape &
         Arity(2) :<<- "x"
       //        Arity.FromLiteral(3) :<<- "y"
 
-      val s2 = Shape >|<
+      val s2 = Shape &
         Arity(2) :<<- "i"
       //        Arity.FromLiteral(3) :<<- "j"
 
       val rr = (s1 >< s2).eval
 
-      typeInferShort(rr.shape).shouldBe(
+      typeInferShort(rr.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
@@ -28,17 +28,17 @@ class OuterProductSpec extends BaseSpec {
 
     it("2") {
 
-      val s1 = Shape >|<
-        Arity(2) :<<- "x" >|<
+      val s1 = Shape &
+        Arity(2) :<<- "x" &
         Arity(3) :<<- "y"
 
-      val s2 = Shape >|<
-        Arity(2) :<<- "i" >|<
+      val s2 = Shape &
+        Arity(2) :<<- "i" &
         Arity(3) :<<- "j"
 
       val rr = (s1 outer s2).eval
 
-      typeInferShort(rr.shape).shouldBe(
+      typeInferShort(rr.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y")) ><
           | (ConstArity.Literal[Int(2)] :<<- String("i")) >< (ConstArity.Literal[Int(3)] :<<- String("j"))

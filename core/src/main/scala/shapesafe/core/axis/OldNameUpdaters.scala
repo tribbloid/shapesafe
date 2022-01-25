@@ -1,7 +1,7 @@
 package shapesafe.core.axis
 
 import shapesafe.core.arity.binary.Op2Like
-import shapesafe.core.arity.{Arity, LeafArity}
+import shapesafe.core.arity.{ArityType, LeafArity}
 import shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Modifier, Selector}
 import shapeless.{::, HList, Witness}
@@ -17,8 +17,8 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
     implicit def ifOldName[
         OLD <: HList,
         N <: String,
-        A1 <: Arity,
-        A2 <: Arity,
+        A1 <: ArityType,
+        A2 <: ArityType,
         O <: LeafArity
     ](
         implicit
@@ -53,8 +53,8 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
     implicit def ifOldName[
         OLD <: HList,
         N <: String,
-        A1 <: Arity,
-        A2 <: Arity,
+        A1 <: ArityType,
+        A2 <: ArityType,
         O <: LeafArity
     ](
         implicit

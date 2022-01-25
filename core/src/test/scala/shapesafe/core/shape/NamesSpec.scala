@@ -13,7 +13,7 @@ class NamesSpec extends BaseSpec {
 
   val hList = "z".narrow :: "y".narrow :: "x".narrow :: HNil
 
-  describe("create") {
+  describe("construct") {
 
     it("1") {
 

@@ -1,7 +1,7 @@
 package shapesafe.core.shape.args
 
 import shapesafe.core.shape.StaticShape
-import shapesafe.core.shape.ShapeAPI.^
+import shapesafe.core.shape.Shape.^
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, NatProductArgs}
 

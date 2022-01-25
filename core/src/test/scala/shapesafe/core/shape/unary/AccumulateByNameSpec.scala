@@ -1,24 +1,24 @@
 package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.{Names, Shape}
 
-class ReduceByNameSpec extends BaseSpec {
+class AccumulateByNameSpec extends BaseSpec {
 
   it("treeString") {
 
-    val s1 =
-      Shape(2, 3) |<<- (Names >< "x" >< "y")
+    val s1 = Shape(2, 3) :<<=
+      (Names >< "x" >< "y")
 
-    val s2 =
-      Shape(4, 5) |<<- (Names >< "x" >< "y")
+    val s2 = Shape(4, 5) :<<=
+      (Names >< "x" >< "y")
 
-    val rr = s1.flattenWith(ArityOps.:+, s2)
+    val rr = Ops.:+.reduceByName(s1, s2)
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._SquashByName ‣ ReduceByName.On
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._ReduceByName ‣ AccumulateByName.On
         | ‣ OuterProduct
         |    ‣ ZipWithNames┏ 2:Literal ><
         |    :             ┃   3:Literal
@@ -35,14 +35,14 @@ class ReduceByNameSpec extends BaseSpec {
   describe("matrix") {
 
     val s1 =
-      Shape(2, 3) |<<- (Names >< "x" >< "y")
+      Shape(2, 3) :<<= (Names >< "x" >< "y")
 
     val s2 =
-      Shape(4, 5) |<<- (Names >< "x" >< "y")
+      Shape(4, 5) :<<= (Names >< "x" >< "y")
 
     it("direct sum") {
 
-      val rr = s1.flattenWith(ArityOps.:+, s2)
+      val rr = Ops.:+.reduceByName(s1, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -54,7 +54,7 @@ class ReduceByNameSpec extends BaseSpec {
 
     it("Kronecker product") {
 
-      val rr = s1.flattenWith(ArityOps.:*, s2)
+      val rr = Ops.:*.reduceByName(s1, s2)
 
       rr.eval.toString.shouldBe(
         """

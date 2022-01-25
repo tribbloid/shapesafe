@@ -1,15 +1,15 @@
 package shapesafe.core.arity.binary
 
-import shapesafe.core.arity.Arity
-import shapesafe.core.arity.ops.ArityOps.==!
+import shapesafe.core.arity.ArityType
+import shapesafe.core.Ops.==!
 
 trait Require2_Imp0 extends Require2_Imp1 {
 
   import shapesafe.core.arity.ProveArity._
 
   implicit def uncheckedEqual[
-      A1 <: Arity,
-      A2 <: Arity
+      A1 <: ArityType,
+      A2 <: ArityType
   ](
       implicit
       domain: UncheckedDomain[A1, A2]

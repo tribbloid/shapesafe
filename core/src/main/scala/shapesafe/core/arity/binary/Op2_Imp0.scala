@@ -5,8 +5,8 @@ import shapesafe.core.arity._
 trait Op2_Imp0 {
 
   implicit def unchecked[
-      A1 <: Arity,
-      A2 <: Arity,
+      A1 <: ArityType,
+      A2 <: ArityType,
       OP <: Op2
   ](
       implicit

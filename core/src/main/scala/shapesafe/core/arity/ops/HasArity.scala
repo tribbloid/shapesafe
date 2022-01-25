@@ -1,9 +1,11 @@
 package shapesafe.core.arity.ops
 
-import shapesafe.core.arity.Arity
+import shapesafe.core.arity.{Arity, ArityType}
 
 trait HasArity {
 
-  type _Arity <: Arity
-  def arity: _Arity
+  type _ArityType <: ArityType
+  def arityType: _ArityType
+
+  def arity: Arity.^[_ArityType] = arityType.^
 }
