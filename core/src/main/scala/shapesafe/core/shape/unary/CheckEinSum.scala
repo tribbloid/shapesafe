@@ -12,7 +12,7 @@ case class CheckEinSum[
 
 object CheckEinSum {
 
-  val op: Ops.==!._AppendByName.type = Ops.==!._AppendByName
+  val op: Ops.==!._ReduceByName.type = Ops.==!._ReduceByName
 
   def indexing: op._Lemma.type = op._Lemma
 }

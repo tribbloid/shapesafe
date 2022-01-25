@@ -56,14 +56,14 @@ class GetSubscriptSpec extends BaseSpec {
 
     it("getByIndex") {
 
-      val v = s1.Sub(0).eval.shape.head
+      val v = s1.select1(0).eval.shape.head
 
       assert(v == Arity(3) :<<- "z") // HList is of inverse order
     }
 
     it("getByName") {
 
-      val v = s1.Sub("y").eval.shape.head
+      val v = s1.select1("y").eval.shape.head
 
       assert(v == Arity(2) :<<- "y")
     }

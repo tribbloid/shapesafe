@@ -22,8 +22,8 @@ class EinSumSpec extends BaseSpec {
 
     r.treeString.shouldBe(
       """
-        |Reorder┏ x ><
-        |       ┃   i
+        |Select┏ x ><
+        |      ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
@@ -84,12 +84,12 @@ class EinSumSpec extends BaseSpec {
 
         val h1 = indexing(("j" ->> Arity(4).arity) :: ss)
         h1.toString.shouldBe(
-          """4:Literal :: 3:Literal :: 4:Literal :: HNil"""
+          """3:Literal :: 4:Literal :: HNil"""
         )
 
         val h2 = indexing(("i" ->> Arity(3).arity) :: ss)
         h2.toString.shouldBe(
-          """3:Literal :: 3:Literal :: 4:Literal :: HNil"""
+          """3:Literal :: 4:Literal :: HNil"""
         )
       }
     }

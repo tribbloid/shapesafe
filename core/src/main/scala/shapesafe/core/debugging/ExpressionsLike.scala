@@ -24,10 +24,10 @@ trait ExpressionsLike {
   trait AppendByName[O] extends ExprOn1 {
     type _DebugSymbol = "AppendByName[" + O + "]"
   }
-  trait SquashByName[O] extends ExprOn1 {
-    type _DebugSymbol = "SquashByName[" + O + "]"
+  trait ReduceByName[O] extends ExprOn1 {
+    type _DebugSymbol = "ReduceByName[" + O + "]"
   }
-  trait DimensionWise[O] extends ExprOn2 {
-    type _DebugSymbol = "DimensionWise[" + O + "]"
+  trait ForEachAxis[O] extends ExprOn2 {
+    type _DebugSymbol = "ForEachAxis[" + O + "]"
   }
 }

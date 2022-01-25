@@ -3,7 +3,7 @@ package shapesafe.core.shape.ops
 import shapesafe.core.shape.ShapeAPI.^
 import shapesafe.core.shape.{Names, Shape, ShapeAPI}
 import shapesafe.core.shape.binary.OuterProduct
-import shapesafe.core.shape.unary.{CheckEinSum, Reorder}
+import shapesafe.core.shape.unary.{CheckEinSum, Select}
 import shapeless.{HList, SingletonProductArgs}
 import shapeless.ops.hlist.Reverse
 
@@ -17,9 +17,9 @@ case class EinSumOps[
 
   lazy val checked: CheckEinSum[S1] = CheckEinSum(shape)
 
-  def -->[N <: Names](names: N): ^[Reorder[CheckEinSum[S1], N]] = {
+  def -->[N <: Names](names: N): ^[Select[CheckEinSum[S1], N]] = {
 
-    Reorder(checked, names).^
+    Select(checked, names).^
   }
 
   object -->* extends SingletonProductArgs {
@@ -30,7 +30,7 @@ case class EinSumOps[
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[Reorder[CheckEinSum[S1], lemma.Out]] = {
+    ): ^[Select[CheckEinSum[S1], lemma.Out]] = {
 
       val names = lemma.apply(reverse(v))
       -->(names)

@@ -61,7 +61,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   /**
     * assign new names
     */
-  object namedWith {
+  object namedBy {
 
     def apply[N <: Names](newNames: N): ^[ZipWithNames[_Shape, N]] = {
 
@@ -69,7 +69,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     }
   }
 
-  lazy val :<<= : namedWith.type = namedWith
+  lazy val :<<= : namedBy.type = namedBy
 
   // no need for Names constructor
   object named extends SingletonProductArgs {
@@ -84,7 +84,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
       val out = lemma.apply(reverse(v))
 
-      namedWith.apply(out)
+      namedBy.apply(out)
     }
   }
 
@@ -112,12 +112,12 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
   def einSum: EinSumOps[_Shape] = EinSumOps(shape)
 
-  def contract[N <: Names](names: N): ^[Reorder[CheckEinSum[_Shape], N]] = {
+  def contract[N <: Names](names: N): ^[Select[CheckEinSum[_Shape], N]] = {
 
     einSum.-->(names)
   }
 
-  object Sub {
+  object select1 {
 
     def apply[T <: Index](v: T): ^[GetSubscript[_Shape, T]] = {
       GetSubscript(shape, v).^
@@ -137,31 +137,15 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     }
   }
 
-  def flattenWith(
-      infix: Ops.Infix,
-      that: ShapeAPI
-  ): ^[infix._SquashByName.On[OuterProduct[_Shape, that._Shape]]] = {
-
-    val outerP = ><(that)
-    infix._SquashByName.On(outerP).^
-  }
-
-  def flatten(
-      infix: Ops.Infix
-  ): ^[infix._SquashByName.On[_Shape]] = {
-
-    infix._SquashByName.On(this).^
-  }
-
-  def transposeWith[N <: Names](names: N): ^[Reorder[RequireDistinct[_Shape], N]] = {
+  def selectBy[II <: IndicesMagnet](indices: II): ^[Select[RequireDistinct[_Shape], II]] = {
 
     val distinct = RequireDistinct(shape)
-    val result = Reorder(distinct, names)
+    val result = Select(distinct, indices)
 
     result.^
   }
 
-  object transpose extends SingletonProductArgs {
+  object select extends SingletonProductArgs {
 
     def applyProduct[H1 <: HList, H2 <: HList](
         v: H1
@@ -169,25 +153,28 @@ trait ShapeAPI extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[Reorder[RequireDistinct[_Shape], lemma.Out]] = {
+    ): ^[Select[RequireDistinct[_Shape], lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
-      transposeWith(out)
+      selectBy(out)
     }
   }
 
-  def dimensionWise(
+  def reduceByName(
+      infix: Ops.Infix
+  ) = infix.reduceByName(this)
+
+  def flattenByName = reduceByName(Ops.:*)
+
+  def foreachAxis(
       infix: Ops.Infix,
       that: ShapeAPI
-  ): ^[infix._DimensionWise.On[_Shape, that._Shape]] = {
-
-    infix._DimensionWise.On(this, that).^
-  }
+  ) = infix.foreachAxis(this, that)
 
   def requireEqual(
       that: ShapeAPI
-  ): ^[Ops.==!._DimensionWise.On[_Shape, that._Shape]] = dimensionWise(Ops.==!, that)
+  ): ^[Ops.==!._ForEachAxis.On[_Shape, that._Shape]] = foreachAxis(Ops.==!, that)
 }
 
 object ShapeAPI {

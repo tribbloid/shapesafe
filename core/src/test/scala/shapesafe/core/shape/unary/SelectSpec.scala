@@ -5,7 +5,7 @@ import shapesafe.core.arity.Arity
 import shapesafe.core.shape.Index.Name
 import shapesafe.core.shape.{Indices, Names, Shape}
 
-class ReorderSpec extends BaseSpec {
+class SelectSpec extends BaseSpec {
 
   val s1 = Shape &
     (Arity(1) :<<- "x") &
@@ -15,15 +15,15 @@ class ReorderSpec extends BaseSpec {
   describe("Premise") {
     it("eye") {
 
-      val ss = Reorder(s1, Indices.Eye)
-      val rr = Reorder.Premise.apply(ss)
+      val ss = Select(s1, Indices.Eye)
+      val rr = Select.Premise.apply(ss)
       typeInferShort(rr).shouldBe("StaticShape.Eye")
     }
 
     it("1") {
 
-      val ss = Reorder(s1, Indices >< Name("z"))
-      val rr = Reorder.Premise.apply(ss)
+      val ss = Select(s1, Indices >< Name("z"))
+      val rr = Select.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
         """StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z"))"""
       )
@@ -31,8 +31,8 @@ class ReorderSpec extends BaseSpec {
 
     it("2") {
 
-      val ss = Reorder(s1, Indices >< Name("z") >< Name("y"))
-      val rr = Reorder.Premise.apply(ss)
+      val ss = Select(s1, Indices >< Name("z") >< Name("y"))
+      val rr = Select.Premise.apply(ss)
 
       val s2 = Shape &
         Arity(3) :<<- "z" &
@@ -49,8 +49,8 @@ class ReorderSpec extends BaseSpec {
 
     it("3") {
 
-      val ss = Reorder(s1, Indices >< Name("z") >< Name("y") >< Name("x"))
-      val rr = Reorder.Premise.apply(ss)
+      val ss = Select(s1, Indices >< Name("z") >< Name("y") >< Name("x"))
+      val rr = Select.Premise.apply(ss)
       typeInferShort(rr).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z")) >< (ConstArity.Literal[Int(2)] :<<- String("y")) >< (ConstArity.Literal[Int(1)] :<<- String("x"))
@@ -61,7 +61,7 @@ class ReorderSpec extends BaseSpec {
 
   it("with names") {
 
-    val r = Reorder(s1, Indices >< Name("z") >< Name("y")).^
+    val r = Select(s1, Indices >< Name("z") >< Name("y")).^
 
     r.eval.toString.shouldBe(
       """
@@ -73,7 +73,7 @@ class ReorderSpec extends BaseSpec {
 
   it(" ... alternatively") {
 
-    val r = Reorder(s1, Names >< "z" >< "y").^
+    val r = Select(s1, Names >< "z" >< "y").^
 
     r.eval.toString.shouldBe(
       """

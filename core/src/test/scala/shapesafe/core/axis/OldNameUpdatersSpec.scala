@@ -79,7 +79,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
   describe("Squasher") {
 
-    val squasher = Ops.==!._SquashByName.oldNameUpdater
+    val squasher = Ops.==!._ReduceByName.oldNameUpdater
 
     describe("can squash") {
 

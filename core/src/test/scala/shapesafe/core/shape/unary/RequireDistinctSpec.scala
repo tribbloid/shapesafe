@@ -82,7 +82,7 @@ class RequireDistinctSpec extends BaseSpec {
         Arity(2) :<<- "b" &
         Arity(3) :<<- "c"
 
-      val r = shape.transposeWith(Names >< "c")
+      val r = shape.selectBy(Names >< "c")
 
       r.eval.toString.shouldBe(
         """
@@ -95,7 +95,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "c")).eval
 
-      val r = shape.transposeWith("c" >< "b" >< "a")
+      val r = shape.selectBy("c" >< "b" >< "a")
 
       r.eval.toString.shouldBe(
         """
@@ -113,7 +113,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "a")).eval
 
-      val r = shape.transposeWith(Names("a", "b"))
+      val r = shape.selectBy(Names("a", "b"))
 
       shouldNotCompile("""r.eval""")
     }
@@ -122,7 +122,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "c")).eval
 
-      val r = shape.transposeWith(Names("a", "i"))
+      val r = shape.selectBy(Names("a", "i"))
 
       shouldNotCompile("""r.eval""")
     }

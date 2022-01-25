@@ -1,12 +1,13 @@
 package shapesafe.core.arity.ops
 
+import ai.acyclic.graph.commons.HasOuter
 import shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import shapesafe.core.arity.{Arity, ArityAPI}
 import shapesafe.core.axis.OldNameUpdaters
 import shapesafe.core.debugging.Expressions
-import shapesafe.core.shape.binary.DimensionWise
-import shapesafe.core.shape.unary.ReduceByName
-import ai.acyclic.graph.commons.HasOuter
+import shapesafe.core.shape.ShapeAPI
+import shapesafe.core.shape.binary.ForEachAxis
+import shapesafe.core.shape.unary.AccumulateByName
 import singleton.ops
 
 trait ArityOpsLike extends HasArity {
@@ -30,31 +31,44 @@ trait ArityOpsLike extends HasArity {
       final override def outer: Infix.this.type = Infix.this
     }
 
-    object _AppendByName extends ReduceByName with _HasOuter {
+    object _AppendByName extends AccumulateByName with _HasOuter {
 
       val oldNameUpdater: Updaters.Appender.type = Updaters.Appender
 
       type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
-    object _SquashByName extends ReduceByName with _HasOuter {
+    object _ReduceByName extends AccumulateByName with _HasOuter {
 
       val oldNameUpdater: Updaters.Squasher.type = Updaters.Squasher
 
-      type _Unary = Expressions.SquashByName[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Unary = Expressions.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
-//    type SquashByName[S1 <: Shape] = SquashByName._On[S1]
 
-    object _DimensionWise extends DimensionWise with _HasOuter {
+    object _ForEachAxis extends ForEachAxis with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.DimensionWise[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Binary = Expressions.ForEachAxis[Op#Debug[Unit, Unit]#_DebugSymbol]
+    }
+
+    // part of the API
+
+    def reduceByName[S1 <: ShapeAPI](s1: S1) = {
+      _ReduceByName.On(s1.shape).^
+    }
+    def reduceByName[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
+      _ReduceByName.On((s1 >< s2).shape).^
+    }
+
+    def foreachAxis[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
+      _ForEachAxis.On(s1.shape, s2.shape).^
     }
   }
 
   class InfixImpl[OP <: Op2Like](val op: OP) extends Infix {
 
     type Op = OP
+
   }
 
 //  object :+ extends Op2[ops.+] with Infix

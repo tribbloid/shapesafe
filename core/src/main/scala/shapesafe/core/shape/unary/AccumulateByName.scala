@@ -7,7 +7,7 @@ import shapesafe.core.shape.{ProveShape, Shape, StaticShape}
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.{::, HList}
 
-trait ReduceByName {
+trait AccumulateByName {
 
   import ProveShape._
 
@@ -21,7 +21,7 @@ trait ReduceByName {
   ] extends Conjecture1.^[S1]
       with HasOuter {
 
-    override def outer: ReduceByName.this.type = ReduceByName.this
+    override def outer: AccumulateByName.this.type = AccumulateByName.this
 
     def s1: S1 with Shape
 

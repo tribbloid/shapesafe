@@ -12,7 +12,7 @@ case class ContractByName[
 
 object ContractByName {
 
-  val op: Ops.==!._SquashByName.type = Ops.==!._SquashByName
+  val op: Ops.==!._ReduceByName.type = Ops.==!._ReduceByName
 
   def indexing: op._Lemma.type = op._Lemma
 }
