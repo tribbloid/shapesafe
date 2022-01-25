@@ -2,8 +2,8 @@ package shapesafe.core.axis
 
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
-import shapesafe.core.arity.ops.ArityOps
 import shapeless.HNil
+import shapesafe.core.Ops
 
 class OldNameUpdatersSpec extends BaseSpec {
 
@@ -16,7 +16,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
   describe("Appender") {
 
-    val appender = ArityOps.==!._AppendByName.oldNameUpdater
+    val appender = Ops.==!._AppendByName.oldNameUpdater
 
     describe("can append") {
 
@@ -79,7 +79,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
   describe("Squasher") {
 
-    val squasher = ArityOps.==!._SquashByName.oldNameUpdater
+    val squasher = Ops.==!._SquashByName.oldNameUpdater
 
     describe("can squash") {
 

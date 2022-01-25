@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Unchecked
 import shapesafe.core.arity.ProveArity._
-import shapesafe.core.arity.ops.ArityOps.==!
+import shapesafe.core.Ops.==!
 import shapesafe.core.arity.{Arity, ProveArity}
 
 abstract class UncheckedDomain[

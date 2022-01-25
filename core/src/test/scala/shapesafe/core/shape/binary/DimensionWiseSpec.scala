@@ -1,7 +1,7 @@
 package shapesafe.core.shape.binary
 
 import shapesafe.BaseSpec
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
 class DimensionWiseSpec extends BaseSpec {
@@ -11,7 +11,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     val s2 = Shape(4, 5)
 
-    val rr = s1.dimensionWise(ArityOps.:+, s2)
+    val rr = s1.dimensionWise(Ops.:+, s2)
 
     rr.treeString.shouldBe(
       """
@@ -30,7 +30,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     it("direct sum") {
 
-      val rr = s1.dimensionWise(ArityOps.:+, s2)
+      val rr = s1.dimensionWise(Ops.:+, s2)
 
 //      TypeVizCT.infer(rr.shape).show
 
@@ -44,7 +44,7 @@ class DimensionWiseSpec extends BaseSpec {
 
     it("Kronecker product") {
 
-      val rr = s1.dimensionWise(ArityOps.:*, s2)
+      val rr = s1.dimensionWise(Ops.:*, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -72,7 +72,7 @@ class DimensionWiseSpec extends BaseSpec {
       val s1 = Shape(2, 3)
       val s2 = Shape(4, 5, 6)
 
-      val rr = s1.dimensionWise(ArityOps.:+, s2)
+      val rr = s1.dimensionWise(Ops.:+, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -89,10 +89,10 @@ class DimensionWiseSpec extends BaseSpec {
 
     it(" ... even if both operands are a conjectures") {
 
-      val s1 = Shape(2, 3).|<<-*("a", "b")
-      val s2 = Shape(4, 5, 6).|<<-*("a", "b", "c")
+      val s1 = Shape(2, 3).:<<=*("a", "b")
+      val s2 = Shape(4, 5, 6).:<<=*("a", "b", "c")
 
-      val rr = s1.dimensionWise(ArityOps.:*, s2)
+      val rr = s1.dimensionWise(Ops.:*, s2)
 
       rr.eval.toString.shouldBe(
         """

@@ -1,9 +1,9 @@
 package shapesafe.core.shape.ops
 
 import shapesafe.core.axis.Axis
+import shapesafe.core.shape.ShapeAPI.^
 import shapesafe.core.shape.StaticShape
 import shapesafe.core.shape.StaticShape.><
-import shapesafe.core.shape.ShapeAPI.^
 
 case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
 
@@ -22,9 +22,10 @@ case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
   /**
     * Same as appendInner, but can be also used on non-parametric Axis by using only its dependent type
     */
-  case object >|< {
+  case object & {
 
     // TODO: this convoluted, recursive type bound further shows the necessity for scala to have built-in non-singleton peer type
+    //  axis can be a magnet type
     def apply[THAT <: Axis { type _Axis <: THAT }](
         axis: THAT
     ): ^[><[_Shape, axis._Axis]] = {
@@ -33,5 +34,5 @@ case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
     }
   }
 
-  lazy val append: >|<.type = >|<
+  lazy val append: &.type = &
 }

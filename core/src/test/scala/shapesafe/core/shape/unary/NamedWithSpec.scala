@@ -7,8 +7,8 @@ import shapesafe.core.shape.{Names, Shape}
 
 class NamedWithSpec extends BaseSpec {
 
-  val shape = Shape >|<
-    Arity(2) :<<- "x" >|<
+  val shape = Shape &
+    Arity(2) :<<- "x" &
     Arity(3) :<<- "y"
 
   val shapeSansName = Shape(2, 3)
@@ -17,17 +17,17 @@ class NamedWithSpec extends BaseSpec {
   val ij = Names >< "i" >< "j"
   val namesTooMany = Names >< "a" >< "b" >< "c"
 
-  val shapeRenamed = Shape >|<
-    Arity(2) :<<- "a" >|<
+  val shapeRenamed = Shape &
+    Arity(2) :<<- "a" &
     Arity(3) :<<- "b"
 
-  describe("|<<-") {
+  describe(":<<=") {
 
     it("1") {
 
       //      inferShort(names1).shouldBe()
 
-      val shape2 = (shape |<<- ab).eval
+      val shape2 = (shape :<<= ab).eval
 
       //      VizType.infer(shape2).toString.shouldBe()
 
@@ -36,9 +36,9 @@ class NamedWithSpec extends BaseSpec {
 
     it("2") {
 
-      val shape1 = shape |<<- ij
+      val shape1 = shape :<<= ij
 
-      val shape2 = (shape1 |<<- Names >< "a" >< "b").eval
+      val shape2 = (shape1 :<<= Names >< "a" >< "b").eval
 
       //      VizType.infer(shape2).toString.shouldBe()
 
@@ -47,7 +47,7 @@ class NamedWithSpec extends BaseSpec {
 
     it("3") {
 
-      val shape1 = shape |<<- ij
+      val shape1 = shape :<<= ij
 
       val shape2 = (shape1.named("a", "b")).eval
 
@@ -58,8 +58,8 @@ class NamedWithSpec extends BaseSpec {
 
   describe("CANNOT eval if") {
 
-    val good = shapeSansName |<<- ab
-    val bad = shapeSansName |<<- namesTooMany
+    val good = shapeSansName :<<= ab
+    val bad = shapeSansName :<<= namesTooMany
 
     describe("peek & interrupt") {
 
@@ -72,7 +72,7 @@ class NamedWithSpec extends BaseSpec {
         msg.shouldBe(
           """
             |      2 :<<- a >< (3 :<<- b)
-            |  :=  2 >< 3 |<<- (a >< b)
+            |  :=  2 >< 3 :<<= (a >< b)
             |""".stripMargin
         )
       }
@@ -83,7 +83,7 @@ class NamedWithSpec extends BaseSpec {
 
         shouldNotCompile(
           """s.interrupt""",
-          """.*(\Q:=  2 >< 3 |<<- (a >< b)\E).*"""
+          """.*(\Q:=  2 >< 3 :<<= (a >< b)\E).*"""
         )
       }
 
@@ -92,7 +92,7 @@ class NamedWithSpec extends BaseSpec {
         val s = bad
         shouldNotCompile(
           """s.interrupt""",
-          """.*(\Q2 >< 3 |<<- (a >< b >< c)\E).*"""
+          """.*(\Q2 >< 3 :<<= (a >< b >< c)\E).*"""
         )
       }
     }
@@ -108,7 +108,7 @@ class NamedWithSpec extends BaseSpec {
 //        msg.toString.shouldBe(
 //          """
 //            |Dimension mismatch
-//            |∅ >< 2 >< 3 |<<- ∅ >< a >< b
+//            |∅ >< 2 >< 3 :<<= ∅ >< a >< b
 //            |    -<< derived from 1 condition >>-
 //            ||>    ∅ >< 2 >< 3
 //            |""".stripMargin
@@ -128,7 +128,7 @@ class NamedWithSpec extends BaseSpec {
 
     it(" ... even if S1 is a conjecture") {
 
-      val s = shapeSansName |<<- ab |<<- namesTooMany
+      val s = shapeSansName :<<= ab :<<= namesTooMany
 
       shouldNotCompile(
         "s.eval",

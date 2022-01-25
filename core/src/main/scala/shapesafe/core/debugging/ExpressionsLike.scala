@@ -13,7 +13,7 @@ trait ExpressionsLike {
   //  trait PrefixW1[S, A] extends (Only[S] ~~ A)
   //  trait PrefixW2[S, A, B] extends (Only[S] ~~ A ~~ B)
 
-  trait |<<-[A, B]
+  trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
   trait RequireDistinct[A]
   trait GetSubscript[A, B]

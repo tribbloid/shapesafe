@@ -1,8 +1,7 @@
 package shapesafe.core.shape
 
-import shapesafe.core.XInt
+import shapesafe.core.{Ops, XInt}
 import shapesafe.core.arity.Utils.NatAsOp
-import shapesafe.core.arity.ops.ArityOps
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.StaticShape.><^
@@ -70,7 +69,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     }
   }
 
-  lazy val |<<- : namedWith.type = namedWith
+  lazy val :<<= : namedWith.type = namedWith
 
   // no need for Names constructor
   object named extends SingletonProductArgs {
@@ -89,7 +88,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
     }
   }
 
-  lazy val |<<-* : named.type = named
+  lazy val :<<=* : named.type = named
 
   object >< {
 
@@ -139,7 +138,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   }
 
   def flattenWith(
-      infix: ArityOps.Infix,
+      infix: Ops.Infix,
       that: ShapeAPI
   ): ^[infix._SquashByName.On[OuterProduct[_Shape, that._Shape]]] = {
 
@@ -148,7 +147,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   }
 
   def flatten(
-      infix: ArityOps.Infix
+      infix: Ops.Infix
   ): ^[infix._SquashByName.On[_Shape]] = {
 
     infix._SquashByName.On(this).^
@@ -179,7 +178,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
   }
 
   def dimensionWise(
-      infix: ArityOps.Infix,
+      infix: Ops.Infix,
       that: ShapeAPI
   ): ^[infix._DimensionWise.On[_Shape, that._Shape]] = {
 
@@ -188,7 +187,7 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
   def requireEqual(
       that: ShapeAPI
-  ): ^[ArityOps.==!._DimensionWise.On[_Shape, that._Shape]] = dimensionWise(ArityOps.==!, that)
+  ): ^[Ops.==!._DimensionWise.On[_Shape, that._Shape]] = dimensionWise(Ops.==!, that)
 }
 
 object ShapeAPI {
@@ -202,7 +201,7 @@ object ShapeAPI {
       toW: Witness.Aux[T]
   ): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {
 
-    ^(Shape >|< Arity(toW))
+    ^(Shape append Arity(toW))
   }
 
   implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOps[T] = StaticOps(v.shape)

@@ -14,7 +14,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       it("1") {
 
-        val ss = Shape >|< Arity(1) :<<- "a"
+        val ss = Shape & Arity(1) :<<- "a"
 
         val rr = RequireDistinct(ss).^
         assert(ss.eval == rr.eval)
@@ -22,7 +22,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       it("2") {
 
-        val ss = Shape(1) |<<- (Names >< "a")
+        val ss = Shape(1) :<<= (Names >< "a")
 
         val rr = RequireDistinct(ss).^
         assert(ss.eval == rr.eval)
@@ -33,7 +33,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       it("1") {
 
-        val ss = Shape >|< Arity(1) :<<- "a" >|< Arity(2) :<<- "b"
+        val ss = Shape & Arity(1) :<<- "a" & Arity(2) :<<- "b"
 
         val rr = RequireDistinct(ss).^
         assert(ss.eval == rr.eval)
@@ -41,7 +41,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       it("2") {
 
-        val ss = Shape(1, 2) |<<- (Names >< "a" >< "b")
+        val ss = Shape(1, 2) :<<= (Names >< "a" >< "b")
 
         val sse = ss.eval
 
@@ -51,7 +51,7 @@ class RequireDistinctSpec extends BaseSpec {
 
       it("3") {
 
-        val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "c")
+        val ss = Shape(1, 2, 3) :<<= (Names >< "a" >< "b" >< "c")
 
         val rr = RequireDistinct(ss).^
         assert(ss.eval == rr.eval)
@@ -62,7 +62,7 @@ class RequireDistinctSpec extends BaseSpec {
   describe("CANNOT eval if") {
     it("shape has duplicated names") {
 
-      val ss = Shape(1, 2, 3) |<<- (Names >< "a" >< "b" >< "a")
+      val ss = Shape(1, 2, 3) :<<= (Names >< "a" >< "b" >< "a")
 
       val rr = RequireDistinct(ss).^
 
@@ -77,9 +77,9 @@ class RequireDistinctSpec extends BaseSpec {
 
     it("1") {
 
-      val shape = Shape >|<
-        Arity(1) :<<- "a" >|<
-        Arity(2) :<<- "b" >|<
+      val shape = Shape &
+        Arity(1) :<<- "a" &
+        Arity(2) :<<- "b" &
         Arity(3) :<<- "c"
 
       val r = shape.transposeWith(Names >< "c")
@@ -93,7 +93,7 @@ class RequireDistinctSpec extends BaseSpec {
 
     it("... alternative syntax") {
 
-      val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
+      val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "c")).eval
 
       val r = shape.transposeWith("c" >< "b" >< "a")
 
@@ -111,7 +111,7 @@ class RequireDistinctSpec extends BaseSpec {
 
     it("shape doesn't have distinct names") {
 
-      val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "a")).eval
+      val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "a")).eval
 
       val r = shape.transposeWith(Names("a", "b"))
 
@@ -120,7 +120,7 @@ class RequireDistinctSpec extends BaseSpec {
 
     it("index with a given name cannot be found") {
 
-      val shape = (Shape(1, 2, 3) |<<- ("a" >< "b" >< "c")).eval
+      val shape = (Shape(1, 2, 3) :<<= ("a" >< "b" >< "c")).eval
 
       val r = shape.transposeWith(Names("a", "i"))
 

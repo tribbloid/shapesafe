@@ -7,9 +7,9 @@ import shapesafe.core.shape.{Indices, Names, Shape}
 
 class ReorderSpec extends BaseSpec {
 
-  val s1 = Shape >|<
-    (Arity(1) :<<- "x") >|<
-    Arity(2) :<<- "y" >|<
+  val s1 = Shape &
+    (Arity(1) :<<- "x") &
+    Arity(2) :<<- "y" &
     Arity(3) :<<- "z"
 
   describe("Premise") {
@@ -34,8 +34,8 @@ class ReorderSpec extends BaseSpec {
       val ss = Reorder(s1, Indices >< Name("z") >< Name("y"))
       val rr = Reorder.Premise.apply(ss)
 
-      val s2 = Shape >|<
-        Arity(3) :<<- "z" >|<
+      val s2 = Shape &
+        Arity(3) :<<- "z" &
         Arity(2) :<<- "y"
 
       TypeViz.infer(s2.shape).should_=:=(TypeViz.infer(rr))

@@ -6,9 +6,9 @@ import shapesafe.core.shape.{Index, Names, Shape}
 
 class GetSubscriptSpec extends BaseSpec {
 
-  val s1 = Shape >|<
-    (Arity(1) :<<- "x") >|<
-    Arity(2) :<<- "y" >|<
+  val s1 = Shape &
+    (Arity(1) :<<- "x") &
+    Arity(2) :<<- "y" &
     Arity(3) :<<- "z"
 
   it("by name") {
@@ -24,7 +24,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it(" ... indirectly") {
 
-    val ss = GetSubscript(s1 |<<- Names >< "a" >< "b" >< "c", Index.Name("c")).^
+    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.Name("c")).^
     val rr = ss.eval
 
     typeInferShort(rr.shape).shouldBe(
@@ -44,7 +44,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it(" .... indirectly") {
 
-    val ss = GetSubscript(s1 |<<- Names >< "a" >< "b" >< "c", Index.I_th(1))
+    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.I_th(1))
     val rr = ss.^.eval
 
     typeInferShort(rr.shape).shouldBe(

@@ -1,7 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.arity.ops
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
 // TODO: useless, EinSum handles every thing, remove?
@@ -13,7 +12,7 @@ case class ContractByName[
 
 object ContractByName {
 
-  val op: ops.ArityOps.==!._SquashByName.type = ArityOps.==!._SquashByName
+  val op: Ops.==!._SquashByName.type = Ops.==!._SquashByName
 
   def indexing: op._Lemma.type = op._Lemma
 }

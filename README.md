@@ -71,7 +71,7 @@ This is a deliberate design which allows complex operand compositions to be defi
     .named("i", "j")
   s1.peek
 
-// [INFO] 1 >< 2 >< (3 >< 4) |<<- (i >< j)
+// [INFO] 1 >< 2 >< (3 >< 4) :<<= (i >< j)
 ```
 
 The errors are only captured once the expression is evaluated (e.g. by explicitly calling `.eval` or `.reason`, which does `peek` and `eval` simultaneously), which summons all algebraic rules like a proof assistant:
@@ -83,15 +83,15 @@ The errors are only captured once the expression is evaluated (e.g. by explicitl
 //
 // ... when proving shape ░▒▓
 //
-// 1 >< 2 >< 3 >< 4 |<<- (i >< j)
+// 1 >< 2 >< 3 >< 4 :<<= (i >< j)
 ```
 
 In the above example, calling `eval` instructs the compiler to summon a series of type classes as lemmata to prove / refute the correctness of the expression:
 
 |                                         lemma |       | expression                              |
 | --------------------------------------------: | :---: | --------------------------------------- |
-|                                               |       | (1 >< 2) **><** (3 >< 4) \|<<- (i >< j) |
-|                         (prove outer product) |  =    | 1 >< 2 >< 3 >< 4 **\|<<-** (i >< j)     |
+|                                               |       | (1 >< 2) **><** (3 >< 4) \:<<= (i >< j) |
+|                         (prove outer product) |  =    | 1 >< 2 >< 3 >< 4 **\:<<=** (i >< j)     |
 | (refute naming of tensor: Dimension mismatch) |  !    |                                         |
 
 Evidently, `eval` can only be used *iff.* each shape operand in the expression (in the above example `a` and `b`)  is either already evaluated, or can be evaluated in the same scope. This is the only case when implicit arguments has to be declared by the user.

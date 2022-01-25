@@ -7,8 +7,8 @@ trait VectorOps extends HasShape {
   import shapesafe.core.shape.Const._
 
   def dot[THAT <: ShapeAPI](that: THAT) = {
-    val s1 = api |<<- i
-    val s2 = that |<<- i
+    val s1 = api :<<= i
+    val s2 = that :<<= i
 
     s1.einSum(s2) --> Names.Eye
   }

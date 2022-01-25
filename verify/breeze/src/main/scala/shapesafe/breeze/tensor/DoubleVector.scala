@@ -17,7 +17,7 @@ class DoubleVector[A1 <: Arity](
     val data: Vec[Double] // should support sparse/lazy vector
 ) extends Serializable {
 
-  import shapesafe.core.arity.ops.ArityOps._
+  import shapesafe.core.Ops._
 
   // TODO: the format should be customisable
   override lazy val toString: String = {

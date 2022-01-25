@@ -1,7 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.arity
-import shapesafe.core.arity.ops.ArityOps
+import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
 // all names must be distinctive - no duplication allowed
@@ -13,7 +12,7 @@ case class CheckEinSum[
 
 object CheckEinSum {
 
-  val op: arity.ops.ArityOps.==!._AppendByName.type = ArityOps.==!._AppendByName
+  val op: Ops.==!._AppendByName.type = Ops.==!._AppendByName
 
   def indexing: op._Lemma.type = op._Lemma
 }

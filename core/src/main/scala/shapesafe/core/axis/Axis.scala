@@ -1,11 +1,13 @@
 package shapesafe.core.axis
 
-import shapesafe.core.XString
-import shapesafe.core.arity.{Arity, ArityAPI}
-import shapesafe.core.debugging.{CanPeek, Expressions}
 import ai.acyclic.graph.commons.IDMixin
 import shapeless.Witness
 import shapeless.labelled.FieldType
+import shapesafe.core.XString
+import shapesafe.core.arity.{Arity, ArityAPI}
+import shapesafe.core.debugging.{CanPeek, Expressions}
+
+import scala.language.implicitConversions
 
 trait Axis extends AxisLike with IDMixin with CanPeek {
   //TODO:; can be a subclass of shapeless KeyTag

@@ -14,7 +14,7 @@ case class ZipWithNames[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.|<<-[S1#Expr, N#Expr]
+  override type Expr = Expressions.:<<=[S1#Expr, N#Expr]
 
   override type _Refute = "Dimension mismatch"
 }

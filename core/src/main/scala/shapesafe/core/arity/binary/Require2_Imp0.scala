@@ -1,7 +1,7 @@
 package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Arity
-import shapesafe.core.arity.ops.ArityOps.==!
+import shapesafe.core.Ops.==!
 
 trait Require2_Imp0 extends Require2_Imp1 {
 
