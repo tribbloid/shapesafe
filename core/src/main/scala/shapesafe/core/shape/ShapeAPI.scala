@@ -167,14 +167,14 @@ trait ShapeAPI extends VectorOps with MatrixOps {
 
   def flattenByName = reduceByName(Ops.:*)
 
-  def foreachAxis(
+  def applyPerDim(
       infix: Ops.Infix,
       that: ShapeAPI
-  ) = infix.foreachAxis(this, that)
+  ) = infix.applyPerDim(this, that)
 
   def requireEqual(
       that: ShapeAPI
-  ): ^[Ops.==!._ForEachAxis.On[_Shape, that._Shape]] = foreachAxis(Ops.==!, that)
+  ): ^[Ops.==!._Op2PerDim.On[_Shape, that._Shape]] = applyPerDim(Ops.==!, that)
 }
 
 object ShapeAPI {

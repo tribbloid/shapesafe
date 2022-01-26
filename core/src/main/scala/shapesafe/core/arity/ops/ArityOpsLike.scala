@@ -6,7 +6,7 @@ import shapesafe.core.arity.{Arity, ArityAPI}
 import shapesafe.core.axis.OldNameUpdaters
 import shapesafe.core.debugging.Expressions
 import shapesafe.core.shape.ShapeAPI
-import shapesafe.core.shape.binary.ForEachAxis
+import shapesafe.core.shape.binary.Op2PerDim
 import shapesafe.core.shape.unary.AccumulateByName
 import singleton.ops
 
@@ -45,10 +45,10 @@ trait ArityOpsLike extends HasArity {
       type _Unary = Expressions.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
-    object _ForEachAxis extends ForEachAxis with _HasOuter {
+    object _Op2PerDim extends Op2PerDim with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.ForEachAxis[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Binary = Expressions.Op2PerDim[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
     // part of the API
@@ -60,8 +60,8 @@ trait ArityOpsLike extends HasArity {
       _ReduceByName.On((s1 >< s2).shape).^
     }
 
-    def foreachAxis[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
-      _ForEachAxis.On(s1.shape, s2.shape).^
+    def applyPerDim[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
+      _Op2PerDim.On(s1.shape, s2.shape).^
     }
   }
 
