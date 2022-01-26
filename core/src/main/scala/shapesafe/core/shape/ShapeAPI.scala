@@ -1,15 +1,15 @@
 package shapesafe.core.shape
 
+import shapeless.ops.hlist.Reverse
+import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.{Ops, XInt}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.StaticShape.><^
 import shapesafe.core.shape.binary.OuterProduct
-import shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOps, VectorOps}
+import shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOpsView, VectorOps}
 import shapesafe.core.shape.unary._
-import shapeless.ops.hlist.Reverse
-import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 
 import scala.language.implicitConversions
 
@@ -188,10 +188,10 @@ object ShapeAPI {
       toW: Witness.Aux[T]
   ): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {
 
-    ^(Shape append Arity(toW))
+    ^(Shape and Arity(toW))
   }
 
-  implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOps[T] = StaticOps(v.shape)
+  implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOpsView[T] = StaticOpsView(v.shape)
 
   case class ^[SELF <: Shape](shape: SELF) extends ShapeAPI {
 

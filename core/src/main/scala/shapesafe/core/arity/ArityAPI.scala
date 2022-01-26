@@ -1,18 +1,14 @@
 package shapesafe.core.arity
 
-import shapesafe.core.XInt
+import shapeless.Witness.Aux
 import shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.{Axis, NoName, NoNameW}
-import shapeless.Witness
-import shapeless.Witness.Aux
 
 import scala.language.implicitConversions
 
 trait ArityAPI extends ArityOpsLike with Axis {
-
-  override type _Axis >: this.type <: ArityAPI
 
   final override def toString: String = arity.toString
 
@@ -66,13 +62,4 @@ object ArityAPI {
 
   implicit def unbox[A <: Arity](v: Aux[A]): A = v.arity
 //  implicit def unbox[T <: ArityAPI](v: T): v._Arity = v._arity // TODO: why is it not effective?
-//  implicit def box[T <: Arity](v: T): ^[T] = ArityAPI.^(v) // TODO: remove, type parameter is arbitrary
-
-  implicit def fromXInt[T <: XInt](v: T)(
-      implicit
-      toW: Witness.Aux[T]
-  ): ArityAPI.^[ConstArity.Literal[T]] = {
-
-    Arity(toW)
-  }
 }

@@ -3,9 +3,9 @@ package shapesafe.core.axis
 import ai.acyclic.graph.commons.IDMixin
 import shapeless.Witness
 import shapeless.labelled.FieldType
-import shapesafe.core.XString
-import shapesafe.core.arity.{Arity, ArityAPI}
+import shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
 import shapesafe.core.debugging.{CanPeek, Expressions}
+import shapesafe.core.{XInt, XString}
 
 import scala.language.implicitConversions
 
@@ -34,7 +34,7 @@ object Axis {
       val arity: A,
       val nameW: Witness.Aux[N]
   ) extends Axis
-//      with KeyTag[N, D :<<- N]
+      //      with KeyTag[N, D :<<- N]
       // TODO: remove? FieldType[] has some black magic written in macro
       {
 
@@ -61,5 +61,13 @@ object Axis {
   ): :<<-[value._Arity, name.T] = {
 
     new :<<-(value.arity, name)
+  }
+
+  implicit def fromXInt[V <: XInt](v: V)(
+      implicit
+      toW: Witness.Aux[V]
+  ): ArityAPI.^[ConstArity.Literal[V]] = {
+
+    Arity(toW)
   }
 }

@@ -89,7 +89,7 @@ object Select extends Reorder_Imp0 {
 
         val head: O = forHead(GetSubscript(v.s1, v.indices.head))
 
-        tail.^ appendInner head
+        tail.^ _and head
       }
     }
   }

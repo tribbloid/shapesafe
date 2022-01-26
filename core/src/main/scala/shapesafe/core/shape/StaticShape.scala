@@ -97,7 +97,7 @@ object StaticShape extends Tuples {
         val vHead = v.head: C
         val head: ArityAPI.^[C] = vHead.^
 
-        val result = prev.^ appendInner head
+        val result = prev.^ _and head
         result
       }
     }
@@ -122,7 +122,7 @@ object StaticShape extends Tuples {
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
 
-        val result = prev.^ appendInner head
+        val result = prev.^ _and head
 
         result
       }
@@ -145,7 +145,7 @@ object StaticShape extends Tuples {
         val prev = forTail(v.tail)
         val head = Arity(w) // Arity.Impl(ConstArity.Literal(w))
 
-        prev.^ appendInner head
+        prev.^ _and head
       }
     }
   }
@@ -166,7 +166,7 @@ object StaticShape extends Tuples {
         val prev = apply(v.tail)
         val head = Arity.FromNat(v.head)
 
-        prev.^ appendInner head
+        prev.^ _and head
       }
     }
   }

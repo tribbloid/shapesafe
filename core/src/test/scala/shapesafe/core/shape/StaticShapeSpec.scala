@@ -8,12 +8,12 @@ class StaticShapeSpec extends BaseSpec {
 
   import shapeless.record._
 
-  describe("create") {
+  describe("construct") {
 
     it("named") {
 
       val shape = Shape &
-        Arity(2) :<<- "x" append
+        Arity(2) :<<- "x" and
         Arity(3) :<<- "y"
 
       typeInferShort(shape.shape).shouldBe(
@@ -30,7 +30,7 @@ class StaticShapeSpec extends BaseSpec {
     it("nameless") {
 
       val shape = Shape &
-        Arity(2) append
+        Arity(2) and
         Arity(3)
 
       typeInferShort(shape.shape).shouldBe(
@@ -45,7 +45,7 @@ class StaticShapeSpec extends BaseSpec {
 
       val shape = Shape &
         Arity(2) :<<- "x" &
-        Arity(3) append
+        Arity(3) and
         Arity(4) :<<- "z"
 
       assert(shape.record.apply("x").runtimeValue == 2)
@@ -57,12 +57,22 @@ class StaticShapeSpec extends BaseSpec {
           |""".stripMargin
       )
     }
+
+    it("nameless shortcut") {
+
+      val shape = Shape & 2 & 3
+      typeInferShort(shape.shape).shouldBe(
+        """
+          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
+          |""".stripMargin
+      )
+    }
   }
 
   it("toString") {
     val shape = Shape &
       Arity(2) :<<- "x" &
-      Arity(3) append
+      Arity(3) and
       Arity(4) :<<- "z"
 
     shape.toString.shouldBe(
@@ -330,7 +340,7 @@ class StaticShapeSpec extends BaseSpec {
   describe("names") {
 
     val shape = Shape &
-      Arity(2) :<<- "x" append
+      Arity(2) :<<- "x" and
       Arity(3) :<<- "y"
 
     it("1") {

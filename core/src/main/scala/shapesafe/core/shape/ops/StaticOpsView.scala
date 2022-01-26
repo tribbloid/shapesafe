@@ -5,14 +5,14 @@ import shapesafe.core.shape.ShapeAPI.^
 import shapesafe.core.shape.StaticShape
 import shapesafe.core.shape.StaticShape.><
 
-case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
+case class StaticOpsView[SELF <: StaticShape](shape: SELF) extends HasShape {
 
   type _Shape = SELF
 
   type Static = _Shape#Static
   def static: Static = shape.static
 
-  def appendInner[THAT <: Axis](
+  protected[shape] def _and[THAT <: Axis](
       axis: THAT
   ): ><[_Shape, THAT] = {
 
@@ -24,15 +24,13 @@ case class StaticOps[SELF <: StaticShape](shape: SELF) extends HasShape {
     */
   case object & {
 
-    // TODO: this convoluted, recursive type bound further shows the necessity for scala to have built-in non-singleton peer type
-    //  axis can be a magnet type
-    def apply[THAT <: Axis { type _Axis <: THAT }](
-        axis: THAT
+    def apply(
+        axis: Axis
     ): ^[><[_Shape, axis._Axis]] = {
 
-      appendInner(axis.axis).^
+      _and[axis._Axis](axis).^
     }
   }
 
-  lazy val append: &.type = &
+  lazy val and: &.type = &
 }

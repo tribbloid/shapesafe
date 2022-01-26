@@ -63,7 +63,7 @@ object GetSubscript extends GetSubscript_Imp0 {
       val p1: P1 = lemma1.instanceFor(v.s1)
       val vv: GetSubscript[P1, I] = v.copy(s1 = p1)
 
-      Shape appendInner lemma2(vv)
+      Shape _and lemma2(vv)
     }
   }
 

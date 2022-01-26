@@ -92,7 +92,7 @@ object OuterProduct extends OuterProduct_Imp0 {
       val p2: P2 = lemma2.instanceFor(direct.s2)
       val a2: A2 = p2.head
 
-      val result = p1.^ appendInner a2
+      val result = p1.^ _and a2
 
       result
     }
