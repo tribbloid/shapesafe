@@ -1,9 +1,9 @@
 package shapesafe.core.axis
 
-import shapesafe.BaseSpec
-import shapesafe.core.arity.Arity
 import shapeless.HNil
+import shapesafe.BaseSpec
 import shapesafe.core.Ops
+import shapesafe.core.arity.Arity
 
 class OldNameUpdatersSpec extends BaseSpec {
 
@@ -12,7 +12,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
   Record // TODO: don't remove! the IDE may clean up the import erratically
 
-  val ii = "i" ->> Arity(3).arity
+  val ii = "i" ->> Arity(3).arityType
 
   describe("Appender") {
 
@@ -24,7 +24,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(3).arity) :: HNil
+          val existing = ("i" ->> Arity(3).arityType) :: HNil
 
           val out = appender.apply(existing -> ii)
 
@@ -33,7 +33,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(3).arity) :: ("j" ->> Arity(4).arity) :: HNil
+          val existing = ("i" ->> Arity(3).arityType) :: ("j" ->> Arity(4).arityType) :: HNil
 
           val out = appender.apply(existing -> ii)
 
@@ -48,7 +48,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(4).arity) :: HNil
+          val existing = ("i" ->> Arity(4).arityType) :: HNil
 
           shouldNotCompile(
             """appender.apply(existing -> ii)"""
@@ -58,7 +58,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(4).arity) :: ("j" ->> Arity(3).arity) :: HNil
+          val existing = ("i" ->> Arity(4).arityType) :: ("j" ->> Arity(3).arityType) :: HNil
 
           shouldNotCompile(
             """val out = appender.apply(existing -> ii)"""
@@ -67,7 +67,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it("3") {
 
-          val existing = ("j" ->> Arity(3).arity) :: ("i" ->> Arity(4).arity) :: HNil
+          val existing = ("j" ->> Arity(3).arityType) :: ("i" ->> Arity(4).arityType) :: HNil
 
           shouldNotCompile(
             """appender.apply(existing -> ii)"""
@@ -87,7 +87,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it(" 1") {
 
-          val existing = ("i" ->> Arity(3).arity) :: HNil
+          val existing = ("i" ->> Arity(3).arityType) :: HNil
 
           val out = squasher.apply(existing -> ii)
 
@@ -96,7 +96,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
         it("2") {
 
-          val existing = ("i" ->> Arity(3).arity) :: ("j" ->> Arity(4).arity) :: HNil
+          val existing = ("i" ->> Arity(3).arityType) :: ("j" ->> Arity(4).arityType) :: HNil
 
           val out = squasher.apply(existing -> ii)
 

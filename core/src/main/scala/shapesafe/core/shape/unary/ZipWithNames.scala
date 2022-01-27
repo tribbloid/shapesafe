@@ -1,16 +1,16 @@
 package shapesafe.core.shape.unary
 
 import shapesafe.core.debugging.{Expressions, Reporters}
-import shapesafe.core.shape.{LeafShape, Names, Shape, StaticShape}
+import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
 import shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 
 case class ZipWithNames[
-    S1 <: Shape,
+    S1 <: ShapeType,
     N <: Names
 ](
-    s1: S1 with Shape,
+    s1: S1 with ShapeType,
     newNames: N
 ) extends Conjecture1.^[S1] {
 
@@ -24,7 +24,7 @@ trait ZipWithNames_Imp0 {
   import shapesafe.core.shape.ProveShape._
 
   implicit def refute[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: LeafShape,
       N <: Names,
       MSG
@@ -43,7 +43,7 @@ object ZipWithNames extends ZipWithNames_Imp0 {
   import shapesafe.core.shape.ProveShape._
 
   implicit def simplify[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: StaticShape,
       N <: Names,
       HO <: HList

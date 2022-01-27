@@ -1,8 +1,8 @@
 package shapesafe.core.axis
 
+import shapeless.HNil
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
-import shapeless.HNil
 
 class NewNameAppenderSpec extends BaseSpec {
 
@@ -11,7 +11,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
   Record // Don't remove! IDE can't figure out the proper import
 
-  val ii = "i" ->> Arity(3).arity
+  val ii = "i" ->> Arity(3).arityType
 
   describe("can append") {
 
@@ -26,7 +26,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
       it("1") {
 
-        val existing = ("a" ->> Arity(4).arity) :: HNil
+        val existing = ("a" ->> Arity(4).arityType) :: HNil
 
         val out = NewNameAppender.apply(existing -> ii)
 
@@ -35,7 +35,7 @@ class NewNameAppenderSpec extends BaseSpec {
 
       it("2") {
 
-        val existing = ("a" ->> Arity(4).arity) :: ("b" ->> Arity(5).arity) :: HNil
+        val existing = ("a" ->> Arity(4).arityType) :: ("b" ->> Arity(5).arityType) :: HNil
 
         val out = NewNameAppender.apply(existing -> ii)
 

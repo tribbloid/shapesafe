@@ -1,10 +1,10 @@
 package shapesafe.core.shape.binary
 
-import shapesafe.core.arity.Arity
+import shapesafe.core.arity.ArityType
 import shapesafe.core.arity.binary.Op2Like
 import shapesafe.core.debugging.HasDebugSymbol
 import shapesafe.core.shape.unary.RecordLemma
-import shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
@@ -16,15 +16,15 @@ trait Op2PerDim {
 
   // all names must be distinctive - no duplication allowed
   trait _On[
-      S1 <: Shape,
-      S2 <: Shape
+      S1 <: ShapeType,
+      S2 <: ShapeType
   ] extends Conjecture2.^[S1, S2]
       with HasOuter {
 
     override def outer: Op2PerDim.this.type = Op2PerDim.this
 
-    def s1: S1 with Shape
-    def s2: S2 with Shape
+    def s1: S1 with ShapeType
+    def s2: S2 with ShapeType
 
     override type Expr = _Binary#Apply[S1, S2]
   }
@@ -34,8 +34,8 @@ trait Op2PerDim {
     import ProveShape._
 
     implicit def simplify[
-        S1 <: Shape,
-        S2 <: Shape,
+        S1 <: ShapeType,
+        S2 <: ShapeType,
         P1 <: StaticShape,
         P2 <: StaticShape,
         HO <: HList
@@ -60,11 +60,11 @@ trait Op2PerDim {
   }
 
   case class On[
-      S1 <: Shape,
-      S2 <: Shape
+      S1 <: ShapeType,
+      S2 <: ShapeType
   ](
-      override val s1: S1 with Shape,
-      override val s2: S2 with Shape
+      override val s1: S1 with ShapeType,
+      override val s2: S2 with ShapeType
   ) extends _On[S1, S2] {}
 
   // TODO: now sure if it is too convoluted, should it extends BinaryIndexingFn?
@@ -75,9 +75,9 @@ trait Op2PerDim {
     implicit def cons[
         TI <: HList,
         TO <: HList,
-        A1 <: Arity,
-        A2 <: Arity,
-        AO <: Arity
+        A1 <: ArityType,
+        A2 <: ArityType,
+        AO <: ArityType
     ](
         implicit
         consTail: TI =>> TO,

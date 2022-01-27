@@ -2,10 +2,10 @@ package shapesafe.core.arity.ops
 
 import ai.acyclic.graph.commons.HasOuter
 import shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
-import shapesafe.core.arity.{Arity, ArityAPI}
+import shapesafe.core.arity.{Arity, ArityType}
 import shapesafe.core.axis.OldNameUpdaters
 import shapesafe.core.debugging.Expressions
-import shapesafe.core.shape.ShapeAPI
+import shapesafe.core.shape.Shape
 import shapesafe.core.shape.binary.Op2PerDim
 import shapesafe.core.shape.unary.AccumulateByName
 import singleton.ops
@@ -19,10 +19,10 @@ trait ArityOpsLike extends HasArity {
     type Op <: Op2Like
     def op: Op
 
-    type On[A1 <: Arity, A2 <: Arity] = Op#On[A1, A2]
+    type On[A1 <: ArityType, A2 <: ArityType] = Op#On[A1, A2]
 
-    final type apply[A1 <: Arity, A2 <: Arity] = On[A1, A2]
-    def apply(that: ArityAPI): ArityAPI.^[On[_Arity, that._Arity]] = op.on(arity.^, that).^
+    final type apply[A1 <: ArityType, A2 <: ArityType] = On[A1, A2]
+    def apply(that: Arity): Arity.^[On[_ArityType, that._ArityType]] = op.on(arityType.^, that).^
 
     object Updaters extends OldNameUpdaters(op)
 
@@ -53,15 +53,15 @@ trait ArityOpsLike extends HasArity {
 
     // part of the API
 
-    def reduceByName[S1 <: ShapeAPI](s1: S1) = {
-      _ReduceByName.On(s1.shape).^
+    def reduceByName[S1 <: Shape](s1: S1) = {
+      _ReduceByName.On(s1.shapeType).^
     }
-    def reduceByName[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
-      _ReduceByName.On((s1 >< s2).shape).^
+    def reduceByName[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
+      _ReduceByName.On((s1 >< s2).shapeType).^
     }
 
-    def applyPerDim[S1 <: ShapeAPI, S2 <: ShapeAPI](s1: S1, s2: S2) = {
-      _Op2PerDim.On(s1.shape, s2.shape).^
+    def applyPerDim[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
+      _Op2PerDim.On(s1.shapeType, s2.shapeType).^
     }
   }
 
@@ -73,34 +73,34 @@ trait ArityOpsLike extends HasArity {
 
 //  object :+ extends Op2[ops.+] with Infix
   object :+ extends InfixImpl(Op2[ops.+, Expressions.+])
-  type :+[X <: Arity, Y <: Arity] = :+.On[X, Y]
+  type :+[X <: ArityType, Y <: ArityType] = :+.On[X, Y]
 
   object :- extends InfixImpl(Op2[ops.-, Expressions.-])
-  type :-[X <: Arity, Y <: Arity] = :-.On[X, Y]
+  type :-[X <: ArityType, Y <: ArityType] = :-.On[X, Y]
 
   object :* extends InfixImpl(Op2[ops.*, Expressions.*])
-  type :*[X <: Arity, Y <: Arity] = :*.On[X, Y]
+  type :*[X <: ArityType, Y <: ArityType] = :*.On[X, Y]
 
   object :/ extends InfixImpl(Op2[ops./, Expressions./])
-  type :/[X <: Arity, Y <: Arity] = :/.On[X, Y]
+  type :/[X <: ArityType, Y <: ArityType] = :/.On[X, Y]
 
   object ==! extends InfixImpl(RequireEqual)
-  type ==![X <: Arity, Y <: Arity] = ==!.On[X, Y]
+  type ==![X <: ArityType, Y <: ArityType] = ==!.On[X, Y]
 
   object !=! extends InfixImpl(Require2[ops.!=, Expressions.!=])
-  type !=![X <: Arity, Y <: Arity] = !=!.On[X, Y]
+  type !=![X <: ArityType, Y <: ArityType] = !=!.On[X, Y]
 
   object `<!` extends InfixImpl(Require2[ops.<, Expressions.<])
-  type `<!`[X <: Arity, Y <: Arity] = `<!`.On[X, Y]
+  type `<!`[X <: ArityType, Y <: ArityType] = `<!`.On[X, Y]
 
   object >! extends InfixImpl(Require2[ops.>, Expressions.>])
-  type >![X <: Arity, Y <: Arity] = >!.On[X, Y]
+  type >![X <: ArityType, Y <: ArityType] = >!.On[X, Y]
 
   object <=! extends InfixImpl(Require2[ops.<=, Expressions.<=])
-  type <=![X <: Arity, Y <: Arity] = <=!.On[X, Y]
+  type <=![X <: ArityType, Y <: ArityType] = <=!.On[X, Y]
 
   object >=! extends InfixImpl(Require2[ops.>=, Expressions.>=])
-  type >=![X <: Arity, Y <: Arity] = >=!.On[X, Y]
+  type >=![X <: ArityType, Y <: ArityType] = >=!.On[X, Y]
 }
 
 object ArityOpsLike {

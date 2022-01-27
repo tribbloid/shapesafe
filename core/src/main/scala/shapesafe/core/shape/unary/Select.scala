@@ -7,10 +7,10 @@ import shapesafe.core.shape._
 import shapesafe.m.viz.VizCTSystem.EmitError
 
 case class Select[ // last step of einsum, contract, transpose, etc.
-    S1 <: Shape,
+    S1 <: ShapeType,
     II <: IndicesMagnet
 ](
-    s1: S1 with Shape,
+    s1: S1 with ShapeType,
     indices: II
 ) extends Conjecture1.^[S1] {
 
@@ -24,7 +24,7 @@ trait Reorder_Imp0 {
   import ProveShape._
 
   implicit def refute[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: LeafShape,
       II <: IndicesMagnet,
       MSG
@@ -45,7 +45,7 @@ object Select extends Reorder_Imp0 {
 
   //TODO: only 1 in superclass needs to be defined
   implicit def simplify[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: StaticShape,
       II <: IndicesMagnet
   ](

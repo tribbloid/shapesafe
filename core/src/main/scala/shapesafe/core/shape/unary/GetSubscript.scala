@@ -1,6 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.arity.Arity
+import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
 import shapesafe.core.debugging.{Expressions, Reporters}
@@ -13,10 +13,10 @@ import shapeless.ops.record.Selector
 import shapeless.{Nat, Witness}
 
 case class GetSubscript[ // last step of einsum, contract, transpose, etc.
-    S1 <: Shape,
+    S1 <: ShapeType,
     I <: Index
 ](
-    s1: S1 with Shape,
+    s1: S1 with ShapeType,
     index: I
 ) extends Conjecture1.^[S1] {
 
@@ -30,7 +30,7 @@ trait GetSubscript_Imp0 {
   import ProveShape._
 
   implicit def refute[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: LeafShape,
       I <: Index,
       MSG
@@ -49,7 +49,7 @@ object GetSubscript extends GetSubscript_Imp0 {
   import ProveShape._
 
   implicit def simplify[
-      S1 <: Shape,
+      S1 <: ShapeType,
       P1 <: StaticShape,
       I <: Index,
       O <: Axis
@@ -72,7 +72,7 @@ object GetSubscript extends GetSubscript_Imp0 {
     implicit def byName[
         P1 <: StaticShape,
         N <: XString,
-        A <: Arity
+        A <: ArityType
     ](
         implicit
         _selector: Selector.Aux[P1#Record, N, A]

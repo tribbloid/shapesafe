@@ -29,8 +29,8 @@ object Op2 extends Op2_Imp0 {
     override type Debug[A, B] = SS[A, B]
 
     case class On[
-        A1 <: Arity,
-        A2 <: Arity
+        A1 <: ArityType,
+        A2 <: ArityType
     ](
         a1: A1,
         a2: A2
@@ -43,7 +43,7 @@ object Op2 extends Op2_Imp0 {
       override lazy val runtimeValue: Int = sh.apply(a1.runtimeValue, a2.runtimeValue).getValue
     }
 
-    override def on(a1: ArityAPI, a2: ArityAPI): On[a1._Arity, a2._Arity] = On(a1.arity, a2.arity)
+    override def on(a1: Arity, a2: Arity): On[a1._ArityType, a2._ArityType] = On(a1.arityType, a2.arityType)
   }
 
   lazy val cache = mutable.Map.empty[AnyRef, Op2]
@@ -65,8 +65,8 @@ object Op2 extends Op2_Imp0 {
   }
 
   implicit def invar[
-      A1 <: Arity,
-      A2 <: Arity,
+      A1 <: ArityType,
+      A2 <: ArityType,
       S1,
       S2,
       OP <: Op2

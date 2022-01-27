@@ -1,15 +1,15 @@
 package shapesafe.core.arity.binary
 
-import shapesafe.core.arity.Arity
+import shapesafe.core.arity.ArityType
 import shapesafe.core.arity.Unchecked
 import shapesafe.core.arity.ProveArity._
 
 trait UncheckedDomain_Imp0 {
 
   case class D2[
-      A1 <: Arity,
-      A2 <: Arity,
-      TC <: Arity
+      A1 <: ArityType,
+      A2 <: ArityType,
+      TC <: ArityType
   ]()(
       implicit
       val bound1: A1 |-< Unchecked,
@@ -23,9 +23,9 @@ trait UncheckedDomain_Imp0 {
   }
 
   implicit def d2[
-      A1 <: Arity,
-      A2 <: Arity,
-      TC <: Arity
+      A1 <: ArityType,
+      A2 <: ArityType,
+      TC <: ArityType
   ](
       implicit
       bound1: A1 |-< Unchecked,

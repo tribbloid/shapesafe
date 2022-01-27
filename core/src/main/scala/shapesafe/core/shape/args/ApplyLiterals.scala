@@ -1,6 +1,6 @@
 package shapesafe.core.shape.args
 
-import shapesafe.core.shape.ShapeAPI.^
+import shapesafe.core.shape.Shape.^
 import shapesafe.core.shape.{Names, StaticShape}
 import shapeless.ops.hlist.Reverse
 import shapeless.{HList, SingletonProductArgs}

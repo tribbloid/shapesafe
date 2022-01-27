@@ -1,13 +1,13 @@
 package shapesafe.core.shape.unary
 
 import shapesafe.core.Ops
-import shapesafe.core.shape.Shape
+import shapesafe.core.shape.ShapeType
 
 // TODO: useless, EinSum handles every thing, remove?
 case class ContractByName[
-    S1 <: Shape
+    S1 <: ShapeType
 ](
-    override val s1: S1 with Shape
+    override val s1: S1 with ShapeType
 ) extends ContractByName.op._On[S1] {}
 
 object ContractByName {

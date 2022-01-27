@@ -4,7 +4,7 @@ import shapesafe.core.debugging.Reporters
 
 object ShapeReporters extends Reporters[ProveShape.type](ProveShape) {
 
-  object PeekShape extends PeekReporter[Shape, LeafShape]
+  object PeekShape extends PeekReporter[ShapeType, LeafShape]
 
-  object InterruptShape extends InterruptReporter[Shape, LeafShape]
+  object InterruptShape extends InterruptReporter[ShapeType, LeafShape]
 }

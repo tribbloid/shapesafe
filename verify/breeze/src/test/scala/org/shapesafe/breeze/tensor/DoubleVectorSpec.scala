@@ -294,13 +294,13 @@ class DoubleVectorSpec extends BaseSpec {
     }
   }
 
-  describe("unsafe") {
-
-    it("zeros") {
-
-      val v = DoubleVector.unsafe.zeros(unstableFn)
-
-      assert(v.arity.runtimeValue == 3)
-    }
-  }
+//  describe("unsafe") {
+//
+//    it("zeros") {
+//
+//      val v = DoubleVector.unsafe.zeros(unstableFn)
+//
+//      assert(v.arity.runtimeValue == 3)
+//    }
+//  }
 }

@@ -1,13 +1,13 @@
 package shapesafe.core.shape.ops
 
-import shapesafe.core.shape.Shape
+import shapesafe.core.shape.ShapeType
 
 trait HasShape {
 
-  type _Shape <: Shape
-  def shape: _Shape
+  type _ShapeType <: ShapeType
+  def shapeType: _ShapeType
 
-  lazy val api = shape.^
+  lazy val shape = shapeType.^
 }
 
 object HasShape {}

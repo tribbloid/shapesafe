@@ -17,7 +17,7 @@ class GetSubscriptSpec extends BaseSpec {
 //    VizType.infer(ee).shouldBe()
     val rr = ss.eval
 
-    typeInferShort(rr.shape).shouldBe(
+    typeInferShort(rr.shapeType).shouldBe(
       """StaticShape.Eye >< (ConstArity.Literal[Int(1)] :<<- String("x"))"""
     )
   }
@@ -27,7 +27,7 @@ class GetSubscriptSpec extends BaseSpec {
     val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.Name("c")).^
     val rr = ss.eval
 
-    typeInferShort(rr.shape).shouldBe(
+    typeInferShort(rr.shapeType).shouldBe(
       """StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("c"))"""
     )
   }
@@ -37,7 +37,7 @@ class GetSubscriptSpec extends BaseSpec {
     val ss = GetSubscript(s1, Index.I_th(0)).^
     val rr = ss.eval
 
-    typeInferShort(rr.shape).shouldBe(
+    typeInferShort(rr.shapeType).shouldBe(
       """StaticShape.Eye >< (ConstArity.Literal[Int(3)] :<<- String("z"))"""
     )
   }
@@ -47,7 +47,7 @@ class GetSubscriptSpec extends BaseSpec {
     val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.I_th(1))
     val rr = ss.^.eval
 
-    typeInferShort(rr.shape).shouldBe(
+    typeInferShort(rr.shapeType).shouldBe(
       """StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("b"))"""
     )
   }

@@ -20,7 +20,7 @@ class OuterProductSpec extends BaseSpec {
 
       val rr = (s1 >< s2).eval
 
-      typeInferShort(rr.shape).shouldBe(
+      typeInferShort(rr.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(2)] :<<- String("i"))""".stripMargin
       )
@@ -38,7 +38,7 @@ class OuterProductSpec extends BaseSpec {
 
       val rr = (s1 outer s2).eval
 
-      typeInferShort(rr.shape).shouldBe(
+      typeInferShort(rr.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y")) ><
           | (ConstArity.Literal[Int(2)] :<<- String("i")) >< (ConstArity.Literal[Int(3)] :<<- String("j"))

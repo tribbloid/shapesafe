@@ -12,16 +12,16 @@ class UncheckedSpec extends BaseSpec {
 
       val conj = RequireDistinct(Unchecked)
 
-      val evaled = conj.^.eval.shape
+      val evaled = conj.^.eval.shapeType
 
       assert(evaled == Unchecked)
     }
 
     it("in Conjecture 2") {
 
-      val conj = OuterProduct(Unchecked, Shape(3, 4).shape)
+      val conj = OuterProduct(Unchecked, Shape(3, 4).shapeType)
 
-      val evaled = conj.^.eval.shape
+      val evaled = conj.^.eval.shapeType
 
       assert(evaled == Unchecked)
     }

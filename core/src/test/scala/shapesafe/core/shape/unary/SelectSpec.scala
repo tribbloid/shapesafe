@@ -38,7 +38,7 @@ class SelectSpec extends BaseSpec {
         Arity(3) :<<- "z" &
         Arity(2) :<<- "y"
 
-      TypeViz.infer(s2.shape).should_=:=(TypeViz.infer(rr))
+      TypeViz.infer(s2.shapeType).should_=:=(TypeViz.infer(rr))
 
       typeInferShort(rr).shouldBe(
         """

@@ -1,9 +1,9 @@
 package shapesafe.core.shape.unary
 
+import shapeless.HNil
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
 import shapesafe.core.shape.{Names, Shape, StaticShape}
-import shapeless.HNil
 
 class EinSumSpec extends BaseSpec {
 
@@ -50,7 +50,7 @@ class EinSumSpec extends BaseSpec {
 
         //      val eye = EinSumOperand.Eye
 
-        val h1 = indexing(("i" ->> Arity(3).arity) :: HNil)
+        val h1 = indexing(("i" ->> Arity(3).arityType) :: HNil)
         h1.toString.shouldBe(
           """3:Literal :: HNil"""
         )
@@ -59,13 +59,13 @@ class EinSumSpec extends BaseSpec {
       it("if names has no duplicate") {
 
         val h1 = indexing(
-          ("i" ->> Arity(3).arity) ::
-            ("j" ->> Arity(4).arity) ::
+          ("i" ->> Arity(3).arityType) ::
+            ("j" ->> Arity(4).arityType) ::
             HNil
         )
 
         val h2 = indexing(
-          ("k" ->> Arity(5).arity) ::
+          ("k" ->> Arity(5).arityType) ::
             h1
         )
 
@@ -74,20 +74,20 @@ class EinSumSpec extends BaseSpec {
 
       it("if name --> dimension has no conflict") {
 
-        val ss = ("i" ->> Arity(3).arity) ::
-          ("j" ->> Arity(4).arity) ::
+        val ss = ("i" ->> Arity(3).arityType) ::
+          ("j" ->> Arity(4).arityType) ::
           HNil
 
         //      VizType[op.Static].toString.shouldBe()
         //      val v1 = EinSumCondition.apply(op.static --> ("j" ->> Arity(4)))
         //      VizType.infer(v1).toString.shouldBe()
 
-        val h1 = indexing(("j" ->> Arity(4).arity) :: ss)
+        val h1 = indexing(("j" ->> Arity(4).arityType) :: ss)
         h1.toString.shouldBe(
           """3:Literal :: 4:Literal :: HNil"""
         )
 
-        val h2 = indexing(("i" ->> Arity(3).arity) :: ss)
+        val h2 = indexing(("i" ->> Arity(3).arityType) :: ss)
         h2.toString.shouldBe(
           """3:Literal :: 4:Literal :: HNil"""
         )
@@ -98,11 +98,11 @@ class EinSumSpec extends BaseSpec {
 
       it("if name --> dimension has conflict") {
 
-        val ss = ("i" ->> Arity(3).arity) ::
+        val ss = ("i" ->> Arity(3).arityType) ::
           ("j" ->> Arity(4)) ::
           HNil
 
-        val h1 = ("j" ->> Arity(3).arity) :: ss
+        val h1 = ("j" ->> Arity(3).arityType) :: ss
 
         shouldNotCompile(
           """indexing(h1)"""

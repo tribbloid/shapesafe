@@ -1,48 +1,75 @@
 package shapesafe.core.arity
 
-import shapesafe.core.arity
-import shapesafe.core.arity.ArityAPI.^
-import shapesafe.core.arity.ConstArity.{Derived, Literal}
-import shapesafe.core.arity.Utils.NatAsOp
-import shapesafe.core.debugging.{CanPeek, HasDebugSymbol}
 import shapeless.{Nat, Witness}
+import shapeless.Witness.Aux
+import shapesafe.core.arity
+import shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
+import shapesafe.core.arity.ConstArity.{Derived, Literal}
+import shapesafe.core.arity.ProveArity.|-
+import shapesafe.core.arity.Utils.NatAsOp
+import shapesafe.core.arity.ops.ArityOpsLike
+import shapesafe.core.axis.{Axis, NoName, NoNameW}
 
-import scala.util.Try
+import scala.language.implicitConversions
 
-trait Arity extends CanPeek with HasDebugSymbol {
+trait Arity extends ArityOpsLike with Axis {
 
-  def runtimeValue: Int
-  final lazy val runtimeValueTry: Try[Int] = Try(runtimeValue)
+  final override def toString: String = arityType.toString
 
-  lazy val valueStr: String = runtimeValueTry
-    .map(_.toString)
-    .getOrElse("???")
-//    .recover {
-//      case ee: Exception =>
-//        ee.getMessage
-//    }
-//    .get
+  def verify[
+      O <: ArityType
+  ](
+      implicit
+      prove: _ArityType |- O
+  ): Arity.^[O] = prove.consequentFor(arityType).value.^
 
-  lazy val fullStr: String = {
+  def eval[
+      O <: LeafArity
+  ](
+      implicit
+      prove: _ArityType |- O
+  ): Arity.^[O] = verify(prove)
 
-    valueStr + ":" + this.getClass.getSimpleName
-  }
+  def peek(
+      implicit
+      reporter: PeekArity.Case[_ArityType]
+  ): this.type = this
 
-  final override def toString: String = fullStr
+  def interrupt(
+      implicit
+      reporter: InterruptArity.Case[_ArityType]
+  ): this.type = this
+
+  def reason[
+      O <: LeafArity
+  ](
+      implicit
+      reporter: ArityReporters.PeekArity.Case[_ArityType],
+      prove: _ArityType |- O
+  ): Arity.^[O] = eval(prove)
+
+  final override val nameW: Aux[NoName] = NoNameW
 }
 
 object Arity {
 
-  trait Verifiable extends Arity {}
+  type Aux[A <: ArityType] = Arity { type _ArityType = A }
+
+  final case class ^[A <: ArityType](arityType: A) extends Arity {
+
+    override type _ArityType = A
+
+    override type _Axis = ^[A]
+
+    override type Expr = A#Expr
+  }
+
+  implicit def unbox[A <: ArityType](v: Aux[A]): A = v.arityType
+//  implicit def unbox[T <: ArityAPI](v: T): v._Arity = v._arity // TODO: why is it not effective?
 
   val Unprovable: ^[arity.Unprovable.type] = arity.Unprovable.^
 
   val Unchecked: ^[arity.Unchecked.type] = arity.Unchecked.^
-
-  implicit class converters[A <: Arity](self: A) {
-
-    def ^ : ^[A] = ArityAPI.^(self)
-  }
 
   def apply(w: Witness.Lt[Int]): ^[Literal[w.T]] = {
     ^(Literal.apply(w))

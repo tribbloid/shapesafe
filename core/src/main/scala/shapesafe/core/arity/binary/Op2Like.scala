@@ -1,6 +1,6 @@
 package shapesafe.core.arity.binary
 
-import shapesafe.core.arity.{Arity, ArityAPI, ArityConjecture}
+import shapesafe.core.arity.{Arity, ArityConjecture, ArityType}
 import shapesafe.core.debugging.HasDebugSymbol
 import ai.acyclic.graph.commons.HasOuter
 import singleton.ops.+
@@ -8,8 +8,8 @@ import singleton.ops.+
 trait Op2Like extends Op2Like.DebuggingSupport {
 
   trait Conjecture2[
-      A1 <: Arity,
-      A2 <: Arity
+      A1 <: ArityType,
+      A2 <: ArityType
   ] extends ArityConjecture
       with HasOuter {
 
@@ -24,14 +24,14 @@ trait Op2Like extends Op2Like.DebuggingSupport {
   }
 
   type On[
-      A1 <: Arity,
-      A2 <: Arity
+      A1 <: ArityType,
+      A2 <: ArityType
   ] <: Conjecture2[A1, A2]
 
   def on(
-      a1: ArityAPI,
-      a2: ArityAPI
-  ): On[a1._Arity, a2._Arity]
+      a1: Arity,
+      a2: Arity
+  ): On[a1._ArityType, a2._ArityType]
 //  object AsShapelessPoly2 extends Poly2 {
 //
 //    implicit def trivial[

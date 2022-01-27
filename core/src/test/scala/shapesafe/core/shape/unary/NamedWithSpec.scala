@@ -66,7 +66,7 @@ class NamedWithSpec extends BaseSpec {
       it("getReportMsg") {
 
         val msg = PeekShape
-          .ForTerm(good.shape)
+          .ForTerm(good.shapeType)
           .getMessage
 
         msg.shouldBe(

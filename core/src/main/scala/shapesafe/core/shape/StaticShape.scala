@@ -2,7 +2,7 @@ package shapesafe.core.shape
 
 import shapesafe.core.{XInt, XString}
 import shapesafe.core.arity.Utils.NatAsOp
-import shapesafe.core.arity.{Arity, ArityAPI, ConstArity}
+import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
 import shapesafe.core.tuple.{StaticTuples, Tuples}
@@ -68,8 +68,8 @@ object StaticShape extends Tuples {
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = new Names.><(tail.names, head.nameW.value)
 
-    final override type _Dimensions = Dimensions.><[tail._Dimensions, head._Arity]
-    final override val dimensions = new Dimensions.><(tail.dimensions, head.arity)
+    final override type _Dimensions = Dimensions.><[tail._Dimensions, head._ArityType]
+    final override val dimensions = new Dimensions.><(tail.dimensions, head.arityType)
 
     override type PeekHead = Head
   }
@@ -78,15 +78,15 @@ object StaticShape extends Tuples {
 
   final type ><^[
       TAIL <: Tuple,
-      HEAD <: Arity
-  ] = ><[TAIL, ArityAPI.^[HEAD]]
+      HEAD <: ArityType
+  ] = ><[TAIL, Arity.^[HEAD]]
 
   trait FromArities_Imp0 extends HListIntake {
 
     implicit def namelessInductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
-        C <: Arity
+        C <: ArityType
     ](
         implicit
         forTail: H_TAIL =>> TAIL
@@ -95,7 +95,7 @@ object StaticShape extends Tuples {
       forAll[C :: H_TAIL].=>> { v =>
         val prev = apply(v.tail)
         val vHead = v.head: C
-        val head: ArityAPI.^[C] = vHead.^
+        val head: Arity.^[C] = vHead.^
 
         val result = prev.^ _and head
         result
@@ -110,7 +110,7 @@ object StaticShape extends Tuples {
         H_TAIL <: HList,
         TAIL <: Tuple,
         N <: XString, // CAUTION: cannot be reduced to w.T! Scala compiler is too dumb to figure it out
-        C <: Arity
+        C <: ArityType
     ](
         implicit
         forTail: H_TAIL =>> TAIL,

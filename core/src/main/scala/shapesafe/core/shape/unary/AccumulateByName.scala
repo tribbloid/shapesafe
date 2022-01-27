@@ -3,7 +3,7 @@ package shapesafe.core.shape.unary
 import shapesafe.core.axis.Axis.UB_->>
 import shapesafe.core.axis.RecordUpdater
 import shapesafe.core.debugging.HasDebugSymbol
-import shapesafe.core.shape.{ProveShape, Shape, StaticShape}
+import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.{::, HList}
 
@@ -17,13 +17,13 @@ trait AccumulateByName {
 
   // all names must be distinctive - no duplication allowed
   trait _On[
-      S1 <: Shape
+      S1 <: ShapeType
   ] extends Conjecture1.^[S1]
       with HasOuter {
 
     override def outer: AccumulateByName.this.type = AccumulateByName.this
 
-    def s1: S1 with Shape
+    def s1: S1 with ShapeType
 
     override type Expr = _Unary#Apply[S1]
   }
@@ -31,7 +31,7 @@ trait AccumulateByName {
   object _On {
 
     implicit def simplify[
-        S1 <: Shape,
+        S1 <: ShapeType,
         P1 <: StaticShape
     ](
         implicit
@@ -48,9 +48,9 @@ trait AccumulateByName {
   }
 
   case class On[
-      S1 <: Shape
+      S1 <: ShapeType
   ](
-      override val s1: S1 with Shape
+      override val s1: S1 with ShapeType
   ) extends _On[S1] {}
 
   object _Lemma extends RecordLemma.ConsNewName {

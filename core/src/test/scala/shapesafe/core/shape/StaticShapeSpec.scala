@@ -16,7 +16,7 @@ class StaticShapeSpec extends BaseSpec {
         Arity(2) :<<- "x" and
         Arity(3) :<<- "y"
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y"))
           |""".stripMargin
@@ -33,9 +33,9 @@ class StaticShapeSpec extends BaseSpec {
         Arity(2) and
         Arity(3)
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
-          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
+          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
 
@@ -51,9 +51,9 @@ class StaticShapeSpec extends BaseSpec {
       assert(shape.record.apply("x").runtimeValue == 2)
       assert(shape.record.apply("z").runtimeValue == 4)
 
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
-          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< ArityAPI.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
+          |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< Arity.^[ConstArity.Literal[Int(3)]] >< (ConstArity.Literal[Int(4)] :<<- String("z"))
           |""".stripMargin
       )
     }
@@ -61,9 +61,9 @@ class StaticShapeSpec extends BaseSpec {
     it("nameless shortcut") {
 
       val shape = Shape & 2 & 3
-      typeInferShort(shape.shape).shouldBe(
+      typeInferShort(shape.shapeType).shouldBe(
         """
-          |StaticShape.Eye >< ArityAPI.^[ConstArity.Literal[Int(2)]] >< ArityAPI.^[ConstArity.Literal[Int(3)]]
+          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
           |""".stripMargin
       )
     }
@@ -137,7 +137,7 @@ class StaticShapeSpec extends BaseSpec {
 
     it("1") {
 
-      val hh = ("x" ->> Arity(3).arity) ::
+      val hh = ("x" ->> Arity(3).arityType) ::
         HNil
 
       val shape = StaticShape.FromArities(hh)
@@ -149,8 +149,8 @@ class StaticShapeSpec extends BaseSpec {
 
     it("2") {
 
-      val hh = ("x" ->> Arity(3).arity) ::
-        ("y" ->> Arity(4).arity) ::
+      val hh = ("x" ->> Arity(3).arityType) ::
+        ("y" ->> Arity(4).arityType) ::
         HNil
 
       val shape = StaticShape.FromArities(hh)
@@ -260,7 +260,7 @@ class StaticShapeSpec extends BaseSpec {
           |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
 
     it("2") {
@@ -309,7 +309,7 @@ class StaticShapeSpec extends BaseSpec {
           |ConstArity.Literal[Int(2)] :: HNil""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
 
     it("2") {
@@ -333,7 +333,7 @@ class StaticShapeSpec extends BaseSpec {
           |""".stripMargin
       )
 
-      assert(record.get("x") == Arity(2).arity)
+      assert(record.get("x") == Arity(2).arityType)
     }
   }
 
@@ -361,7 +361,7 @@ class StaticShapeSpec extends BaseSpec {
 
       val vv = shape.dimensions
 
-      assert(vv.head == Arity(3).arity)
+      assert(vv.head == Arity(3).arityType)
     }
   }
 

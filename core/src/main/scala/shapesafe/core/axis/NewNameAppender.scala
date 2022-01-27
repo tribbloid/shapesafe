@@ -1,6 +1,6 @@
 package shapesafe.core.axis
 
-import shapesafe.core.arity.Arity
+import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.Keys
 import shapeless.{::, HList, NotContainsConstraint, Witness}
@@ -10,7 +10,7 @@ trait NewNameAppender extends RecordUpdater {
   implicit def ifNewName[
       OLD <: HList,
       N <: String,
-      A1 <: Arity,
+      A1 <: ArityType,
       OLDNS <: HList
   ](
       implicit

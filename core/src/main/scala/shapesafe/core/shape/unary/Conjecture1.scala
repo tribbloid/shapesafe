@@ -1,19 +1,19 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.shape.{ProveShape, Shape, ShapeConjecture, Unchecked}
+import shapesafe.core.shape.{ProveShape, ShapeConjecture, ShapeType, Unchecked}
 
 trait Conjecture1 extends ShapeConjecture {
 
-  type SS1 <: Shape
+  type SS1 <: ShapeType
 }
 
 object Conjecture1 {
 
-  type Lt[S1 <: Shape] = Conjecture1 {
+  type Lt[S1 <: ShapeType] = Conjecture1 {
     type SS1 <: S1
   }
 
-  trait ^[S1 <: Shape] extends Conjecture1 {
+  trait ^[S1 <: ShapeType] extends Conjecture1 {
 
     final type SS1 = S1
   }
