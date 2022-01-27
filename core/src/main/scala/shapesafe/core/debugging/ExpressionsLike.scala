@@ -27,7 +27,7 @@ trait ExpressionsLike {
   trait ReduceByName[O] extends ExprOn1 {
     type _DebugSymbol = "ReduceByName[" + O + "]"
   }
-  trait Op2PerDim[O] extends ExprOn2 {
+  trait Op2ByDim[O] extends ExprOn2 {
     type _DebugSymbol = "Op2PerDim[" + O + "]"
   }
 }

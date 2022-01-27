@@ -4,7 +4,7 @@ import shapesafe.BaseSpec
 import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
-class Op2PerDimSpec extends BaseSpec {
+class Op2ByDimSpec extends BaseSpec {
 
   it("treeString") {
     val s1 = Shape(2, 3)
@@ -15,10 +15,10 @@ class Op2PerDimSpec extends BaseSpec {
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2PerDim ‣ Op2PerDim.On┏ 2:Literal ><
-        |                                                              ┃   3:Literal
-        |                                                              ┏ 4:Literal ><
-        |                                                              ┃   5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim ‣ Op2ByDim.On┏ 2:Literal ><
+        |                                                            ┃   3:Literal
+        |                                                            ┏ 4:Literal ><
+        |                                                            ┃   5:Literal
         |""".stripMargin
     )
   }

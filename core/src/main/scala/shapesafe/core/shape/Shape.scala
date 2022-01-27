@@ -8,7 +8,7 @@ import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
-import shapesafe.core.shape.ops.{EinSumOps, MatrixOps, StaticOpsView, VectorOps}
+import shapesafe.core.shape.ops.{EinSumOp, MatrixOps, StaticOpsView, VectorOps}
 import shapesafe.core.shape.unary._
 import shapesafe.core.{Ops, XInt}
 
@@ -111,7 +111,7 @@ trait Shape extends VectorOps with MatrixOps {
 
   def outer: ><.type = ><
 
-  def einSum: EinSumOps[_ShapeType] = EinSumOps(shapeType)
+  def einSum: EinSumOp[_ShapeType] = EinSumOp(shapeType)
 
   def contract[N <: Names](names: N): ^[Select[CheckEinSum[_ShapeType], N]] = {
 
@@ -171,11 +171,11 @@ trait Shape extends VectorOps with MatrixOps {
   def applyPerDim(
       infix: Ops.Infix,
       that: Shape
-  ) = infix.applyPerDim(this, that)
+  ) = infix.applyByDim(this, that)
 
   def requireEqual(
       that: Shape
-  ): ^[Ops.==!._Op2PerDim.On[_ShapeType, that._ShapeType]] = applyPerDim(Ops.==!, that)
+  ): ^[Ops.==!._Op2ByDim.On[_ShapeType, that._ShapeType]] = applyPerDim(Ops.==!, that)
 }
 
 object Shape extends Shape with ApplyLiterals.ToShape {

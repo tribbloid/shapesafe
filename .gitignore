@@ -43,6 +43,7 @@ project/plugins/project/
 .bloop/
 .metals/
 **/metals.sbt
+**/bin
 
 # the Singapore stack
 **/.ammonite/

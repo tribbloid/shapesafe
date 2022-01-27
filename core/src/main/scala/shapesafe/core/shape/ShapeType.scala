@@ -1,7 +1,6 @@
 package shapesafe.core.shape
 
 import shapesafe.core.debugging.CanPeek
-import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 
 trait ShapeType extends CanPeek {}
 

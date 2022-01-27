@@ -9,7 +9,7 @@ import ai.acyclic.graph.commons.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
 
-trait Op2PerDim {
+trait Op2ByDim {
 
   val op: Op2Like
   type _Binary <: HasDebugSymbol.ExprOn2
@@ -21,7 +21,7 @@ trait Op2PerDim {
   ] extends Conjecture2.^[S1, S2]
       with HasOuter {
 
-    override def outer: Op2PerDim.this.type = Op2PerDim.this
+    override def outer: Op2ByDim.this.type = Op2ByDim.this
 
     def s1: S1 with ShapeType
     def s2: S2 with ShapeType

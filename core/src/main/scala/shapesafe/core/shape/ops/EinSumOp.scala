@@ -7,7 +7,7 @@ import shapesafe.core.shape.unary.{CheckEinSum, Select}
 import shapeless.{HList, SingletonProductArgs}
 import shapeless.ops.hlist.Reverse
 
-case class EinSumOps[
+case class EinSumOp[
     S1 <: ShapeType
 ](
     override val shapeType: S1
@@ -41,10 +41,10 @@ case class EinSumOps[
     checked.^
   }
 
-  def apply[S2 <: ShapeType](that: Shape.^[S2]): EinSumOps[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
+  def apply[S2 <: ShapeType](that: Shape.^[S2]): EinSumOp[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
     val direct = checked.^ >< CheckEinSum(that.shapeType).^
 
-    EinSumOps(direct)
+    EinSumOp(direct)
   }
 
   def einSum: this.type = this
