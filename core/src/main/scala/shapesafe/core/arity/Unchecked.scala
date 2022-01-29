@@ -6,5 +6,6 @@ trait Unchecked extends LeafArity {
 }
 
 case object Unchecked extends Unchecked {
-  override def runtimeValue: Int = throw new UnsupportedOperationException("<no runtime value>")
+  override def runtimeValue: Int =
+    throw new UnsupportedOperationException(s"<${this.productPrefix}: no runtime value>")
 }

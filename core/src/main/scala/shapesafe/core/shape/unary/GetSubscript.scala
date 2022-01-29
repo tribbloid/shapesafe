@@ -8,9 +8,9 @@ import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
 import shapesafe.core.{Poly1Base, XString}
 import shapesafe.m.viz.VizCTSystem.EmitError
-import shapeless.ops.hlist.At
+import shapeless.ops.hlist.{At, Reverse}
 import shapeless.ops.record.Selector
-import shapeless.{Nat, Witness}
+import shapeless.{HList, Nat, Witness}
 
 case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     S1 <: ShapeType,
@@ -86,19 +86,21 @@ object GetSubscript extends GetSubscript_Imp0 {
       }
     }
 
-    implicit def byIndex[
+    implicit def byLeft[
         P1 <: StaticShape,
         N <: Nat,
+        R <: HList,
         S <: Int,
         O <: Axis
     ](
         implicit
-        _at: At.Aux[P1#Static, N, O]
-    ): GetSubscript[P1, Index.I_th[N, S]] =>> O = {
-      forAll[GetSubscript[P1, Index.I_th[N, S]]].=>> { v =>
+        reverse: Reverse.Aux[P1#Static, R],
+        _at: At.Aux[R, N, O]
+    ): GetSubscript[P1, Index.Left[N, S]] =>> O = {
+      forAll[GetSubscript[P1, Index.Left[N, S]]].=>> { v =>
         val p1 = v.s1
 
-        _at(p1.static)
+        _at(reverse(p1.static))
       }
     }
   }

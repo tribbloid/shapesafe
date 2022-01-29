@@ -38,7 +38,7 @@ object Op2 extends Op2_Imp0 {
       // TODO: can this be VerifiedArity?
 
       override type _Refute =
-        DebugUtil.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol + DebugUtil.UNDEFINED.T
+        DebugUtil.REFUTE.T + DebugUtil.ILLEGAL_OP.T + A1#_DebugSymbol + SS[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
 
       override lazy val runtimeValue: Int = sh.apply(a1.runtimeValue, a2.runtimeValue).getValue
     }

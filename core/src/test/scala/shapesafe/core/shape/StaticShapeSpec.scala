@@ -122,7 +122,7 @@ class StaticShapeSpec extends BaseSpec {
     }
   }
 
-  describe(StaticShape.FromArities.getClass.getSimpleName) {
+  describe(StaticShape.FromAxes.getClass.getSimpleName) {
 
     import shapeless.syntax.singleton.mkSingletonOps
 
@@ -130,7 +130,7 @@ class StaticShapeSpec extends BaseSpec {
 
       val hh = HNil
 
-      val shape = StaticShape.FromArities(hh)
+      val shape = StaticShape.FromAxes(hh)
 
       assert(shape == StaticShape.Eye)
     }
@@ -140,7 +140,7 @@ class StaticShapeSpec extends BaseSpec {
       val hh = ("x" ->> Arity(3).arityType) ::
         HNil
 
-      val shape = StaticShape.FromArities(hh)
+      val shape = StaticShape.FromAxes(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
@@ -153,12 +153,26 @@ class StaticShapeSpec extends BaseSpec {
         ("y" ->> Arity(4).arityType) ::
         HNil
 
-      val shape = StaticShape.FromArities(hh)
+      val shape = StaticShape.FromAxes(hh)
 
       //    VizType.infer(shape).toString.shouldBe()
 
       assert(shape.dimensions.static == hh)
       assert(shape.static.head.nameless == Arity(3))
+    }
+
+    it("with empty name") {
+
+      val hh = ("x" ->> Arity(3).arityType) ::
+        ("" ->> Arity(4).arityType) ::
+        HNil
+
+      val shape = StaticShape.FromAxes(hh)
+
+      typeInferShort(shape).toString.shouldBe(
+        """StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(4)]] >< (ConstArity.Literal[Int(3)] :<<- String("x"))"""
+      )
+      //    VizType.infer(shape).toString.shouldBe()
     }
   }
 

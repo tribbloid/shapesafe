@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity._
 
-trait Op2_Imp0 {
+trait Op2_Imp0 extends Op2Like_Imp0 {
 
   implicit def unchecked[
       A1 <: ArityType,

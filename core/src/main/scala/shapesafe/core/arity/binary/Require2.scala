@@ -2,7 +2,6 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Utils.Op
 import shapesafe.core.arity._
-import shapesafe.core.debugging.Reporters.ForArity
 import shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
 
 import scala.collection.mutable
@@ -83,17 +82,12 @@ object Require2 extends Require2_Imp0 {
       A2 <: ArityType,
       S1,
       S2,
-      OP <: Require2,
-      MSG
+      OP <: Require2
   ](
       implicit
       bound1: A1 |-< ConstArity[S1],
       bound2: A2 |-< ConstArity[S2],
-      refute0: ForArity.Refute0[OP#On[ConstArity[S1], ConstArity[S2]], MSG],
-      lemma: RequireMsg[
-        OP#Lemma[S1, S2],
-        MSG
-      ]
+      lemma: Require[OP#Lemma[S1, S2]]
   ): OP#On[A1, A2] |- ConstArity[S1] = {
     ProveArity.forAll[OP#On[A1, A2]].=>> { v =>
       bound1.instanceFor(v.a1)

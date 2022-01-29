@@ -22,7 +22,7 @@ trait BaseSpec extends testlib.BaseSpec with TypeViz.Fixtures {
     PeekCT.runtime
   }
 
-  def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T): String = {
+  def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T = null.asInstanceOf[T]): String = {
 
     TypeVizShort
       .infer(v)
