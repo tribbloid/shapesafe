@@ -30,7 +30,7 @@ trait RequireDistinct_Imp0 {
       refute0: Reporters.ForShape.Refute0[RequireDistinct[P1], MSG],
       msg: EmitError[MSG]
   ): RequireDistinct[S1] |- LeafShape = {
-    null
+    ???
   }
 }
 

@@ -1,8 +1,8 @@
 package shapesafe.core.arity.binary
 
+import ai.acyclic.graph.commons.HasOuter
 import shapesafe.core.arity.{Arity, ArityConjecture, ArityType}
 import shapesafe.core.debugging.HasDebugSymbol
-import ai.acyclic.graph.commons.HasOuter
 import singleton.ops.+
 
 trait Op2Like extends Op2Like.DebuggingSupport {
@@ -47,7 +47,7 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
 }
 
-object Op2Like {
+object Op2Like extends Op2Like_Imp0 {
 
   trait DebuggingSupport {
     self: Op2Like =>
@@ -67,4 +67,5 @@ object Op2Like {
 //      ???
 //    }
   }
+
 }

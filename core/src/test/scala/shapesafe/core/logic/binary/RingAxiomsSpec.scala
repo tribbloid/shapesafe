@@ -85,7 +85,7 @@ class RingAxiomsSpec extends BaseSpec {
       t1
     }.fulfil
 
-    print_@(p1.toString)
+//    print_@(p1.toString)
 
 //    val pp = tt.prove // TODO: not working, implicit search is too week
 //    val pp = tt.proveDirectly

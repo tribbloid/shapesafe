@@ -16,4 +16,8 @@ trait MatrixOps extends HasShape {
   def mat_*[THAT <: Shape](that: THAT) = {
     matMul[that.type](that)
   }
+
+//  def transpose = {
+//    val s1 = shape :<<=
+//  }
 }

@@ -44,7 +44,7 @@ object DebugUtil {
 
   type CannotEval = Stripe["cannot evaluate"]
 
-  val UNDEFINED = Witness(""" is undefined """)
+  val ILLEGAL_OP = Witness("""(Illegal Operation) """)
 
   val IMPOSSIBLE = Witness("IMPOSSIBLE!")
 

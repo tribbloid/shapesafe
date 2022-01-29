@@ -55,9 +55,6 @@ class DoubleVectorSpec extends BaseSpec {
     it("(literal)") {
       val v0 = DoubleVector.zeros(3)
 
-      //    val v0type = ScalaReflection.universe.typeOf[v0.arity.type ].finalResultType
-      //    println(v0type)
-
       v0.arity.proveSameType[Witness.`3`.T]
       v0.arity.proveEqualType[Witness.`3`.T]
       v0.arity.requireEqual(3)

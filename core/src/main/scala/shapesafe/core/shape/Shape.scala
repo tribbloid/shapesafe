@@ -127,9 +127,9 @@ trait Shape extends VectorOps with MatrixOps {
     def apply(i: Nat)(
         implicit
         asOp: NatAsOp[i.N]
-    ): ^[GetSubscript[_ShapeType, Index.I_th[i.N, asOp.OutInt]]] = {
+    ): ^[GetSubscript[_ShapeType, Index.Left[i.N, asOp.OutInt]]] = {
 
-      apply(Index.I_th(i))
+      apply(Index.Left(i))
     }
 
     def apply(w: Witness.Lt[String]): ^[GetSubscript[_ShapeType, Index.Name[w.T]]] = {

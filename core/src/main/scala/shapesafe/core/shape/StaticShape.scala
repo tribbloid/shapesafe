@@ -1,12 +1,13 @@
 package shapesafe.core.shape
 
-import shapesafe.core.{XInt, XString}
+import shapeless.{::, HList, HNil, Nat, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
+import shapesafe.core.shape.Const.NoName
 import shapesafe.core.tuple.{StaticTuples, Tuples}
-import shapeless.{::, HList, HNil, Nat, Witness}
+import shapesafe.core.{XInt, XString}
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included
@@ -83,7 +84,7 @@ object StaticShape extends Tuples {
 
   trait FromArities_Imp0 extends HListIntake {
 
-    implicit def namelessInductive[
+    implicit def aritiesInductive[
         H_TAIL <: HList,
         TAIL <: Tuple,
         C <: ArityType
@@ -101,9 +102,10 @@ object StaticShape extends Tuples {
         result
       }
     }
+
   }
 
-  object FromArities extends FromArities_Imp0 {
+  trait FromAxes_Imp0 extends FromArities_Imp0 {
 
     // TODO: merge with namelessInductive?
     implicit def inductive[
@@ -121,6 +123,29 @@ object StaticShape extends Tuples {
         val prev = apply(v.tail)
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
+
+        val result = prev.^ _and head
+
+        result
+      }
+    }
+  }
+
+  object FromAxes extends FromAxes_Imp0 {
+
+    implicit def noNameInductive[
+        H_TAIL <: HList,
+        TAIL <: Tuple,
+        C <: ArityType
+    ](
+        implicit
+        forTail: H_TAIL =>> TAIL
+    ): ((NoName ->> C) :: H_TAIL) =>> (TAIL ><^ C) = {
+
+      forAll[(NoName ->> C) :: H_TAIL].=>> { v =>
+        val prev = apply(v.tail)
+        val vHead = v.head: C
+        val head: Arity.^[C] = vHead.^
 
         val result = prev.^ _and head
 

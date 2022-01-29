@@ -11,6 +11,23 @@ class GetSubscriptSpec extends BaseSpec {
     Arity(2) :<<- "y" &
     Arity(3) :<<- "z"
 
+  describe("select1") {
+
+    it("from Left") {
+
+      val v = s1.select1(2).eval.shape.head
+
+      assert(v == Arity(3) :<<- "z") // HList is of inverse order
+    }
+
+    it("by name") {
+
+      val v = s1.select1("y").eval.shape.head
+
+      assert(v == Arity(2) :<<- "y")
+    }
+  }
+
   it("by name") {
 
     val ss = GetSubscript(s1, Index.Name("x")).^
@@ -32,9 +49,9 @@ class GetSubscriptSpec extends BaseSpec {
     )
   }
 
-  it("by ordinal") {
+  it("from Left") {
 
-    val ss = GetSubscript(s1, Index.I_th(0)).^
+    val ss = GetSubscript(s1, Index.Left(2)).^
     val rr = ss.eval
 
     typeInferShort(rr.shapeType).shouldBe(
@@ -44,28 +61,11 @@ class GetSubscriptSpec extends BaseSpec {
 
   it(" .... indirectly") {
 
-    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.I_th(1))
+    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.Left(1))
     val rr = ss.^.eval
 
     typeInferShort(rr.shapeType).shouldBe(
       """StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("b"))"""
     )
-  }
-
-  describe("Sub") {
-
-    it("getByIndex") {
-
-      val v = s1.select1(0).eval.shape.head
-
-      assert(v == Arity(3) :<<- "z") // HList is of inverse order
-    }
-
-    it("getByName") {
-
-      val v = s1.select1("y").eval.shape.head
-
-      assert(v == Arity(2) :<<- "y")
-    }
   }
 }

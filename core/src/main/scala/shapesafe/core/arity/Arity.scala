@@ -8,7 +8,8 @@ import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
-import shapesafe.core.axis.{Axis, NoName, NoNameW}
+import shapesafe.core.axis.Axis
+import shapesafe.core.shape.Const
 
 import scala.language.implicitConversions
 
@@ -48,7 +49,7 @@ trait Arity extends ArityOpsLike with Axis {
       prove: _ArityType |- O
   ): Arity.^[O] = eval(prove)
 
-  final override val nameW: Aux[NoName] = NoNameW
+  final override val nameW: Aux[Const.NoName] = Const.NoNameW
 }
 
 object Arity {

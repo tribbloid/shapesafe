@@ -2,7 +2,8 @@ package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.Index.Name
+import shapesafe.core.shape.Index.{Left, Name}
+import shapesafe.core.shape.Names.tupleExtension
 import shapesafe.core.shape.{Indices, Names, Shape}
 
 class SelectSpec extends BaseSpec {
@@ -61,25 +62,36 @@ class SelectSpec extends BaseSpec {
 
   it("with names") {
 
-    val r = Select(s1, Indices >< Name("z") >< Name("y")).^
+    val strs = Seq(
+      Select(s1, Indices >< Name("z") >< Name("y")).^.eval.toString,
+      Select(s1, Names >< "z" >< "y").^.eval.toString,
+      s1.select("z", "y").eval.toString,
+      s1.selectBy(Names("z", "y")).eval.toString
+    )
 
-    r.eval.toString.shouldBe(
-      """
+    strs.distinct
+      .mkString("\n")
+      .shouldBe(
+        """
         |3:Literal :<<- z ><
         |  2:Literal :<<- y
         |""".stripMargin
-    )
+      )
   }
 
-  it(" ... alternatively") {
-
-    val r = Select(s1, Names >< "z" >< "y").^
-
-    r.eval.toString.shouldBe(
-      """
-        |3:Literal :<<- z ><
-        |  2:Literal :<<- y
-        |""".stripMargin
+  it("with indices") {
+    val strs = Seq(
+      Select(s1, Indices >< Left(2) >< Left(1)).^.eval.toString,
+      s1.selectBy(Indices >< Left(2) >< Left(1)).eval.toString
     )
+
+    strs.distinct
+      .mkString("\n")
+      .shouldBe(
+        """
+          |3:Literal :<<- z ><
+          |  2:Literal :<<- y
+          |""".stripMargin
+      )
   }
 }

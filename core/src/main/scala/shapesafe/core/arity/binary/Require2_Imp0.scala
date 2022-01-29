@@ -3,7 +3,7 @@ package shapesafe.core.arity.binary
 import shapesafe.core.arity.ArityType
 import shapesafe.core.Ops.==!
 
-trait Require2_Imp0 extends Require2_Imp1 {
+trait Require2_Imp0 extends Op2Like_Imp0 {
 
   import shapesafe.core.arity.ProveArity._
 

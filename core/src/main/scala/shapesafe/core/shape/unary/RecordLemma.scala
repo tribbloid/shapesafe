@@ -23,7 +23,7 @@ trait RecordLemma extends Poly1Base[HList, HList] {
     ](
         implicit
         lemma1: outer.=>>[I, O],
-        lemma2: StaticShape.FromArities.Case[O]
+        lemma2: StaticShape.FromAxes.Case[O]
     ): I =>> lemma2.Out = {
 
       forAll[I].=>> { i =>

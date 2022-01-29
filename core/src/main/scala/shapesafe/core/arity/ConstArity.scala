@@ -1,16 +1,15 @@
 package shapesafe.core.arity
 
-import shapesafe.core.arity.Utils.Op
 import ai.acyclic.graph.commons.IDMixin
 import shapeless.Witness
-import singleton.ops.{==, Require, ToString}
+import shapesafe.core.arity.Utils.Op
+import singleton.ops.{==, Require}
 
 trait ConstArity[S] extends LeafArity with IDMixin {
 
   type SS = S
   def singleton: S
 
-  final override type _DebugSymbol = ToString[S]
   final override type Expr = S
 
   override lazy val _id: S = singleton
