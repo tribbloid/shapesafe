@@ -4,7 +4,7 @@ import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
 import shapesafe.core.shape.{Index, Names, Shape}
 
-class GetSubscriptSpec extends BaseSpec {
+class Select1Spec extends BaseSpec {
 
   val s1 = Shape &
     (Arity(1) :<<- "x") &
@@ -30,7 +30,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it("by name") {
 
-    val ss = GetSubscript(s1, Index.Name("x")).^
+    val ss = Select1(s1, Index.Name("x")).^
 //    VizType.infer(ee).shouldBe()
     val rr = ss.eval
 
@@ -41,7 +41,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it(" ... indirectly") {
 
-    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.Name("c")).^
+    val ss = Select1(s1 :<<= Names >< "a" >< "b" >< "c", Index.Name("c")).^
     val rr = ss.eval
 
     typeInferShort(rr.shapeType).shouldBe(
@@ -51,7 +51,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it("from Left") {
 
-    val ss = GetSubscript(s1, Index.Left(2)).^
+    val ss = Select1(s1, Index.Left(2)).^
     val rr = ss.eval
 
     typeInferShort(rr.shapeType).shouldBe(
@@ -61,7 +61,7 @@ class GetSubscriptSpec extends BaseSpec {
 
   it(" .... indirectly") {
 
-    val ss = GetSubscript(s1 :<<= Names >< "a" >< "b" >< "c", Index.Left(1))
+    val ss = Select1(s1 :<<= Names >< "a" >< "b" >< "c", Index.Left(1))
     val rr = ss.^.eval
 
     typeInferShort(rr.shapeType).shouldBe(

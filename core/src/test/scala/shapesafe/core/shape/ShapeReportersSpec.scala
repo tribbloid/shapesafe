@@ -1,7 +1,7 @@
 package shapesafe.core.shape
 
 import shapesafe.BaseSpec
-import shapesafe.core.shape.unary.RequireDistinct
+import shapesafe.core.shape.unary.RequireDistinctNames
 
 class ShapeReportersSpec extends BaseSpec {
 
@@ -25,7 +25,7 @@ class ShapeReportersSpec extends BaseSpec {
 
     it("Conjecture1") {
 
-      val i = RequireDistinct(Unchecked).^
+      val i = RequireDistinctNames(Unchecked).^
 
       val m = ShapeReporters.PeekShape.ForTerm(i.shapeType).getMessage
 
@@ -34,7 +34,7 @@ class ShapeReportersSpec extends BaseSpec {
           """
             |_UNCHECKED_
             |
-            |  :=  RequireDistinct[_UNCHECKED_]
+            |  :=  RequireDistinctNames[_UNCHECKED_]
             |""".stripMargin.trim
       )
     }

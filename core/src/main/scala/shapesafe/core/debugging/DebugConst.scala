@@ -3,7 +3,7 @@ package shapesafe.core.debugging
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
-object DebugUtil {
+object DebugConst {
 
   type StrOr_???[T1] = ITE[
     IsString[T1],
@@ -13,15 +13,11 @@ object DebugUtil {
 
   // TODO: is it possible and better?
   //  also need time for https://github.com/fthomas/singleton-ops/issues/182
-//  type StrOrRaw[T1] = ITE[
-//    IsString[T1],
-//    T1,
-//    TypeToLiteral.Type.Case[T1]
-//  ]
-
-  type Refute[T <: CanRefute] = StrOr_???[
-    T#_Refute
-  ]
+  //  type StrOrRaw[T1] = ITE[
+  //    IsString[T1],
+  //    T1,
+  //    TypeToLiteral.Type.Case[T1]
+  //  ]
 
   val shades_+ = Witness(" ░▒▓")
 
@@ -52,4 +48,6 @@ object DebugUtil {
 
   val FROM1 = Witness("\n\n... with 1 prior >\n\n")
   val FROM2 = Witness("\n\n... with 2 priors >\n\n")
+
+  val INTERNAL_ERROR = "[INTERNAL ERROR] Please submit a bug report using the following expression ..."
 }

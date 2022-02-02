@@ -22,20 +22,20 @@ class EinSumSpec extends BaseSpec {
 
     r.treeString.shouldBe(
       """
-        |Select┏ x ><
-        |      ┃   i
+        |Rearrange┏ x ><
+        |         ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
         |       ‣ CheckEinSum
-        |       :  ‣ ZipWithNames┏ 1:Literal ><
-        |       :                ┃   2:Literal
-        |       :                ┏ x ><
-        |       :                ┃   y
+        |       :  ‣ GiveNames┏ 1:Literal ><
+        |       :             ┃   2:Literal
+        |       :             ┏ x ><
+        |       :             ┃   y
         |       ‣ CheckEinSum
-        |          ‣ ZipWithNames┏ 3:Literal ><
-        |                        ┃   4:Literal
-        |                        ┏ i ><
-        |                        ┃   j
+        |          ‣ GiveNames┏ 3:Literal ><
+        |                     ┃   4:Literal
+        |                     ┏ i ><
+        |                     ┃   j
         |""".stripMargin
     )
   }

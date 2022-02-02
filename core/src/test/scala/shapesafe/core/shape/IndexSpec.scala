@@ -11,7 +11,7 @@ class IndexSpec extends BaseSpec {
 
       val ii = Index.Name("ABC")
 
-      PeekCT.runtime[ii.Expr].typeStr.shouldBe("ABC")
+      PeekCT.runtime[ii.Notation].typeStr.shouldBe("ABC")
     }
   }
 
@@ -21,7 +21,7 @@ class IndexSpec extends BaseSpec {
 
       val ii = Index.Left(3)
 
-      PeekCT.runtime[ii.Expr].typeStr.shouldBe("3")
+      PeekCT.runtime[ii.Notation].typeStr.shouldBe("3")
     }
   }
 }

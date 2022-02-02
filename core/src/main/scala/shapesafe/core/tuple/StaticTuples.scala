@@ -1,6 +1,6 @@
 package shapesafe.core.tuple
 
-import shapesafe.core.debugging.{CanPeek, Expressions}
+import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
 import ai.acyclic.graph.commons.{IDMixin, TextBlock}
 import shapeless.{::, HList, HNil, Witness}
@@ -34,8 +34,8 @@ trait StaticTuples[VB] extends Tuples {
 
     override lazy val toString: String = EYE.value
 
-    final override type _ConsExpr[T <: CanPeek] = T#Expr
-    final override type Expr = EYE.T
+    final override type _ConsExpr[T <: CanPeek] = T#Notation
+    final override type Notation = EYE.T
   }
   override val Eye = new Eye
 
@@ -69,8 +69,8 @@ trait StaticTuples[VB] extends Tuples {
 
     type PeekHead <: CanPeek
 
-    final override type _ConsExpr[PEEK <: CanPeek] = Expressions.><[this.Expr, PEEK#Expr]
-    final override type Expr = TAIL#_ConsExpr[PeekHead]
+    final override type _ConsExpr[PEEK <: CanPeek] = Notations.><[this.Notation, PEEK#Notation]
+    final override type Notation = TAIL#_ConsExpr[PeekHead]
   }
 
   final override def cons[TAIL <: Tuple, HEAD <: VBound](tail: TAIL, head: HEAD): TAIL >< HEAD =

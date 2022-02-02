@@ -1,6 +1,12 @@
 package shapesafe.core.debugging
 
-trait CanRefute {
+trait CanRefute extends CanPeek {
 
-  type _Refute
+  type _RefuteTxt
+
+  final type RefuteTxt = DebugConst.StrOr_???[
+    _RefuteTxt
+  ]
 }
+
+object CanRefute {}

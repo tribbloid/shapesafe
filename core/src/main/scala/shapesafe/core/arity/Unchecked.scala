@@ -2,7 +2,7 @@ package shapesafe.core.arity
 
 trait Unchecked extends LeafArity {
 
-  override type Expr = "_UNCHECKED_"
+  override type Notation = "_UNCHECKED_"
 }
 
 case object Unchecked extends Unchecked {

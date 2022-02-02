@@ -6,4 +6,4 @@ CRDIR="$(
 )"
 
 "${CRDIR}"/.update-submodules.sh && \
-"${CRDIR}"/.CI-pipeline.sh "${@}"
+"${CRDIR}"/CI-pipeline.sh "${@}"

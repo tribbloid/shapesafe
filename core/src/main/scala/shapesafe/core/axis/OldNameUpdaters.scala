@@ -44,7 +44,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
   }
   object Appender extends Appender
 
-  trait Squasher extends RecordUpdater {
+  trait Reducer extends RecordUpdater {
     // TODO: should be a Poly2?
     // TODO: merge into EinSumIndexed.Cons
 
@@ -81,7 +81,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
       }
     }
   }
-  object Squasher extends Squasher
+  object Reducer extends Reducer
 }
 
 object OldNameUpdaters {}

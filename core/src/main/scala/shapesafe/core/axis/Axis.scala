@@ -4,7 +4,7 @@ import ai.acyclic.graph.commons.IDMixin
 import shapeless.Witness
 import shapeless.labelled.FieldType
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
-import shapesafe.core.debugging.{CanPeek, Expressions}
+import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.{XInt, XString}
 
 import scala.language.implicitConversions
@@ -44,10 +44,10 @@ object Axis {
 
     trait CanPeekName extends CanPeek {
 
-      override type Expr = Name
+      override type Notation = Name
     }
 
-    override type Expr = Expressions.:<<-[A#Expr, CanPeekName#Expr]
+    override type Notation = Notations.:<<-[A#Notation, CanPeekName#Notation]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arityType"

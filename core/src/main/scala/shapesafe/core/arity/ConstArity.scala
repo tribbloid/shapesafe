@@ -10,7 +10,7 @@ trait ConstArity[S] extends LeafArity with IDMixin {
   type SS = S
   def singleton: S
 
-  final override type Expr = S
+  final override type Notation = S
 
   override lazy val _id: S = singleton
 

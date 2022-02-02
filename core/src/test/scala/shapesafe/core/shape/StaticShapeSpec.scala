@@ -41,6 +41,16 @@ class StaticShapeSpec extends BaseSpec {
 
     }
 
+    it("nameless shortcut") {
+
+      val shape = Shape & 2 & 3
+      typeInferShort(shape.shapeType).shouldBe(
+        """
+          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
+          |""".stripMargin
+      )
+    }
+
     it("mixed") {
 
       val shape = Shape &
@@ -58,15 +68,6 @@ class StaticShapeSpec extends BaseSpec {
       )
     }
 
-    it("nameless shortcut") {
-
-      val shape = Shape & 2 & 3
-      typeInferShort(shape.shapeType).shouldBe(
-        """
-          |StaticShape.Eye >< Arity.^[ConstArity.Literal[Int(2)]] >< Arity.^[ConstArity.Literal[Int(3)]]
-          |""".stripMargin
-      )
-    }
   }
 
   it("toString") {

@@ -1,25 +1,25 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.debugging.{Expressions, Reporters}
-import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
-import shapesafe.m.viz.VizCTSystem.EmitError
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
+import shapesafe.core.debugging.{Notations, Reporters}
+import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
+import shapesafe.m.viz.VizCTSystem.EmitError
 
-case class ZipWithNames[
+case class GiveNames[
     S1 <: ShapeType,
     N <: Names
 ](
     s1: S1 with ShapeType,
     newNames: N
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.On[S1] {
 
-  override type Expr = Expressions.:<<=[S1#Expr, N#Expr]
+  override type Notation = Notations.:<<=[S1#Notation, N#Notation]
 
-  override type _Refute = "Dimension mismatch"
+  override type _RefuteTxt = "Dimension mismatch"
 }
 
-trait ZipWithNames_Imp0 {
+trait GiveNames_Imp0 {
 
   import shapesafe.core.shape.ProveShape._
 
@@ -31,14 +31,14 @@ trait ZipWithNames_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[ZipWithNames[P1, N], MSG],
+      refute0: Reporters.ForShape.Refute0[GiveNames[P1, N], MSG],
       msg: EmitError[MSG]
-  ): ZipWithNames[S1, N] |- LeafShape = {
+  ): GiveNames[S1, N] |- LeafShape = {
     ???
   }
 }
 
-object ZipWithNames extends ZipWithNames_Imp0 {
+object GiveNames extends GiveNames_Imp0 {
 
   import shapesafe.core.shape.ProveShape._
 
@@ -52,8 +52,8 @@ object ZipWithNames extends ZipWithNames_Imp0 {
       lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
       toShape: StaticShape.FromAxes.Case[HO]
-  ): ZipWithNames[S1, N] |- toShape.Out = {
-    forAll[ZipWithNames[S1, N]].=>> { src =>
+  ): GiveNames[S1, N] |- toShape.Out = {
+    forAll[GiveNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
       val p1: P1 = lemma.instanceFor(src.s1)
 

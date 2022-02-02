@@ -21,7 +21,7 @@ object Index {
 
     override protected def _id = w.value
 
-    override type Expr = S
+    override type Notation = S
   }
 
   object Name {
@@ -34,7 +34,7 @@ object Index {
 
     override protected def _id = value
 
-    override type Expr = S
+    override type Notation = S
   }
 
   object Left {

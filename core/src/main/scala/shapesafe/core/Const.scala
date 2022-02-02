@@ -1,6 +1,7 @@
-package shapesafe.core.shape
+package shapesafe.core
 
 import shapeless.Witness
+import shapesafe.core.shape.{Names, Shape}
 
 object Const {
 
@@ -13,4 +14,9 @@ object Const {
   val ik = Names("i", "k")
 
   val shape3 = Shape(3)
+
+  object True // TODO: should already exists in scala library
+  type True = True.type
+
+  implicit def _summonTrue: True = True
 }

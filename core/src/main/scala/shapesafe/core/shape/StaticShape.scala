@@ -1,11 +1,11 @@
 package shapesafe.core.shape
 
-import shapeless.{::, HList, HNil, Nat, Witness}
+import shapeless.{::, HList, HNil, Nat, Succ, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
-import shapesafe.core.shape.Const.NoName
+import shapesafe.core.Const.NoName
 import shapesafe.core.tuple.{StaticTuples, Tuples}
 import shapesafe.core.{XInt, XString}
 
@@ -41,14 +41,17 @@ object StaticShape extends Tuples {
   // Cartesian product doesn't have eye but whatever
   class Eye extends Proto.Eye with StaticShape {
 
-    final type Record = HNil
+    final override type Record = HNil
     override def record: Record = HNil
+
+    final override type NatNumOfDimensions = Nat._0
 
     final override type _Names = Names.Eye
     final override val names = Names.Eye
 
     final override type _Dimensions = Dimensions.Eye
     final override val dimensions = Dimensions.Eye
+
   }
   override val Eye = new Eye
 
@@ -65,6 +68,8 @@ object StaticShape extends Tuples {
     final type Field = head.Field
     final override type Record = Field :: tail.Record
     override lazy val record: Record = head.asField :: tail.record
+
+    final override type NatNumOfDimensions = Succ[tail.NatNumOfDimensions]
 
     final override type _Names = Names.><[tail._Names, head.Name]
     final override val names = new Names.><(tail.names, head.nameW.value)

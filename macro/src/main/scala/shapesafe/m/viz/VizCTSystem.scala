@@ -146,6 +146,9 @@ object VizCTSystem {
           str
         } catch {
           case e: Throwable =>
+            println(s"[ERROR] Compile-time formatting exception: ${e.toString}")
+            e.printStackTrace()
+
             "[ ERROR ] " + e.toString
         }
 

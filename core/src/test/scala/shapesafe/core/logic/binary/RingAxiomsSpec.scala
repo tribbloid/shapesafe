@@ -2,7 +2,6 @@ package shapesafe.core.logic.binary
 
 import shapesafe.BaseSpec
 import shapesafe.core.logic.ProofSystem
-import ai.acyclic.graph.commons.debug.print_@
 
 object RingAxiomsSpec {
 
