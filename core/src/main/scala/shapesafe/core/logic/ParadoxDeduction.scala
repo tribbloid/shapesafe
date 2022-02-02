@@ -1,6 +1,6 @@
 package shapesafe.core.logic
 
-object ContradictionDeduction {
+object ParadoxDeduction {
 
   trait _Imp0 extends HasTheory {
     import theory._
@@ -13,7 +13,7 @@ object ContradictionDeduction {
   }
 }
 
-trait ContradictionDeduction extends ContradictionDeduction._Imp0 {
+trait ParadoxDeduction extends ParadoxDeduction._Imp0 {
   import theory._
 
   implicit def contradicting1[I, O](

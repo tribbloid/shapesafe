@@ -12,7 +12,7 @@ import shapeless.ops.hlist.{At, Reverse}
 import shapeless.ops.record.Selector
 import shapeless.{HList, Nat, Witness}
 
-case class GetSubscript[ // last step of einsum, contract, transpose, etc.
+case class Select1[
     S1 <: ShapeType,
     I <: Index
 ](
@@ -20,12 +20,12 @@ case class GetSubscript[ // last step of einsum, contract, transpose, etc.
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.GetSubscript[S1#Expr, I#Expr]
+  override type Expr = Expressions.Select1[S1#Expr, I#Expr]
 
   override type _Refute = "Index not found"
 }
 
-trait GetSubscript_Imp0 {
+trait Select1_Imp0 {
 
   import ProveShape._
 
@@ -37,14 +37,14 @@ trait GetSubscript_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[GetSubscript[P1, I], MSG],
+      refute0: Reporters.ForShape.Refute0[Select1[P1, I], MSG],
       msg: EmitError[MSG]
-  ): GetSubscript[S1, I] |- LeafShape = {
+  ): Select1[S1, I] |- LeafShape = {
     ???
   }
 }
 
-object GetSubscript extends GetSubscript_Imp0 {
+object Select1 extends Select1_Imp0 {
 
   import ProveShape._
 
@@ -56,18 +56,18 @@ object GetSubscript extends GetSubscript_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      lemma2: Premise.=>>[GetSubscript[P1, I], O]
-  ): GetSubscript[S1, I] |- (StaticShape.Eye >< O) = {
+      lemma2: Premise.=>>[Select1[P1, I], O]
+  ): Select1[S1, I] |- (StaticShape.Eye >< O) = {
 
-    ProveShape.forAll[GetSubscript[S1, I]].=>> { v =>
+    ProveShape.forAll[Select1[S1, I]].=>> { v =>
       val p1: P1 = lemma1.instanceFor(v.s1)
-      val vv: GetSubscript[P1, I] = v.copy(s1 = p1)
+      val vv: Select1[P1, I] = v.copy(s1 = p1)
 
       Shape _and lemma2(vv)
     }
   }
 
-  object Premise extends Poly1Base[GetSubscript[_, _], Axis] {
+  object Premise extends Poly1Base[Select1[_, _], Axis] {
 
     implicit def byName[
         P1 <: StaticShape,
@@ -76,8 +76,8 @@ object GetSubscript extends GetSubscript_Imp0 {
     ](
         implicit
         _selector: Selector.Aux[P1#Record, N, A]
-    ): GetSubscript[P1, Index.Name[N]] =>> (A :<<- N) = {
-      forAll[GetSubscript[P1, Index.Name[N]]].=>> { v =>
+    ): Select1[P1, Index.Name[N]] =>> (A :<<- N) = {
+      forAll[Select1[P1, Index.Name[N]]].=>> { v =>
         val p1: P1 = v.s1
 
         val arity: A = _selector(p1.record)
@@ -96,8 +96,8 @@ object GetSubscript extends GetSubscript_Imp0 {
         implicit
         reverse: Reverse.Aux[P1#Static, R],
         _at: At.Aux[R, N, O]
-    ): GetSubscript[P1, Index.Left[N, S]] =>> O = {
-      forAll[GetSubscript[P1, Index.Left[N, S]]].=>> { v =>
+    ): Select1[P1, Index.Left[N, S]] =>> O = {
+      forAll[Select1[P1, Index.Left[N, S]]].=>> { v =>
         val p1 = v.s1
 
         _at(reverse(p1.static))

@@ -2,8 +2,8 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.ConstArity.Derived
 import shapesafe.core.arity.Utils.Op
-import shapesafe.core.arity.{ProveArity, _}
-import shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
+import shapesafe.core.arity._
+import shapesafe.core.debugging.{DebugConst, HasDebugSymbol}
 import singleton.ops.+
 
 import scala.collection.mutable
@@ -38,7 +38,7 @@ object Op2 extends Op2_Imp0 {
       // TODO: can this be VerifiedArity?
 
       override type _Refute =
-        DebugUtil.REFUTE.T + DebugUtil.ILLEGAL_OP.T + A1#_DebugSymbol + SS[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
+        DebugConst.REFUTE.T + DebugConst.ILLEGAL_OP.T + A1#_DebugSymbol + SS[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
 
       override lazy val runtimeValue: Int = sh.apply(a1.runtimeValue, a2.runtimeValue).getValue
     }

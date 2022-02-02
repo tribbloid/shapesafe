@@ -2,14 +2,13 @@ package shapesafe.core.arity
 
 import shapeless.{Nat, Witness}
 import shapeless.Witness.Aux
-import shapesafe.core.arity
+import shapesafe.core.{arity, Const}
 import shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.Axis
-import shapesafe.core.shape.Const
 
 import scala.language.implicitConversions
 

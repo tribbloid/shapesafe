@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.debugging.DebugUtil.{Refute, Stripe}
+import shapesafe.core.debugging.DebugConst.{Refute, Stripe}
 import shapesafe.core.Poly1Base
 import shapesafe.core.logic.Theory
 import shapesafe.m.viz.PeekCT
@@ -18,7 +18,7 @@ class Reporters[
 
   trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
 
-    import shapesafe.core.debugging.DebugUtil._
+    import shapesafe.core.debugging.DebugConst._
     import scope._
 
     type ExprOf[T <: CanPeek] = T#Expr
@@ -120,9 +120,9 @@ object Reporters {
 
     type TryStripe
 
-    type Refute0[SELF <: CanPeek with CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
+    type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
 
-    object Refute0 extends Poly1Base[CanPeek with CanRefute, Any] {
+    object Refute0 extends Poly1Base[CanRefute, Any] {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
@@ -140,12 +140,10 @@ object Reporters {
   object ForArity extends Refutes {
 
     type TryStripe = "\n\n" + Stripe["... when proving arity"]
-
   }
 
   object ForShape extends Refutes {
 
     type TryStripe = "\n\n" + Stripe["... when proving shape"]
-
   }
 }

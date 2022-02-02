@@ -77,9 +77,9 @@ class OldNameUpdatersSpec extends BaseSpec {
     }
   }
 
-  describe("Squasher") {
+  describe("Reducer") {
 
-    val squasher = Ops.==!._ReduceByName.oldNameUpdater
+    val reducer = Ops.==!._ReduceByName.oldNameUpdater
 
     describe("can squash") {
 
@@ -89,7 +89,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
           val existing = ("i" ->> Arity(3).arityType) :: HNil
 
-          val out = squasher.apply(existing -> ii)
+          val out = reducer.apply(existing -> ii)
 
           out.fields.toString.shouldBe("(i,3:Literal) :: HNil")
         }
@@ -98,7 +98,7 @@ class OldNameUpdatersSpec extends BaseSpec {
 
           val existing = ("i" ->> Arity(3).arityType) :: ("j" ->> Arity(4).arityType) :: HNil
 
-          val out = squasher.apply(existing -> ii)
+          val out = reducer.apply(existing -> ii)
 
           out.fields.toString.shouldBe("(i,3:Literal) :: (j,4:Literal) :: HNil")
         }

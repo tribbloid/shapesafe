@@ -53,7 +53,7 @@ Var will be kept as expressions, most notably OuterProduct.
       - H -> H ~ UcArity
       - D -> D ~ UcArity
       
-    - GetSubscript
+    - Select1
 
       - S -> Empty >< Arity
       - H -> Dynamic >< Arity

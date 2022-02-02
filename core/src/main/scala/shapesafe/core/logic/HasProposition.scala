@@ -36,7 +36,7 @@ trait HasProposition {
   case class Nay[O]() extends Proposition.^[O] {}
 
   case class Abstain[O]() extends Proposition.^[O] {}
-  // TODO: for Nay & Grey, add type-level reason
+  // TODO: for Nay & Abstain, add type-level reason
 
   case class Absurd[O](
       aye: Aye[O],

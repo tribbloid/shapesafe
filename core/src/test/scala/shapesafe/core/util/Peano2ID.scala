@@ -1,11 +1,11 @@
 package shapesafe.core.util
 
 import shapesafe.core.fixtures.Peano
-import shapesafe.core.logic.{CanUseSubTheory, ContradictionDeduction, ProofSystem}
+import shapesafe.core.logic.{CanUseSubTheory, ParadoxDeduction, ProofSystem}
 
 trait Peano2ID {
 
-  object ProveStuff extends ProofSystem with ContradictionDeduction with CanUseSubTheory
+  object ProveStuff extends ProofSystem with ParadoxDeduction with CanUseSubTheory
   import ProveStuff._
 
   abstract class Stuff {

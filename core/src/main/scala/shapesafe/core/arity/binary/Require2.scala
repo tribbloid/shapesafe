@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Utils.Op
 import shapesafe.core.arity._
-import shapesafe.core.debugging.{DebugUtil, HasDebugSymbol}
+import shapesafe.core.debugging.{DebugConst, HasDebugSymbol}
 
 import scala.collection.mutable
 
@@ -43,7 +43,7 @@ object Require2 extends Require2_Imp0 {
     ) extends Conjecture2[A1, A2] {
 
       override type _Refute =
-        DebugUtil.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#Negation#_DebugSymbol + A2#_DebugSymbol
+        DebugConst.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#Negation#_DebugSymbol + A2#_DebugSymbol
 
       override lazy val runtimeValue: Int = {
         val v1 = a1.runtimeValue

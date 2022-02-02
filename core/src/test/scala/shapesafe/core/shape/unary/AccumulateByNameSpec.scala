@@ -20,14 +20,14 @@ class AccumulateByNameSpec extends BaseSpec {
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._ReduceByName ‣ AccumulateByName.On
         | ‣ OuterProduct
-        |    ‣ ZipWithNames┏ 2:Literal ><
-        |    :             ┃   3:Literal
-        |    :             ┏ x ><
-        |    :             ┃   y
-        |    ‣ ZipWithNames┏ 4:Literal ><
-        |                  ┃   5:Literal
-        |                  ┏ x ><
-        |                  ┃   y
+        |    ‣ GiveNames┏ 2:Literal ><
+        |    :          ┃   3:Literal
+        |    :          ┏ x ><
+        |    :          ┃   y
+        |    ‣ GiveNames┏ 4:Literal ><
+        |               ┃   5:Literal
+        |               ┏ x ><
+        |               ┃   y
         |""".stripMargin
     )
   }

@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-trait CanRefute {
+trait CanRefute extends CanPeek {
 
   type _Refute
 }

@@ -4,21 +4,20 @@ import shapesafe.BaseSpec
 import shapesafe.core.Ops
 import shapesafe.core.shape.Shape
 
-class Op2ByDimSpec extends BaseSpec {
+abstract class Op2ByDimSpec extends BaseSpec {
 
   it("treeString") {
     val s1 = Shape(2, 3)
-
     val s2 = Shape(4, 5)
 
-    val rr = s1.applyPerDim(Ops.:+, s2)
+    val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
     rr.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim ‣ Op2ByDim.On┏ 2:Literal ><
-        |                                                            ┃   3:Literal
-        |                                                            ┏ 4:Literal ><
-        |                                                            ┃   5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On┏ 2:Literal ><
+        |                                                                     ┃   3:Literal
+        |                                                                     ┏ 4:Literal ><
+        |                                                                     ┃   5:Literal
         |""".stripMargin
     )
   }
@@ -30,28 +29,35 @@ class Op2ByDimSpec extends BaseSpec {
 
     it("direct sum") {
 
-      val rr = s1.applyPerDim(Ops.:+, s2)
+      val strs = Seq(
+        s1.applyByDim(Ops.:+, s2).eval.toString,
+        s2.applyByDimDropLeft(Ops.:+, s2).eval.toString
+      )
 
-//      TypeVizCT.infer(rr.shape).show
-
-      rr.eval.toString.shouldBe(
-        """
+      strs
+        .mkString("\n")
+        .shouldBe(
+          """
           |6:Derived ><
           |  8:Derived
           |""".stripMargin
-      )
+        )
     }
 
     it("Kronecker product") {
 
-      val rr = s1.applyPerDim(Ops.:*, s2)
-
-      rr.eval.toString.shouldBe(
-        """
+      val strs = Seq(
+        s1.applyByDim(Ops.:*, s2).eval.toString,
+        s2.applyByDimDropLeft(Ops.:*, s2).eval.toString
+      )
+      strs
+        .mkString("\n")
+        .shouldBe(
+          """
           |8:Derived ><
           |  15:Derived
           |""".stripMargin
-      )
+        )
     }
 
     it("shouldEqual") {
@@ -64,7 +70,23 @@ class Op2ByDimSpec extends BaseSpec {
     }
   }
 
-  describe("can truncate extra dimension(s) if") {
+  describe(Ops.:+._Op2ByDim_Strict.IffRelay.getClass.getSimpleName) {
+
+    it("will FAIL if instance cannot be summoned") {
+
+      val s1 = Shape(2)
+      val s2 = Shape(3, 4)
+
+      type TT = Ops.:+._Op2ByDim_Strict.IffRelay[s1._ShapeType, s2._ShapeType]
+
+      shouldNotCompile(
+        """implicitly[TT]""",
+        """.*(\QDimension mismatch\E).*"""
+      )
+    }
+  }
+
+  describe("applyByDim will FAIL if") {
     // TODO: is this really the best behaviour?
 
     it("operands has different dimensions") {
@@ -72,7 +94,38 @@ class Op2ByDimSpec extends BaseSpec {
       val s1 = Shape(2, 3)
       val s2 = Shape(4, 5, 6)
 
-      val rr = s1.applyPerDim(Ops.:+, s2)
+      val rr = s1.applyByDim(Ops.:+, s2)
+
+      shouldNotCompile(
+        """rr.eval""",
+        """.*(\QDimension mismatch\E).*"""
+      )
+
+    }
+
+    it(" ... even if both operands are conjectures") {
+
+      val s1 = Shape(2, 3).:<<=*("a", "b")
+      val s2 = Shape(4, 5, 6).:<<=*("a", "b", "c")
+
+      val rr = s1.applyByDim(Ops.:*, s2)
+
+      shouldNotCompile(
+        """rr.eval""",
+        """.*(\QDimension mismatch\E).*"""
+      )
+    }
+  }
+
+  describe("applyByDimDropLeft can drop extra dimension(s) if") {
+    // TODO: is this really the best behaviour?
+
+    it("operands has different dimensions") {
+
+      val s1 = Shape(2, 3)
+      val s2 = Shape(4, 5, 6)
+
+      val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -87,12 +140,12 @@ class Op2ByDimSpec extends BaseSpec {
 //      )
     }
 
-    it(" ... even if both operands are a conjectures") {
+    it(" ... even if both operands are conjectures") {
 
       val s1 = Shape(2, 3).:<<=*("a", "b")
       val s2 = Shape(4, 5, 6).:<<=*("a", "b", "c")
 
-      val rr = s1.applyPerDim(Ops.:*, s2)
+      val rr = s1.applyByDimDropLeft(Ops.:*, s2)
 
       rr.eval.toString.shouldBe(
         """
@@ -112,4 +165,6 @@ class Op2ByDimSpec extends BaseSpec {
 //      )
     }
   }
+
+  describe("shouldEqual") {}
 }

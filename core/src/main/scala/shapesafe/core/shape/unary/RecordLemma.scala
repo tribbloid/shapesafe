@@ -52,5 +52,21 @@ object RecordLemma {
         newName(to -> v.head)
       }
     }
+
+//    implicit def consEmptyName[
+//        TI <: HList,
+//        TO <: HList,
+//        HI <: UB_->>
+//    ](
+//        implicit
+//        consTail: TI =>> TO,
+//        newName: NewNameAppender.Case[(TO, HI)]
+//    ): (HI :: TI) =>> newName.Out = {
+//      forAll[HI :: TI].=>> { v =>
+//        val ti = v.tail
+//        val to = consTail(ti)
+//        newName(to -> v.head)
+//      }
+//    }
   }
 }

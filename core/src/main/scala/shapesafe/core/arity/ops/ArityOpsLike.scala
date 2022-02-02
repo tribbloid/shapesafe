@@ -1,13 +1,14 @@
 package shapesafe.core.arity.ops
 
 import ai.acyclic.graph.commons.HasOuter
+import shapesafe.core.Const
 import shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import shapesafe.core.arity.{Arity, ArityType}
 import shapesafe.core.axis.OldNameUpdaters
-import shapesafe.core.debugging.Expressions
-import shapesafe.core.shape.Shape
+import shapesafe.core.debugging.{DebugConst, Expressions}
 import shapesafe.core.shape.binary.Op2ByDim
 import shapesafe.core.shape.unary.AccumulateByName
+import shapesafe.core.shape.{LeafShape, Shape}
 import singleton.ops
 
 trait ArityOpsLike extends HasArity {
@@ -40,19 +41,35 @@ trait ArityOpsLike extends HasArity {
 
     object _ReduceByName extends AccumulateByName with _HasOuter {
 
-      val oldNameUpdater: Updaters.Squasher.type = Updaters.Squasher
+      val oldNameUpdater: Updaters.Reducer.type = Updaters.Reducer
 
       type _Unary = Expressions.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
-    object _Op2ByDim extends Op2ByDim with _HasOuter {
+    object _Op2ByDim_Strict extends Op2ByDim with _HasOuter {
+
       override val op: Infix.this.Op = Infix.this.op
 
-      type _Binary = Expressions.Op2ByDim[Op#Debug[Unit, Unit]#_DebugSymbol]
+      override type _ExprProto = Expressions.Op2ByDim_Strict[Op#Debug[Unit, Unit]#_DebugSymbol]
+
+      override type Iff[A <: LeafShape, B <: LeafShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
+
+      override type _RefuteProto = "Dimension mismatch"
+    }
+
+    object _Op2ByDim_DropLeft extends Op2ByDim with _HasOuter {
+      override val op: Infix.this.Op = Infix.this.op
+
+      override type _ExprProto = Expressions.Op2ByDim_DropLeft[Op#Debug[Unit, Unit]#_DebugSymbol]
+
+      override type Iff[_ <: LeafShape, _ <: LeafShape] = Const.True
+
+      override type _RefuteProto = DebugConst.INTERNAL_ERROR.type
     }
 
     // part of the API
 
+    // TODO: should it be "foldByName"? Underlying Op may not be monoidal
     def reduceByName[S1 <: Shape](s1: S1) = {
       _ReduceByName.On(s1.shapeType).^
     }
@@ -61,14 +78,17 @@ trait ArityOpsLike extends HasArity {
     }
 
     def applyByDim[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
-      _Op2ByDim.On(s1.shapeType, s2.shapeType).^
+      _Op2ByDim_Strict.On[s1._ShapeType, s2._ShapeType](s1.shapeType, s2.shapeType).^
+    }
+
+    def applyByDimDropLeft[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
+      _Op2ByDim_DropLeft.On[S1#_ShapeType, S2#_ShapeType](s1.shapeType, s2.shapeType).^
     }
   }
 
   class InfixImpl[OP <: Op2Like](val op: OP) extends Infix {
 
     type Op = OP
-
   }
 
 //  object :+ extends Op2[ops.+] with Infix

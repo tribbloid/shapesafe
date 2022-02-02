@@ -1,20 +1,54 @@
 package shapesafe.core.shape.binary
 
-import shapesafe.core.arity.ArityType
-import shapesafe.core.arity.binary.Op2Like
-import shapesafe.core.debugging.HasDebugSymbol
-import shapesafe.core.shape.unary.RecordLemma
-import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
+import shapesafe.core.XString
+import shapesafe.core.arity.ArityType
+import shapesafe.core.arity.binary.Op2Like
+import shapesafe.core.debugging.{HasDebugSymbol, Reporters}
+import shapesafe.core.shape.unary.RecordLemma
+import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
+import shapesafe.m.viz.VizCTSystem.EmitError
 
 trait Op2ByDim {
 
   val op: Op2Like
-  type _Binary <: HasDebugSymbol.ExprOn2
+  type _ExprProto <: HasDebugSymbol.ExprOn2
 
-  // all names must be distinctive - no duplication allowed
+  type Iff[_ <: LeafShape, _ <: LeafShape]
+
+  type _RefuteProto <: XString
+
+  class IffRelay[P1 <: LeafShape, P2 <: LeafShape]
+
+  trait IffRelay_Imp0 {
+
+    implicit def refute[
+        P1 <: LeafShape,
+        P2 <: LeafShape,
+        MSG
+    ](
+        implicit
+        refute0: Reporters.ForShape.Refute0[_On[P1, P2], MSG],
+        msg: EmitError[MSG]
+    ): IffRelay[P1, P2] =
+      ???
+  }
+
+  object IffRelay extends IffRelay_Imp0 {
+
+    implicit def prove[
+        P1 <: LeafShape,
+        P2 <: LeafShape
+    ](
+        implicit
+        iff: Iff[P1, P2]
+    ): IffRelay[P1, P2] = {
+      new IffRelay[P1, P2]
+    }
+  }
+
   trait _On[
       S1 <: ShapeType,
       S2 <: ShapeType
@@ -23,10 +57,12 @@ trait Op2ByDim {
 
     override def outer: Op2ByDim.this.type = Op2ByDim.this
 
-    def s1: S1 with ShapeType
-    def s2: S2 with ShapeType
+    final override type Expr = _ExprProto#Apply[S1, S2]
 
-    override type Expr = _Binary#Apply[S1, S2]
+    final override type _Refute = _RefuteProto
+
+    def s1: S1
+    def s2: S2
   }
 
   object _On {
@@ -43,6 +79,7 @@ trait Op2ByDim {
         implicit
         lemma1: S1 |- P1,
         lemma2: S2 |- P2,
+        iffRelay: IffRelay[P1, P2],
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
         toShape: _Lemma.ToShape.Case[HO]
@@ -63,8 +100,8 @@ trait Op2ByDim {
       S1 <: ShapeType,
       S2 <: ShapeType
   ](
-      override val s1: S1 with ShapeType,
-      override val s2: S2 with ShapeType
+      override val s1: S1,
+      override val s2: S2
   ) extends _On[S1, S2] {}
 
   // TODO: now sure if it is too convoluted, should it extends BinaryIndexingFn?

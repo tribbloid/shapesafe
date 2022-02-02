@@ -16,7 +16,7 @@ trait ExpressionsLike {
   trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
   trait RequireDistinct[A]
-  trait GetSubscript[A, B]
+  trait Select1[A, B]
   trait Reorder[A, B]
 
   import singleton.ops.+
@@ -27,7 +27,10 @@ trait ExpressionsLike {
   trait ReduceByName[O] extends ExprOn1 {
     type _DebugSymbol = "ReduceByName[" + O + "]"
   }
-  trait Op2ByDim[O] extends ExprOn2 {
-    type _DebugSymbol = "Op2PerDim[" + O + "]"
+  trait Op2ByDim_Strict[O] extends ExprOn2 {
+    type _DebugSymbol = "Op2ByDim_Strict[" + O + "]"
+  }
+  trait Op2ByDim_DropLeft[O] extends ExprOn2 {
+    type _DebugSymbol = "Op2ByDim_DropRight[" + O + "]"
   }
 }

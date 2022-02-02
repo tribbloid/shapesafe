@@ -2,7 +2,7 @@ package shapesafe.core.shape
 
 import shapesafe.BaseSpec
 import shapesafe.core.shape.binary.OuterProduct
-import shapesafe.core.shape.unary.RequireDistinct
+import shapesafe.core.shape.unary.RequireDistinctNames
 
 class UncheckedSpec extends BaseSpec {
 
@@ -10,7 +10,7 @@ class UncheckedSpec extends BaseSpec {
 
     it("in Conjecture 1") {
 
-      val conj = RequireDistinct(Unchecked)
+      val conj = RequireDistinctNames(Unchecked)
 
       val evaled = conj.^.eval.shapeType
 

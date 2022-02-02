@@ -4,7 +4,7 @@ import shapesafe.core.shape.{Names, Shape}
 
 trait VectorOps extends HasShape {
 
-  import shapesafe.core.shape.Const._
+  import shapesafe.core.Const._
 
   def dot[THAT <: Shape](that: THAT) = {
     val s1 = shape :<<= i

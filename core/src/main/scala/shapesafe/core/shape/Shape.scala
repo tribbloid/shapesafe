@@ -64,9 +64,9 @@ trait Shape extends VectorOps with MatrixOps {
     */
   object namedBy {
 
-    def apply[N <: Names](newNames: N): ^[ZipWithNames[_ShapeType, N]] = {
+    def apply[N <: Names](newNames: N): ^[GiveNames[_ShapeType, N]] = {
 
-      new ZipWithNames[_ShapeType, N](shapeType.^, newNames).^
+      new GiveNames[_ShapeType, N](shapeType.^, newNames).^
     }
   }
 
@@ -81,7 +81,7 @@ trait Shape extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[ZipWithNames[_ShapeType, lemma.Out]] = {
+    ): ^[GiveNames[_ShapeType, lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
@@ -113,40 +113,39 @@ trait Shape extends VectorOps with MatrixOps {
 
   def einSum: EinSumOp[_ShapeType] = EinSumOp(shapeType)
 
-  def contract[N <: Names](names: N): ^[Select[CheckEinSum[_ShapeType], N]] = {
+  def contract[N <: Names](names: N): ^[Rearrange[CheckEinSum[_ShapeType], N]] = {
 
     einSum.-->(names)
   }
 
   object select1 {
 
-    def apply[T <: Index](v: T): ^[GetSubscript[_ShapeType, T]] = {
-      GetSubscript(shapeType, v).^
+    def apply[T <: Index](v: T): ^[Select1[_ShapeType, T]] = {
+      Select1(shapeType, v).^
     }
 
     def apply(i: Nat)(
         implicit
         asOp: NatAsOp[i.N]
-    ): ^[GetSubscript[_ShapeType, Index.Left[i.N, asOp.OutInt]]] = {
+    ): ^[Select1[_ShapeType, Index.Left[i.N, asOp.OutInt]]] = {
 
       apply(Index.Left(i))
     }
 
-    def apply(w: Witness.Lt[String]): ^[GetSubscript[_ShapeType, Index.Name[w.T]]] = {
+    def apply(w: Witness.Lt[String]): ^[Select1[_ShapeType, Index.Name[w.T]]] = {
 
       apply(Index.Name(w))
     }
   }
 
-  def selectBy[II <: IndicesMagnet](indices: II): ^[Select[RequireDistinct[_ShapeType], II]] = {
+  def rearrangeBy[II <: IndicesMagnet](indices: II): ^[Rearrange[_ShapeType, II]] = {
 
-    val distinct = RequireDistinct(shapeType)
-    val result = Select(distinct, indices)
+    val result = Rearrange(shapeType, indices)
 
     result.^
   }
 
-  object select extends SingletonProductArgs {
+  object rearrange extends SingletonProductArgs {
 
     def applyProduct[H1 <: HList, H2 <: HList](
         v: H1
@@ -154,11 +153,11 @@ trait Shape extends VectorOps with MatrixOps {
         implicit
         reverse: Reverse.Aux[H1, H2],
         lemma: Names.FromLiterals.Case[H2]
-    ): ^[Select[RequireDistinct[_ShapeType], lemma.Out]] = {
+    ): ^[Rearrange[_ShapeType, lemma.Out]] = {
 
       val out = lemma.apply(reverse(v))
 
-      selectBy(out)
+      rearrangeBy(out)
     }
   }
 
@@ -168,14 +167,22 @@ trait Shape extends VectorOps with MatrixOps {
 
   def flattenByName = reduceByName(Ops.:*)
 
-  def applyPerDim(
+  def applyByDim(
       infix: Ops.Infix,
       that: Shape
-  ) = infix.applyByDim(this, that)
+  ): ^[infix._Op2ByDim_Strict.On[this._ShapeType, that._ShapeType]] =
+    infix.applyByDim(this, that)
+
+  def applyByDimDropLeft(
+      infix: Ops.Infix,
+      that: Shape
+  ): ^[infix._Op2ByDim_DropLeft.On[this._ShapeType, that._ShapeType]] =
+    infix.applyByDimDropLeft(this, that)
 
   def requireEqual(
       that: Shape
-  ): ^[Ops.==!._Op2ByDim.On[_ShapeType, that._ShapeType]] = applyPerDim(Ops.==!, that)
+  ): ^[Ops.==!._Op2ByDim_DropLeft.On[this._ShapeType, that._ShapeType]] =
+    Ops.==!.applyByDimDropLeft(this, that)
 }
 
 object Shape extends Shape with ApplyLiterals.ToShape {

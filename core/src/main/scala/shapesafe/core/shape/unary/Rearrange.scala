@@ -6,7 +6,7 @@ import shapesafe.core.debugging.{Expressions, Reporters}
 import shapesafe.core.shape._
 import shapesafe.m.viz.VizCTSystem.EmitError
 
-case class Select[ // last step of einsum, contract, transpose, etc.
+case class Rearrange[ // last step of einsum, contract, transpose, etc.
     S1 <: ShapeType,
     II <: IndicesMagnet
 ](
@@ -31,15 +31,15 @@ trait Reorder_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[Select[P1, II], MSG],
+      refute0: Reporters.ForShape.Refute0[Rearrange[P1, II], MSG],
       msg: EmitError[MSG]
-  ): Select[S1, II] |- LeafShape = {
+  ): Rearrange[S1, II] |- LeafShape = {
     ???
   }
 
 }
 
-object Select extends Reorder_Imp0 {
+object Rearrange extends Reorder_Imp0 {
 
   import ProveShape._
 
@@ -51,10 +51,10 @@ object Select extends Reorder_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      lemma2: Premise.Case[Select[P1, II#AsIndices]]
-  ): Select[S1, II] |- lemma2.Out = {
+      lemma2: Premise.Case[Rearrange[P1, II#AsIndices]]
+  ): Rearrange[S1, II] |- lemma2.Out = {
 
-    forAll[Select[S1, II]].=>> { v =>
+    forAll[Rearrange[S1, II]].=>> { v =>
       val p1: P1 = lemma1.instanceFor(v.s1)
       val vv = v.copy(s1 = p1, indices = v.indices.asIndices: II#AsIndices)
 
@@ -62,13 +62,13 @@ object Select extends Reorder_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Select[_, _], StaticShape] {
+  object Premise extends Poly1Base[Rearrange[_, _], StaticShape] {
 
     implicit def eye[
         P1 <: StaticShape
     ] = {
 
-      forAll[Select[P1, Indices.Eye]].=>> { v =>
+      forAll[Rearrange[P1, Indices.Eye]].=>> { v =>
         StaticShape.Eye
       }
     }
@@ -81,13 +81,13 @@ object Select extends Reorder_Imp0 {
         O <: Axis
     ](
         implicit
-        forTail: Select[P1, II_-] |- OO_-,
-        forHead: GetSubscript.Premise.Auxs.=>>[GetSubscript[P1, I], O]
+        forTail: Rearrange[P1, II_-] |- OO_-,
+        forHead: Select1.Premise.Auxs.=>>[Select1[P1, I], O]
     ) = {
-      forAll[Select[P1, Indices.><[II_-, I]]].=>> { v =>
+      forAll[Rearrange[P1, Indices.><[II_-, I]]].=>> { v =>
         val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
-        val head: O = forHead(GetSubscript(v.s1, v.indices.head))
+        val head: O = forHead(Select1(v.s1, v.indices.head))
 
         tail.^ _and head
       }

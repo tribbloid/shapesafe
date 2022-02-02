@@ -1,10 +1,10 @@
 package shapesafe.core.shape.ops
 
-import shapesafe.core.shape.Shape
+import shapesafe.core.shape.{Index, Indices, Shape}
 
 trait MatrixOps extends HasShape {
 
-  import shapesafe.core.shape.Const._
+  import shapesafe.core.Const._
 
   def matMul[THAT <: Shape](that: THAT) = {
     val s1 = shape :<<= ij
@@ -17,7 +17,11 @@ trait MatrixOps extends HasShape {
     matMul[that.type](that)
   }
 
-//  def transpose = {
-//    val s1 = shape :<<=
-//  }
+  def transpose = {
+    (shape :<<=* ("", "")).rearrangeBy(Indices & Index.Left(1) & Index.Left(0))
+  }
+
+  def `^T` = {
+    transpose
+  }
 }

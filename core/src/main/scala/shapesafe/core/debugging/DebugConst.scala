@@ -3,7 +3,7 @@ package shapesafe.core.debugging
 import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
-object DebugUtil {
+object DebugConst {
 
   type StrOr_???[T1] = ITE[
     IsString[T1],
@@ -52,4 +52,6 @@ object DebugUtil {
 
   val FROM1 = Witness("\n\n... with 1 prior >\n\n")
   val FROM2 = Witness("\n\n... with 2 priors >\n\n")
+
+  val INTERNAL_ERROR = "[INTERNAL ERROR] Please submit a bug report using the following expression ..."
 }
