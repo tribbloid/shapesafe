@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-object Expressions extends ExpressionsLike {
+object Notations extends NotationsLike {
 
   trait +[A, B] extends HasDebugSymbol {
     type _DebugSymbol = " + "

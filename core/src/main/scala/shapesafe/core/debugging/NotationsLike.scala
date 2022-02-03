@@ -2,7 +2,7 @@ package shapesafe.core.debugging
 
 import shapesafe.core.debugging.HasDebugSymbol.{ExprOn1, ExprOn2}
 
-trait ExpressionsLike {
+trait NotationsLike {
 
 //  type Peek[T <: CanPeek] = T#_Peek // with T
 
@@ -15,7 +15,7 @@ trait ExpressionsLike {
 
   trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
-  trait RequireDistinct[A]
+  trait RequireDistinctName[A]
   trait Select1[A, B]
   trait Reorder[A, B]
 

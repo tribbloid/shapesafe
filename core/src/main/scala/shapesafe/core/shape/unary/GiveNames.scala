@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
-import shapesafe.core.debugging.{Expressions, Reporters}
+import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
 import shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -14,7 +14,7 @@ case class GiveNames[
     newNames: N
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.:<<=[S1#Expr, N#Expr]
+  override type Notation = Notations.:<<=[S1#Notation, N#Notation]
 
   override type _Refute = "Dimension mismatch"
 }

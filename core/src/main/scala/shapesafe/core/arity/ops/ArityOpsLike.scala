@@ -5,7 +5,7 @@ import shapesafe.core.Const
 import shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import shapesafe.core.arity.{Arity, ArityType}
 import shapesafe.core.axis.OldNameUpdaters
-import shapesafe.core.debugging.{DebugConst, Expressions}
+import shapesafe.core.debugging.{DebugConst, Notations}
 import shapesafe.core.shape.binary.Op2ByDim
 import shapesafe.core.shape.unary.AccumulateByName
 import shapesafe.core.shape.{LeafShape, Shape}
@@ -36,23 +36,23 @@ trait ArityOpsLike extends HasArity {
 
       val oldNameUpdater: Updaters.Appender.type = Updaters.Appender
 
-      type _Unary = Expressions.AppendByName[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Unary = Notations.AppendByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
     object _ReduceByName extends AccumulateByName with _HasOuter {
 
       val oldNameUpdater: Updaters.Reducer.type = Updaters.Reducer
 
-      type _Unary = Expressions.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Unary = Notations.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
     }
 
     object _Op2ByDim_Strict extends Op2ByDim with _HasOuter {
 
       override val op: Infix.this.Op = Infix.this.op
 
-      override type _ExprProto = Expressions.Op2ByDim_Strict[Op#Debug[Unit, Unit]#_DebugSymbol]
+      override type _ExprProto = Notations.Op2ByDim_Strict[Op#Debug[Unit, Unit]#_DebugSymbol]
 
-      override type Iff[A <: LeafShape, B <: LeafShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
+      override type Condition[A <: LeafShape, B <: LeafShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
 
       override type _RefuteProto = "Dimension mismatch"
     }
@@ -60,9 +60,9 @@ trait ArityOpsLike extends HasArity {
     object _Op2ByDim_DropLeft extends Op2ByDim with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      override type _ExprProto = Expressions.Op2ByDim_DropLeft[Op#Debug[Unit, Unit]#_DebugSymbol]
+      override type _ExprProto = Notations.Op2ByDim_DropLeft[Op#Debug[Unit, Unit]#_DebugSymbol]
 
-      override type Iff[_ <: LeafShape, _ <: LeafShape] = Const.True
+      override type Condition[_ <: LeafShape, _ <: LeafShape] = Const.True
 
       override type _RefuteProto = DebugConst.INTERNAL_ERROR.type
     }
@@ -92,38 +92,38 @@ trait ArityOpsLike extends HasArity {
   }
 
 //  object :+ extends Op2[ops.+] with Infix
-  object :+ extends InfixImpl(Op2[ops.+, Expressions.+])
+  object :+ extends InfixImpl(Op2[ops.+, Notations.+])
   type :+[X <: ArityType, Y <: ArityType] = :+.On[X, Y]
 
-  object :- extends InfixImpl(Op2[ops.-, Expressions.-])
+  object :- extends InfixImpl(Op2[ops.-, Notations.-])
   type :-[X <: ArityType, Y <: ArityType] = :-.On[X, Y]
 
-  object :* extends InfixImpl(Op2[ops.*, Expressions.*])
+  object :* extends InfixImpl(Op2[ops.*, Notations.*])
   type :*[X <: ArityType, Y <: ArityType] = :*.On[X, Y]
 
-  object :/ extends InfixImpl(Op2[ops./, Expressions./])
+  object :/ extends InfixImpl(Op2[ops./, Notations./])
   type :/[X <: ArityType, Y <: ArityType] = :/.On[X, Y]
 
   object ==! extends InfixImpl(RequireEqual)
   type ==![X <: ArityType, Y <: ArityType] = ==!.On[X, Y]
 
-  object !=! extends InfixImpl(Require2[ops.!=, Expressions.!=])
+  object !=! extends InfixImpl(Require2[ops.!=, Notations.!=])
   type !=![X <: ArityType, Y <: ArityType] = !=!.On[X, Y]
 
-  object `<!` extends InfixImpl(Require2[ops.<, Expressions.<])
+  object `<!` extends InfixImpl(Require2[ops.<, Notations.<])
   type `<!`[X <: ArityType, Y <: ArityType] = `<!`.On[X, Y]
 
-  object >! extends InfixImpl(Require2[ops.>, Expressions.>])
+  object >! extends InfixImpl(Require2[ops.>, Notations.>])
   type >![X <: ArityType, Y <: ArityType] = >!.On[X, Y]
 
-  object <=! extends InfixImpl(Require2[ops.<=, Expressions.<=])
+  object <=! extends InfixImpl(Require2[ops.<=, Notations.<=])
   type <=![X <: ArityType, Y <: ArityType] = <=!.On[X, Y]
 
-  object >=! extends InfixImpl(Require2[ops.>=, Expressions.>=])
+  object >=! extends InfixImpl(Require2[ops.>=, Notations.>=])
   type >=![X <: ArityType, Y <: ArityType] = >=!.On[X, Y]
 }
 
 object ArityOpsLike {
 
-  val RequireEqual: Require2.Impl[ops.==, Expressions.==] = Require2[ops.==, Expressions.==]
+  val RequireEqual: Require2.Impl[ops.==, Notations.==] = Require2[ops.==, Notations.==]
 }

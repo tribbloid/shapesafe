@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.core.Poly1Base
 import shapesafe.core.axis.Axis
-import shapesafe.core.debugging.{Expressions, Reporters}
+import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape._
 import shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -14,7 +14,7 @@ case class Rearrange[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.Reorder[S1#Expr, indices.AsIndices#Expr]
+  override type Notation = Notations.Reorder[S1#Notation, indices.AsIndices#Notation]
 
   override type _Refute = "Indices not found"
 }

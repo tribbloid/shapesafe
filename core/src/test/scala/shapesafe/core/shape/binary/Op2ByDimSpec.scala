@@ -70,21 +70,22 @@ abstract class Op2ByDimSpec extends BaseSpec {
     }
   }
 
-  describe(Ops.:+._Op2ByDim_Strict.IffRelay.getClass.getSimpleName) {
-
-    it("will FAIL if instance cannot be summoned") {
-
-      val s1 = Shape(2)
-      val s2 = Shape(3, 4)
-
-      type TT = Ops.:+._Op2ByDim_Strict.IffRelay[s1._ShapeType, s2._ShapeType]
-
-      shouldNotCompile(
-        """implicitly[TT]""",
-        """.*(\QDimension mismatch\E).*"""
-      )
-    }
-  }
+  // TODO: should be a test in CanRefute or Refutes
+//  describe(Ops.:+._Op2ByDim_Strict.IffRelay.getClass.getSimpleName) {
+//
+//    it("will FAIL if instance cannot be summoned") {
+//
+//      val s1 = Shape(2)
+//      val s2 = Shape(3, 4)
+//
+//      type TT = Ops.:+._Op2ByDim_Strict.IffRelay[s1._ShapeType, s2._ShapeType]
+//
+//      shouldNotCompile(
+//        """implicitly[TT]""",
+//        """.*(\QDimension mismatch\E).*"""
+//      )
+//    }
+//  }
 
   describe("applyByDim will FAIL if") {
     // TODO: is this really the best behaviour?

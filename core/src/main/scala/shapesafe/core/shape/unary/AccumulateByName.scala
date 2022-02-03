@@ -25,7 +25,7 @@ trait AccumulateByName {
 
     def s1: S1 with ShapeType
 
-    override type Expr = _Unary#Apply[S1]
+    override type Notation = _Unary#Apply[S1]
   }
 
   object _On {

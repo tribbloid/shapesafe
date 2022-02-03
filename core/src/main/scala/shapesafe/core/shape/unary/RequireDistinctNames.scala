@@ -1,6 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.debugging.{Expressions, Reporters}
+import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
 import shapesafe.m.viz.VizCTSystem.EmitError
 
@@ -11,12 +11,12 @@ case class RequireDistinctNames[
     s1: S1 with ShapeType
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.RequireDistinct[S1#Expr]
+  override type Notation = Notations.RequireDistinctName[S1#Notation]
 
   override type _Refute = "Names has duplicates"
 }
 
-trait RequireDistinct_Imp0 {
+trait RequireDistinctName_Imp0 {
 
   import ProveShape._
 
@@ -25,16 +25,16 @@ trait RequireDistinct_Imp0 {
       P1 <: LeafShape,
       MSG
   ](
-     implicit
-     lemma: S1 |- P1,
-     refute0: Reporters.ForShape.Refute0[RequireDistinctNames[P1], MSG],
-     msg: EmitError[MSG]
+      implicit
+      lemma: S1 |- P1,
+      refute0: Reporters.ForShape.Refute0[RequireDistinctNames[P1], MSG],
+      msg: EmitError[MSG]
   ): RequireDistinctNames[S1] |- LeafShape = {
     ???
   }
 }
 
-object RequireDistinctNames extends RequireDistinct_Imp0 {
+object RequireDistinctNames extends RequireDistinctName_Imp0 {
 
   import ProveShape._
 

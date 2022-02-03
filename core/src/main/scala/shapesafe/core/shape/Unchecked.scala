@@ -5,7 +5,7 @@ import shapeless.Nat
 // TODO: should be "Wildcard"?
 trait Unchecked extends LeafShape {
 
-  override type Expr = "_UNCHECKED_"
+  override type Notation = "_UNCHECKED_"
 
   final override type NatNumOfDimensions = Nat
 }

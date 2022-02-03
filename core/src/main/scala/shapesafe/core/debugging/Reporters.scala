@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.debugging.DebugConst.{Refute, Stripe}
+import shapesafe.core.debugging.DebugConst.Stripe
 import shapesafe.core.Poly1Base
 import shapesafe.core.logic.Theory
 import shapesafe.m.viz.PeekCT
@@ -21,13 +21,13 @@ class Reporters[
     import shapesafe.core.debugging.DebugConst._
     import scope._
 
-    type ExprOf[T <: CanPeek] = T#Expr
+    type ExprOf[T <: CanPeek] = T#Notation
 
     trait Step1_Imp3 extends Poly1Base[Iub, XString] {
 
       implicit def raw[A <: Iub, VA <: XString](
           implicit
-          vizA: PeekCTAux[A#Expr, VA],
+          vizA: PeekCTAux[A#Notation, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
         forAll[A].=>>(_ => mk.value)
@@ -43,7 +43,7 @@ class Reporters[
       ](
           implicit
           lemma: A |- S,
-          vizA: PeekCTAux[A#Expr, VA],
+          vizA: PeekCTAux[A#Notation, VA],
           vizS: PeekCTAux[ExprOf[S], VS],
           mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
@@ -118,7 +118,7 @@ object Reporters {
 
   trait Refutes {
 
-    type TryStripe
+    type WHEN_PROVING
 
     type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
 
@@ -126,24 +126,53 @@ object Reporters {
 
       implicit def get[I <: _IUB, V <: String](
           implicit
-          expr2Str: PeekCTAux[I#Expr, V]
+          expr2Str: PeekCTAux[I#Notation, V]
       ): I =>> (
-        Refute[I] +
-          TryStripe +
+        I#Refute +
+          WHEN_PROVING +
           V
       ) = forAll[I].=>> { _ =>
         null
+      }
+    }
+
+    class NotFound[T, R <: CanRefute]
+
+    trait NotFound_Imp0 {
+
+      implicit def refute[
+          T,
+          R <: CanRefute,
+          MSG
+      ](
+          implicit
+          refute0: Refute0[R, MSG],
+          msg: EmitError[MSG]
+      ): NotFound[T, R] =
+        ???
+    }
+
+    object NotFound extends NotFound_Imp0 {
+
+      implicit def prove[
+          T,
+          R <: CanRefute
+      ](
+          implicit
+          iff: T
+      ): NotFound[T, R] = {
+        new NotFound[T, R]
       }
     }
   }
 
   object ForArity extends Refutes {
 
-    type TryStripe = "\n\n" + Stripe["... when proving arity"]
+    type WHEN_PROVING = "\n\n" + Stripe["... when proving arity"]
   }
 
   object ForShape extends Refutes {
 
-    type TryStripe = "\n\n" + Stripe["... when proving shape"]
+    type WHEN_PROVING = "\n\n" + Stripe["... when proving shape"]
   }
 }

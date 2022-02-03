@@ -1,27 +1,17 @@
 package shapesafe.core.debugging
 
 import shapeless.Witness
-import singleton.ops.{+, ITE, IsString}
+import singleton.ops.+
 
 object DebugConst {
 
-  type StrOr_???[T1] = ITE[
-    IsString[T1],
-    T1,
-    "???"
-  ]
-
   // TODO: is it possible and better?
   //  also need time for https://github.com/fthomas/singleton-ops/issues/182
-//  type StrOrRaw[T1] = ITE[
-//    IsString[T1],
-//    T1,
-//    TypeToLiteral.Type.Case[T1]
-//  ]
-
-  type Refute[T <: CanRefute] = StrOr_???[
-    T#_Refute
-  ]
+  //  type StrOrRaw[T1] = ITE[
+  //    IsString[T1],
+  //    T1,
+  //    TypeToLiteral.Type.Case[T1]
+  //  ]
 
   val shades_+ = Witness(" ░▒▓")
 

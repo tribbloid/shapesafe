@@ -61,7 +61,7 @@ object Arity {
 
     override type _Axis = ^[A]
 
-    override type Expr = A#Expr
+    override type Notation = A#Notation
   }
 
   implicit def unbox[A <: ArityType](v: Aux[A]): A = v.arityType

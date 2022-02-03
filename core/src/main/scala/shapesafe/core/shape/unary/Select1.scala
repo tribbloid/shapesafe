@@ -3,7 +3,7 @@ package shapesafe.core.shape.unary
 import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
-import shapesafe.core.debugging.{Expressions, Reporters}
+import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
 import shapesafe.core.{Poly1Base, XString}
@@ -20,7 +20,7 @@ case class Select1[
     index: I
 ) extends Conjecture1.^[S1] {
 
-  override type Expr = Expressions.Select1[S1#Expr, I#Expr]
+  override type Notation = Notations.Select1[S1#Notation, I#Notation]
 
   override type _Refute = "Index not found"
 }

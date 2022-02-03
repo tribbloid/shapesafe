@@ -34,7 +34,7 @@ class ShapeReportersSpec extends BaseSpec {
           """
             |_UNCHECKED_
             |
-            |  :=  RequireDistinct[_UNCHECKED_]
+            |  :=  RequireDistinctName[_UNCHECKED_]
             |""".stripMargin.trim
       )
     }

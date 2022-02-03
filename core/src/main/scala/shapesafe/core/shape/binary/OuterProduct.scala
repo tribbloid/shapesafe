@@ -1,7 +1,7 @@
 package shapesafe.core.shape.binary
 
 import shapesafe.core.axis.Axis
-import shapesafe.core.debugging.{Expressions, Reporters}
+import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape.{LeafShape, ShapeType, StaticShape}
 import shapesafe.m.viz.VizCTSystem.EmitError
@@ -16,7 +16,7 @@ case class OuterProduct[
     s2: S2
 ) extends Conjecture2.^[S1, S2] {
 
-  override type Expr = Expressions.><[S1#Expr, S2#Expr]
+  override type Notation = Notations.><[S1#Notation, S2#Notation]
 
   override type _Refute = "Cannot compute outer product"
 }

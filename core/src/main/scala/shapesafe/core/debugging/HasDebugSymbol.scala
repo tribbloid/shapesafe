@@ -10,13 +10,13 @@ object HasDebugSymbol {
 
     trait On[A] {}
 
-    type Apply[AA <: CanPeek] = On[AA#Expr]
+    type Apply[AA <: CanPeek] = On[AA#Notation]
   }
   trait ExprOn2 extends HasDebugSymbol {
 
     trait On[A, B] {}
 
-    type Apply[AA <: CanPeek, BB <: CanPeek] = On[AA#Expr, BB#Expr]
+    type Apply[AA <: CanPeek, BB <: CanPeek] = On[AA#Notation, BB#Notation]
   }
 
   trait Require extends HasDebugSymbol {

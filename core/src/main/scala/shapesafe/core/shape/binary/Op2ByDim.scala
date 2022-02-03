@@ -9,45 +9,15 @@ import shapesafe.core.arity.binary.Op2Like
 import shapesafe.core.debugging.{HasDebugSymbol, Reporters}
 import shapesafe.core.shape.unary.RecordLemma
 import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
-import shapesafe.m.viz.VizCTSystem.EmitError
 
 trait Op2ByDim {
 
   val op: Op2Like
   type _ExprProto <: HasDebugSymbol.ExprOn2
 
-  type Iff[_ <: LeafShape, _ <: LeafShape]
+  type Condition[_ <: LeafShape, _ <: LeafShape]
 
   type _RefuteProto <: XString
-
-  class IffRelay[P1 <: LeafShape, P2 <: LeafShape]
-
-  trait IffRelay_Imp0 {
-
-    implicit def refute[
-        P1 <: LeafShape,
-        P2 <: LeafShape,
-        MSG
-    ](
-        implicit
-        refute0: Reporters.ForShape.Refute0[_On[P1, P2], MSG],
-        msg: EmitError[MSG]
-    ): IffRelay[P1, P2] =
-      ???
-  }
-
-  object IffRelay extends IffRelay_Imp0 {
-
-    implicit def prove[
-        P1 <: LeafShape,
-        P2 <: LeafShape
-    ](
-        implicit
-        iff: Iff[P1, P2]
-    ): IffRelay[P1, P2] = {
-      new IffRelay[P1, P2]
-    }
-  }
 
   trait _On[
       S1 <: ShapeType,
@@ -57,7 +27,7 @@ trait Op2ByDim {
 
     override def outer: Op2ByDim.this.type = Op2ByDim.this
 
-    final override type Expr = _ExprProto#Apply[S1, S2]
+    final override type Notation = _ExprProto#Apply[S1, S2]
 
     final override type _Refute = _RefuteProto
 
@@ -79,7 +49,7 @@ trait Op2ByDim {
         implicit
         lemma1: S1 |- P1,
         lemma2: S2 |- P2,
-        iffRelay: IffRelay[P1, P2],
+        condition: Reporters.ForShape.NotFound[Condition[P1, P2], _On[P1, P2]],
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
         toShape: _Lemma.ToShape.Case[HO]

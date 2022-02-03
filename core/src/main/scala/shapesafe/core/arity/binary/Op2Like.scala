@@ -20,7 +20,7 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final override type _DebugSymbol = A1#_DebugSymbol + Debug[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
     // TODO: add Bracket
-    final override type Expr = Debug[A1#Expr, A2#Expr]
+    final override type Notation = Debug[A1#Notation, A2#Notation]
   }
 
   type On[
