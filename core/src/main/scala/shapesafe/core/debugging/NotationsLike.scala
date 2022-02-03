@@ -1,8 +1,8 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.debugging.HasDebugSymbol.{ExprOn1, ExprOn2}
-
 trait NotationsLike {
+
+  import NotationsLike._
 
 //  type Peek[T <: CanPeek] = T#_Peek // with T
 
@@ -15,22 +15,38 @@ trait NotationsLike {
 
   trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
+
   trait RequireDistinctName[A]
   trait Select1[A, B]
   trait Reorder[A, B]
 
-  import singleton.ops.+
+  trait AppendByName[O] extends Proto1 {
+//    type _NotationTxt = "AppendByName[" + O + "]"
+  }
+  trait ReduceByName[O] extends Proto1 {
+//    type _NotationTxt = "ReduceByName[" + O + "]"
+  }
+  trait Op2ByDim_Strict[O] extends Proto2 {
+//    type _NotationTxt = "Op2ByDim_Strict[" + O + "]"
+  }
+  trait Op2ByDim_DropLeft[O] extends Proto2 {
+//    type _NotationTxt = "Op2ByDim_DropRight[" + O + "]"
+  }
+}
 
-  trait AppendByName[O] extends ExprOn1 {
-    type _DebugSymbol = "AppendByName[" + O + "]"
+object NotationsLike {
+
+  trait Proto1 {
+
+    trait On[A] {}
+
+    type Apply[AA <: CanPeek] = On[AA#Notation]
   }
-  trait ReduceByName[O] extends ExprOn1 {
-    type _DebugSymbol = "ReduceByName[" + O + "]"
+  trait Proto2 {
+
+    trait On[A, B] {}
+
+    type Apply[AA <: CanPeek, BB <: CanPeek] = On[AA#Notation, BB#Notation]
   }
-  trait Op2ByDim_Strict[O] extends ExprOn2 {
-    type _DebugSymbol = "Op2ByDim_Strict[" + O + "]"
-  }
-  trait Op2ByDim_DropLeft[O] extends ExprOn2 {
-    type _DebugSymbol = "Op2ByDim_DropRight[" + O + "]"
-  }
+
 }

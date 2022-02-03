@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Utils.Op
 import shapesafe.core.arity._
-import shapesafe.core.debugging.{DebugConst, HasDebugSymbol}
+import shapesafe.core.debugging.{DebugConst, HasSymbolTxt}
 
 import scala.collection.mutable
 
@@ -21,7 +21,7 @@ object Require2 extends Require2_Imp0 {
 
   class Impl[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasDebugSymbol.Require
+      SS[A, B] <: HasSymbolTxt.HasNegation
   ](
       implicit
       sh: Utils.BoolSh[??]
@@ -30,7 +30,7 @@ object Require2 extends Require2_Imp0 {
     // TODO: this should supersedes AssertEqual
 
     override type Lemma[X1, X2] = ??[X1, X2]
-    override type Debug[A, B] = SS[A, B]
+    override type _NotationProto[A, B] = SS[A, B]
 
     import singleton.ops._
 
@@ -42,8 +42,8 @@ object Require2 extends Require2_Imp0 {
         a2: A2
     ) extends Conjecture2[A1, A2] {
 
-      override type _Refute =
-        DebugConst.REFUTE.T + A1#_DebugSymbol + SS[Unit, Unit]#Negation#_DebugSymbol + A2#_DebugSymbol
+      override type _RefuteTxt =
+        DebugConst.REFUTE.T + A1#SymbolTxt + SS[Unit, Unit]#Negation#SymbolTxt + A2#SymbolTxt
 
       override lazy val runtimeValue: Int = {
         val v1 = a1.runtimeValue
@@ -63,7 +63,7 @@ object Require2 extends Require2_Imp0 {
 
   def apply[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasDebugSymbol.Require
+      SS[A, B] <: HasSymbolTxt.HasNegation
   ](
       implicit
       sh: Utils.BoolSh[??]

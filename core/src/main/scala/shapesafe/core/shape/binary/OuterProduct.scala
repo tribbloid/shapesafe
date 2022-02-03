@@ -18,7 +18,7 @@ case class OuterProduct[
 
   override type Notation = Notations.><[S1#Notation, S2#Notation]
 
-  override type _Refute = "Cannot compute outer product"
+  override type _RefuteTxt = "Cannot compute outer product"
 }
 
 trait OuterProduct_Imp1 {

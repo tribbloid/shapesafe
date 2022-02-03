@@ -13,7 +13,7 @@ object Conjecture1 {
     type SS1 <: S1
   }
 
-  trait ^[S1 <: ShapeType] extends Conjecture1 {
+  trait On[S1 <: ShapeType] extends Conjecture1 {
 
     final type SS1 = S1
   }

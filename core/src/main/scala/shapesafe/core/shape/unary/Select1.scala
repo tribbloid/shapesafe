@@ -18,11 +18,11 @@ case class Select1[
 ](
     s1: S1 with ShapeType,
     index: I
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.On[S1] {
 
   override type Notation = Notations.Select1[S1#Notation, I#Notation]
 
-  override type _Refute = "Index not found"
+  override type _RefuteTxt = "Index not found"
 }
 
 trait Select1_Imp0 {

@@ -12,11 +12,11 @@ case class GiveNames[
 ](
     s1: S1 with ShapeType,
     newNames: N
-) extends Conjecture1.^[S1] {
+) extends Conjecture1.On[S1] {
 
   override type Notation = Notations.:<<=[S1#Notation, N#Notation]
 
-  override type _Refute = "Dimension mismatch"
+  override type _RefuteTxt = "Dimension mismatch"
 }
 
 trait GiveNames_Imp0 {

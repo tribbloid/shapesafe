@@ -2,10 +2,12 @@ package shapesafe.core.arity.binary
 
 import ai.acyclic.graph.commons.HasOuter
 import shapesafe.core.arity.{Arity, ArityConjecture, ArityType}
-import shapesafe.core.debugging.HasDebugSymbol
+import shapesafe.core.debugging.HasSymbolTxt
 import singleton.ops.+
 
-trait Op2Like extends Op2Like.DebuggingSupport {
+trait Op2Like {
+
+  type _NotationProto[_, _] <: HasSymbolTxt
 
   trait Conjecture2[
       A1 <: ArityType,
@@ -18,9 +20,8 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _DebugSymbol = A1#_DebugSymbol + Debug[Unit, Unit]#_DebugSymbol + A2#_DebugSymbol
-    // TODO: add Bracket
-    final override type Notation = Debug[A1#Notation, A2#Notation]
+    final override type _SymbolTxt = A1#SymbolTxt + _NotationProto[Unit, Unit]#SymbolTxt + A2#SymbolTxt
+    final override type Notation = _NotationProto[A1#Notation, A2#Notation]
   }
 
   type On[
@@ -47,25 +48,4 @@ trait Op2Like extends Op2Like.DebuggingSupport {
 
 }
 
-object Op2Like extends Op2Like_Imp0 {
-
-  trait DebuggingSupport {
-    self: Op2Like =>
-
-    type Debug[A1, A2] <: HasDebugSymbol
-//    implicit def debug[
-//        A1 <: Arity,
-//        A2 <: Arity,
-//        I1 <: Arity.HasInfo,
-//        I2 <: Arity.HasInfo
-//    ](
-//        implicit
-//        toInfo1: ProveArity.|-[A1, I1],
-//        toInfo2: ProveArity.|-[A2, I2],
-//        fail: FailOn[I1, I2]
-//    ): On[A1, A2] =>> Arity = ProveArity.forAll[On[A1, A2]].=>> {
-//      ???
-//    }
-  }
-
-}
+object Op2Like extends Op2Like_Imp0 {}

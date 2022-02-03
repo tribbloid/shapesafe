@@ -1,9 +1,15 @@
 package shapesafe.core.debugging
 
 import shapeless.Witness
-import singleton.ops.+
+import singleton.ops.{+, ITE, IsString}
 
 object DebugConst {
+
+  type StrOr_???[T1] = ITE[
+    IsString[T1],
+    T1,
+    "???"
+  ]
 
   // TODO: is it possible and better?
   //  also need time for https://github.com/fthomas/singleton-ops/issues/182

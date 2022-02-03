@@ -128,7 +128,7 @@ object Reporters {
           implicit
           expr2Str: PeekCTAux[I#Notation, V]
       ): I =>> (
-        I#Refute +
+        I#RefuteTxt +
           WHEN_PROVING +
           V
       ) = forAll[I].=>> { _ =>

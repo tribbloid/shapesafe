@@ -14,7 +14,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
         val ss = Shape & Arity(1) :<<- "a"
 
-        val rr = RequireDistinctNames(ss).^
+        val rr = RequireDistinctNames.On(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -22,7 +22,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
         val ss = Shape(1) :<<= (Names >< "a")
 
-        val rr = RequireDistinctNames(ss).^
+        val rr = RequireDistinctNames.On(ss).^
         assert(ss.eval == rr.eval)
       }
     }
@@ -33,7 +33,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
         val ss = Shape & Arity(1) :<<- "a" & Arity(2) :<<- "b"
 
-        val rr = RequireDistinctNames(ss).^
+        val rr = RequireDistinctNames.On(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -43,7 +43,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
         val sse = ss.eval
 
-        val rr = RequireDistinctNames(ss).^
+        val rr = RequireDistinctNames.On(ss).^
         assert(ss.eval == rr.eval)
       }
 
@@ -51,7 +51,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
         val ss = Shape(1, 2, 3) :<<= (Names >< "a" >< "b" >< "c")
 
-        val rr = RequireDistinctNames(ss).^
+        val rr = RequireDistinctNames.On(ss).^
         assert(ss.eval == rr.eval)
       }
     }
@@ -63,7 +63,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 //
 //      val ss = Shape & Arity(1) & Arity(2)
 //
-//      val rr = RequireDistinctNames(ss).^
+//      val rr = RequireDistinctN.On(ss).^
 //      assert(ss.eval == rr.eval)
 //    }
 //
@@ -71,7 +71,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 //
 //      val ss = Shape & Arity(1) & Arity(2) & Arity(3) :<<- "c"
 //
-//      val rr = RequireDistinctNames(ss).^
+//      val rr = RequireDistinctN.On(ss).^
 //      assert(ss.eval == rr.eval)
 //    }
 //  }
@@ -81,7 +81,7 @@ class RequireDistinctNamesSpec extends BaseSpec {
 
       val ss = Shape(1, 2, 3) :<<= (Names >< "a" >< "b" >< "a")
 
-      val rr = RequireDistinctNames(ss).^
+      val rr = RequireDistinctNames.On(ss).^
 
       shouldNotCompile(
         """rr.eval""",

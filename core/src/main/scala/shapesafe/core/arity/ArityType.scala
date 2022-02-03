@@ -1,11 +1,11 @@
 package shapesafe.core.arity
 
 import shapesafe.core.arity.Arity.^
-import shapesafe.core.debugging.{CanPeek, HasDebugSymbol}
+import shapesafe.core.debugging.{CanPeek, HasSymbolTxt}
 
 import scala.util.Try
 
-trait ArityType extends CanPeek with HasDebugSymbol {
+trait ArityType extends CanPeek with HasSymbolTxt {
 
   def runtimeValue: Int
   final lazy val runtimeValueTry: Try[Int] = Try(runtimeValue)

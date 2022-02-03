@@ -1,24 +1,24 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.axis.Axis.UB_->>
-import shapesafe.core.axis.RecordUpdater
-import shapesafe.core.debugging.HasDebugSymbol
-import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.{::, HList}
+import shapesafe.core.axis.Axis.UB_->>
+import shapesafe.core.axis.RecordUpdater
+import shapesafe.core.debugging.NotationsLike
+import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 
 trait AccumulateByName {
 
   import ProveShape._
 
-  type _Unary <: HasDebugSymbol.ExprOn1
+  type _Unary <: NotationsLike.Proto1
 
   val oldNameUpdater: RecordUpdater
 
   // all names must be distinctive - no duplication allowed
   trait _On[
       S1 <: ShapeType
-  ] extends Conjecture1.^[S1]
+  ] extends Conjecture1.On[S1]
       with HasOuter {
 
     override def outer: AccumulateByName.this.type = AccumulateByName.this

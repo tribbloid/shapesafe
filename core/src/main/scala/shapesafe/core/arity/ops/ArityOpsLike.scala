@@ -36,21 +36,21 @@ trait ArityOpsLike extends HasArity {
 
       val oldNameUpdater: Updaters.Appender.type = Updaters.Appender
 
-      type _Unary = Notations.AppendByName[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Unary = Notations.AppendByName[Op#_NotationProto[Unit, Unit]#SymbolTxt]
     }
 
     object _ReduceByName extends AccumulateByName with _HasOuter {
 
       val oldNameUpdater: Updaters.Reducer.type = Updaters.Reducer
 
-      type _Unary = Notations.ReduceByName[Op#Debug[Unit, Unit]#_DebugSymbol]
+      type _Unary = Notations.ReduceByName[Op#_NotationProto[Unit, Unit]#SymbolTxt]
     }
 
     object _Op2ByDim_Strict extends Op2ByDim with _HasOuter {
 
       override val op: Infix.this.Op = Infix.this.op
 
-      override type _ExprProto = Notations.Op2ByDim_Strict[Op#Debug[Unit, Unit]#_DebugSymbol]
+      override type _NotationProto = Notations.Op2ByDim_Strict[Op#_NotationProto[Unit, Unit]#SymbolTxt]
 
       override type Condition[A <: LeafShape, B <: LeafShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
 
@@ -60,7 +60,7 @@ trait ArityOpsLike extends HasArity {
     object _Op2ByDim_DropLeft extends Op2ByDim with _HasOuter {
       override val op: Infix.this.Op = Infix.this.op
 
-      override type _ExprProto = Notations.Op2ByDim_DropLeft[Op#Debug[Unit, Unit]#_DebugSymbol]
+      override type _NotationProto = Notations.Op2ByDim_DropLeft[Op#_NotationProto[Unit, Unit]#SymbolTxt]
 
       override type Condition[_ <: LeafShape, _ <: LeafShape] = Const.True
 

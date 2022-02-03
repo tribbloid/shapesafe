@@ -3,21 +3,21 @@ package shapesafe.core.shape.binary
 import ai.acyclic.graph.commons.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
-import shapesafe.core.XString
 import shapesafe.core.arity.ArityType
 import shapesafe.core.arity.binary.Op2Like
-import shapesafe.core.debugging.{HasDebugSymbol, Reporters}
+import shapesafe.core.debugging.{NotationsLike, Reporters}
 import shapesafe.core.shape.unary.RecordLemma
 import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
 
 trait Op2ByDim {
 
   val op: Op2Like
-  type _ExprProto <: HasDebugSymbol.ExprOn2
 
   type Condition[_ <: LeafShape, _ <: LeafShape]
 
-  type _RefuteProto <: XString
+  type _NotationProto <: NotationsLike.Proto2
+
+  type _RefuteProto
 
   trait _On[
       S1 <: ShapeType,
@@ -27,9 +27,9 @@ trait Op2ByDim {
 
     override def outer: Op2ByDim.this.type = Op2ByDim.this
 
-    final override type Notation = _ExprProto#Apply[S1, S2]
+    final override type Notation = _NotationProto#Apply[S1, S2]
 
-    final override type _Refute = _RefuteProto
+    final override type _RefuteTxt = _RefuteProto
 
     def s1: S1
     def s2: S2
