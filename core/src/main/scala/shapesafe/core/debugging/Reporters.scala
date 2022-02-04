@@ -136,9 +136,9 @@ object Reporters {
       }
     }
 
-    class NotFound[T, R <: CanRefute]
+    class NotFoundInfo[T, R <: CanRefute]
 
-    trait NotFound_Imp0 {
+    trait NotFoundInfo_Imp0 {
 
       implicit def refute[
           T,
@@ -148,11 +148,11 @@ object Reporters {
           implicit
           refute0: Refute0[R, MSG],
           msg: EmitError[MSG]
-      ): NotFound[T, R] =
+      ): NotFoundInfo[T, R] =
         ???
     }
 
-    object NotFound extends NotFound_Imp0 {
+    object NotFoundInfo extends NotFoundInfo_Imp0 {
 
       implicit def prove[
           T,
@@ -160,8 +160,8 @@ object Reporters {
       ](
           implicit
           iff: T
-      ): NotFound[T, R] = {
-        new NotFound[T, R]
+      ): NotFoundInfo[T, R] = {
+        new NotFoundInfo[T, R]
       }
     }
   }

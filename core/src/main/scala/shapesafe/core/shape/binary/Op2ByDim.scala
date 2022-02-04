@@ -13,7 +13,7 @@ trait Op2ByDim {
 
   val op: Op2Like
 
-  type Condition[_ <: LeafShape, _ <: LeafShape]
+  type Condition[_ <: StaticShape, _ <: StaticShape]
 
   type _NotationProto <: NotationsLike.Proto2
 
@@ -49,7 +49,7 @@ trait Op2ByDim {
         implicit
         lemma1: S1 |- P1,
         lemma2: S2 |- P2,
-        condition: Reporters.ForShape.NotFound[Condition[P1, P2], _On[P1, P2]],
+        condition: Reporters.ForShape.NotFoundInfo[Condition[P1, P2], _On[P1, P2]],
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
         toShape: _Lemma.ToShape.Case[HO]

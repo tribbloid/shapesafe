@@ -10,7 +10,7 @@ class UncheckedSpec extends BaseSpec {
 
     it("in Conjecture 1") {
 
-      val conj = RequireDistinctNames.On(Unchecked)
+      val conj = RequireDistinctNames(Unchecked)
 
       val evaled = conj.^.eval.shapeType
 

@@ -25,7 +25,7 @@ class ShapeReportersSpec extends BaseSpec {
 
     it("Conjecture1") {
 
-      val i = RequireDistinctNames.On(Unchecked).^
+      val i = RequireDistinctNames(Unchecked).^
 
       val m = ShapeReporters.PeekShape.ForTerm(i.shapeType).getMessage
 
@@ -34,7 +34,7 @@ class ShapeReportersSpec extends BaseSpec {
           """
             |_UNCHECKED_
             |
-            |  :=  RequireDistinctName[_UNCHECKED_]
+            |  :=  RequireDistinctNames[_UNCHECKED_]
             |""".stripMargin.trim
       )
     }

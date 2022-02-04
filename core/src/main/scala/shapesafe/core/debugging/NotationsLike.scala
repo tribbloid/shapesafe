@@ -16,7 +16,10 @@ trait NotationsLike {
   trait :<<=[A, B]
 //  trait OuterProduct[A, B] use >< instead
 
-  trait RequireDistinctName[A]
+  trait RequireDistinctNames[A]
+
+  trait RequireNumOfDimensions[A, NAT]
+
   trait Select1[A, B]
   trait Reorder[A, B]
 

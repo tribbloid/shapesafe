@@ -1,5 +1,6 @@
 package shapesafe.core.shape.ops
 
+import shapeless.Nat
 import shapesafe.core.shape.{Index, Indices, Shape}
 
 trait MatrixOps extends HasShape {
@@ -18,7 +19,7 @@ trait MatrixOps extends HasShape {
   }
 
   def transpose = {
-    (shape :<<=* ("", "")).rearrangeBy(Indices & Index.Left(1) & Index.Left(0))
+    shape.requireNumDim(Nat._2).rearrangeBy(Indices & Index.Left(1) & Index.Left(0))
   }
 
   def `^T` = {

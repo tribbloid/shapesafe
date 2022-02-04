@@ -1,16 +1,24 @@
 package shapesafe.core.shape.unary
 
 import shapesafe.core.debugging.Notations
-import shapesafe.core.shape.StaticShape
+import shapesafe.core.shape.{ShapeType, StaticShape}
 
 // all names must be distinctive - no duplication allowed
-object RequireDistinctNames extends Require1 {
+case class RequireDistinctNames[S1 <: ShapeType](
+    override val s1: S1 with ShapeType
+) extends Conjecture1.On[S1]
+    with Require1Static {
 
-  object _Lemma extends RecordLemma.ConsNewName
+  import RequireDistinctNames._
 
   override type Condition[P1 <: StaticShape] = _Lemma.Case[P1#Record]
 
-  override type _NotationProto[N] = Notations.RequireDistinctName[N]
+  override type Notation = Notations.RequireDistinctNames[S1#Notation]
 
-  override type _RefuteProto = "Names has duplicates"
+  override type _RefuteTxt = "Names has duplicates"
+}
+
+object RequireDistinctNames {
+
+  object _Lemma extends RecordLemma.ConsNewName
 }

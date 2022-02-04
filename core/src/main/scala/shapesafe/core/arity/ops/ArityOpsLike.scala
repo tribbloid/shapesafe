@@ -8,7 +8,7 @@ import shapesafe.core.axis.OldNameUpdaters
 import shapesafe.core.debugging.{DebugConst, Notations}
 import shapesafe.core.shape.binary.Op2ByDim
 import shapesafe.core.shape.unary.AccumulateByName
-import shapesafe.core.shape.{LeafShape, Shape}
+import shapesafe.core.shape.{Shape, StaticShape}
 import singleton.ops
 
 trait ArityOpsLike extends HasArity {
@@ -52,7 +52,7 @@ trait ArityOpsLike extends HasArity {
 
       override type _NotationProto = Notations.Op2ByDim_Strict[Op#_NotationProto[Unit, Unit]#SymbolTxt]
 
-      override type Condition[A <: LeafShape, B <: LeafShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
+      override type Condition[A <: StaticShape, B <: StaticShape] = A#NatNumOfDimensions =:= B#NatNumOfDimensions
 
       override type _RefuteProto = "Dimension mismatch"
     }
@@ -62,7 +62,7 @@ trait ArityOpsLike extends HasArity {
 
       override type _NotationProto = Notations.Op2ByDim_DropLeft[Op#_NotationProto[Unit, Unit]#SymbolTxt]
 
-      override type Condition[_ <: LeafShape, _ <: LeafShape] = Const.True
+      override type Condition[_ <: StaticShape, _ <: StaticShape] = Const.True
 
       override type _RefuteProto = DebugConst.INTERNAL_ERROR.type
     }
@@ -107,8 +107,8 @@ trait ArityOpsLike extends HasArity {
   object ==! extends InfixImpl(RequireEqual)
   type ==![X <: ArityType, Y <: ArityType] = ==!.On[X, Y]
 
-  object !=! extends InfixImpl(Require2[ops.!=, Notations.!=])
-  type !=![X <: ArityType, Y <: ArityType] = !=!.On[X, Y]
+  object =/=! extends InfixImpl(Require2[ops.!=, Notations.=/=])
+  type =/=![X <: ArityType, Y <: ArityType] = =/=!.On[X, Y]
 
   object `<!` extends InfixImpl(Require2[ops.<, Notations.<])
   type `<!`[X <: ArityType, Y <: ArityType] = `<!`.On[X, Y]

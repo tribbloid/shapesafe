@@ -9,7 +9,7 @@ import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
 import shapesafe.core.shape.ops.{EinSumOp, MatrixOps, StaticOpsView, VectorOps}
-import shapesafe.core.shape.unary._
+import shapesafe.core.shape.unary.{RequireDistinctNames, _}
 import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
@@ -179,10 +179,17 @@ trait Shape extends VectorOps with MatrixOps {
   ): ^[infix._Op2ByDim_DropLeft.On[this._ShapeType, that._ShapeType]] =
     infix.applyByDimDropLeft(this, that)
 
+  // TODO: aggregate all the requires
   def requireEqual(
       that: Shape
   ): ^[Ops.==!._Op2ByDim_DropLeft.On[this._ShapeType, that._ShapeType]] =
     Ops.==!.applyByDimDropLeft(this, that)
+
+  lazy val requireDistinctNames: ^[RequireDistinctNames[_ShapeType]] =
+    RequireDistinctNames(shapeType).^
+
+  def requireNumDim[N <: Nat](dim: N): ^[RequireNumOfDimensions[_ShapeType, N]] =
+    RequireNumOfDimensions(shapeType, dim).^
 }
 
 object Shape extends Shape with ApplyLiterals.ToShape {
