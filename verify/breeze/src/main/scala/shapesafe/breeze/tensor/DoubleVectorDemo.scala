@@ -34,7 +34,7 @@ object DoubleVectorDemo {
     val conved = x50.conv(x3)
     print_@(conved.data.size)
 
-    conved.arity.arityType.requireEqual(48)
+    conved.arity.arityType.proveEqual(48)
     //    conved.arity.internal.requireEqual(49) // doesn't compile
   }
 
@@ -42,7 +42,7 @@ object DoubleVectorDemo {
     val conved = x50.pad(5).conv(x3, 2)
     print_@(conved.data.size)
 
-    conved.arity.arityType.requireEqual(29)
+    conved.arity.arityType.proveEqual(29)
     //    conved.arity.internal.requireEqual(28) // doesn't compile
   }
 

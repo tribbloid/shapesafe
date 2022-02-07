@@ -69,20 +69,20 @@ class DoubleVectorSpec extends BaseSpec {
         "v0.arity.internal.proveEqual[Witness.`4`.T]"
       }
       shouldNotCompile(
-        "v0.arity.internal.requireEqual(4)"
+        "v0.arity.internal.proveEqual(4)"
       )
     }
 
     it("(stable val)") {
 
       val v1 = DoubleVector.zeros(stable)
-      //    v1.arity.internal.requireEqual(3) //TODO: Calculation has returned a non-literal type/value
+      //    v1.arity.internal.proveEqual(3) //TODO: Calculation has returned a non-literal type/value
     }
 
     it("(stable lazy val)") {
 
       val v2 = DoubleVector.zeros(stableLzy)
-      //    v2.arity.internal.requireEqual(3) //TODO: Calculation has returned a non-literal type/value
+      //    v2.arity.internal.proveEqual(3) //TODO: Calculation has returned a non-literal type/value
     }
 
     it("unsupported") {
@@ -142,7 +142,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0 concat v1
       assert(result.data == DenseVector(1.0, 2.0, 0.0, 0.0, 0.0))
-      result.arity.requireEqual(5)
+      result.arity.proveEqual(5)
 
       val v2 = DoubleVector.zeros(5)
       val v3 = DoubleVector.zeros(6)
@@ -186,7 +186,7 @@ class DoubleVectorSpec extends BaseSpec {
 //
 //        {
 //          result.crossValidate()
-//          result.arity.internal.requireEqual(6)
+//          result.arity.internal.proveEqual(6)
 //        }
 //
 //        {
@@ -255,7 +255,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0.pad(2)
       result.crossValidate()
-      result.arity.requireEqual(10)
+      result.arity.proveEqual(10)
     }
   }
 
@@ -268,7 +268,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val result = v0.conv(v1)
       result.crossValidate()
-      result.arity.requireEqual(4)
+      result.arity.proveEqual(4)
     }
 
     it("2") {
@@ -280,13 +280,13 @@ class DoubleVectorSpec extends BaseSpec {
       {
         val result = v0.conv(v1, 2)
         result.crossValidate()
-        result.arity.requireEqual(2)
+        result.arity.proveEqual(2)
       }
 
       {
         val result = v0.conv(v2, 2)
         result.crossValidate()
-        result.arity.requireEqual(2)
+        result.arity.proveEqual(2)
       }
     }
   }
