@@ -9,7 +9,7 @@ class Op2Spec extends ArityFixture {
     it("arity trivially") {
 
       val p = a.eval
-      p.requireEqual(3)
+      p.proveEqual(3)
     }
 
     it("a + b") {
@@ -17,7 +17,7 @@ class Op2Spec extends ArityFixture {
       val op = a :+ b
 
       val p = op.eval
-      p.requireEqual(7)
+      p.proveEqual(7)
     }
 
     it("a + b + c") {
@@ -26,7 +26,7 @@ class Op2Spec extends ArityFixture {
       val op = op0 :+ c
 
       val p = op.eval
-      p.requireEqual(12)
+      p.proveEqual(12)
     }
 
     it("... in 1 line") {
@@ -34,7 +34,7 @@ class Op2Spec extends ArityFixture {
       val op = a :+ b :+ c
 
       val p = op.eval
-      p.requireEqual(12)
+      p.proveEqual(12)
     }
 
     it("a + b + c + d") {
@@ -42,7 +42,7 @@ class Op2Spec extends ArityFixture {
       val op = a :+ b :+ c :+ Arity._1
 
       val p = op.eval
-      p.requireEqual(13)
+      p.proveEqual(13)
     }
 
     it("b / a") {
@@ -50,7 +50,7 @@ class Op2Spec extends ArityFixture {
       val op = b :/ a
 
       val p = op.eval
-      p.requireEqual(1)
+      p.proveEqual(1)
     }
 
     it("... NOT if b == 0") {
@@ -67,7 +67,7 @@ class Op2Spec extends ArityFixture {
       val op = (a :+ b :- c) :/ Arity._1
 
       val p = op.eval
-      p.requireEqual(2)
+      p.proveEqual(2)
     }
   }
 

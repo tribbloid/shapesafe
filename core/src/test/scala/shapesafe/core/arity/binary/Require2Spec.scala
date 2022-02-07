@@ -12,19 +12,19 @@ class Require2Spec extends ArityFixture {
       it("a") {
 
         val op = RequireEqual.on(a, a).^
-        op.eval.requireEqual(3)
+        op.eval.proveEqual(3)
       }
 
       it("a + b") {
 
         val op = RequireEqual.on(a :+ b, ab).^
-        op.eval.requireEqual(7)
+        op.eval.proveEqual(7)
       }
 
       it("a + b + c") {
 
         val op = RequireEqual.on(a :+ b :+ c, abc).^
-        op.eval.requireEqual(12)
+        op.eval.proveEqual(12)
       }
     }
 
@@ -33,7 +33,7 @@ class Require2Spec extends ArityFixture {
       it("a + b + c") {
 
         val op = RequireEqual.on(a :+ b :+ c, ab :+ c).^
-        op.eval.requireEqual(12)
+        op.eval.proveEqual(12)
       }
     }
 
@@ -44,9 +44,9 @@ class Require2Spec extends ArityFixture {
         val op = RequireEqual.on(Unchecked.^, a).^
 
         val out = op.eval
-        out.requireEqual(3)
+        out.proveEqual(3)
 
-//        op.asProof.out.core.requireEqual(3)
+//        op.asProof.out.core.proveEqual(3)
       }
 
       it("a + b") {
@@ -55,7 +55,7 @@ class Require2Spec extends ArityFixture {
         val op = RequireEqual.on(sum, Unchecked.^).^
 
         val out = op.eval
-        out.requireEqual(7)
+        out.proveEqual(7)
       }
     }
   }

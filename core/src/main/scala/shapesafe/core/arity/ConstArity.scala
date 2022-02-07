@@ -25,7 +25,7 @@ trait ConstArity[S] extends LeafArity with IDMixin {
   ): Unit = {}
 
   // TODO: should be named proofEqual, require should do everything in runtime?
-  def requireEqual(w: Witness.Lt[Int])(
+  def proveEqual(w: Witness.Lt[Int])(
       implicit
       proof: Require[S == w.T]
   ): Unit = {

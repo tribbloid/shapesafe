@@ -19,9 +19,9 @@ class LeafAritySpec extends BaseSpec {
       val out = subject
       val out2 = subject
 
-      subject.requireEqual(w)(proof)
-      out.requireEqual(w)(proof) // scala compiler may fumble on this one
-      out2.requireEqual(w)(proof)
+      subject.proveEqual(w)(proof)
+      out.proveEqual(w)(proof) // scala compiler may fumble on this one
+      out2.proveEqual(w)(proof)
 
       implicitly[subject.SS + w.T]
       implicitly[out.SS + w.T]

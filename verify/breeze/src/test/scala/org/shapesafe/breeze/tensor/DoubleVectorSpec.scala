@@ -10,7 +10,7 @@ class DoubleVectorSpec extends BaseSpec {
 
     val v = DoubleVector(1.0, 2.0, 3.0)
 
-    v.arity.requireEqual(3)
+    v.arity.proveEqual(3)
   }
 
   it("... with YUUGE number of args!") {
@@ -23,7 +23,7 @@ class DoubleVectorSpec extends BaseSpec {
       1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 0.0 //
     )
 
-    v.arity.requireEqual(50)
+    v.arity.proveEqual(50)
   }
 
   it(
@@ -40,7 +40,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       val v = DoubleVector.from.hList(1.0 :: 2.0 :: 3.0 :: HNil)
 
-      v.arity.requireEqual(3)
+      v.arity.proveEqual(3)
     }
   }
 
@@ -57,7 +57,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       v0.arity.proveSameType[Witness.`3`.T]
       v0.arity.proveEqualType[Witness.`3`.T]
-      v0.arity.requireEqual(3)
+      v0.arity.proveEqual(3)
 
       //    v0.arity.internal.proveSame[Witness.`4`.T]
       //    v0.arity.internal.proveEqual[Witness.`4`.T]
@@ -165,7 +165,7 @@ class DoubleVectorSpec extends BaseSpec {
 
       aa.proveSameType[Witness.`6`.T]
       aa.proveEqualType[Witness.`6`.T]
-      aa.requireEqual(6)
+      aa.proveEqual(6)
 
 //      aa.internal._can_+(3)
     }

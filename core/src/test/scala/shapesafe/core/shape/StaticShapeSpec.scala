@@ -182,8 +182,8 @@ class StaticShapeSpec extends BaseSpec {
     it("1") {
       val ss = Shape.Literals(4)
 
-      ss.dimensions.static.head.requireEqual(4)
-      ss.dimensions.static.last.requireEqual(4)
+      ss.dimensions.static.head.proveEqual(4)
+      ss.dimensions.static.last.proveEqual(4)
 
       val nn = (ss :<<= (Names >< "i")).eval
 
@@ -197,8 +197,8 @@ class StaticShapeSpec extends BaseSpec {
     it("2") {
       val ss = Shape.Literals(4, 3, 2)
 
-      ss.dimensions.static.head.requireEqual(2)
-      ss.dimensions.static.last.requireEqual(4)
+      ss.dimensions.static.head.proveEqual(2)
+      ss.dimensions.static.last.proveEqual(4)
 
       val nn = (ss :<<= (Names >< "i" >< "j" >< "k")).eval
 
@@ -217,8 +217,8 @@ class StaticShapeSpec extends BaseSpec {
     it("1") {
       val ss = Shape.Nats(4)
 
-      ss.dimensions.static.head.requireEqual(4)
-      ss.dimensions.static.last.requireEqual(4)
+      ss.dimensions.static.head.proveEqual(4)
+      ss.dimensions.static.last.proveEqual(4)
 
       val nn = (ss :<<= (Names >< "i")).eval
 
@@ -232,8 +232,8 @@ class StaticShapeSpec extends BaseSpec {
     it("2") {
       val ss = Shape.Nats(4, 3, 2)
 
-      ss.dimensions.static.head.requireEqual(2)
-      ss.dimensions.static.last.requireEqual(4)
+      ss.dimensions.static.head.proveEqual(2)
+      ss.dimensions.static.last.proveEqual(4)
 
       val nn = (ss :<<= (Names >< "i" >< "j" >< "k")).eval
 
