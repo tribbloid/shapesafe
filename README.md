@@ -41,10 +41,11 @@ upon request, please create (or vote for) tickets to backport for a specific com
 
 ### Build Status
 
-| branch \ profile | Scala-2.12 | Scala-2.13 | Scala-2.13 w/ splain plugin |
-| ---- | ---- | ---- | ---- |
-| master | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master) |
-| dev (latest WIP) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-legacy/badge.svg) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg) | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg) |
+| branch \ profile | Scala-2.13                                                                                 | Scala-2.13 w/ splain plugin                                                                       |
+|------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| master           | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master)         | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master)         |
+| 0.1.0            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.0) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.0) |
+| dev (latest WIP) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg)                       | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg)                |
 
 ### Roadmap
 
@@ -100,11 +101,11 @@ s1.eval
 In the above example, calling `eval` instructs the compiler to summon a series of type classes as lemmata to prove /
 refute the correctness of the expression:
 
-|                                         lemma |       | expression                              |
-| --------------------------------------------: | :---: | --------------------------------------- |
-|                                               |       | (1 >< 2) **><** (3 >< 4) \:<<= (i >< j) |
-|                         (prove outer product) |  =    | 1 >< 2 >< 3 >< 4 **\:<<=** (i >< j)     |
-| (refute naming of tensor: Dimension mismatch) |  !    |                                         |
+|                                         lemma |   | expression                              |
+|----------------------------------------------:|:-:|-----------------------------------------|
+|                                               |   | (1 >< 2) **><** (3 >< 4) \:<<= (i >< j) |
+|                         (prove outer product) | = | 1 >< 2 >< 3 >< 4 **\:<<=** (i >< j)     |
+| (refute naming of tensor: Dimension mismatch) | ! |                                         |
 
 Evidently, `eval` can only be used *iff.* each shape operand in the expression (in the above example `a` and `b`)  is
 either already evaluated, or can be evaluated in the same scope. This is the only case when implicit arguments has to be
