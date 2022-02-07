@@ -7,7 +7,7 @@ import shapesafe.core.arity.ArityType
 import shapesafe.core.arity.binary.Op2Like
 import shapesafe.core.debugging.{NotationsLike, Reporters}
 import shapesafe.core.shape.unary.RecordLemma
-import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
+import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 
 trait Op2ByDim {
 
