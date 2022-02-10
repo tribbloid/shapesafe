@@ -2,12 +2,12 @@ package shapesafe.core.arity.binary
 
 import ai.acyclic.graph.commons.HasOuter
 import shapesafe.core.arity.{Arity, ArityConjecture, ArityType}
-import shapesafe.core.debugging.HasSymbolTxt
+import shapesafe.core.debugging.HasSymbolLit
 import singleton.ops.+
 
 trait Op2Like {
 
-  type _NotationProto[_, _] <: HasSymbolTxt
+  type _NotationProto[_, _] <: HasSymbolLit
 
   trait Conjecture2[
       A1 <: ArityType,
@@ -20,7 +20,7 @@ trait Op2Like {
 
     final def outer: Op2Like.this.type = Op2Like.this
 
-    final override type _SymbolTxt = A1#SymbolTxt + _NotationProto[Unit, Unit]#SymbolTxt + A2#SymbolTxt
+    final override type _SymbolLit = A1#SymbolTxt + _NotationProto[Unit, Unit]#SymbolTxt + A2#SymbolTxt
     final override type Notation = _NotationProto[A1#Notation, A2#Notation]
   }
 

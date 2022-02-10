@@ -19,9 +19,11 @@ object DebugConst {
   //    TypeToLiteral.Type.Case[T1]
   //  ]
 
+  val SPACE4 = Witness("    ")
   val shades_+ = Witness(" ░▒▓")
+  val shades_- = Witness("▓▒░ ")
 
-  type Stripe[T] = "\u001b[7m" + T + shades_+.T + "\u001b[0m" + "\n\n"
+  type Stripe[T] = SPACE4.T + shades_-.T + T + shades_+.T + "\n\n"
 
   // TODO: add another instance that shows reasoning process?
 

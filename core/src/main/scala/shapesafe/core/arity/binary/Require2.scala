@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.Utils.Op
 import shapesafe.core.arity._
-import shapesafe.core.debugging.{DebugConst, HasSymbolTxt}
+import shapesafe.core.debugging.{DebugConst, HasSymbolLit}
 
 import scala.collection.mutable
 
@@ -21,7 +21,7 @@ object Require2 extends Require2_Imp0 {
 
   class Impl[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasSymbolTxt.HasNegation
+      SS[A, B] <: HasSymbolLit.HasNegation
   ](
       implicit
       sh: Utils.BoolSh[??]
@@ -63,7 +63,7 @@ object Require2 extends Require2_Imp0 {
 
   def apply[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasSymbolTxt.HasNegation
+      SS[A, B] <: HasSymbolLit.HasNegation
   ](
       implicit
       sh: Utils.BoolSh[??]

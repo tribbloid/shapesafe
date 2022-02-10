@@ -7,7 +7,7 @@ import singleton.ops.ToString
   */
 trait LeafArity extends VerifiedArity {
 
-  final override type _SymbolTxt = ToString[Notation]
+  final override type _SymbolLit = ToString[Notation]
 }
 
 object LeafArity {}

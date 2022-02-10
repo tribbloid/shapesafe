@@ -3,7 +3,7 @@ package shapesafe.core.arity.binary
 import shapesafe.core.arity.ConstArity.Derived
 import shapesafe.core.arity.Utils.Op
 import shapesafe.core.arity._
-import shapesafe.core.debugging.{DebugConst, HasSymbolTxt}
+import shapesafe.core.debugging.{DebugConst, HasSymbolLit}
 import singleton.ops.+
 
 import scala.collection.mutable
@@ -19,7 +19,7 @@ object Op2 extends Op2_Imp0 {
 
   class Impl[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasSymbolTxt
+      SS[A, B] <: HasSymbolLit
   ]()(
       implicit
       sh: Utils.IntSh[??]
@@ -53,7 +53,7 @@ object Op2 extends Op2_Imp0 {
 
   def apply[
       ??[X1, X2] <: Op,
-      SS[A, B] <: HasSymbolTxt
+      SS[A, B] <: HasSymbolLit
   ](
       implicit
       sh: Utils.IntSh[??]

@@ -42,7 +42,7 @@ upon request, please create (or vote for) tickets to backport for a specific com
 ### Build Status
 
 | branch \ profile | Scala-2.13                                                                                 | Scala-2.13 w/ splain plugin                                                                       |
-|------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+| ---------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
 | master           | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master)         | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master)         |
 | 0.1.0            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.0) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.0) |
 | dev (latest WIP) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg)                       | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg)                |
@@ -66,6 +66,10 @@ In POSIX shell, run `./dev/make-all.sh`
 Guaranteed to be working by [Continuous Integration](.github/workflows/main.yml)
 
 You must have an installed JDK that supports Gradle 7+ before the compilation
+
+### Tutorial
+
+
 
 ### Architecture
 
@@ -101,11 +105,11 @@ s1.eval
 In the above example, calling `eval` instructs the compiler to summon a series of type classes as lemmata to prove /
 refute the correctness of the expression:
 
-|                                         lemma |   | expression                              |
-|----------------------------------------------:|:-:|-----------------------------------------|
-|                                               |   | (1 >< 2) **><** (3 >< 4) \:<<= (i >< j) |
-|                         (prove outer product) | = | 1 >< 2 >< 3 >< 4 **\:<<=** (i >< j)     |
-| (refute naming of tensor: Dimension mismatch) | ! |                                         |
+| lemma                                         |     | expression                              |
+| ---------------------------------------------:|:---:| --------------------------------------- |
+|                                               |     | (1 >< 2) **><** (3 >< 4) \:<<= (i >< j) |
+| (prove outer product)                         | =   | 1 >< 2 >< 3 >< 4 **\:<<=** (i >< j)     |
+| (refute naming of tensor: Dimension mismatch) | !   |                                         |
 
 Evidently, `eval` can only be used *iff.* each shape operand in the expression (in the above example `a` and `b`)  is
 either already evaluated, or can be evaluated in the same scope. This is the only case when implicit arguments has to be
@@ -174,5 +178,5 @@ and several pioneers in type-safe ML:
 - Maxime Kjaer et al. for [tf-dotty](https://github.com/MaximeKjaer/tf-dotty)
 
 $$
-\frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists}
+\frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists} \: \vee \: 0.1.1
 $$
