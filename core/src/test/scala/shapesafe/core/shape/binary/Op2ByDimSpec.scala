@@ -2,9 +2,9 @@ package shapesafe.core.shape.binary
 
 import shapesafe.BaseSpec
 import shapesafe.core.Ops
-import shapesafe.core.shape.Shape
+import shapesafe.core.shape.{Shape, ShapeReporters}
 
-abstract class Op2ByDimSpec extends BaseSpec {
+class Op2ByDimSpec extends BaseSpec {
 
   it("treeString") {
     val s1 = Shape(2, 3)
@@ -22,6 +22,39 @@ abstract class Op2ByDimSpec extends BaseSpec {
     )
   }
 
+  describe("peek") {
+
+    val s1 = Shape(2, 3)
+    val s2 = Shape(4, 5)
+
+    it("Strict") {
+      val rr = s1.applyByDim(Ops.:+, s2)
+
+      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+
+      str.shouldBe(
+        """
+          |      6 >< 8
+          |  :=  Op2ByDim_Strict[ + ]#On[2 >< 3,4 >< 5]
+          |""".stripMargin
+      )
+    }
+
+    it("DropLef") {
+      val rr = s1.applyByDimDropLeft(Ops.:+, s2)
+
+      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+
+      str.shouldBe(
+        """
+          |      6 >< 8
+          |  :=  Op2ByDim_DropLeft[ + ]#On[2 >< 3,4 >< 5]
+          |""".stripMargin
+      )
+    }
+
+  }
+
   describe("matrix") {
 
     val s1 = Shape(2, 3)
@@ -31,8 +64,8 @@ abstract class Op2ByDimSpec extends BaseSpec {
 
       val strs = Seq(
         s1.applyByDim(Ops.:+, s2).eval.toString,
-        s2.applyByDimDropLeft(Ops.:+, s2).eval.toString
-      )
+        s1.applyByDimDropLeft(Ops.:+, s2).eval.toString
+      ).distinct
 
       strs
         .mkString("\n")
@@ -48,8 +81,9 @@ abstract class Op2ByDimSpec extends BaseSpec {
 
       val strs = Seq(
         s1.applyByDim(Ops.:*, s2).eval.toString,
-        s2.applyByDimDropLeft(Ops.:*, s2).eval.toString
-      )
+        s1.applyByDimDropLeft(Ops.:*, s2).eval.toString
+      ).distinct
+
       strs
         .mkString("\n")
         .shouldBe(

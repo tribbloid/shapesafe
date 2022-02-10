@@ -5,6 +5,7 @@ import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.shape.ProveShape.|-
+import shapesafe.core.shape.ShapeReporters.{InterruptShape, PeekShape}
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
@@ -43,19 +44,19 @@ trait Shape extends VectorOps with MatrixOps {
 
   def peek(
       implicit
-      reporter: ShapeReporters.PeekShape.Case[_ShapeType]
+      reporter: PeekShape.Case[_ShapeType]
   ): this.type = this
 
   def interrupt(
       implicit
-      reporter: ShapeReporters.InterruptShape.Case[_ShapeType]
+      reporter: InterruptShape.Case[_ShapeType]
   ): this.type = this
 
   def reason[
       O <: LeafShape
   ](
       implicit
-      reporter: ShapeReporters.PeekShape.Case[_ShapeType],
+      reporter: PeekShape.Case[_ShapeType],
       prove: _ShapeType |- O
   ): ^[O] = eval(prove)
 

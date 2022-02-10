@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Names, Shape}
+import shapesafe.core.shape.{Names, Shape, ShapeReporters}
 
 class AccumulateByNameSpec extends BaseSpec {
 
@@ -30,6 +30,28 @@ class AccumulateByNameSpec extends BaseSpec {
         |               ┃   y
         |""".stripMargin
     )
+  }
+
+  describe("peek") {
+    val s1 = Shape(2, 3) :<<=
+      (Names >< "x" >< "y")
+
+    val s2 = Shape(4, 5) :<<=
+      (Names >< "x" >< "y")
+
+    it("reduceByName") {
+
+      val rr = Ops.:+.reduceByName(s1, s2)
+
+      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+
+      str.shouldBe(
+        """
+          |      6 :<<- x >< (8 :<<- y)
+          |  :=  ReduceByName[ + ]#On[2 >< 3 :<<= (x >< y) >< (4 >< 5 :<<= (x >< y))]
+          |""".stripMargin
+      )
+    }
   }
 
   describe("matrix") {
