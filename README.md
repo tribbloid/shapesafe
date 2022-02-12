@@ -2,7 +2,7 @@
 
 **shapesafe** is the one-size-fits-all compile-time verifier for numerical linear algebra on JVM, obvious shape and indexing errors in tensor operations are captured by scala's typing system.
 
-Program in shapesafe actively proves itself while being written. All the following capabilities are enabled on release v0.1.0:
+Shapesafe allows programs to actively prove themselves while being written. The following capabilities are enabled in release v0.1.0:
 
 ##### static & runtime-dependent tensor shapes of arbitrary rank
 
@@ -24,7 +24,7 @@ Program in shapesafe actively proves itself while being written. All the followi
 
 ![S5](doc/video/S5.gif)
 
-Screenshots can be reproduced by compiling our showcases in Visual Studio Code + Scala (Metals) plugin:
+These screenshots can be reproduced by compiling our showcases in Visual Studio Code + Scala (Metals) plugin:
 
 - [Part 1](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala/shapesafe/demo/core/ShowCase.scala)
   - [Part 1 - error captured](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala-shouldFail/shapesafe/demo/core/ShowCase_Refute.scala)
@@ -40,19 +40,20 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
 ### Build Status
 
 | branch \ profile | Scala-2.13                                                                                 | Scala-2.13 w/ splain plugin                                                                       |
-| ---------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| ---------------- |--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | master           | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master)         | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master)         |
+| 0.1.1            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.1) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.1) |
 | 0.1.0            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.0) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.0) |
 | dev (latest WIP) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg)                       | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg)                |
 
-### How to use
+### Tutorial
 
-- Setup `shapesafe-core` in your scala project using [your favourite dependency manager](https://search.maven.org/artifact/ai.acyclic.shapesafe/shapesafe-core_2.13/0.1.0/jar). Replace the version number with that of the latest compatible release 
+- Setup `shapesafe-core` in your scala project [using your favourite dependency manager](https://search.maven.org/artifact/ai.acyclic.shapesafe/shapesafe-core_2.13/0.1.0/jar). Replace the version number with that of the latest compatible release 
 
-- Run our [Casually Written Tutorial](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala) and learn the basics by reading code and errors.
+- Compile our [Casually Written Tutorial](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala) and learn the basics by reading code and errors.
   
   - The [shapesafe-demo](https://github.com/tribbloid/shapesafe-demo) project provides a reference setup using sbt
-  - This [scastie page](https://scastie.scala-lang.org/tribbloid/RL1BZ0YTR9WyH4MBw624tA) does the same but in your browser
+  - Our [Scastie snippet](https://scastie.scala-lang.org/tribbloid/RL1BZ0YTR9WyH4MBw624tA) uses the same setup but can run in browser
 
 ### Roadmap
 
@@ -73,28 +74,28 @@ In POSIX shell, run `./dev/make-all.sh`
 
 Guaranteed to be working by [Continuous Integration](.github/workflows/main.yml)
 
-You must have an installed JDK that supports Gradle 7+ before the compilation
+You must have installed a JDK that supports Gradle 7+ before the compilation
 
 ### Architecture (Recommended for user who finished our tutorial)
 
-##### Lazy Verification Paradigm
+##### Lazy Verification
 
-In the beginning of the tutorial, we can immediately observe that writing expressions
-requires no implicit summoning of type class. As a trade-off, shape errors in expressions won't be detected when defined, at which case they are still represented as computation graph:
+It can be observed immediately in the tutorial that calling functions in shapesafe
+requires no implicit summoning of type class. In fact, their return types are represented as computation graphs rather than computed Arities or Shapes.
+As a trade-off, errors in these computation graphs can't be detected as-is:
 
 ```scala
 val a = Shape(1, 2)
 val b = Shape(3, 4)
-val s1 = (a >< b)
-        .named("i", "j")
+val s1 = (a >< b).:<<=*("i", "j")
 s1.peek
 
 // [INFO] 1 >< 2 >< (3 >< 4) :<<= (i >< j)
 ```
 
-This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex-function-composition-with-no-implicit-scope)) and [the other example in the tutorial](https://github.com/tribbloid/shapesafe-demo/blob/db19e1a5c05ff302308a5744bedbe65dd9f62a5d/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala#L59).
+This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex-function-composition-with-no-implicit-scope) and [the other example in the tutorial](https://github.com/tribbloid/shapesafe-demo/blob/db19e1a5c05ff302308a5744bedbe65dd9f62a5d/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala#L59)).
 
-Type-checking happens once the expression is evaluated (by explicitly calling `.eval` or `.reason`), which summons all algebraic rules like a proof assistant:
+Detection of errors only happens once the expression is evaluated (by explicitly calling `.eval` or `.reason`), which summons all algebraic rules like a proof assistant:
 
 ```scala
 s1.eval
@@ -128,7 +129,7 @@ At this moment, all algebraic rules are defined to manipulate the following 2 ty
 Shapesafe works most efficiently if dimensions of all tensors are either constants (represented
 by `shapesafe.core.arity.Const`), or unchecked (represented by `shapesafe.core.arity.Unchecked`, meaning that it has no
 constraint or symbol, and should be ignored in validation). In practice, this can reliably support the majority of
-applied linear algebra / ML use cases. Support for algebra of variable shapes (with symbol, represented
+applied linear algebra / ML use cases. Support for symbolic algebra for shape variables (represented
 by `shapesafe.core.arity.Var`) will be gradually enabled in future releases.
 
 ##### Upgrade to Scala 3
