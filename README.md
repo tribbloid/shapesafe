@@ -53,7 +53,9 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
 - Compile our [Casually Written Tutorial](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala) and learn the basics by reading code and errors.
   
   - The [shapesafe-demo](https://github.com/tribbloid/shapesafe-demo) project provides a reference setup using sbt
-  - Our [Scastie snippet](https://scastie.scala-lang.org/tribbloid/RL1BZ0YTR9WyH4MBw624tA) uses the same setup but can run in browser
+  - Our Scastie snippet (courtesy of EPFL Scala Center) uses the same setup but can run in browser
+    - [Part 1](https://scastie.scala-lang.org/tribbloid/RL1BZ0YTR9WyH4MBw624tA/10)
+    - [Part 2](https://scastie.scala-lang.org/tribbloid/hB9EyCVWQvilD20DcFq7wg/3)
 
 ### Roadmap
 
