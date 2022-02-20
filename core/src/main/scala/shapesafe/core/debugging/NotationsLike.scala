@@ -21,7 +21,7 @@ trait NotationsLike {
   trait RequireNumOfDimensions[A, NAT]
 
   trait Select1[A, B]
-  trait Reorder[A, B]
+  trait Rearrange[A, B]
 
   trait AppendByName[O] extends Proto1 {
 //    type _NotationTxt = "AppendByName[" + O + "]"

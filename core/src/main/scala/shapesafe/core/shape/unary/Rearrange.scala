@@ -14,12 +14,12 @@ case class Rearrange[ // last step of einsum, contract, transpose, etc.
     indices: II
 ) extends Conjecture1.On[S1] {
 
-  override type Notation = Notations.Reorder[S1#Notation, indices.AsIndices#Notation]
+  override type Notation = Notations.Rearrange[S1#Notation, indices.AsIndices#Notation]
 
   override type _RefuteTxt = "Indices not found"
 }
 
-trait Reorder_Imp0 {
+trait Rearrange_Imp0 {
 
   import ProveShape._
 
@@ -39,7 +39,7 @@ trait Reorder_Imp0 {
 
 }
 
-object Rearrange extends Reorder_Imp0 {
+object Rearrange extends Rearrange_Imp0 {
 
   import ProveShape._
 

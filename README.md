@@ -164,20 +164,29 @@ possible.
 
 ### Credit
 
-- [Prof. Dmytro Mitin](https://www.researchgate.net/profile/Dmytro-Mitin) at National Taras Shevchenko University of
-  Kyiv
-- All maintainers of [singleton-ops](https://github.com/fthomas/singleton-ops)
-- All maintainers of [shapeless](https://github.com/milessabin/shapeless)
-- All maintainers of [splain](https://github.com/tek/splain)
-- Breandan Considine, maintainer of [Kotlin∇](https://openreview.net/forum?id=SkluMSZ08H)
+- [Prof. Dmytro Mitin](https://www.researchgate.net/profile/Dmytro-Mitin) at National Taras Shevchenko University of Kyiv
+- [Oron Port](https://github.com/soronpo) et al. maintainers of [singleton-ops](https://github.com/fthomas/singleton-ops)
+- [Mile Sabin](https://github.com/milessabin) et al. maintainers of [shapeless](https://github.com/milessabin/shapeless)
+- [Torsten Schmits](https://github.com/tek) et al. maintainers of [splain](https://github.com/tek/splain)
+- [Breandan Considine](https://scholar.google.ca/citations?user=bC-gapAAAAAJ), maintainer of [Kotlin∇](https://openreview.net/forum?id=SkluMSZ08H)
 
-This project is heavily influenced by Kotlin∇ (see discussion [here](https://github.com/breandan/kotlingrad/issues/11))
-and several pioneers in type-safe ML:
+This project is heavily influenced by Kotlin∇ (see discussion [here](https://github.com/breandan/kotlingrad/issues/11)) and several pioneers in type-safe ML:
 
 - Evan Spark for [first showing the possibility](https://etrain.github.io/2015/05/28/type-safe-linear-algebra-in-scala)
 - Tongfei Chen et al. for [Nexus](https://github.com/ctongfei/nexus)
 - Dougal Maclaurin et al. for [Dex](https://github.com/google-research/dex-lang)
+- Prof. Austin Huang et al. for [HaskTorch](https://github.com/hasktorch/hasktorch)
 - Maxime Kjaer et al. for [tf-dotty](https://github.com/MaximeKjaer/tf-dotty)
+
+Many have answered critical questions that have guided how the project evolves:
+
+- Torsten Scholak - API, compiler, gradual typing
+- Alex Merritt - API, IR, documents
+- Cameron Rose - API
+- Arseniy Zhizhelev - Scala 3 upgrade
+- Ryan Orendorff - Automated theorem proving
+
+
 
 $$
 \frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists}
