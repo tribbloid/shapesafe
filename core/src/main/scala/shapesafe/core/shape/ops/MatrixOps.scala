@@ -1,17 +1,15 @@
 package shapesafe.core.shape.ops
 
 import shapeless.Nat
-import shapesafe.core.shape.{Index, Indices, Shape}
+import shapesafe.core.shape.{Index, Indices, Names, Shape}
 
 trait MatrixOps extends HasShape {
 
-  import shapesafe.core.Const._
-
   def matMul[THAT <: Shape](that: THAT) = {
-    val s1 = shape :<<= ij
-    val s2 = that :<<= jk
+    val s1 = shape :<<= Names.ij
+    val s2 = that :<<= Names.jk
 
-    s1.einSum(s2) --> ik
+    s1.einSum(s2) --> Names.ik
   }
 
   def mat_*[THAT <: Shape](that: THAT) = {

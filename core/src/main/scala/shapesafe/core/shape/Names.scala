@@ -72,4 +72,9 @@ object Names extends Tuples with ApplyLiterals.ToNames {
   }
 
   object Syntax extends Syntax
+
+  val i = Names("i")
+  val ij = Names("i", "j")
+  val jk = Names("j", "k")
+  val ik = Names("i", "k")
 }

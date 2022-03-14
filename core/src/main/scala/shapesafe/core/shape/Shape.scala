@@ -237,4 +237,6 @@ object Shape extends Shape with ApplyLiterals.ToShape {
 
   override type _ShapeType = StaticShape.Eye
   override def shapeType: Eye = StaticShape.Eye
+
+  val shape3 = Shape(3)
 }

@@ -4,17 +4,15 @@ import shapesafe.core.shape.{Names, Shape}
 
 trait VectorOps extends HasShape {
 
-  import shapesafe.core.Const._
-
   def dot[THAT <: Shape](that: THAT) = {
-    val s1 = shape :<<= i
-    val s2 = that :<<= i
+    val s1 = shape :<<= Names.i
+    val s2 = that :<<= Names.i
 
-    s1.einSum(s2) --> Names.Eye
+    s1.einSum(s2) --> Names.i
   }
 
   def cross[THAT <: Shape](that: THAT) = {
 
-    shape.requireEqual(that).requireEqual(shape3)
+    shape.requireEqual(that).requireEqual(Shape.shape3)
   }
 }
