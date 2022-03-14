@@ -2,22 +2,23 @@ package shapesafe.core.shape.unary
 
 import shapesafe.core.debugging.Reporters
 import shapesafe.core.shape.ProveShape.|-
-import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
+import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
 
-trait Require1Static extends Conjecture1 {
+trait Require1 extends Conjecture1 {
 
+  type Prior <: LeafShape
   val s1: SS1 with ShapeType
 
-  type Condition[P1 <: StaticShape]
+  type Condition[P1 <: Prior]
 
-  type Constructor[N1 <: ShapeType] <: Require1Static
+//  type Constructor[N1 <: ShapeType] <: Require1
 }
 
-object Require1Static {
+object Require1 {
 
   implicit def simplify[
-      T <: Require1Static,
-      P1 <: StaticShape
+      T <: Require1,
+      P1 <: T#Prior
   ](
       implicit
       lemma: T#SS1 |- P1,

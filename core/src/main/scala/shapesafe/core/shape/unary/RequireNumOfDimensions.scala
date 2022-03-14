@@ -13,7 +13,9 @@ case class RequireNumOfDimensions[
     override val s1: S1 with ShapeType,
     n: N
 ) extends Conjecture1.On[S1]
-    with Require1Static {
+    with Require1 {
+
+  override type Prior = StaticShape
 
   override type Condition[P1 <: StaticShape] = P1#NatNumOfDimensions =:= n.N
 

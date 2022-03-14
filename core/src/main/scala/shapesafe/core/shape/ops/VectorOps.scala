@@ -8,7 +8,7 @@ trait VectorOps extends HasShape {
     val s1 = shape :<<= Names.i
     val s2 = that :<<= Names.i
 
-    s1.einSum(s2) --> Names.i
+    (s1.einSum(s2) --> Names.Eye) >< Shape(1)
   }
 
   def cross[THAT <: Shape](that: THAT) = {

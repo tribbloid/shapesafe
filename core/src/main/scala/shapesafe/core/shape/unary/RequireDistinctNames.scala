@@ -7,9 +7,11 @@ import shapesafe.core.shape.{ShapeType, StaticShape}
 case class RequireDistinctNames[S1 <: ShapeType](
     override val s1: S1 with ShapeType
 ) extends Conjecture1.On[S1]
-    with Require1Static {
+    with Require1 {
 
   import RequireDistinctNames._
+
+  override type Prior = StaticShape
 
   override type Condition[P1 <: StaticShape] = _Lemma.Case[P1#Record]
 
