@@ -2,10 +2,11 @@ package shapesafe.core.logic
 
 import shapesafe.core.ProofLike
 import shapesafe.core.ProofLike.TheoremTag
+import shapesafe.m.Emit
 
 import scala.annotation.implicitNotFound
 
-trait Theory extends HasTheory with HasTactic {
+trait Theory extends HasTactic {
 
   final override val theory: this.type = this
 
@@ -43,8 +44,6 @@ trait Theory extends HasTheory with HasTactic {
     }
 
     final def apply(v: I): P#Repr = instanceFor(v)
-
-    //    final def findApplicable(v: I): this.type = this
   }
 
   object Proof {
@@ -67,27 +66,23 @@ trait Theory extends HasTheory with HasTactic {
     }
   }
 
-  @implicitNotFound(
-    "[NO PROOF]: ${I}\t |- \t??? <: ${O}"
-  )
   final type |-<[-I, O] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
     */
-  @implicitNotFound(
-    "[NO PROOF]: ${I}\t |- \t${O}"
-  )
   final type |-[-I, O] = Proof[I, system.Aye[O]]
+  implicit def refute_|-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT PROVE]: ${I} |- ${O}"]
+  ): |-[I, O] = ???
 
-  @implicitNotFound(
-    "[NO REFUTATION]: ${I}\t |-\\- \t${O}"
-  )
   final type |-\-[-I, O] = Proof[I, system.Nay[O]]
+  implicit def refute_|-\-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT REFUTE]: ${I} |-\\- ${O}"]
+  ): |-[I, O] = ???
 
-  @implicitNotFound(
-    "[NO ABSTENTION]: ${I}\t |-?- \t${O}"
-  )
   final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 
   final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]
@@ -181,13 +176,13 @@ trait Theory extends HasTheory with HasTactic {
     ): O2 |- O1 = eq.backward
   }
 
-  trait SuperTheory extends system.ExtensionLike {
+  trait SuperTheory extends system.TheoryInSystem {
 
     override type Bound <: Theory.this.ExtensionBound
   }
 
   object SuperTheory {
-    type Aux = System#ExtensionLike {
+    type Aux = System#TheoryInSystem {
 
       type Bound <: Theory.this.ExtensionBound
     }

@@ -4,10 +4,8 @@ import ai.acyclic.graph.commons.reflect.Reflection
 import ai.acyclic.graph.commons.reflect.format.TypeFormat
 import ai.acyclic.graph.commons.viz.{TypeViz, TypeVizFormat}
 import ai.acyclic.graph.commons.{HasOuter, TreeFormat}
-import shapesafe.m.{GenericMsgEmitter, MWithReflection}
-import shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
-import shapeless.Witness
-import singleton.ops.{+, RequireMsg, RequireMsgSym}
+import shapesafe.m.{Emit, MWithReflection}
+import singleton.ops.+
 
 import scala.collection.mutable
 import scala.reflect.api.{Trees, Types}
@@ -58,13 +56,13 @@ trait VizCTSystem extends Product {
     def peek[O <: String with Singleton](
         implicit
         ev: Info.Aux[I, O],
-        emit: EmitInfo[O]
+        emit: Emit.Info[O]
     ): Unit = {}
 
     def interrupt[O <: String with Singleton](
         implicit
         ev: Info.Aux[I, O],
-        emit: EmitError["\n" + O]
+        emit: Emit.Error[O]
     ): Unit = {}
 
     // TODO: impl Should_=:= at compile-time
@@ -82,16 +80,6 @@ trait VizCTSystem extends Product {
 }
 
 object VizCTSystem {
-
-  val FALSE = Witness(false)
-
-  type EmitError[T] = RequireMsg[FALSE.T, T]
-
-  type EmitWarning[T] = RequireMsgSym[FALSE.T, T, singleton.ops.Warn]
-//  type EmitInfo[T] = EmitWarning[T] // should change after the patch
-
-//  type EmitWarning[T] = GenericMsgEmitter[T, GenericMsgEmitter.Warning]
-  type EmitInfo[T] = GenericMsgEmitter[T, GenericMsgEmitter.Info]
 
   private val cache = mutable.HashMap.empty[Types#Type, (VizCTSystem, Trees#Tree)]
 

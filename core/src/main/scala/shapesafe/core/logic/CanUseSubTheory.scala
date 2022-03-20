@@ -4,7 +4,7 @@ trait CanUseSubTheory {
   self: Theory =>
 
   object SubTheory {
-    type Aux = System#ExtensionLike {
+    type Aux = System#TheoryInSystem {
 
       type ExtensionBound >: self.Bound
     }

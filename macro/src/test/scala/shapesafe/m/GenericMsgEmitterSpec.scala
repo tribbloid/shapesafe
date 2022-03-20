@@ -16,10 +16,10 @@ class GenericMsgEmitterSpec extends BaseSpec {
 
     type RR = "ABC"
     type TT = GenericMsgEmitter[RR, GenericMsgEmitter.Error]
-//    shouldNotCompile(
-//      """implicitly[TT]""",
-//      "ABC"
-//    )
+    shouldNotCompile(
+      """implicitly[TT]""",
+      "ABC"
+    )
   }
 
   it("byOp") {
@@ -45,35 +45,6 @@ class GenericMsgEmitterSpec extends BaseSpec {
 //      "ABC"
 //    )
   }
-
-//  it("byTypeable") {
-//
-//    type T = ToString["ABC"]
-//
-//    shouldNotCompile(
-//      """emitError.byTypeable[ToString["ABC"]]""",
-//      "ABC"
-//    )
-//
-//    shouldNotCompile(
-//      """emitError.byTypeable[T]""",
-//      "ABC"
-//    )
-//
-//    def run[T](
-//        implicit
-//        op: Typeable[T]
-//    ): EmitMsg[T, EmitMsg.Error] = {
-//      emitError.byTypeable[T](op)
-//    }
-//
-//    val v = run[ToString["ABC"]]
-//
-////    shouldNotCompile(
-////      """run[ToString["ABC"]]""",
-////      "ABC"
-////    )
-//  }
 
   // TODO: how to validate compile-time emitted message by assertion?
   it("can emit warning") { // TODO: how to de-verbose?

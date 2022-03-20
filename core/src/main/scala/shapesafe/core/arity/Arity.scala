@@ -1,34 +1,40 @@
 package shapesafe.core.arity
 
 import shapeless.{Nat, Witness}
-import shapeless.Witness.Aux
-import shapesafe.core.{arity, Const}
 import shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.Axis
+import shapesafe.core.logic.Evaluable
+import shapesafe.core.{arity, Const}
 
 import scala.language.implicitConversions
 
-trait Arity extends ArityOpsLike with Axis {
+trait Arity extends Evaluable with ArityOpsLike with Axis {
+
+  import Arity._
+
+  override val theory: ProveArity.type = ProveArity
+  type EvalTo = LeafArity
 
   final override def toString: String = arityType.toString
 
+  // TODO: aggregate to Evaluable
   def verify[
       O <: ArityType
   ](
       implicit
       prove: _ArityType |- O
-  ): Arity.^[O] = prove.consequentFor(arityType).value.^
+  ): ^[O] = prove.consequentFor(arityType).value.^
 
   def eval[
       O <: LeafArity
   ](
       implicit
       prove: _ArityType |- O
-  ): Arity.^[O] = verify(prove)
+  ): ^[O] = verify(prove)
 
   def peek(
       implicit
@@ -46,9 +52,9 @@ trait Arity extends ArityOpsLike with Axis {
       implicit
       reporter: ArityReporters.PeekArity.Case[_ArityType],
       prove: _ArityType |- O
-  ): Arity.^[O] = eval(prove)
+  ): ^[O] = eval(prove)
 
-  final override val nameW: Aux[Const.NoName] = Const.NoNameW
+  final override val nameW: Witness.Aux[Const.NoName] = Const.NoNameW
 }
 
 object Arity {

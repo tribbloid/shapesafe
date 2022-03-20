@@ -4,7 +4,7 @@ import shapesafe.core.Poly1Base
 import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape._
-import shapesafe.m.viz.VizCTSystem.EmitError
+import shapesafe.m.Emit
 
 case class Rearrange[ // last step of einsum, contract, transpose, etc.
     S1 <: ShapeType,
@@ -32,7 +32,7 @@ trait Rearrange_Imp0 {
       implicit
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Rearrange[P1, II], MSG],
-      msg: EmitError[MSG]
+      msg: Emit.Error[MSG]
   ): Rearrange[S1, II] |- LeafShape = {
     ???
   }
