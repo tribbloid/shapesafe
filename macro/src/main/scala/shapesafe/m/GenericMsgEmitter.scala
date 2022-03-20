@@ -5,15 +5,12 @@ import singleton.ops.impl.Op
 
 import java.util.logging.Logger
 import scala.language.experimental.macros
-import scala.reflect.macros.whitebox
+import scala.reflect.macros.blackbox
 
 /**
   * An alternative to RequireMsgSym in singleton-ops
   */
-class GenericMsgEmitter[T, SS <: GenericMsgEmitter.EmitLevel] {
-
-//  def emit: Unit = macro EmitMsg.Macros.emit[T, SS]
-}
+class GenericMsgEmitter[T, SS <: GenericMsgEmitter.EmitLevel] {}
 
 object GenericMsgEmitter {
 
@@ -48,7 +45,7 @@ object GenericMsgEmitter {
   implicit def byOnlyInstance[A, SS <: GenericMsgEmitter.EmitLevel]: GenericMsgEmitter[A, SS] =
     macro Macros.byOnlyInstance[A, SS]
 
-  final class Macros(val c: whitebox.Context) extends MWithReflection {
+  final class Macros(val c: blackbox.Context) extends MWithReflection {
 
     import u._
 
@@ -74,7 +71,13 @@ object GenericMsgEmitter {
 
       // if inherited from multiple traits, take the most serious one
       if (ll <:< weakTypeOf[Abort]) {
-        c.abort(c.enclosingPosition, ss)
+        Logger.getLogger(this.getClass.getName).severe(ss)
+//        println("throwing exception: " + ss)
+//        throw new AbortMacroException(c.enclosingPosition.asInstanceOf[scala.reflect.internal.util.Position], ss)
+        throw new Throwable(ss)
+
+//        c.error(c.enclosingPosition, ss)
+//        c.abort(c.enclosingPosition, ss)
       } else if (ll <:< typeOf[Error]) {
         Logger.getLogger(this.getClass.getName).severe(ss)
         c.error(c.enclosingPosition, ss)

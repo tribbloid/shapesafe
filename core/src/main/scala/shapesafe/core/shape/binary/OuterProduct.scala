@@ -1,12 +1,12 @@
 package shapesafe.core.shape.binary
 
+import shapeless.HList
+import shapeless.ops.hlist.Prepend
 import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape.{LeafShape, ShapeType, StaticShape}
-import shapesafe.m.viz.VizCTSystem.EmitError
-import shapeless.HList
-import shapeless.ops.hlist.Prepend
+import shapesafe.m.Emit
 
 case class OuterProduct[
     S1 <: ShapeType,
@@ -36,7 +36,7 @@ trait OuterProduct_Imp1 {
       lemma1: S1 |- P1,
       lemma2: S2 |- P2,
       refute0: Reporters.ForShape.Refute0[OuterProduct[P1, P2], MSG],
-      msg: EmitError[MSG]
+      msg: Emit.Error[MSG]
   ): OuterProduct[S1, S2] |- LeafShape = {
     ???
   }

@@ -1,10 +1,10 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.debugging.DebugConst.Stripe
 import shapesafe.core.Poly1Base
+import shapesafe.core.debugging.DebugConst.Stripe
 import shapesafe.core.logic.Theory
+import shapesafe.m.Emit
 import shapesafe.m.viz.PeekCT
-import shapesafe.m.viz.VizCTSystem.{EmitError, EmitInfo}
 import singleton.ops.{+, XString}
 
 // TODO: this weird abuse of implicit priority is due to the fact that
@@ -18,8 +18,8 @@ class Reporters[
 
   trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
 
-    import shapesafe.core.debugging.DebugConst._
     import scope._
+    import shapesafe.core.debugging.DebugConst._
 
     type ExprOf[T <: CanPeek] = T#Notation
 
@@ -68,12 +68,12 @@ class Reporters[
 
   trait PeekReporter[IUB <: CanPeek, TGT <: CanPeek] extends ProofReporter[IUB, TGT] {
 
-    override type EmitMsg[T] = EmitInfo[T]
+    override type EmitMsg[T] = Emit.Info[T]
   }
 
   trait InterruptReporter[IUB <: CanPeek, TGT <: CanPeek] extends ProofReporter[IUB, TGT] {
 
-    override type EmitMsg[T] = EmitError[T]
+    override type EmitMsg[T] = Emit.Error[T]
   }
 }
 
@@ -147,7 +147,7 @@ object Reporters {
       ](
           implicit
           refute0: Refute0[R, MSG],
-          msg: EmitError[MSG]
+          msg: Emit.Error[MSG]
       ): NotFoundInfo[T, R] =
         ???
     }

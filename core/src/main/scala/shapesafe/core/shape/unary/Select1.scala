@@ -1,5 +1,8 @@
 package shapesafe.core.shape.unary
 
+import shapeless.ops.hlist.{At, Reverse}
+import shapeless.ops.record.Selector
+import shapeless.{HList, Nat, Witness}
 import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
@@ -7,10 +10,7 @@ import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
 import shapesafe.core.{Poly1Base, XString}
-import shapesafe.m.viz.VizCTSystem.EmitError
-import shapeless.ops.hlist.{At, Reverse}
-import shapeless.ops.record.Selector
-import shapeless.{HList, Nat, Witness}
+import shapesafe.m.Emit
 
 case class Select1[
     S1 <: ShapeType,
@@ -38,7 +38,7 @@ trait Select1_Imp0 {
       implicit
       lemma1: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[Select1[P1, I], MSG],
-      msg: EmitError[MSG]
+      msg: Emit.Error[MSG]
   ): Select1[S1, I] |- LeafShape = {
     ???
   }

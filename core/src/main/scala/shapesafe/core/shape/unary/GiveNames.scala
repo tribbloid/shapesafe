@@ -4,7 +4,7 @@ import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
 import shapesafe.core.debugging.{Notations, Reporters}
 import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
-import shapesafe.m.viz.VizCTSystem.EmitError
+import shapesafe.m.Emit
 
 case class GiveNames[
     S1 <: ShapeType,
@@ -32,7 +32,7 @@ trait GiveNames_Imp0 {
       implicit
       lemma: S1 |- P1,
       refute0: Reporters.ForShape.Refute0[GiveNames[P1, N], MSG],
-      msg: EmitError[MSG]
+      msg: Emit.Error[MSG]
   ): GiveNames[S1, N] |- LeafShape = {
     ???
   }
