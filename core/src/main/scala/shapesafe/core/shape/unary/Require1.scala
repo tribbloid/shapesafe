@@ -2,14 +2,14 @@ package shapesafe.core.shape.unary
 
 import shapesafe.core.debugging.Reporters
 import shapesafe.core.shape.ProveShape.|-
-import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType, StaticShape}
+import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType}
 
 trait Require1 extends Conjecture1 {
 
   type Prior <: LeafShape
   val s1: SS1 with ShapeType
 
-  type Condition[P1 <: Prior]
+  type Condition[_ <: Prior]
 
 //  type Constructor[N1 <: ShapeType] <: Require1
 }
