@@ -12,7 +12,7 @@ trait ProofSystem extends HasProposition with Theory { // TODO: no IUB?
 
   trait Bound
 
-  trait ExtensionLike extends Theory {
+  trait TheoryInSystem extends Theory {
 
 //    override type Bound <: ProofSystem.this.ExtensionBound
 

@@ -4,6 +4,7 @@ import shapeless.ops.hlist.Reverse
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
+import shapesafe.core.logic.Evaluable
 import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.ShapeReporters.{InterruptShape, PeekShape}
 import shapesafe.core.shape.StaticShape.{><^, Eye}
@@ -15,12 +16,16 @@ import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
 
-trait Shape extends VectorOps with MatrixOps {
+trait Shape extends Evaluable with VectorOps with MatrixOps {
 
   import Shape._
 
+  override val theory: ProveShape.type = ProveShape
+  type EvalTo = LeafShape
+
   final override def toString: String = shapeType.toString
 
+  // TODO: aggregate to Evaluable
   final def verify[
       O <: ShapeType
   ](

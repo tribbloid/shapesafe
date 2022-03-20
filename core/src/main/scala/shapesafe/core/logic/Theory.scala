@@ -43,8 +43,6 @@ trait Theory extends HasTheory with HasTactic {
     }
 
     final def apply(v: I): P#Repr = instanceFor(v)
-
-    //    final def findApplicable(v: I): this.type = this
   }
 
   object Proof {
@@ -181,13 +179,13 @@ trait Theory extends HasTheory with HasTactic {
     ): O2 |- O1 = eq.backward
   }
 
-  trait SuperTheory extends system.ExtensionLike {
+  trait SuperTheory extends system.TheoryInSystem {
 
     override type Bound <: Theory.this.ExtensionBound
   }
 
   object SuperTheory {
-    type Aux = System#ExtensionLike {
+    type Aux = System#TheoryInSystem {
 
       type Bound <: Theory.this.ExtensionBound
     }

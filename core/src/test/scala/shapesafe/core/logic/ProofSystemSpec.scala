@@ -102,7 +102,7 @@ class ProofSystemSpec extends BaseSpec {
 
     ignore(" ... with diamond type hierarchy") {
 
-      object SubProveStuff2 extends ProveStuff.ExtensionLike
+      object SubProveStuff2 extends ProveStuff.TheoryInSystem
 
       //      object SubSubProveNat extends SubProvePeano.SubScope with SubProveNat2.SubScope
       // TODO: at this moment, compiler says "class SubScope is inherited twice"
