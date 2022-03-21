@@ -2,6 +2,7 @@ package shapesafe.core.logic
 
 import shapesafe.core.ProofLike
 import shapesafe.core.ProofLike.TheoremTag
+import shapesafe.m.Emit
 
 import scala.annotation.implicitNotFound
 
@@ -65,27 +66,23 @@ trait Theory extends HasTheory with HasTactic {
     }
   }
 
-  @implicitNotFound(
-    "[NO PROOF]: ${I}\t |- \t??? <: ${O}"
-  )
   final type |-<[-I, O] = Proof[I, system.Aye[_ <: O]]
 
   /**
     * entailment, logical implication used only in existential proof summoning
     */
-  @implicitNotFound(
-    "[NO PROOF]: ${I}\t |- \t${O}"
-  )
   final type |-[-I, O] = Proof[I, system.Aye[O]]
+  implicit def refute_|-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT PROVE]: ${I} |- ${O}"]
+  ): |-[I, O] = ???
 
-  @implicitNotFound(
-    "[NO REFUTATION]: ${I}\t |-\\- \t${O}"
-  )
   final type |-\-[-I, O] = Proof[I, system.Nay[O]]
+  implicit def refute_|-\-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT REFUTE]: ${I} |-\\- ${O}"]
+  ): |-[I, O] = ???
 
-  @implicitNotFound(
-    "[NO ABSTENTION]: ${I}\t |-?- \t${O}"
-  )
   final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 
   final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]
