@@ -6,7 +6,7 @@ import shapesafe.m.Emit
 
 import scala.annotation.implicitNotFound
 
-trait Theory extends HasTheory with HasTactic {
+trait Theory extends HasTactic {
 
   final override val theory: this.type = this
 

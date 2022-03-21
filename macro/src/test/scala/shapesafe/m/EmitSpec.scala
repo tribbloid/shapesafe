@@ -22,7 +22,7 @@ class EmitSpec extends BaseSpec {
 
       shouldNotCompile(
         """direct""",
-        ".*Test123"
+        ".*Test123.*"
       )
     }
 
@@ -30,7 +30,7 @@ class EmitSpec extends BaseSpec {
 
       shouldNotCompile(
         """indirect""",
-        ".*Test123"
+        ".*Test123.*"
       )
     }
 
@@ -43,7 +43,7 @@ class EmitSpec extends BaseSpec {
 
       shouldNotCompile(
         """indirect""",
-        ".*Test123"
+        ".*Test123.*"
       )
     }
   }
