@@ -1,7 +1,6 @@
 package shapesafe.core.debugging
 
 import shapesafe.core.Poly1Base
-import shapesafe.core.debugging.DebugConst.Stripe
 import shapesafe.core.logic.Theory
 import shapesafe.m.Emit
 import shapesafe.m.viz.PeekCT
@@ -10,16 +9,16 @@ import singleton.ops.{+, XString}
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
 //  so step 1 is isolated to avoid triggering RequireMsg prematurely
-class Reporters[
+class Reasoning[
     PS <: Theory
-](val scope: PS) {
+](val theory: PS) {
 
-  import Reporters._
+  import Reasoning._
 
   trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
 
-    import scope._
     import shapesafe.core.debugging.DebugConst._
+    import theory._
 
     type ExprOf[T <: CanPeek] = T#Notation
 
@@ -77,7 +76,7 @@ class Reporters[
   }
 }
 
-object Reporters {
+object Reasoning {
 
   type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
@@ -114,65 +113,5 @@ object Reporters {
       //      val emit = new EmitMsg[SS, EmitMsg.Error]
       //      emit.emit
     }
-  }
-
-  trait Refutes {
-
-    type WHEN_PROVING
-
-    type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
-
-    object Refute0 extends Poly1Base[CanRefute, Any] {
-
-      implicit def get[I <: _IUB, V <: String](
-          implicit
-          expr2Str: PeekCTAux[I#Notation, V]
-      ): I =>> (
-        I#RefuteTxt +
-          WHEN_PROVING +
-          V
-      ) = forAll[I].=>> { _ =>
-        null
-      }
-    }
-
-    class NotFoundInfo[T, R <: CanRefute]
-
-    trait NotFoundInfo_Imp0 {
-
-      implicit def refute[
-          T,
-          R <: CanRefute,
-          MSG
-      ](
-          implicit
-          refute0: Refute0[R, MSG],
-          msg: Emit.Error[MSG]
-      ): NotFoundInfo[T, R] =
-        ???
-    }
-
-    object NotFoundInfo extends NotFoundInfo_Imp0 {
-
-      implicit def prove[
-          T,
-          R <: CanRefute
-      ](
-          implicit
-          iff: T
-      ): NotFoundInfo[T, R] = {
-        new NotFoundInfo[T, R]
-      }
-    }
-  }
-
-  object ForArity extends Refutes {
-
-    type WHEN_PROVING = "\n\n" + Stripe["... when proving arity"]
-  }
-
-  object ForShape extends Refutes {
-
-    type WHEN_PROVING = "\n\n" + Stripe["... when proving shape"]
   }
 }

@@ -2,7 +2,7 @@ package shapesafe.core.arity.binary
 
 import shapesafe.core.arity.ProveArity.{|-, |-<}
 import shapesafe.core.arity.{ArityType, LeafArity}
-import shapesafe.core.debugging.Reporters.ForArity
+import shapesafe.core.debugging.Refutes.ForArity
 import shapesafe.m.Emit
 
 trait Op2Like_Imp0 {

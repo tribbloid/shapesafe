@@ -29,7 +29,7 @@ object Index {
     def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
-  class Left[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
+  class LtoR[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
     type Ordinal = N
 
     override protected def _id = value
@@ -37,13 +37,13 @@ object Index {
     override type Notation = S
   }
 
-  object Left {
+  object LtoR {
 
 //    import shapeless.ops.nat.ToInt
 
     def apply(i: Nat)(
         implicit
         asOp: NatAsOp[i.N]
-    ) = new Left[i.N, asOp.OutInt](i.asInstanceOf[i.N], asOp.value.asInstanceOf[asOp.OutInt])
+    ) = new LtoR[i.N, asOp.OutInt](i.asInstanceOf[i.N], asOp.value.asInstanceOf[asOp.OutInt])
   }
 }

@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Names, Shape, ShapeReporters}
+import shapesafe.core.shape.{Names, Shape, ShapeReasoning}
 
 class AccumulateByNameSpec extends BaseSpec {
 
@@ -43,7 +43,7 @@ class AccumulateByNameSpec extends BaseSpec {
 
       val rr = Ops.:+.reduceByName(s1, s2)
 
-      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+      val str = ShapeReasoning.PeekShape.ForTerm(rr.shapeType).getMessage
 
       str.shouldBe(
         """

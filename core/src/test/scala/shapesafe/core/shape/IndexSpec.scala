@@ -15,11 +15,11 @@ class IndexSpec extends BaseSpec {
     }
   }
 
-  describe(classOf[Index.Left[_, _]].getSimpleName) {
+  describe(classOf[Index.LtoR[_, _]].getSimpleName) {
 
     it("peek") {
 
-      val ii = Index.Left(3)
+      val ii = Index.LtoR(3)
 
       PeekCT.runtime[ii.Notation].typeStr.shouldBe("3")
     }

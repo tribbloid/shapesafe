@@ -1,6 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.debugging.Reporters
+import shapesafe.core.debugging.Refutes
 import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.{LeafShape, ProveShape, ShapeType}
 
@@ -22,7 +22,7 @@ object Require1 {
   ](
       implicit
       lemma: T#SS1 |- P1,
-      condition: Reporters.ForShape.NotFoundInfo[T#Condition[P1], T]
+      condition: Refutes.ForShape.NotFoundInfo[T#Condition[P1], T]
   ): T |- P1 = {
 
     ProveShape.forAll[T].=>> { v =>

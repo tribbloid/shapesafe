@@ -13,6 +13,6 @@ trait VectorOps extends HasShape {
 
   def cross[THAT <: Shape](that: THAT) = {
 
-    shape.requireEqual(that).requireEqual(Shape.shape3)
+    shape.requireEqual(that).requireEqual(Shape._3)
   }
 }

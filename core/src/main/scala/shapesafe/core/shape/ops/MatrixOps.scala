@@ -17,7 +17,7 @@ trait MatrixOps extends HasShape {
   }
 
   def transpose = {
-    shape.requireNumDim(Nat._2).rearrangeBy(Indices & Index.Left(1) & Index.Left(0))
+    shape.requireNumDim(Nat._2).rearrangeBy(Indices & Index.LtoR(1) & Index.LtoR(0))
   }
 
   def `^T` = {
