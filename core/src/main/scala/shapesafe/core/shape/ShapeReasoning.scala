@@ -1,8 +1,8 @@
 package shapesafe.core.shape
 
-import shapesafe.core.debugging.Reporters
+import shapesafe.core.debugging.Reasoning
 
-object ShapeReporters extends Reporters[ProveShape.type](ProveShape) {
+object ShapeReasoning extends Reasoning[ProveShape.type](ProveShape) {
 
   object PeekShape extends PeekReporter[ShapeType, LeafShape]
 

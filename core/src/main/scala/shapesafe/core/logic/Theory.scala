@@ -4,9 +4,21 @@ import shapesafe.core.ProofLike
 import shapesafe.core.ProofLike.TheoremTag
 import shapesafe.m.Emit
 
-import scala.annotation.implicitNotFound
+trait Theory_Imp0 {
+  self: Theory =>
 
-trait Theory extends HasTactic {
+  implicit def refute_|-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT PROVE]: ${I} |- ${O}"]
+  ): |-[I, O] = ???
+
+  implicit def refute_|-\-[I, O](
+      implicit
+      emit: Emit.Error["[CANNOT REFUTE]: ${I} |-\\- ${O}"]
+  ): |-[I, O] = ???
+}
+
+trait Theory extends HasTactic with Theory_Imp0 {
 
   final override val theory: this.type = this
 
@@ -72,16 +84,8 @@ trait Theory extends HasTactic {
     * entailment, logical implication used only in existential proof summoning
     */
   final type |-[-I, O] = Proof[I, system.Aye[O]]
-  implicit def refute_|-[I, O](
-      implicit
-      emit: Emit.Error["[CANNOT PROVE]: ${I} |- ${O}"]
-  ): |-[I, O] = ???
 
   final type |-\-[-I, O] = Proof[I, system.Nay[O]]
-  implicit def refute_|-\-[I, O](
-      implicit
-      emit: Emit.Error["[CANNOT REFUTE]: ${I} |-\\- ${O}"]
-  ): |-[I, O] = ???
 
   final type |-?-[-I, O] = Proof[I, system.Abstain[O]]
 

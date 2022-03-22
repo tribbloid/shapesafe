@@ -51,7 +51,7 @@ object RequireMsgSpike {
 
 class RequireMsgSpike extends Spike {
 
-  import RequireMsgSpike._
+//  import RequireMsgSpike._
 
   describe("interpolation of Msg") {
 

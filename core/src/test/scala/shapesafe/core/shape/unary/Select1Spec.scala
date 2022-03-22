@@ -51,7 +51,7 @@ class Select1Spec extends BaseSpec {
 
   it("from Left") {
 
-    val ss = Select1(s1, Index.Left(2)).^
+    val ss = Select1(s1, Index.LtoR(2)).^
     val rr = ss.eval
 
     typeInferShort(rr.shapeType).shouldBe(
@@ -61,7 +61,7 @@ class Select1Spec extends BaseSpec {
 
   it(" .... indirectly") {
 
-    val ss = Select1(s1 :<<= Names >< "a" >< "b" >< "c", Index.Left(1))
+    val ss = Select1(s1 :<<= Names >< "a" >< "b" >< "c", Index.LtoR(1))
     val rr = ss.^.eval
 
     typeInferShort(rr.shapeType).shouldBe(

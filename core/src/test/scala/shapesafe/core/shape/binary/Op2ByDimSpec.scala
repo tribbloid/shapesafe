@@ -2,7 +2,7 @@ package shapesafe.core.shape.binary
 
 import shapesafe.BaseSpec
 import shapesafe.core.Ops
-import shapesafe.core.shape.{Shape, ShapeReporters}
+import shapesafe.core.shape.{Shape, ShapeReasoning}
 
 class Op2ByDimSpec extends BaseSpec {
 
@@ -30,7 +30,7 @@ class Op2ByDimSpec extends BaseSpec {
     it("Strict") {
       val rr = s1.applyByDim(Ops.:+, s2)
 
-      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+      val str = ShapeReasoning.PeekShape.ForTerm(rr.shapeType).getMessage
 
       str.shouldBe(
         """
@@ -43,7 +43,7 @@ class Op2ByDimSpec extends BaseSpec {
     it("DropLef") {
       val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
-      val str = ShapeReporters.PeekShape.ForTerm(rr.shapeType).getMessage
+      val str = ShapeReasoning.PeekShape.ForTerm(rr.shapeType).getMessage
 
       str.shouldBe(
         """

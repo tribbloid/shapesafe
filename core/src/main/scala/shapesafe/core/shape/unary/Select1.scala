@@ -6,7 +6,7 @@ import shapeless.{HList, Nat, Witness}
 import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
-import shapesafe.core.debugging.{Notations, Reporters}
+import shapesafe.core.debugging.{Notations, Refutes}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
 import shapesafe.core.{Poly1Base, XString}
@@ -37,7 +37,7 @@ trait Select1_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[Select1[P1, I], MSG],
+      refute0: Refutes.ForShape.Refute0[Select1[P1, I], MSG],
       msg: Emit.Error[MSG]
   ): Select1[S1, I] |- LeafShape = {
     ???
@@ -96,8 +96,8 @@ object Select1 extends Select1_Imp0 {
         implicit
         reverse: Reverse.Aux[P1#Static, R],
         _at: At.Aux[R, N, O]
-    ): Select1[P1, Index.Left[N, S]] =>> O = {
-      forAll[Select1[P1, Index.Left[N, S]]].=>> { v =>
+    ): Select1[P1, Index.LtoR[N, S]] =>> O = {
+      forAll[Select1[P1, Index.LtoR[N, S]]].=>> { v =>
         val p1 = v.s1
 
         _at(reverse(p1.static))

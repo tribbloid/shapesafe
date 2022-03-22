@@ -6,12 +6,12 @@ import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.logic.Evaluable
 import shapesafe.core.shape.ProveShape.|-
-import shapesafe.core.shape.ShapeReporters.{InterruptShape, PeekShape}
+import shapesafe.core.shape.ShapeReasoning.{InterruptShape, PeekShape}
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
 import shapesafe.core.shape.ops.{EinSumOp, MatrixOps, StaticOpsView, VectorOps}
-import shapesafe.core.shape.unary.{RequireDistinctNames, _}
+import shapesafe.core.shape.unary._
 import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
@@ -133,9 +133,9 @@ trait Shape extends Evaluable with VectorOps with MatrixOps {
     def apply(i: Nat)(
         implicit
         asOp: NatAsOp[i.N]
-    ): ^[Select1[_ShapeType, Index.Left[i.N, asOp.OutInt]]] = {
+    ): ^[Select1[_ShapeType, Index.LtoR[i.N, asOp.OutInt]]] = {
 
-      apply(Index.Left(i))
+      apply(Index.LtoR(i))
     }
 
     def apply(w: Witness.Lt[String]): ^[Select1[_ShapeType, Index.Name[w.T]]] = {
@@ -223,19 +223,6 @@ object Shape extends Shape with ApplyLiterals.ToShape {
     final type _ShapeType = SELF
   }
 
-  // TODO: only support LeafShape, remove
-//  object Vector {
-//
-//    type Aux[T <: Axis] = ^[∅ >< T]
-//  }
-//  type Vector = Vector.Aux[_]
-//
-//  object Matrix {
-//
-//    type Aux[T1 <: Axis, T2 <: Axis] = ^[∅ >< T1 >< T2]
-//  }
-//  type Matrix = Matrix.Aux[_ <: Axis, _ <: Axis]
-
   val Unchecked: Shape.^[shapesafe.core.shape.Unchecked.type] = shapesafe.core.shape.Unchecked.^
 
   def box[T <: ShapeType](self: T): Shape.^[T] = Shape.^(self)
@@ -243,5 +230,7 @@ object Shape extends Shape with ApplyLiterals.ToShape {
   override type _ShapeType = StaticShape.Eye
   override def shapeType: Eye = StaticShape.Eye
 
-  val shape3 = Shape(3)
+  val _1 = Shape(1)
+  val _2 = Shape(2)
+  val _3 = Shape(3)
 }

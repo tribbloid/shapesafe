@@ -1,6 +1,7 @@
 package shapesafe.core.shape
 
 import shapeless.Nat
+import shapesafe.core.axis.Axis
 
 // TODO: add VerifiedShape
 trait LeafShape extends ShapeType {
@@ -14,8 +15,16 @@ object LeafShape {
 
   implicit def endo[T <: LeafShape]: T |- T = ProveShape.forAll[T].=>>(identity[T])
 
-//  type IfTrue1[_ <: LeafShape] = Const.True
-//  type IfTrue2[_ <: LeafShape, _ <: LeafShape] = Const.True
-//
-//  type IffSameNumOfDimension[L1 <: LeafShape, L2 <: LeafShape] = L1#NatNumOfDimensions =:= L2#NatNumOfDimensions
+  import StaticShape.><
+
+  type Vector[T <: Axis] = Shape.^[StaticShape.Eye >< T]
+  type Vector_ = Vector[_]
+
+  type Matrix[T1 <: Axis, T2 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2]
+  type Matrix_ = Matrix[_, _]
+
+  type Tensor3[T1 <: Axis, T2 <: Axis, T3 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2 >< T3]
+  type Tensor3_ = Tensor3[_, _, _]
+
+  // TODO: use CodeGen to continue this pattern
 }

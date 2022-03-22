@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.ShapeReporters.PeekShape
+import shapesafe.core.shape.ShapeReasoning.PeekShape
 import shapesafe.core.shape.{Names, Shape}
 
 class GiveNamesSpec extends BaseSpec {

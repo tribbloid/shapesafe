@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.core.Poly1Base
 import shapesafe.core.axis.Axis
-import shapesafe.core.debugging.{Notations, Reporters}
+import shapesafe.core.debugging.{Notations, Refutes}
 import shapesafe.core.shape._
 import shapesafe.m.Emit
 
@@ -31,7 +31,7 @@ trait Rearrange_Imp0 {
   ](
       implicit
       lemma: S1 |- P1,
-      refute0: Reporters.ForShape.Refute0[Rearrange[P1, II], MSG],
+      refute0: Refutes.ForShape.Refute0[Rearrange[P1, II], MSG],
       msg: Emit.Error[MSG]
   ): Rearrange[S1, II] |- LeafShape = {
     ???

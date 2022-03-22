@@ -1,7 +1,7 @@
 package shapesafe.core.arity
 
 import shapeless.{Nat, Witness}
-import shapesafe.core.arity.ArityReporters.{InterruptArity, PeekArity}
+import shapesafe.core.arity.ArityReasoning.{InterruptArity, PeekArity}
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.Utils.NatAsOp
@@ -50,7 +50,7 @@ trait Arity extends Evaluable with ArityOpsLike with Axis {
       O <: LeafArity
   ](
       implicit
-      reporter: ArityReporters.PeekArity.Case[_ArityType],
+      reporter: ArityReasoning.PeekArity.Case[_ArityType],
       prove: _ArityType |- O
   ): ^[O] = eval(prove)
 
@@ -81,14 +81,6 @@ object Arity {
     ^(Literal.apply(w))
   }
 
-  lazy val _0 = Arity(0)
-
-  lazy val _1 = Arity(1)
-
-  lazy val _2 = Arity(2)
-
-  lazy val _3 = Arity(3)
-
   object FromNat {
 
     def apply[N <: Nat](v: N)(
@@ -99,4 +91,12 @@ object Arity {
       ^(Derived.summon[NatAsOp[N]](asOp))
     }
   }
+
+  lazy val _0 = Arity(0)
+
+  lazy val _1 = Arity(1)
+
+  lazy val _2 = Arity(2)
+
+  lazy val _3 = Arity(3)
 }

@@ -2,7 +2,7 @@ package shapesafe.core.shape.unary
 
 import shapesafe.BaseSpec
 import shapesafe.core.arity.Arity
-import shapesafe.core.shape.Index.{Left, Name}
+import shapesafe.core.shape.Index.{LtoR, Name}
 import shapesafe.core.shape.Names.tupleExtension
 import shapesafe.core.shape.{Indices, Names, Shape}
 
@@ -99,8 +99,8 @@ class RearrangeSpec extends BaseSpec {
 
     it("with indices") {
       val strs = Seq(
-        Rearrange(s1, Indices >< Left(2) >< Left(1)).^.eval.toString,
-        s1.rearrangeBy(Indices >< Left(2) >< Left(1)).eval.toString
+        Rearrange(s1, Indices >< LtoR(2) >< LtoR(1)).^.eval.toString,
+        s1.rearrangeBy(Indices >< LtoR(2) >< LtoR(1)).eval.toString
       )
 
       strs.distinct
@@ -116,8 +116,8 @@ class RearrangeSpec extends BaseSpec {
     it("even for nameless shapes") {
 
       val strs = Seq(
-        Rearrange(s1Nameless, Indices >< Left(2) >< Left(1)).^.eval.toString,
-        s1Nameless.rearrangeBy(Indices >< Left(2) >< Left(1)).eval.toString
+        Rearrange(s1Nameless, Indices >< LtoR(2) >< LtoR(1)).^.eval.toString,
+        s1Nameless.rearrangeBy(Indices >< LtoR(2) >< LtoR(1)).eval.toString
       )
 
       strs.distinct
@@ -162,7 +162,7 @@ class RearrangeSpec extends BaseSpec {
     }
   }
 
-  describe("CANNOT select if") {
+  describe("CANNOT rearrange if") {
 
     // TODO: no longer true
 //    it("shape doesn't have distinct names") {

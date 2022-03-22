@@ -1,8 +1,8 @@
 package shapesafe.core.arity
 
-import shapesafe.core.debugging.Reporters
+import shapesafe.core.debugging.Reasoning
 
-object ArityReporters extends Reporters[ProveArity.type](ProveArity) {
+object ArityReasoning extends Reasoning[ProveArity.type](ProveArity) {
 
   object PeekArity extends PeekReporter[ArityType, LeafArity]
 

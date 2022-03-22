@@ -3,7 +3,7 @@ package shapesafe.core.shape.binary
 import shapeless.HList
 import shapeless.ops.hlist.Prepend
 import shapesafe.core.axis.Axis
-import shapesafe.core.debugging.{Notations, Reporters}
+import shapesafe.core.debugging.{Notations, Refutes}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape.{LeafShape, ShapeType, StaticShape}
 import shapesafe.m.Emit
@@ -35,7 +35,7 @@ trait OuterProduct_Imp1 {
       implicit
       lemma1: S1 |- P1,
       lemma2: S2 |- P2,
-      refute0: Reporters.ForShape.Refute0[OuterProduct[P1, P2], MSG],
+      refute0: Refutes.ForShape.Refute0[OuterProduct[P1, P2], MSG],
       msg: Emit.Error[MSG]
   ): OuterProduct[S1, S2] |- LeafShape = {
     ???

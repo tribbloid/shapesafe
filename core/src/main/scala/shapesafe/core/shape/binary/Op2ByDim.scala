@@ -5,7 +5,7 @@ import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
 import shapesafe.core.arity.ArityType
 import shapesafe.core.arity.binary.Op2Like
-import shapesafe.core.debugging.{NotationsLike, Reporters}
+import shapesafe.core.debugging.{NotationsLike, Refutes}
 import shapesafe.core.shape.unary.RecordLemma
 import shapesafe.core.shape.{ProveShape, ShapeType, StaticShape}
 
@@ -49,7 +49,7 @@ trait Op2ByDim {
         implicit
         lemma1: S1 |- P1,
         lemma2: S2 |- P2,
-        condition: Reporters.ForShape.NotFoundInfo[Condition[P1, P2], _On[P1, P2]],
+        condition: Refutes.ForShape.NotFoundInfo[Condition[P1, P2], _On[P1, P2]],
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
         toShape: _Lemma.ToShape.Case[HO]
