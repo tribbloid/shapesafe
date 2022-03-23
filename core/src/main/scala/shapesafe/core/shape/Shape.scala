@@ -4,9 +4,8 @@ import shapeless.ops.hlist.Reverse
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
-import shapesafe.core.logic.Evaluable
-import shapesafe.core.shape.ProveShape.|-
-import shapesafe.core.shape.ShapeReasoning.{InterruptShape, PeekShape}
+import shapesafe.core.axis.Axis
+import shapesafe.core.debugging.CanReason
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
@@ -16,16 +15,18 @@ import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
 
-trait Shape extends Evaluable with VectorOps with MatrixOps {
+trait Shape extends CanReason with VectorOps with MatrixOps {
 
   import Shape._
 
   override val theory: ProveShape.type = ProveShape
-  type EvalTo = LeafShape
+
+  import theory._
+  import AsLeafShape._
 
   final override def toString: String = shapeType.toString
 
-  // TODO: aggregate to Evaluable
+  // TODO: aggregate to CanReason
   final def verify[
       O <: ShapeType
   ](
@@ -40,30 +41,31 @@ trait Shape extends Evaluable with VectorOps with MatrixOps {
 //      prove: _Shape |- O
 //  ): ^[O] = prove.valueOf(shape).^
 
+  type EvalTo[O <: LeafShape] = _ShapeType |- O
   def eval[ // TODO: eval each member?
       O <: LeafShape
   ](
       implicit
-      prove: _ShapeType |- O
-  ): ^[O] = verify(prove)
+      to: EvalTo[O]
+  ): ^[O] = verify(to)
 
   def peek(
       implicit
-      reporter: PeekShape.Case[_ShapeType]
+      reporter: Peek[_ShapeType]
   ): this.type = this
 
   def interrupt(
       implicit
-      reporter: InterruptShape.Case[_ShapeType]
+      reporter: Interrupt[_ShapeType]
   ): this.type = this
 
+  type ReasonTo[O <: LeafShape] = this._ShapeType |-@- O
   def reason[
       O <: LeafShape
   ](
       implicit
-      reporter: PeekShape.Case[_ShapeType],
-      prove: _ShapeType |- O
-  ): ^[O] = eval(prove)
+      to: ReasonTo[O]
+  ): ^[O] = eval(to)
 
   /**
     * assign new names
@@ -151,6 +153,8 @@ trait Shape extends Evaluable with VectorOps with MatrixOps {
     result.^
   }
 
+  def dropAll = rearrangeBy(Indices.Eye)
+
   object rearrange extends SingletonProductArgs {
 
     def applyProduct[H1 <: HList, H2 <: HList](
@@ -230,7 +234,27 @@ object Shape extends Shape with ApplyLiterals.ToShape {
   override type _ShapeType = StaticShape.Eye
   override def shapeType: Eye = StaticShape.Eye
 
+  val _0 = Shape(0)
   val _1 = Shape(1)
   val _2 = Shape(2)
   val _3 = Shape(3)
+
+  type Leaf[T <: ShapeType] = Shape.^[T]
+  type Leaf_ = Leaf[_]
+
+  object Leaf {
+
+    import StaticShape.><
+
+    type Vector[T <: Axis] = Shape.^[StaticShape.Eye >< T]
+    type Vector_ = Vector[_]
+
+    type Matrix[T1 <: Axis, T2 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2]
+    type Matrix_ = Matrix[_, _]
+
+    type Tensor3[T1 <: Axis, T2 <: Axis, T3 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2 >< T3]
+    type Tensor3_ = Tensor3[_, _, _]
+
+    // TODO: use CodeGen to continue this pattern
+  }
 }

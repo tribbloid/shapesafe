@@ -2,10 +2,11 @@ package shapesafe.core.arity
 
 import shapeless.Nat
 import singleton.ops.ToInt
-import singleton.ops.impl.{std, OpId, OpMacro}
 import singleton.twoface.impl.TwoFaceAny
 
 object Utils {
+
+  import singleton.ops.impl.std
 
   type Op = singleton.ops.impl.Op
 
