@@ -43,7 +43,7 @@ class AccumulateByNameSpec extends BaseSpec {
 
       val rr = Ops.:+.reduceByName(s1, s2)
 
-      val str = ShapeReasoning.PeekShape.ForTerm(rr.shapeType).getMessage
+      val str = ShapeReasoning._Peek.ForTerm(rr.shapeType).getMessage
 
       str.shouldBe(
         """

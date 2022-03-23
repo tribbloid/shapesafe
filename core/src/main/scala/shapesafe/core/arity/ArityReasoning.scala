@@ -2,9 +2,10 @@ package shapesafe.core.arity
 
 import shapesafe.core.debugging.Reasoning
 
-object ArityReasoning extends Reasoning[ProveArity.type](ProveArity) {
+object ArityReasoning extends Reasoning.Canonical {
 
-  object PeekArity extends PeekReporter[ArityType, LeafArity]
+  val theory: ProveArity.type = ProveArity
 
-  object InterruptArity extends InterruptReporter[ArityType, LeafArity]
+  type FromType = ArityType
+  type ToType = LeafArity
 }

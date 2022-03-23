@@ -4,9 +4,8 @@ import shapeless.ops.hlist.Reverse
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
-import shapesafe.core.logic.Evaluable
+import shapesafe.core.debugging.CanReason
 import shapesafe.core.shape.ProveShape.|-
-import shapesafe.core.shape.ShapeReasoning.{InterruptShape, PeekShape}
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
@@ -16,16 +15,15 @@ import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
 
-trait Shape extends Evaluable with VectorOps with MatrixOps {
+trait Shape extends CanReason with VectorOps with MatrixOps {
 
   import Shape._
 
-  override val theory: ProveShape.type = ProveShape
-  type EvalTo = LeafShape
+  override val reasoning: ShapeReasoning.type = ShapeReasoning
 
   final override def toString: String = shapeType.toString
 
-  // TODO: aggregate to Evaluable
+  // TODO: aggregate to CanReason
   final def verify[
       O <: ShapeType
   ](
@@ -49,19 +47,19 @@ trait Shape extends Evaluable with VectorOps with MatrixOps {
 
   def peek(
       implicit
-      reporter: PeekShape.Case[_ShapeType]
+      reporter: reasoning._Peek.Case[_ShapeType]
   ): this.type = this
 
   def interrupt(
       implicit
-      reporter: InterruptShape.Case[_ShapeType]
+      reporter: reasoning._Interrupt.Case[_ShapeType]
   ): this.type = this
 
   def reason[
       O <: LeafShape
   ](
       implicit
-      reporter: PeekShape.Case[_ShapeType],
+      reporter: reasoning._Peek.Case[_ShapeType],
       prove: _ShapeType |- O
   ): ^[O] = eval(prove)
 
@@ -230,7 +228,8 @@ object Shape extends Shape with ApplyLiterals.ToShape {
   override type _ShapeType = StaticShape.Eye
   override def shapeType: Eye = StaticShape.Eye
 
-  val _1 = Shape(1)
-  val _2 = Shape(2)
-  val _3 = Shape(3)
+  lazy val _0 = Shape(0)
+  lazy val _1 = Shape(1)
+  lazy val _2 = Shape(2)
+  lazy val _3 = Shape(3)
 }

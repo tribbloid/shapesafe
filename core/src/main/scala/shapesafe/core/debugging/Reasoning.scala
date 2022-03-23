@@ -9,9 +9,9 @@ import singleton.ops.{+, XString}
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
 //  so step 1 is isolated to avoid triggering RequireMsg prematurely
-class Reasoning[
-    PS <: Theory
-](val theory: PS) {
+trait Reasoning {
+
+  val theory: Theory
 
   import Reasoning._
 
@@ -113,5 +113,17 @@ object Reasoning {
       //      val emit = new EmitMsg[SS, EmitMsg.Error]
       //      emit.emit
     }
+  }
+
+  trait Canonical extends Reasoning {
+
+    type FromType <: CanPeek
+    type ToType <: CanPeek
+
+    object _Peek extends PeekReporter[FromType, ToType]
+    type _Peek[I <: FromType] = _Peek.Case[I]
+
+    object _Interrupt extends InterruptReporter[FromType, ToType]
+    type _Interrupt[I <: FromType] = _Interrupt.Case[I]
   }
 }

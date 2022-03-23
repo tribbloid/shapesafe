@@ -2,9 +2,10 @@ package shapesafe.core.shape
 
 import shapesafe.core.debugging.Reasoning
 
-object ShapeReasoning extends Reasoning[ProveShape.type](ProveShape) {
+object ShapeReasoning extends Reasoning.Canonical {
 
-  object PeekShape extends PeekReporter[ShapeType, LeafShape]
+  val theory: ProveShape.type = ProveShape
 
-  object InterruptShape extends InterruptReporter[ShapeType, LeafShape]
+  type FromType = ShapeType
+  type ToType = LeafShape
 }

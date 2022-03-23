@@ -10,7 +10,7 @@ trait ProofSystem extends HasProposition with Theory { // TODO: no IUB?
   final type System = this.type
   final val system = this
 
-  trait Bound
+  trait Bound // TODO: remove, useless
 
   trait TheoryInSystem extends Theory {
 
