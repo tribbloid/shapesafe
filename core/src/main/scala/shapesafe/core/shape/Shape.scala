@@ -4,6 +4,7 @@ import shapeless.ops.hlist.Reverse
 import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
+import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.CanReason
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
@@ -152,6 +153,8 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
     result.^
   }
 
+  def select0 = rearrangeBy(Indices.Eye)
+
   object rearrange extends SingletonProductArgs {
 
     def applyProduct[H1 <: HList, H2 <: HList](
@@ -235,4 +238,23 @@ object Shape extends Shape with ApplyLiterals.ToShape {
   val _1 = Shape(1)
   val _2 = Shape(2)
   val _3 = Shape(3)
+
+  type Leaf[T <: ShapeType] = Shape.^[T]
+  type Leaf_ = Leaf[_]
+
+  object Leaf {
+
+    import StaticShape.><
+
+    type Vector[T <: Axis] = Shape.^[StaticShape.Eye >< T]
+    type Vector_ = Vector[_]
+
+    type Matrix[T1 <: Axis, T2 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2]
+    type Matrix_ = Matrix[_, _]
+
+    type Tensor3[T1 <: Axis, T2 <: Axis, T3 <: Axis] = Shape.^[StaticShape.Eye >< T1 >< T2 >< T3]
+    type Tensor3_ = Tensor3[_, _, _]
+
+    // TODO: use CodeGen to continue this pattern
+  }
 }
