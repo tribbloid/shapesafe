@@ -2,7 +2,6 @@ package shapesafe.core.arity
 
 import shapeless.{Nat, Witness}
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
-import shapesafe.core.arity.ProveArity.|-
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.Axis
@@ -15,7 +14,10 @@ trait Arity extends CanReason with ArityOpsLike with Axis {
 
   import Arity._
 
-  override val reasoning: ArityReasoning.type = ArityReasoning
+  override val theory: ProveArity.type = ProveArity
+
+  import theory._
+  import AsLeafArity._
 
   final override def toString: String = arityType.toString
 
@@ -27,29 +29,30 @@ trait Arity extends CanReason with ArityOpsLike with Axis {
       prove: _ArityType |- O
   ): ^[O] = prove.consequentFor(arityType).value.^
 
+  type EvalTo[O <: LeafArity] = _ArityType |- O
   def eval[
       O <: LeafArity
   ](
       implicit
-      prove: _ArityType |- O
+      prove: EvalTo[O]
   ): ^[O] = verify(prove)
 
   def peek(
       implicit
-      reporter: reasoning._Peek[_ArityType]
+      reporter: Peek[_ArityType]
   ): this.type = this
 
   def interrupt(
       implicit
-      reporter: reasoning._Interrupt[_ArityType]
+      reporter: Interrupt[_ArityType]
   ): this.type = this
 
+  type ReasonTo[O <: LeafArity] = this._ArityType |-@- O
   def reason[
       O <: LeafArity
   ](
       implicit
-      reporter: reasoning._Peek[_ArityType],
-      prove: _ArityType |- O
+      prove: ReasonTo[O]
   ): ^[O] = eval(prove)
 
   final override val nameW: Witness.Aux[Const.NoName] = Const.NoNameW
@@ -90,8 +93,8 @@ object Arity {
     }
   }
 
-  lazy val _0 = Arity(0)
-  lazy val _1 = Arity(1)
-  lazy val _2 = Arity(2)
-  lazy val _3 = Arity(3)
+  val _0 = Arity(0)
+  val _1 = Arity(1)
+  val _2 = Arity(2)
+  val _3 = Arity(3)
 }

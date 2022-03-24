@@ -1,7 +1,7 @@
 package shapesafe.core.debugging
 
 import shapesafe.core.Poly1Base
-import shapesafe.core.logic.Theory
+import shapesafe.core.logic.HasTheory
 import shapesafe.m.Emit
 import shapesafe.m.viz.PeekCT
 import singleton.ops.{+, XString}
@@ -9,11 +9,9 @@ import singleton.ops.{+, XString}
 // TODO: this weird abuse of implicit priority is due to the fact that
 //  singleton-ops RequireMsg only cache the last message in the implicit search
 //  so step 1 is isolated to avoid triggering RequireMsg prematurely
-trait Reasoning {
+trait Reporters extends HasTheory {
 
-  val theory: Theory
-
-  import Reasoning._
+  import Reporters._
 
   trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
 
@@ -76,7 +74,7 @@ trait Reasoning {
   }
 }
 
-object Reasoning {
+object Reporters {
 
   type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
@@ -115,15 +113,4 @@ object Reasoning {
     }
   }
 
-  trait Canonical extends Reasoning {
-
-    type FromType <: CanPeek
-    type ToType <: CanPeek
-
-    object _Peek extends PeekReporter[FromType, ToType]
-    type _Peek[I <: FromType] = _Peek.Case[I]
-
-    object _Interrupt extends InterruptReporter[FromType, ToType]
-    type _Interrupt[I <: FromType] = _Interrupt.Case[I]
-  }
 }

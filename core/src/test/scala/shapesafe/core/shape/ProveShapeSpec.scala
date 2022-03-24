@@ -1,9 +1,10 @@
 package shapesafe.core.shape
 
 import shapesafe.BaseSpec
+import shapesafe.core.shape.ProveShape.AsLeafShape
 import shapesafe.core.shape.unary.RequireDistinctNames
 
-class ShapeReportersSpec extends BaseSpec {
+class ProveShapeSpec extends BaseSpec {
 
   describe("can report") {
 
@@ -11,7 +12,7 @@ class ShapeReportersSpec extends BaseSpec {
 
       val i = Shape(3, 4)
 
-      val m = ShapeReasoning._Peek.ForTerm(i.shapeType).getMessage
+      val m = AsLeafShape.Peek.ForTerm(i.shapeType).getMessage
       assert(m.trim == "3 >< 4")
     }
 
@@ -19,7 +20,7 @@ class ShapeReportersSpec extends BaseSpec {
 
       val i = Shape.Unchecked
 
-      val m = ShapeReasoning._Peek.ForTerm(i.shapeType).getMessage
+      val m = AsLeafShape.Peek.ForTerm(i.shapeType).getMessage
       assert(m.trim == "_UNCHECKED_")
     }
 
@@ -27,7 +28,7 @@ class ShapeReportersSpec extends BaseSpec {
 
       val i = RequireDistinctNames(Unchecked).^
 
-      val m = ShapeReasoning._Peek.ForTerm(i.shapeType).getMessage
+      val m = AsLeafShape.Peek.ForTerm(i.shapeType).getMessage
 
       assert(
         m.trim ==
@@ -43,7 +44,7 @@ class ShapeReportersSpec extends BaseSpec {
 
       val i = Shape.Unchecked >< Shape(3, 4)
 
-      val m = ShapeReasoning._Peek.ForTerm(i.shapeType).getMessage
+      val m = AsLeafShape.Peek.ForTerm(i.shapeType).getMessage
 
 //      import shapesafe.m.viz.PeekCT
 //      PeekCT[i._Shape#Expr].interrupt

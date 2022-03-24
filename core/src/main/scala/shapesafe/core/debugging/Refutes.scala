@@ -2,7 +2,7 @@ package shapesafe.core.debugging
 
 import shapesafe.core.Poly1Base
 import shapesafe.core.debugging.DebugConst.Stripe
-import shapesafe.core.debugging.Reasoning.PeekCTAux
+import shapesafe.core.debugging.Reporters.PeekCTAux
 import shapesafe.m.Emit
 import singleton.ops.+
 

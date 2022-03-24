@@ -5,7 +5,6 @@ import shapeless.{HList, Nat, SingletonProductArgs, Witness}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.debugging.CanReason
-import shapesafe.core.shape.ProveShape.|-
 import shapesafe.core.shape.StaticShape.{><^, Eye}
 import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
@@ -19,7 +18,10 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 
   import Shape._
 
-  override val reasoning: ShapeReasoning.type = ShapeReasoning
+  override val theory: ProveShape.type = ProveShape
+
+  import theory._
+  import AsLeafShape._
 
   final override def toString: String = shapeType.toString
 
@@ -38,30 +40,31 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 //      prove: _Shape |- O
 //  ): ^[O] = prove.valueOf(shape).^
 
+  type EvalTo[O <: LeafShape] = _ShapeType |- O
   def eval[ // TODO: eval each member?
       O <: LeafShape
   ](
       implicit
-      prove: _ShapeType |- O
-  ): ^[O] = verify(prove)
+      to: EvalTo[O]
+  ): ^[O] = verify(to)
 
   def peek(
       implicit
-      reporter: reasoning._Peek.Case[_ShapeType]
+      reporter: Peek[_ShapeType]
   ): this.type = this
 
   def interrupt(
       implicit
-      reporter: reasoning._Interrupt.Case[_ShapeType]
+      reporter: Interrupt[_ShapeType]
   ): this.type = this
 
+  type ReasonTo[O <: LeafShape] = this._ShapeType |-@- O
   def reason[
       O <: LeafShape
   ](
       implicit
-      reporter: reasoning._Peek.Case[_ShapeType],
-      prove: _ShapeType |- O
-  ): ^[O] = eval(prove)
+      to: ReasonTo[O]
+  ): ^[O] = eval(to)
 
   /**
     * assign new names
@@ -228,8 +231,8 @@ object Shape extends Shape with ApplyLiterals.ToShape {
   override type _ShapeType = StaticShape.Eye
   override def shapeType: Eye = StaticShape.Eye
 
-  lazy val _0 = Shape(0)
-  lazy val _1 = Shape(1)
-  lazy val _2 = Shape(2)
-  lazy val _3 = Shape(3)
+  val _0 = Shape(0)
+  val _1 = Shape(1)
+  val _2 = Shape(2)
+  val _3 = Shape(3)
 }
