@@ -25,7 +25,7 @@ trait ProofWithReasoning extends ProofSystem with Reporters {
 
     object ReasoningMixin {
 
-      implicit def mixin[I <: CanPeek, P <: Consequent](
+      implicit def reason[I <: CanPeek, P <: Consequent](
           implicit
           reporter: Peek.Case[I],
           prove: Proof[I, P]

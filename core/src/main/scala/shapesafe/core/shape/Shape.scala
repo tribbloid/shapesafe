@@ -153,7 +153,7 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
     result.^
   }
 
-  def select0 = rearrangeBy(Indices.Eye)
+  def dropAll = rearrangeBy(Indices.Eye)
 
   object rearrange extends SingletonProductArgs {
 
