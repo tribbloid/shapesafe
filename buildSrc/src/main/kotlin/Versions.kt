@@ -6,7 +6,7 @@ class Versions(self: Project) {
     val projectGroup = "ai.acyclic.shapesafe"
     val projectRootID = "shapesafe"
 
-    val projectV = "0.2.0-SNAPSHOT"
+    val projectV = "0.1.3"
     val projectVMajor = projectV.removeSuffix("-SNAPSHOT")
 //    val projectVComposition = projectV.split('-')
 
