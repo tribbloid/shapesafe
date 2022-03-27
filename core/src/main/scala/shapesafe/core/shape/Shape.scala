@@ -107,14 +107,6 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 
       OuterProduct(shapeType, that.shapeType).^
     }
-
-    // TODO: redundant?
-//    def apply[THAT <: Shape](
-//        that: ^[THAT]
-//    ): ^[OuterProduct[_Shape, that._Shape]] = {
-//
-//      OuterProduct(shape, that.shape).^
-//    }
   }
 
   def outer: ><.type = ><

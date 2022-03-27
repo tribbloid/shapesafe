@@ -26,16 +26,14 @@ class EinSumSpec extends BaseSpec {
         |         ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
-        |       ‣ CheckEinSum
-        |       :  ‣ GiveNames┏ 1:Literal ><
-        |       :             ┃   2:Literal
-        |       :             ┏ x ><
-        |       :             ┃   y
-        |       ‣ CheckEinSum
-        |          ‣ GiveNames┏ 3:Literal ><
-        |                     ┃   4:Literal
-        |                     ┏ i ><
-        |                     ┃   j
+        |       ‣ GiveNames┏ 1:Literal ><
+        |       :          ┃   2:Literal
+        |       :          ┏ x ><
+        |       :          ┃   y
+        |       ‣ GiveNames┏ 3:Literal ><
+        |                  ┃   4:Literal
+        |                  ┏ i ><
+        |                  ┃   j
         |""".stripMargin
     )
   }

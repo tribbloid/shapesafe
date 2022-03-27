@@ -70,19 +70,19 @@ trait ArityOpsLike extends HasArity {
     // part of the API
 
     // TODO: should it be "foldByName"? Underlying Op may not be monoidal
-    def reduceByName[S1 <: Shape](s1: S1) = {
+    def reduceByName(s1: Shape) = {
       _ReduceByName.On(s1.shapeType).^
     }
-    def reduceByName[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
+    def reduceByName(s1: Shape, s2: Shape) = {
       _ReduceByName.On((s1 >< s2).shapeType).^
     }
 
-    def applyByDim[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
+    def applyByDim(s1: Shape, s2: Shape) = {
       _Op2ByDim_Strict.On[s1._ShapeType, s2._ShapeType](s1.shapeType, s2.shapeType).^
     }
 
-    def applyByDimDropLeft[S1 <: Shape, S2 <: Shape](s1: S1, s2: S2) = {
-      _Op2ByDim_DropLeft.On[S1#_ShapeType, S2#_ShapeType](s1.shapeType, s2.shapeType).^
+    def applyByDimDropLeft(s1: Shape, s2: Shape) = {
+      _Op2ByDim_DropLeft.On[s1._ShapeType, s2._ShapeType](s1.shapeType, s2.shapeType).^
     }
   }
 

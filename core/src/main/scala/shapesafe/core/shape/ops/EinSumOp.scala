@@ -1,11 +1,10 @@
 package shapesafe.core.shape.ops
 
-import shapesafe.core.shape.Shape.^
-import shapesafe.core.shape.{Names, Shape, ShapeType}
-import shapesafe.core.shape.binary.OuterProduct
-import shapesafe.core.shape.unary.{CheckEinSum, Rearrange}
-import shapeless.{HList, SingletonProductArgs}
 import shapeless.ops.hlist.Reverse
+import shapeless.{HList, SingletonProductArgs}
+import shapesafe.core.shape.Shape.^
+import shapesafe.core.shape.unary.{CheckEinSum, Rearrange}
+import shapesafe.core.shape.{Names, Shape, ShapeType}
 
 case class EinSumOp[
     S1 <: ShapeType
@@ -41,10 +40,10 @@ case class EinSumOp[
     checked.^
   }
 
-  def apply[S2 <: ShapeType](that: Shape.^[S2]): EinSumOp[OuterProduct[CheckEinSum[S1], CheckEinSum[S2]]] = {
-    val direct = checked.^ >< CheckEinSum(that.shapeType).^
+  def apply[S2 <: ShapeType](that: Shape.^[S2]) = {
+    val direct = this.shapeType.^ >< that.shapeType.^
 
-    EinSumOp(direct)
+    EinSumOp(direct.shapeType)
   }
 
   def einSum: this.type = this
