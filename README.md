@@ -40,8 +40,10 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
 ### Build Status
 
 | branch \ profile | Scala-2.13                                                                                 | Scala-2.13 w/ splain plugin                                                                       |
-| ---------------- |--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
+|------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | master           | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master)         | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master)         |
+| 0.1.3            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.3) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.3) |
+| 0.1.2            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.2) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.2) |
 | 0.1.1            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.1) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.1) |
 | 0.1.0            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.0) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.0) |
 | dev (latest WIP) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg)                       | ![CI-legacy](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg)                |
@@ -54,8 +56,10 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
   
   - The [shapesafe-demo](https://github.com/tribbloid/shapesafe-demo) project provides a reference setup using sbt
   - Our Scastie snippet (courtesy of EPFL Scala Center) uses the same setup but can run in browser
-    - [Part 1](https://scastie.scala-lang.org/tribbloid/RL1BZ0YTR9WyH4MBw624tA/10)
-    - [Part 2](https://scastie.scala-lang.org/tribbloid/hB9EyCVWQvilD20DcFq7wg/3)
+    - [Part 1 - Static Reasoning, Arity Operations](https://scastie.scala-lang.org/tribbloid/EiF9dRe4RlighRYBAGOBJA/4)
+    - [Part 2 - Shape Operations](https://scastie.scala-lang.org/tribbloid/uUgXi5TtRIqxa2TrZCmVzQ)
+    - [Part 3 - Tensor Typing](https://scastie.scala-lang.org/tribbloid/dn8DrIRrT6CD7ojKGQw5gQ)
+    - (if the environment timeout please comment out part of the source code and try again)
 
 ### Roadmap
 
@@ -190,5 +194,5 @@ Many have answered critical questions that have guided how the project evolves:
 
 $$
 \frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists}
- \: \vee \: 0.1.1
+ \: \vee \: 0.1.3
 $$
