@@ -298,7 +298,10 @@ subprojects {
                         }
 
                         name.set("shapesafe")
-                        description.set("a static typechecker for (named) tensor operations in scala")
+                        description.set(
+                            "SHAPE/S∀F∃: static prover/type-checker for N-D array programming in Scala," +
+                                    " a use case of intuitionistic type theory"
+                        )
 
                         val github = "https://github.com/tribbloid"
                         val repo = github + "/shapesafe"
