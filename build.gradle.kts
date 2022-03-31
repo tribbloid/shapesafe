@@ -100,23 +100,17 @@ allprojects {
 
                     mutableListOf(
 
-                        "-encoding", "UTF-8",
-                        "-unchecked",
-                        "-deprecation",
-                        "-feature",
+                        "-encoding", "UTF-8", "-unchecked", "-deprecation", "-feature",
 
                         "-language:higherKinds",
 
-                        "-Xlint:poly-implicit-overload",
-                        "-Xlint:option-implicit",
-                        "-Wunused:imports",
+                        "-Xlint:poly-implicit-overload", "-Xlint:option-implicit", "-Wunused:imports",
 
                         "-g:line",
 
 //                        "-Ylog",
 //                        "-Ydebug",
-                        "-Vissue",
-                        "-Yissue-debug"
+                        "-Vissue", "-Yissue-debug"
 
 //                    ,
 //                    "-Xlog-implicits",
@@ -128,9 +122,7 @@ allprojects {
                 if (vs.splainV != "") {
                     compilerOptions.addAll(
                         listOf(
-                            "-Vimplicits",
-                            "-Vimplicits-verbose-tree",
-                            "-Vtype-diffs"
+                            "-Vimplicits", "-Vimplicits-verbose-tree", "-Vtype-diffs"
                         )
                     )
                 }
@@ -156,7 +148,10 @@ allprojects {
             maxHeapSize = "4096m"
 
             testLogging {
+
                 showExceptions = true
+                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+
                 showCauses = true
                 showStackTraces = true
 
@@ -199,7 +194,7 @@ allprojects {
 
                 "logs",
 
-            )
+                )
         }
     }
 }
@@ -270,8 +265,7 @@ subprojects {
         val rootID = vs.projectRootID
 
         val moduleID =
-            if (project.name.equals(rootID))
-                throw UnsupportedOperationException("root project should not be published")
+            if (project.name.equals(rootID)) throw UnsupportedOperationException("root project should not be published")
             else rootID + "-" + project.name + suffix
 
         val whitelist = setOf("graph-commons", "macro", "core")
@@ -299,8 +293,7 @@ subprojects {
 
                         name.set("shapesafe")
                         description.set(
-                            "SHAPE/S∀F∃: static prover/type-checker for N-D array programming in Scala," +
-                                    " a use case of intuitionistic type theory"
+                            "SHAPE/S∀F∃: static prover/type-checker for N-D array programming in Scala," + " a use case of intuitionistic type theory"
                         )
 
                         val github = "https://github.com/tribbloid"
@@ -336,9 +329,7 @@ idea {
             // apache spark
             "warehouse",
 
-            "spike",
-            "splain",
-            "graph-commons"
+            "spike", "splain", "graph-commons"
         )
 
         isDownloadJavadoc = true
