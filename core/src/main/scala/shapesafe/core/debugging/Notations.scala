@@ -29,7 +29,7 @@ object Notations extends NotationsLike {
   }
   trait >=[A, B] extends HasSymbolLit.HasNegation {
     type _SymbolLit = " >= "
-    type Negation = >[A, B]
+    type Negation = <[A, B]
   }
   trait <[A, B] extends HasSymbolLit.HasNegation {
     type _SymbolLit = " < "
