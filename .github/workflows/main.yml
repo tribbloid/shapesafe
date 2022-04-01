@@ -24,13 +24,6 @@ jobs:
         run: |
           ./dev/CI-latest.sh -PscalaVersion=${{matrix.scalaVersion}}
 
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always()
-        with:
-          files: |
-            **/test-results/**/*.xml
-
       - name: Pre-release on github
         uses: "marvinpinto/action-automatic-releases@latest"
         if: contains(github.ref_name, 'Release/')
@@ -45,3 +38,10 @@ jobs:
             macro/build/libs/*.jar
             core/build/libs/*.jar
 #            verify/build/libs/*.jar
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: |
+            **/test-results/**/*.xml
