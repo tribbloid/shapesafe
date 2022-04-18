@@ -1,6 +1,6 @@
 package shapesafe.core.axis
 
-import shapesafe.core.Poly1Base
+import shapesafe.core.AdHocPoly1
 import shapeless.HList
 
-trait RecordUpdater extends Poly1Base[(HList, Axis.UB_->>), HList] {}
+trait RecordUpdater extends AdHocPoly1[(HList, Axis.UB_->>), HList] {}

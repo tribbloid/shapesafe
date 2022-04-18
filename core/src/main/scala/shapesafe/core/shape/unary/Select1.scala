@@ -9,7 +9,7 @@ import shapesafe.core.axis.Axis.:<<-
 import shapesafe.core.debugging.{Notations, Refutes}
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
-import shapesafe.core.{Poly1Base, XString}
+import shapesafe.core.{AdHocPoly1, XString}
 import shapesafe.m.Emit
 
 case class Select1[
@@ -67,7 +67,7 @@ object Select1 extends Select1_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Select1[_, _], Axis] {
+  object Premise extends AdHocPoly1[Select1[_, _], Axis] {
 
     implicit def byName[
         P1 <: StaticShape,

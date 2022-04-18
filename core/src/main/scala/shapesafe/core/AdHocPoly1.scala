@@ -6,8 +6,11 @@ import scala.annotation.implicitNotFound
 
 // TODO: compiler bug?
 //  https://stackoverflow.com/questions/65944627/in-scala-how-could-a-covariant-type-parameter-be-an-upper-bound-of-an-abstract
-// TODO: merge into shapeless Poly1
-trait Poly1Base[IUB, OUB] {
+
+/**
+  * Different from dotty's polymorphic function type, which only supports parametric polymorphic
+  */
+trait AdHocPoly1[IUB, OUB] {
 
   final type _IUB = IUB
   final type _OUB = OUB
@@ -52,7 +55,7 @@ trait Poly1Base[IUB, OUB] {
     @implicitNotFound(
       "${I}\t =/=>> \t??? <: ${OUB}"
     )
-    final type Case[I <: IUB] = Poly1Base.this.Case[I]
+    final type Case[I <: IUB] = AdHocPoly1.this.Case[I]
 
     @implicitNotFound(
       "${I}\t =/=>> \t${O}"
@@ -100,7 +103,7 @@ trait Poly1Base[IUB, OUB] {
 
   object AsShapelessPoly1 extends Poly1 {
 
-    val outer: Poly1Base[IUB, OUB] = Poly1Base.this
+    val outer: AdHocPoly1[IUB, OUB] = AdHocPoly1.this
 
     implicit def delegate[I <: IUB, O <: OUB](
         implicit
@@ -111,4 +114,4 @@ trait Poly1Base[IUB, OUB] {
   }
 }
 
-object Poly1Base {}
+object AdHocPoly1 {}

@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.Poly1Base
+import shapesafe.core.AdHocPoly1
 import shapesafe.core.logic.HasTheory
 import shapesafe.m.Emit
 import shapesafe.m.viz.PeekCT
@@ -20,7 +20,7 @@ trait Reporters extends HasTheory {
 
     type ExprOf[T <: CanPeek] = T#Notation
 
-    trait Step1_Imp3 extends Poly1Base[Iub, XString] {
+    trait Step1_Imp3 extends AdHocPoly1[Iub, XString] {
 
       implicit def raw[A <: Iub, VA <: XString](
           implicit
@@ -78,13 +78,13 @@ object Reporters {
 
   type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
-  trait Reporter[IUB] extends Poly1Base[IUB, Unit] {
+  trait Reporter[IUB] extends AdHocPoly1[IUB, Unit] {
 
     type EmitMsg[T]
 
     final type Iub = IUB
 
-    val Step1: Poly1Base[IUB, XString]
+    val Step1: AdHocPoly1[IUB, XString]
 
     case class ForTerm[IN <: IUB](v: IN) {
 

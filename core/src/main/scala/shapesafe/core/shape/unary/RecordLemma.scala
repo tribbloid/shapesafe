@@ -1,19 +1,19 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.Poly1Base
+import shapesafe.core.AdHocPoly1
 import shapesafe.core.axis.Axis.UB_->>
 import shapesafe.core.axis.NewNameAppender
 import shapesafe.core.shape.StaticShape
 import shapeless.{::, HList, HNil}
 
-trait RecordLemma extends Poly1Base[HList, HList] {
+trait RecordLemma extends AdHocPoly1[HList, HList] {
 
   implicit val nil: HNil =>> HNil = forAll[HNil].=>> { _ =>
     HNil
   }
 
   // TODO: move to a more general 'AndThen' class
-  object ToShape extends Poly1Base[HList, StaticShape] {
+  object ToShape extends AdHocPoly1[HList, StaticShape] {
 
     val outer: RecordLemma.this.type = RecordLemma.this
 

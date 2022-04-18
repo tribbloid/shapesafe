@@ -1,6 +1,6 @@
 package shapesafe.core.shape.unary
 
-import shapesafe.core.Poly1Base
+import shapesafe.core.AdHocPoly1
 import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.{Notations, Refutes}
 import shapesafe.core.shape._
@@ -62,7 +62,7 @@ object Rearrange extends Rearrange_Imp0 {
     }
   }
 
-  object Premise extends Poly1Base[Rearrange[_, _], StaticShape] {
+  object Premise extends AdHocPoly1[Rearrange[_, _], StaticShape] {
 
     implicit def eye[
         P1 <: StaticShape

@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-import shapesafe.core.Poly1Base
+import shapesafe.core.AdHocPoly1
 import shapesafe.core.debugging.DebugConst.Stripe
 import shapesafe.core.debugging.Reporters.PeekCTAux
 import shapesafe.m.Emit
@@ -12,7 +12,7 @@ trait Refutes {
 
   type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
 
-  object Refute0 extends Poly1Base[CanRefute, Any] {
+  object Refute0 extends AdHocPoly1[CanRefute, Any] {
 
     implicit def get[I <: _IUB, V <: String](
         implicit
