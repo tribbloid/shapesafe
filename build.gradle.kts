@@ -119,7 +119,7 @@ allprojects {
 //                    "-Xlint:implicit-recursion"
                     )
 
-                if (vs.splainV != "") {
+                if (vs.splainV.isNotEmpty()) {
                     compilerOptions.addAll(
                         listOf(
                             "-Vimplicits", "-Vimplicits-verbose-tree", "-Vtype-diffs"
@@ -237,7 +237,7 @@ subprojects {
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
         //https://github.com/tek/splain
-        if (vs.splainV != "") {
+        if (vs.splainV.isNotEmpty()) {
             val splainD = "io.tryp:splain_${vs.scalaV}:${vs.splainV}"
             logger.warn("Using " + splainD)
 
