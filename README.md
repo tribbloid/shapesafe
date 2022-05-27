@@ -1,4 +1,4 @@
-<img src="https://render.githubusercontent.com/render/math?math=%5Cfrac%7B%5Cmathrm%7BS%7D%20%5Cmathrm%7BH%7D%20%5Cmathrm%7BA%7D%20%5Cmathrm%7BP%7D%20%5Cmathrm%7BE%7D%7D%7B%5C%3A%20%5Cmathrm%7BS%7D%20%5C%3A%20%5Cforall%20%5Cmathrm%7BF%7D%20%5C%3A%20%5Cexists%7D" height=100>
+![SHAPE/S∀F∃](doc/.asset/logo/binary.png)
 
 **shapesafe** is the one-size-fits-all compile-time verifier for numerical linear algebra on JVM, obvious shape and indexing errors in tensor operations are captured by scala's typing system.
 
