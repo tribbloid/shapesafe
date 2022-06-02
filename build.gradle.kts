@@ -9,7 +9,7 @@ buildscript {
 //    val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.4.13") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.0") // suffix is always 2.12, weird
     }
 }
 
@@ -233,7 +233,7 @@ subprojects {
         testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.10")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.11")
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
         //https://github.com/tek/splain
