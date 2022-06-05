@@ -329,7 +329,7 @@ idea {
             // apache spark
             "warehouse",
 
-            "spike", "splain", "graph-commons"
+            "splain", "graph-commons"
         )
 
         isDownloadJavadoc = true

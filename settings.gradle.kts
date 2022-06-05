@@ -1,4 +1,8 @@
 
+val noVerify: String? by settings
+
+val noSpike: String? by settings
+
 include("graph-commons")
 project(":graph-commons").projectDir = file("graph-commons/core")
 
@@ -7,14 +11,30 @@ include(
     ":macro",
     // uses unstable & experimental scala features, should be modified very slowly & carefully
     ":core",
-    ":verify",
-    ":verify:breeze",
-    ":verify:djl",
+    "shapesafe-demo"
 //    // uses common scala features
-    ":shapesafe-demo"
-//    "spike"
 )
 
+fun isEnabled(profile: String?): Boolean {
+    val result = profile.toBoolean() || profile == ""
+    return result
+}
+
+if (!isEnabled(noVerify)) {
+
+    include(
+        ":verify",
+        ":verify:breeze",
+        ":verify:djl"
+    )
+}
+
+if (!isEnabled(noSpike)) {
+
+    include(
+        "spike"
+    )
+}
 
 pluginManagement.repositories {
     gradlePluginPortal()
