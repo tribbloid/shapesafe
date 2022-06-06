@@ -1,4 +1,4 @@
-package shapesafe.breeze.tensor
+package shapesafe.verify.breeze.tensor
 
 import ai.acyclic.graph.commons.debug.print_@
 import shapesafe.core.arity.Arity

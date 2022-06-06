@@ -1,4 +1,4 @@
-package shapesafe.breeze.tensor
+package shapesafe.verify.breeze.tensor
 
 import breeze.linalg.DenseVector
 import breeze.signal

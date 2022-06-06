@@ -1,4 +1,4 @@
-package shapesafe.djl.tensor
+package shapesafe.verfiy.djl.tensor
 
 import shapesafe.BaseSpec
 
