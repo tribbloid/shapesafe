@@ -3,6 +3,11 @@ val noVerify: String? by settings
 
 val noSpike: String? by settings
 
+fun isEnabled(profile: String?): Boolean {
+    val result = profile.toBoolean() || profile == ""
+    return result
+}
+
 include("graph-commons")
 project(":graph-commons").projectDir = file("graph-commons/core")
 
@@ -14,11 +19,6 @@ include(
     "shapesafe-demo"
 //    // uses common scala features
 )
-
-fun isEnabled(profile: String?): Boolean {
-    val result = profile.toBoolean() || profile == ""
-    return result
-}
 
 if (!isEnabled(noVerify)) {
 

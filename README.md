@@ -42,6 +42,7 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
 | branch \ profile | Scala-2.13                                                                                 | Scala-2.13 w/ splain plugin                                                                       |
 |------------------|--------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | master           | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=master)         | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=master)         |
+| 0.1.4            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.4) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.4) |
 | 0.1.3            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.3) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.3) |
 | 0.1.2            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.2) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.2) |
 | 0.1.1            | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI/badge.svg?branch=Release/v0.1.1) | ![CI](https://github.com/tribbloid/shapesafe/workflows/CI-splain/badge.svg?branch=Release/v0.1.1) |
@@ -194,5 +195,5 @@ Many have answered critical questions that have guided how the project evolves:
 
 $$
 \frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists}
- \: \vee \: 0.1.3
+ \: \vee \: 0.1.4
 $$
