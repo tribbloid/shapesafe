@@ -53,7 +53,7 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
 
 - Setup `shapesafe-core` in your scala project [using your favourite dependency manager](https://search.maven.org/artifact/ai.acyclic.shapesafe/shapesafe-core_2.13/0.1.0/jar). Replace the version number with that of the latest compatible release 
 
-- Compile our [Casually Written Tutorial](https://github.com/tribbloid/shapesafe-demo/blob/main/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala) and learn the basics by reading code and errors.
+- Compile our [Casually Written Tutorial](https://github.com/tribbloid/shapesafe-demo/tree/main/src/main/scala-shouldFail/shapesafe/demo/tutorial) and learn the basics by reading code and errors.
   
   - The [shapesafe-demo](https://github.com/tribbloid/shapesafe-demo) project provides a reference setup using sbt
   - Our Scastie snippet (courtesy of EPFL Scala Center) uses the same setup but can run in browser
@@ -100,7 +100,7 @@ s1.peek
 // [INFO] 1 >< 2 >< (3 >< 4) :<<= (i >< j)
 ```
 
-This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex-function-composition-with-no-implicit-scope) and [the other example in the tutorial](https://github.com/tribbloid/shapesafe-demo/blob/db19e1a5c05ff302308a5744bedbe65dd9f62a5d/src/main/scala-shouldFail/shapesafe/demo/core/Tutorial.scala#L59)).
+This is a deliberate design which allows complex operand compositions to be defined with no boilerplate (see [example above](#complex-function-composition-with-no-implicit-scope) and [TutorialPart1/StaticReasoning](https://github.com/tribbloid/shapesafe-demo/blob/d5fdd40c896e649338d2b9b6a627e6e4ab985e59/src/main/scala-shouldFail/shapesafe/demo/tutorial/TutorialPart1.scala#L59)).
 
 Detection of errors only happens once the expression is evaluated (by explicitly calling `.eval` or `.reason`), which summons all algebraic rules like a proof assistant:
 
