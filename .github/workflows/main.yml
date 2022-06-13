@@ -12,7 +12,7 @@ jobs:
       max-parallel: 2
       fail-fast: false
       matrix:
-        javaVersion:["1.8", "17"]
+        javaVersion: ["1.8", "17"]
         scalaVersion: ["2.13.8"]
 
     steps:
@@ -38,7 +38,7 @@ jobs:
             graph-commons/core/build/libs/*.jar
             macro/build/libs/*.jar
             core/build/libs/*.jar
-#            verify/build/libs/*.jar
+      #            verify/build/libs/*.jar
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1

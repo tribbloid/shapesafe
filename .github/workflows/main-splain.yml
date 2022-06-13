@@ -12,7 +12,7 @@ jobs:
       max-parallel: 2
       fail-fast: false
       matrix:
-        javaVersion:["1.8", "17"]
+        javaVersion: ["1.8", "17"]
         scalaVersion: ["2.13.8"]
 
     steps:
