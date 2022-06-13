@@ -57,9 +57,9 @@ Support for scala-2.13 is always guaranteed, supports for scala-2.12 or scala-js
   
   - The [shapesafe-demo](https://github.com/tribbloid/shapesafe-demo) project provides a reference setup using sbt
   - Our Scastie snippet (courtesy of EPFL Scala Center) uses the same setup but can run in browser
-    - [Part 1 - Static Reasoning, Arity Operations](https://scastie.scala-lang.org/tribbloid/EiF9dRe4RlighRYBAGOBJA/4)
-    - [Part 2 - Shape Operations](https://scastie.scala-lang.org/tribbloid/uUgXi5TtRIqxa2TrZCmVzQ)
-    - [Part 3 - Tensor Typing](https://scastie.scala-lang.org/tribbloid/dn8DrIRrT6CD7ojKGQw5gQ)
+    - [Part 1 - Static Reasoning, Arity Operations](https://scastie.scala-lang.org/tribbloid/ZUhG9iypQB2fYeScr6odMA)
+    - [Part 2 - Shape Operations](https://scastie.scala-lang.org/tribbloid/4r2YHkQBQv6mwfn5awAq9A)
+    - [Part 3 - Tensor Typing](https://scastie.scala-lang.org/tribbloid/fkZ1Er6UTq6axi87MbXVKw)
     - (if the environment timeout please comment out part of the source code and try again)
 
 ### Roadmap
