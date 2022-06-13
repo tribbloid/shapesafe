@@ -1,6 +1,6 @@
 package shapesafe.m.viz
 
-import ai.acyclic.graph.commons.reflect.format.FormatOvrd.{~~, Only}
+import ai.acyclic.graph.commons.reflect.format.FormatOvrd.{~~, SingletonName}
 import shapesafe.m.GenericMsgEmitter
 import shapeless.Witness
 import singleton.ops.+
@@ -42,7 +42,7 @@ class KindVizCTSpec extends VizCTSpec {
     }
   }
 
-  describe(NoTree.toString) {
+  describe(kindNoTree.toString) {
 
     val groundTruth = TypeVizShort.infer(Witness("Int").value)
 
@@ -55,13 +55,13 @@ class KindVizCTSpec extends VizCTSpec {
 
     it("1") {
 
-      val w1 = NoTree.infoOf[Int]
+      val w1 = kindNoTree.infoOf[Int]
       TypeVizShort[w1.Out].should_=:=(groundTruth)
     }
 
     it(" ... implicitly") {
 
-      val w1 = NoTree[Int].summonInfo
+      val w1 = kindNoTree[Int].summonInfo
 
       //      viz.infer(w1).should_=:=()
       TypeVizShort[w1.Out].should_=:=(groundTruth)
@@ -69,7 +69,7 @@ class KindVizCTSpec extends VizCTSpec {
 
     it("generic 1") {
 
-      val w1 = NoTree.infoOf[Dummy[_, _]]
+      val w1 = kindNoTree.infoOf[Dummy[_, _]]
 
       TypeVizShort[w1.Out].typeStr
         .shouldBe(
@@ -79,25 +79,25 @@ class KindVizCTSpec extends VizCTSpec {
 
     it("summonStr") {
 
-      val str = NoTree[Int].summonStr
+      val str = kindNoTree[Int].summonStr
       str.shouldBe("Int")
     }
 
     it("peek (explicit)") {
 
-      val info = NoTree[Int].summonInfo
+      val info = kindNoTree[Int].summonInfo
 
       GenericMsgEmitter.byOnlyInstance[info.Out, GenericMsgEmitter.Info]
     }
 
     it("peek") {
 
-      NoTree[Int].peek
+      kindNoTree[Int].peek
     }
 
     it("interrupt") {
 
-      val viz = NoTree[Int]
+      val viz = kindNoTree[Int]
       shouldNotCompile(
         """viz.interrupt""",
         ".*(Int).*"
@@ -105,11 +105,11 @@ class KindVizCTSpec extends VizCTSpec {
     }
   }
 
-  describe(WithOvrd.toString) {
+  describe(kindWithOvrd.toString) {
 
     it("1") {
 
-      val w1 = WithOvrd.infoOf[Dummy[Int, String]]
+      val w1 = kindWithOvrd.infoOf[Dummy[Int, String]]
 
       TypeVizShort[w1.Out].typeStr
         .shouldBe(
@@ -119,7 +119,7 @@ class KindVizCTSpec extends VizCTSpec {
 
     it(" ... implicitly") {
 
-      val w1 = WithOvrd[Dummy[Int, String]].summonInfo
+      val w1 = kindWithOvrd[Dummy[Int, String]].summonInfo
 
       TypeVizShort[w1.Out].typeStr
         .shouldBe(
@@ -127,39 +127,40 @@ class KindVizCTSpec extends VizCTSpec {
         )
     }
 
+    it("2") {
+      val w1 = kindWithOvrd.infoOf[SingletonName[nonFinalV.type]]
+      TypeVizShort[w1.Out].typeStr
+        .shouldBe(
+          s"""String("shapesafe.m.viz.KindVizCTSpec.nonFinalV")"""
+        )
+    }
+
     describe("abort on error") {
 
-      val localV = "a"
+      val localV: "a" = "a"
 
       it("1") {
 
-        val w1 = WithOvrd.infoOf[Only[localV.type]]
+        val w1 = kindWithOvrd.infoOf[SingletonName[localV.type]]
         TypeVizShort[w1.Out].typeStr
           .shouldBe(
-            s"""String("FormatOvrd.Only")"""
+            s"""String("FormatOvrd.SingletonName")"""
           )
       }
 
-      it("2") {
-        val w1 = WithOvrd.infoOf[Only[nonFinalV.type]]
-        TypeVizShort[w1.Out].typeStr
-          .shouldBe(
-            s"""String("FormatOvrd.Only")"""
-          )
-      }
     }
   }
 }
 
 object KindVizCTSpec {
 
-  val NoTree = KindVizCT.NoTree
-  val WithOvrd = KindVizCT.WithOvrd
+  val kindNoTree = KindVizCT.NoTree
+  val kindWithOvrd = KindVizCT.WithOvrd
 
   final val finalV = "b"
   val nonFinalV = "b"
 
-  case class Dummy[T1, T2]() extends (T1 ~~ Only["a"] ~~ Only[finalV.type] ~~ T2) {
+  case class Dummy[T1, T2]() extends (T1 ~~ SingletonName["a"] ~~ SingletonName[finalV.type] ~~ T2) {
 
 //    final val infoOf = KindVizCT.infoOf[Dummy[T1, T2]]
   }

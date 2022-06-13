@@ -7,4 +7,4 @@ FWDIR="$(
 
 ${FWDIR}/gradlew wrapper --gradle-version=7.4.2
 
-${FWDIR}/gradlew dependencyUpdates "$@"
+${FWDIR}/gradlew dependencyUpdates --warning-mode all "$@"

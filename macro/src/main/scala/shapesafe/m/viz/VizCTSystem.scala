@@ -98,8 +98,8 @@ object VizCTSystem {
           tt, {
             val self: VizCTSystem = {
 
-              val r = refl.typeView(tt).getOnlyInstance
-              r.asInstanceOf[VizCTSystem]
+              val system = refl.typeView(tt).onlyInstance
+              system.asInstanceOf[VizCTSystem]
             }
             val name: String = self.getClass.getCanonicalName.stripSuffix("$")
             val liftSelf: c.Tree = c.parse(name)

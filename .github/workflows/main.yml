@@ -12,14 +12,15 @@ jobs:
       max-parallel: 2
       fail-fast: false
       matrix:
+        javaVersion: ["1.8", "17"]
         scalaVersion: ["2.13.8"]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: ${{matrix.javaVersion}}
       - name: build & test
         run: |
           ./dev/CI-latest.sh -PscalaVersion=${{matrix.scalaVersion}}
@@ -37,7 +38,7 @@ jobs:
             graph-commons/core/build/libs/*.jar
             macro/build/libs/*.jar
             core/build/libs/*.jar
-#            verify/build/libs/*.jar
+      #            verify/build/libs/*.jar
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
