@@ -5,4 +5,5 @@ FWDIR="$(
   pwd
 )"
 
-${FWDIR}/gradlew test "${@}"
+# parallel disabled for interferring with benchmarks
+${FWDIR}/gradlew test -Porg.gradle.parallel=false "${@}"
