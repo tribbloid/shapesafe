@@ -86,11 +86,10 @@ allprojects {
     }
 
     tasks {
-        val jvmTarget = JavaVersion.VERSION_1_8.toString()
 
         withType<ScalaCompile> {
 
-            targetCompatibility = jvmTarget
+//            targetCompatibility = jvmTarget
 
             scalaCompileOptions.apply {
 
