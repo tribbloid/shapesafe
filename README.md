@@ -177,7 +177,7 @@ possible.
 
 This project is heavily influenced by Kotlin∇ (see discussion [here](https://github.com/breandan/kotlingrad/issues/11)) and several pioneers in type-safe ML:
 
-- Evan Spark for [first showing the possibility](https://etrain.github.io/2015/05/28/type-safe-linear-algebra-in-scala)
+- Evan Spark for [showing the possibility first](https://etrain.github.io/2015/05/28/type-safe-linear-algebra-in-scala)
 - Tongfei Chen et al. for [Nexus](https://github.com/ctongfei/nexus)
 - Dougal Maclaurin et al. for [Dex](https://github.com/google-research/dex-lang)
 - Prof. Austin Huang et al. for [HaskTorch](https://github.com/hasktorch/hasktorch)
@@ -191,7 +191,7 @@ Many have answered critical questions that have guided how the project evolves:
 - Arseniy Zhizhelev - Scala 3 upgrade
 - Ryan Orendorff - Automated theorem proving
 
-
+---
 
 $$
 \frac{\mathrm{S} \mathrm{H} \mathrm{A} \mathrm{P} \mathrm{E}}{\: \mathrm{S} \: \forall \mathrm{F} \: \exists}
