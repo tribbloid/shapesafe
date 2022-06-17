@@ -39,11 +39,11 @@ object GenericMsgEmitter {
     ): GenericMsgEmitter[A, SSS] =
       macro Macros.byTypeTag[A, SSS]
 
-    def byOnlyInstance[A]: GenericMsgEmitter[A, SS] = macro Macros.byOnlyInstance[A, SS]
+    def byOnlyInstance[A]: GenericMsgEmitter[A, SS] = macro Macros.bySingletonName[A, SS]
   }
 
   implicit def byOnlyInstance[A, SS <: GenericMsgEmitter.EmitLevel]: GenericMsgEmitter[A, SS] =
-    macro Macros.byOnlyInstance[A, SS]
+    macro Macros.bySingletonName[A, SS]
 
   final class Macros(val c: blackbox.Context) extends MWithReflection {
 
@@ -102,17 +102,17 @@ object GenericMsgEmitter {
       val aa: Type = weakTypeOf[A]
 
       val ttg: Reflection.Runtime.TypeTag[A] = c.eval(c.Expr[Reflection.Runtime.TypeTag[A]](c.untypecheck(q"${_ttg}")))
-      val v = Reflection.Runtime.typeView(ttg.tpe).getOnlyInstance
+      val v = Reflection.Runtime.typeView(ttg.tpe).singletonName
 
       val ll = emitValue[LL](v)
 
       q"$liftOuter.create[$aa, $ll]"
     }
 
-    def byOnlyInstance[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
+    def bySingletonName[A: c.WeakTypeTag, LL: c.WeakTypeTag]: c.Tree = {
 
       val aa: Type = weakTypeOf[A]
-      val v = refl.typeView(aa).getOnlyInstance
+      val v = refl.typeView(aa).singletonName
 
       val ll = emitValue[LL](v)
 

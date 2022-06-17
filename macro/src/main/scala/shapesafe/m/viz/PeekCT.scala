@@ -13,7 +13,7 @@ case object PeekCT extends VizCTSystem {
     TypeInfo,
     { v =>
       Trials(
-        FormatOvrd.Only.DeAlias,
+        FormatOvrd.SingletonName.DeAlias,
         v.HideStatic.DeAlias
       )
     }
