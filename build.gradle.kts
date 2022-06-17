@@ -87,6 +87,13 @@ allprojects {
 
     tasks {
 
+        build {
+
+            dependsOn (
+                gradle.includedBuild("splain").task(":publishToMavenLocal")
+            )
+        }
+
         withType<ScalaCompile> {
 
 //            targetCompatibility = jvmTarget

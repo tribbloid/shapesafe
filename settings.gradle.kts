@@ -8,6 +8,8 @@ fun isEnabled(profile: String?): Boolean {
     return result
 }
 
+includeBuild("splain")
+
 include("graph-commons")
 project(":graph-commons").projectDir = file("graph-commons/core")
 

@@ -6,11 +6,6 @@ FWDIR="$(
 )"
 DATE=$(date --iso-8601=second)
 
-echo "[SUBMODULE(S)]" && \
-cd ${FWDIR}/splain && \
-./dev/make-all.sh "${@}" && \
-cd ..
-
 mkdir -p ${FWDIR}/logs
 mkdir -p ${FWDIR}/logs/dependencyTree
 
