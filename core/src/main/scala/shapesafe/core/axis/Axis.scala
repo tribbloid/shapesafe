@@ -10,7 +10,7 @@ import shapesafe.core.{XInt, XString}
 import scala.language.implicitConversions
 
 trait Axis extends AxisLike with IDMixin with CanPeek {
-  //TODO:; can be a subclass of shapeless KeyTag
+  // TODO:; can be a subclass of shapeless KeyTag
 
   final type Field = FieldType[Name, _ArityType]
   final def asField: Field = arityType.asInstanceOf[Field]

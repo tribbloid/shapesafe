@@ -60,7 +60,7 @@ trait StaticTuples[VB] extends Tuples {
     override lazy val toString: String = {
       val tailStr = tail match {
         case _: Eye => ""
-        case _ => tail.toString + " ><\n"
+        case _      => tail.toString + " ><\n"
       }
 
       s"""$tailStr${TextBlock(head.toString).indent("  ").build}

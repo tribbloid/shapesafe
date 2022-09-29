@@ -6,7 +6,7 @@ import shapeless.{HList, Poly1}
 
 case class HListView[H <: HList](hh: H) {
 
-  //https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
+  // https://stackoverflow.com/questions/66036106/can-shapeless-record-type-be-used-as-a-poly1-part-2
   trait GetV extends Poly1 {
 
     implicit def getter[S](

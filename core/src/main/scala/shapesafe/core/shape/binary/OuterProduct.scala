@@ -46,7 +46,7 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
 
   import shapesafe.core.shape.ProveShape._
 
-  //TODO: should leverage append, if the deadlock problem has been solved
+  // TODO: should leverage append, if the deadlock problem has been solved
   implicit def simplify[
       S1 <: ShapeType,
       P1 <: StaticShape,

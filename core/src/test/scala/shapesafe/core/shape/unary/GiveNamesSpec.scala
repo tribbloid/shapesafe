@@ -49,7 +49,7 @@ class GiveNamesSpec extends BaseSpec {
 
       val shape1 = shape :<<= ij
 
-      val shape2 = (shape1.named("a", "b")).eval
+      val shape2 = shape1.named("a", "b").eval
 
       TypeViz.infer(shape2).should_=:=(TypeViz.infer(shapeRenamed))
 

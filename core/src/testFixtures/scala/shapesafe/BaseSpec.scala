@@ -53,8 +53,8 @@ object BaseSpec {
   }
 
   /**
-    * Nat uses church encoding and may risk slowing down compilation
-    * as a result, we recommend tests using member of this object as much as possible
+    * Nat uses church encoding and may risk slowing down compilation as a result, we recommend tests using member of
+    * this object as much as possible
     */
   object big extends TypeN {
 

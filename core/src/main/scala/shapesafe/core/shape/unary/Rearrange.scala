@@ -43,7 +43,7 @@ object Rearrange extends Rearrange_Imp0 {
 
   import ProveShape._
 
-  //TODO: only 1 in superclass needs to be defined
+  // TODO: only 1 in superclass needs to be defined
   implicit def simplify[
       S1 <: ShapeType,
       P1 <: StaticShape,

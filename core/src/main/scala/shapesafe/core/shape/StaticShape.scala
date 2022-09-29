@@ -10,8 +10,7 @@ import shapesafe.core.tuple.{StaticTuples, Tuples}
 import shapesafe.core.{XInt, XString}
 
 /**
-  * a thin wrapper of HList that has all proofs of constraints included
-  * this saves compiler burden and reduces error
+  * a thin wrapper of HList that has all proofs of constraints included this saves compiler burden and reduces error
   */
 trait StaticShape extends LeafShape with StaticShape.Proto {
 
