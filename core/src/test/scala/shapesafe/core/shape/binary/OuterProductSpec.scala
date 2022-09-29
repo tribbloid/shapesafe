@@ -38,11 +38,12 @@ class OuterProductSpec extends BaseSpec {
 
       val rr = (s1 outer s2).eval
 
-      typeInferShort(rr.shapeType).shouldBe(
+      val rrT = typeInferShort(rr.shapeType)
+      rrT.shouldBe(
         """
           |StaticShape.Eye >< (ConstArity.Literal[Int(2)] :<<- String("x")) >< (ConstArity.Literal[Int(3)] :<<- String("y")) ><
           | (ConstArity.Literal[Int(2)] :<<- String("i")) >< (ConstArity.Literal[Int(3)] :<<- String("j"))
-          |""".stripMargin.split('\n').mkString
+          |""".stripMargin.split(System.lineSeparator()).mkString
       )
     }
   }

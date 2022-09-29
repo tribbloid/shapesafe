@@ -2,12 +2,12 @@ package shapesafe.core.shape
 
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.CanPeek
-import ai.acyclic.graph.commons.IDMixin
+import ai.acyclic.graph.commons.EqualBy
 import shapeless.{Nat, Witness}
 
-trait Index extends IDMixin with CanPeek {
+trait Index extends EqualBy with CanPeek {
 
-  override lazy val toString: String = s"${_id}:${getClass.getSimpleName}"
+  override lazy val toString: String = s"${_equalBy}:${getClass.getSimpleName}"
 }
 
 object Index {
@@ -19,7 +19,7 @@ object Index {
     def name: S = w.value
     type Name = S
 
-    override protected def _id = w.value
+    override protected def _equalBy = w.value
 
     override type Notation = S
   }
@@ -32,7 +32,7 @@ object Index {
   class LtoR[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
     type Ordinal = N
 
-    override protected def _id = value
+    override protected def _equalBy = value
 
     override type Notation = S
   }

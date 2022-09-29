@@ -2,7 +2,7 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.graph.commons.{IDMixin, TextBlock}
+import ai.acyclic.graph.commons.{EqualBy, TextBlock}
 import shapeless.{::, HList, HNil, Witness}
 
 trait StaticTuples[VB] extends Tuples {
@@ -11,7 +11,7 @@ trait StaticTuples[VB] extends Tuples {
 
   final type VBound = VB
 
-  trait Tuple extends IDMixin with CanPeek {
+  trait Tuple extends EqualBy with CanPeek {
 
     type Static <: HList
     def static: Static
@@ -19,7 +19,7 @@ trait StaticTuples[VB] extends Tuples {
 
     def asList: List[VB]
 
-    override protected def _id: Any = asList
+    override protected def _equalBy: Any = asList
 
     final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
@@ -60,7 +60,7 @@ trait StaticTuples[VB] extends Tuples {
     override lazy val toString: String = {
       val tailStr = tail match {
         case _: Eye => ""
-        case _ => tail.toString + " ><\n"
+        case _      => tail.toString + " ><\n"
       }
 
       s"""$tailStr${TextBlock(head.toString).indent("  ").build}

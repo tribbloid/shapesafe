@@ -92,9 +92,8 @@ trait Theory extends HasTactic with Theory_Imp0 {
   final type `_|_`[-I, O] = Proof[I, system.Absurd[O]]
 
   /**
-    *  TODO: this is the counterpart of Spark polymorphic function in the proof system
-    *    required for defining axiom of induction
-    *    at this moment it is useless
+    * TODO: this is the counterpart of Spark polymorphic function in the proof system required for defining axiom of
+    * induction at this moment it is useless
     */
   trait GenProof {
 
@@ -108,21 +107,23 @@ trait Theory extends HasTactic with Theory_Imp0 {
   type Theorem[T <: Proof[_, _]] = T with TheoremTag
 
   /**
-    * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true)
-    * NOT material implication! If I can be immediately refuted then it implies NOTHING! Not even itself.
+    * Logical implication: If I is true then P is definitely true (or: NOT(I) /\ P = true) NOT material implication! If
+    * I can be immediately refuted then it implies NOTHING! Not even itself.
     *
-    * In fact, any [[Arity]] or [[Shape]] that cannot be refuted at compile-time should subclass [[VerifiedArity]]
-    * or [[VerifiedShape]], which implies itself
+    * In fact, any [[Arity]] or [[Shape]] that cannot be refuted at compile-time should subclass [[VerifiedArity]] or
+    * [[VerifiedShape]], which implies itself
     *
     * Programmer must ensure that no implicit subclass is defined for immediately refutable conjectures
     *
     * the symbol =>> is there to stress that it represents 2 morphism:
     *
-    * - value v --> value apply(v)
+    *   - value v --> value apply(v)
     *
-    * - domain I --> domain O
-    * @tparam I src type
-    * @tparam O tgt type
+    *   - domain I --> domain O
+    * @tparam I
+    *   src type
+    * @tparam O
+    *   tgt type
     */
   def =>>[I, O](_fn: I => O): Theorem[I |- O] = {
     new (I |- O) with TheoremTag {

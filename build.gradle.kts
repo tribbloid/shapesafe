@@ -99,17 +99,17 @@ allprojects {
 
                     mutableListOf(
 
-                        "-encoding", "UTF-8", "-unchecked", "-deprecation", "-feature",
+                        "-encoding", "UTF-8",
+                        "-unchecked", "-deprecation", "-feature",
 
                         "-language:higherKinds",
 
                         "-Xlint:poly-implicit-overload", "-Xlint:option-implicit", "-Wunused:imports",
 
-                        "-g:line",
+                        "-g:vars",
 
 //                        "-Ylog",
 //                        "-Ydebug",
-                        "-Vissue", "-Yissue-debug"
 
 //                    ,
 //                    "-Xlog-implicits",
@@ -194,23 +194,11 @@ allprojects {
                 "logs",
 
                 )
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
         }
     }
-}
-
-subprojects {
-
-    // resolving version conflicts
-    // TODO: remove, already defined in `constraints` as below
-//    configurations.all {
-//        resolutionStrategy.dependencySubstitution {
-//            substitute(
-//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
-//            ).apply {
-//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
-//            }
-//        }
-//    }
 
     dependencies {
 
@@ -243,6 +231,21 @@ subprojects {
             scalaCompilerPlugins(splainD)
         }
     }
+}
+
+subprojects {
+
+    // resolving version conflicts
+    // TODO: remove, already defined in `constraints` as below
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(
+//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+//            ).apply {
+//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+//            }
+//        }
+//    }
 
     // https://stackoverflow.com/a/66352905/1772342
     val signingSecretKey = providers.gradleProperty("signing.gnupg.secretKey")
@@ -330,21 +333,5 @@ idea {
 
             "splain", "graph-commons"
         )
-
-        isDownloadJavadoc = true
-        isDownloadSources = true
     }
 }
-
-//idea {
-//
-//    module {
-//
-//        excludeDirs = excludeDirs + files(
-//
-//            // submodules
-////            "graph-commons",
-//            "splain"
-//        )
-//    }
-//}

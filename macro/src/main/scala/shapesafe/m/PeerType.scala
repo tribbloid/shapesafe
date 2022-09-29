@@ -5,7 +5,8 @@ import scala.reflect.macros.whitebox
 
 /**
   * a.k.a. non-singleton tightest upper bound
-  * @tparam I input type
+  * @tparam I
+  *   input type
   */
 trait PeerType[I] {
 
@@ -54,7 +55,7 @@ object PeerType {
 
           val chosen = baseTypes.flatMap {
             case NoType => None
-            case v @ _ => Some(v)
+            case v @ _  => Some(v)
           }.head
 
           chosen

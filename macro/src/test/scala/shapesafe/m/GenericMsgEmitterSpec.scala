@@ -51,14 +51,14 @@ class GenericMsgEmitterSpec extends BaseSpec {
     emitWarning.byOnlyInstance["ABC"]
 
     type TT = GenericMsgEmitter["ABC", GenericMsgEmitter.Warning]
-    implicitly[TT] //(EmitMsg.emit)
+    implicitly[TT] // (EmitMsg.emit)
   }
 
   it("can emit info") {
     emitInfo.byOnlyInstance["ABC"]
 
     type TT = GenericMsgEmitter["ABC", GenericMsgEmitter.Info]
-    implicitly[TT] //(EmitMsg.emit)
+    implicitly[TT] // (EmitMsg.emit)
   }
 }
 
