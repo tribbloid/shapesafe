@@ -99,13 +99,14 @@ allprojects {
 
                     mutableListOf(
 
-                        "-encoding", "UTF-8", "-unchecked", "-deprecation", "-feature",
+                        "-encoding", "UTF-8",
+                        "-unchecked", "-deprecation", "-feature",
 
                         "-language:higherKinds",
 
                         "-Xlint:poly-implicit-overload", "-Xlint:option-implicit", "-Wunused:imports",
 
-                        "-g:line",
+                        "-g:vars",
 
 //                        "-Ylog",
 //                        "-Ydebug",
@@ -194,6 +195,9 @@ allprojects {
                 "logs",
 
                 )
+
+            isDownloadJavadoc = true
+            isDownloadSources = true
         }
     }
 }
@@ -330,21 +334,5 @@ idea {
 
             "splain", "graph-commons"
         )
-
-        isDownloadJavadoc = true
-        isDownloadSources = true
     }
 }
-
-//idea {
-//
-//    module {
-//
-//        excludeDirs = excludeDirs + files(
-//
-//            // submodules
-////            "graph-commons",
-//            "splain"
-//        )
-//    }
-//}
