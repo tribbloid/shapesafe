@@ -44,7 +44,7 @@ class KindVizCTSpec extends VizCTSpec {
 
   describe(kindNoTree.toString) {
 
-    val groundTruth = TypeVizShort.infer(Witness("Int").value)
+    val groundTruth = TypeVizShort.infer["Int"](Witness("Int").value)
 
     it("ground truth") {
 
