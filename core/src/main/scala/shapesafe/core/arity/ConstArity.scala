@@ -12,7 +12,7 @@ trait ConstArity[S] extends LeafArity with EqualBy {
 
   final override type Notation = S
 
-  override lazy val _id: S = singleton
+  override lazy val _equalBy: S = singleton
 
   def proveSameType[N2](
       implicit

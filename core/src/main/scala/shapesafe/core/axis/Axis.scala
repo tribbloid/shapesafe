@@ -18,7 +18,7 @@ trait Axis extends AxisLike with EqualBy with CanPeek {
   type _Axis >: this.type <: Axis
   final def axis: _Axis = this: _Axis
 
-  override protected lazy val _id: Any = (arityType, name)
+  override protected lazy val _equalBy: Any = (arityType, name)
 }
 
 object Axis {

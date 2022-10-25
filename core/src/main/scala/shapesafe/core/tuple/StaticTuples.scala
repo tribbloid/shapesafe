@@ -19,7 +19,7 @@ trait StaticTuples[VB] extends Tuples {
 
     def asList: List[VB]
 
-    override protected def _id: Any = asList
+    override protected def _equalBy: Any = asList
 
     final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
