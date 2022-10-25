@@ -1,6 +1,6 @@
 package shapesafe.core.axis
 
-import ai.acyclic.graph.commons.IDMixin
+import ai.acyclic.graph.commons.EqualBy
 import shapeless.Witness
 import shapeless.labelled.FieldType
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
@@ -9,7 +9,7 @@ import shapesafe.core.{XInt, XString}
 
 import scala.language.implicitConversions
 
-trait Axis extends AxisLike with IDMixin with CanPeek {
+trait Axis extends AxisLike with EqualBy with CanPeek {
   // TODO:; can be a subclass of shapeless KeyTag
 
   final type Field = FieldType[Name, _ArityType]

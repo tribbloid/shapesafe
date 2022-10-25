@@ -2,7 +2,7 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.graph.commons.{IDMixin, TextBlock}
+import ai.acyclic.graph.commons.{EqualBy, TextBlock}
 import shapeless.{::, HList, HNil, Witness}
 
 trait StaticTuples[VB] extends Tuples {
@@ -11,7 +11,7 @@ trait StaticTuples[VB] extends Tuples {
 
   final type VBound = VB
 
-  trait Tuple extends IDMixin with CanPeek {
+  trait Tuple extends EqualBy with CanPeek {
 
     type Static <: HList
     def static: Static

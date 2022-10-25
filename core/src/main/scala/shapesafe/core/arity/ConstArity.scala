@@ -1,11 +1,11 @@
 package shapesafe.core.arity
 
-import ai.acyclic.graph.commons.IDMixin
+import ai.acyclic.graph.commons.EqualBy
 import shapeless.Witness
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}
 
-trait ConstArity[S] extends LeafArity with IDMixin {
+trait ConstArity[S] extends LeafArity with EqualBy {
 
   type SS = S
   def singleton: S

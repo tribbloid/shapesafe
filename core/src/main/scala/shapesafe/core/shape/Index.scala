@@ -2,10 +2,10 @@ package shapesafe.core.shape
 
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.CanPeek
-import ai.acyclic.graph.commons.IDMixin
+import ai.acyclic.graph.commons.EqualBy
 import shapeless.{Nat, Witness}
 
-trait Index extends IDMixin with CanPeek {
+trait Index extends EqualBy with CanPeek {
 
   override lazy val toString: String = s"${_id}:${getClass.getSimpleName}"
 }
