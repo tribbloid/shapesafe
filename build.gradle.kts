@@ -110,7 +110,6 @@ allprojects {
 
 //                        "-Ylog",
 //                        "-Ydebug",
-                        "-Vissue", "-Yissue-debug"
 
 //                    ,
 //                    "-Xlog-implicits",
@@ -200,21 +199,6 @@ allprojects {
             isDownloadSources = true
         }
     }
-}
-
-subprojects {
-
-    // resolving version conflicts
-    // TODO: remove, already defined in `constraints` as below
-//    configurations.all {
-//        resolutionStrategy.dependencySubstitution {
-//            substitute(
-//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
-//            ).apply {
-//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
-//            }
-//        }
-//    }
 
     dependencies {
 
@@ -247,6 +231,21 @@ subprojects {
             scalaCompilerPlugins(splainD)
         }
     }
+}
+
+subprojects {
+
+    // resolving version conflicts
+    // TODO: remove, already defined in `constraints` as below
+//    configurations.all {
+//        resolutionStrategy.dependencySubstitution {
+//            substitute(
+//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+//            ).apply {
+//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+//            }
+//        }
+//    }
 
     // https://stackoverflow.com/a/66352905/1772342
     val signingSecretKey = providers.gradleProperty("signing.gnupg.secretKey")

@@ -30,14 +30,12 @@ class ProveShapeSpec extends BaseSpec {
 
       val m = AsLeafShape.Peek.ForTerm(i.shapeType).getMessage
 
-      assert(
-        m.trim ==
-          """
-            |_UNCHECKED_
-            |
-            |  :=  RequireDistinctNames[_UNCHECKED_]
-            |""".stripMargin.trim
-      )
+      m shouldBe
+        """
+          |_UNCHECKED_
+          |
+          |  :=  RequireDistinctNames[_UNCHECKED_]
+          |""".stripMargin
     }
 
     it("Conjecture2") {
@@ -49,14 +47,12 @@ class ProveShapeSpec extends BaseSpec {
 //      import shapesafe.m.viz.PeekCT
 //      PeekCT[i._Shape#Expr].interrupt
 
-      assert(
-        m.trim ==
-          """
-            |_UNCHECKED_
-            |
-            |  :=  _UNCHECKED_ >< (3 >< 4)
-            |""".stripMargin.trim
-      )
+      m shouldBe
+        """
+          |_UNCHECKED_
+          |
+          |  :=  _UNCHECKED_ >< (3 >< 4)
+          |""".stripMargin
     }
   }
 }

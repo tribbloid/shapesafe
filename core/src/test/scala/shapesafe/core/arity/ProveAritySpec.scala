@@ -48,14 +48,12 @@ class ProveAritySpec extends BaseSpec {
 
       val m = AsLeafArity.Peek.ForTerm(i.arityType).getMessage
 
-      assert(
-        m.trim ==
-          """
+      m shouldBe
+        """
           |_UNCHECKED_
           |
           |  :=  3 + _UNCHECKED_
-          |""".stripMargin.trim
-      )
+          |""".stripMargin
     }
   }
 }
