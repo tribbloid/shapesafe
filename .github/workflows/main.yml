@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         javaVersion: ["1.8", "17"]
-        scalaVersion: ["2.13.8"]
+        scalaVersion: ["2.13.10"]
 
     steps:
       - uses: actions/checkout@v2
