@@ -9,7 +9,7 @@ buildscript {
 //    val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.3") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.5") // suffix is always 2.12, weird
     }
 }
 
@@ -28,7 +28,7 @@ plugins {
     `maven-publish`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 
-    id("com.github.ben-manes.versions") version "0.42.0"
+    id("com.github.ben-manes.versions") version "0.44.0"
 }
 
 val sonatypeApiUser = providers.gradleProperty("sonatypeApiUser")
@@ -203,24 +203,25 @@ allprojects {
     dependencies {
 
         // see https://github.com/gradle/gradle/issues/13067
-        fun bothImpl(constraintNotation: Any) {
-            implementation(constraintNotation)
-            testFixturesImplementation(constraintNotation)
-        }
+        // TODO: remove, apparently fixed in the latest plugin
+//        fun bothImpl(constraintNotation: Any) {
+//            implementation(constraintNotation)
+//            testFixturesImplementation(constraintNotation)
+//        }
 
         constraints {
-            bothImpl("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}")
+            implementation("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}")
         }
 
-        bothImpl("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        bothImpl("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        bothImpl("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
+        implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.1.11")
+        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.2.0")
 
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
         //https://github.com/tek/splain

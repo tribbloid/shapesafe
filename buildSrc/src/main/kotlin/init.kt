@@ -11,8 +11,3 @@ fun Project.versions(): Versions {
 
     return Versions(this)
 }
-
-//fun DependencyHandler.bothImpl(constraintNotation: Any) {
-//    implementation(constraintNotation)
-//    testFixturesImplementation(constraintNotation)
-//}
