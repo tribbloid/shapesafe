@@ -271,7 +271,7 @@ subprojects {
             if (project.name.equals(rootID)) throw UnsupportedOperationException("root project should not be published")
             else rootID + "-" + project.name + suffix
 
-        val whitelist = setOf("graph-commons", "macro", "core")
+        val whitelist = setOf("prover-commons", "macro", "core")
 
         if (whitelist.contains(project.name)) {
 
@@ -332,7 +332,7 @@ idea {
             // apache spark
             "warehouse",
 
-            "splain", "graph-commons"
+            "splain", "prover-commons"
         )
     }
 }

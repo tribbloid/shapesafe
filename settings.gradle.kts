@@ -8,8 +8,8 @@ fun isEnabled(profile: String?): Boolean {
     return result
 }
 
-include("graph-commons")
-project(":graph-commons").projectDir = file("graph-commons/core")
+include("prover-commons")
+project(":prover-commons").projectDir = file("prover-commons/core")
 
 include(
     // should be skipped on CI, contains local experiments only
