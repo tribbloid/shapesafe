@@ -1,6 +1,6 @@
 package shapesafe.core.arity.ops
 
-import ai.acyclic.graph.commons.HasOuter
+import ai.acyclic.prover.commons.HasOuter
 import shapesafe.core.Const
 import shapesafe.core.arity.binary.{Op2, Op2Like, Require2}
 import shapesafe.core.arity.{Arity, ArityType}

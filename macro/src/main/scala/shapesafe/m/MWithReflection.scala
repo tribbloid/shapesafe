@@ -1,7 +1,7 @@
 package shapesafe.m
 
-import ai.acyclic.graph.commons.reflect.MacroReflection
-import ai.acyclic.graph.commons.viz.TypeViz
+import ai.acyclic.prover.commons.reflect.MacroReflection
+import ai.acyclic.prover.commons.viz.TypeViz
 
 import scala.reflect.macros.blackbox
 

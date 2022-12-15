@@ -1,7 +1,7 @@
 package shapesafe.m.viz
 
-import ai.acyclic.graph.commons.reflect.format.{Formats0, TypeFormat}
-import ai.acyclic.graph.commons.viz.TypeVizFormat
+import ai.acyclic.prover.commons.reflect.format.{Formats0, TypeFormat}
+import ai.acyclic.prover.commons.viz.TypeVizFormat
 
 import scala.language.experimental.macros
 

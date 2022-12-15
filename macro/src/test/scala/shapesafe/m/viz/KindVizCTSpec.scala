@@ -1,6 +1,6 @@
 package shapesafe.m.viz
 
-import ai.acyclic.graph.commons.reflect.format.FormatOvrd.{~~, SingletonName}
+import ai.acyclic.prover.commons.reflect.format.FormatOvrd.{~~, SingletonName}
 import shapesafe.m.GenericMsgEmitter
 import shapeless.Witness
 import singleton.ops.+

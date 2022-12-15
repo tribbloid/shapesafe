@@ -1,6 +1,6 @@
 package shapesafe.core.shape.unary
 
-import ai.acyclic.graph.commons.HasOuter
+import ai.acyclic.prover.commons.HasOuter
 import shapeless.{::, HList}
 import shapesafe.core.axis.Axis.UB_->>
 import shapesafe.core.axis.RecordUpdater

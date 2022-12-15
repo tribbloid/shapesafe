@@ -1,6 +1,6 @@
 package shapesafe.core.arity.binary
 
-import ai.acyclic.graph.commons.HasOuter
+import ai.acyclic.prover.commons.HasOuter
 import shapesafe.core.arity.{Arity, ArityConjecture, ArityType}
 import shapesafe.core.debugging.HasSymbolLit
 import singleton.ops.+

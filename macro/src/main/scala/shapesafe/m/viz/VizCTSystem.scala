@@ -1,9 +1,9 @@
 package shapesafe.m.viz
 
-import ai.acyclic.graph.commons.reflect.Reflection
-import ai.acyclic.graph.commons.reflect.format.TypeFormat
-import ai.acyclic.graph.commons.viz.{TypeViz, TypeVizFormat}
-import ai.acyclic.graph.commons.{HasOuter, TreeFormat}
+import ai.acyclic.prover.commons.reflect.Reflection
+import ai.acyclic.prover.commons.reflect.format.TypeFormat
+import ai.acyclic.prover.commons.viz.{TypeViz, TypeVizFormat}
+import ai.acyclic.prover.commons.{HasOuter, TreeFormat}
 import shapesafe.m.{Emit, MWithReflection}
 import singleton.ops.+
 

@@ -1,6 +1,6 @@
 package shapesafe.core.shape.binary
 
-import ai.acyclic.graph.commons.HasOuter
+import ai.acyclic.prover.commons.HasOuter
 import shapeless.ops.hlist.Zip
 import shapeless.{::, HList, HNil}
 import shapesafe.core.arity.ArityType

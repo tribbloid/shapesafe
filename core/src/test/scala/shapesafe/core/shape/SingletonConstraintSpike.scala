@@ -1,6 +1,6 @@
 package shapesafe.core.shape
 
-import ai.acyclic.graph.commons.testlib.BaseSpec
+import ai.acyclic.prover.commons.testlib.BaseSpec
 import org.scalatest.Ignore
 import shapeless.Witness
 

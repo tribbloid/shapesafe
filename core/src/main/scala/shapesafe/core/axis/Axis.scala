@@ -1,6 +1,6 @@
 package shapesafe.core.axis
 
-import ai.acyclic.graph.commons.EqualBy
+import ai.acyclic.prover.commons.EqualBy
 import shapeless.Witness
 import shapeless.labelled.FieldType
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}

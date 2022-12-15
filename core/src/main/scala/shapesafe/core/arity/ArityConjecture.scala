@@ -1,7 +1,7 @@
 package shapesafe.core.arity
 
 import shapesafe.core.debugging.CanRefute
-import ai.acyclic.graph.commons.ProductTree
+import ai.acyclic.prover.commons.ProductTree
 
 trait ArityConjecture extends ArityType.Verifiable with CanRefute with ProductTree {
 

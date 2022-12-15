@@ -1,9 +1,9 @@
 package shapesafe.m.viz
 
-import ai.acyclic.graph.commons.reflect.format.FormatOvrd
-import ai.acyclic.graph.commons.reflect.format.Formats0.TypeInfo
-import ai.acyclic.graph.commons.reflect.format.Formats1.{RecursiveForm, Trials}
-import ai.acyclic.graph.commons.viz.TypeVizFormat
+import ai.acyclic.prover.commons.reflect.format.FormatOvrd
+import ai.acyclic.prover.commons.reflect.format.Formats0.TypeInfo
+import ai.acyclic.prover.commons.reflect.format.Formats1.{RecursiveForm, Trials}
+import ai.acyclic.prover.commons.viz.TypeVizFormat
 
 import scala.language.experimental.macros
 

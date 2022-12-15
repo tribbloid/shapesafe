@@ -3,7 +3,7 @@ package shapesafe.core.shape
 import org.scalatest.Ignore
 import shapesafe.BaseSpec
 import shapesafe.core.arity.ConstArity
-import ai.acyclic.graph.commons.debug.print_@
+import ai.acyclic.prover.commons.debug.print_@
 import shapeless.{HNil, Witness}
 
 @Ignore

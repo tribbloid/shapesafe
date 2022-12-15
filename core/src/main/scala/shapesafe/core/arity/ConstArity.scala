@@ -1,6 +1,6 @@
 package shapesafe.core.arity
 
-import ai.acyclic.graph.commons.EqualBy
+import ai.acyclic.prover.commons.EqualBy
 import shapeless.Witness
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}

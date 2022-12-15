@@ -1,8 +1,8 @@
 package shapesafe
 
-import ai.acyclic.graph.commons.testlib
-import ai.acyclic.graph.commons.reflect.ScalaReflection
-import ai.acyclic.graph.commons.viz.TypeViz
+import ai.acyclic.prover.commons.testlib
+import ai.acyclic.prover.commons.reflect.ScalaReflection
+import ai.acyclic.prover.commons.viz.TypeViz
 import shapesafe.m.viz.PeekCT
 import shapeless.{HList, Nat, Witness}
 

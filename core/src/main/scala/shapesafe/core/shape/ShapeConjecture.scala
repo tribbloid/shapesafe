@@ -1,7 +1,7 @@
 package shapesafe.core.shape
 
 import shapesafe.core.debugging.CanRefute
-import ai.acyclic.graph.commons.{ProductTree, TreeFormat}
+import ai.acyclic.prover.commons.{ProductTree, TreeFormat}
 
 trait ShapeConjecture extends ShapeType with CanRefute with ProductTree {
 

@@ -2,7 +2,7 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.graph.commons.{EqualBy, TextBlock}
+import ai.acyclic.prover.commons.{EqualBy, TextBlock}
 import shapeless.{::, HList, HNil, Witness}
 
 trait StaticTuples[VB] extends Tuples {

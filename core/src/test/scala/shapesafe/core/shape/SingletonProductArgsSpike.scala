@@ -2,7 +2,7 @@ package shapesafe.core.shape
 
 import org.scalatest.Ignore
 import shapesafe.BaseSpec
-import ai.acyclic.graph.commons.WideTyped
+import ai.acyclic.prover.commons.WideTyped
 import shapeless.ops.hlist.ZipWithKeys
 import shapeless.{HList, HNil, SingletonProductArgs}
 

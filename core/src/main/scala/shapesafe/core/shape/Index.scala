@@ -2,7 +2,7 @@ package shapesafe.core.shape
 
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.CanPeek
-import ai.acyclic.graph.commons.EqualBy
+import ai.acyclic.prover.commons.EqualBy
 import shapeless.{Nat, Witness}
 
 trait Index extends EqualBy with CanPeek {
