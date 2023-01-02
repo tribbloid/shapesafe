@@ -19,7 +19,7 @@ trait MWithReflection {
   }
 
   lazy val refl = MacroReflection[u.type](c.universe)
-  lazy val viz = TypeViz(refl)
+  lazy val viz = TypeViz.default(refl)
 
 //  case class MacroError(message: String) extends Exception(message)
 }

@@ -10,4 +10,4 @@ trait Unchecked extends LeafShape {
   final override type NatNumOfDimensions = Nat
 }
 
-object Unchecked extends Unchecked {}
+case object Unchecked extends Unchecked {}

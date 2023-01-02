@@ -2,6 +2,7 @@ package shapesafe.core.arity
 
 import ai.acyclic.prover.commons.EqualBy
 import shapeless.Witness
+import shapesafe.core.XInt
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}
 
@@ -38,7 +39,7 @@ trait ConstArity[S] extends LeafArity with EqualBy {
 
 object ConstArity {
 
-  class Derived[OP <: Op, OUT <: Int](override val singleton: OUT) extends ConstArity[OUT] {
+  case class Derived[OP <: Op, OUT <: Int] private (override val singleton: OUT) extends ConstArity[OUT] {
     override lazy val runtimeValue: Int = singleton
   }
 
@@ -53,21 +54,21 @@ object ConstArity {
   }
 
   // this makes it impossible to construct directly from Int type
-  class Literal[S <: Int](val singleton: S) extends ConstArity[S] {
+  case class Literal[S <: XInt](val singleton: S) extends ConstArity[S] {
 
     override def runtimeValue: Int = singleton
   }
 
   object Literal {
 
-    implicit def summon[S <: Int](
+    implicit def summon[S <: XInt](
         implicit
         w: Witness.Aux[S]
     ): Literal[S] = {
       new Literal[S](w.value)
     }
 
-    def apply(w: Witness.Lt[Int]): Literal[w.T] = {
+    def shapeless(w: Witness.Lt[XInt]): Literal[w.T] = {
 
       Literal.summon[w.T](w)
     }

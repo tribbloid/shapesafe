@@ -1,12 +1,11 @@
 package shapesafe.core.arity
 
+import shapesafe.core.debugging.ExpressionType
+
 /**
   * always successful, no need to verify
   */
-trait VerifiedArity extends ArityType.Verifiable {
-
-//  final def in: this.type = this
-}
+trait VerifiedArity extends ArityType.Verifiable with ExpressionType.Leaf {}
 
 object VerifiedArity {
 

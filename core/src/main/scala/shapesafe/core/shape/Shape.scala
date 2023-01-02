@@ -21,6 +21,8 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 
   override val theory: ProveShape.type = ProveShape
 
+  override def expressionType = shapeType
+
   import theory._
   import AsLeafShape._
 

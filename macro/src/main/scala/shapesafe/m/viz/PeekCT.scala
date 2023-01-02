@@ -1,15 +1,14 @@
 package shapesafe.m.viz
 
-import ai.acyclic.prover.commons.reflect.format.FormatOvrd
 import ai.acyclic.prover.commons.reflect.format.Formats0.TypeInfo
 import ai.acyclic.prover.commons.reflect.format.Formats1.{RecursiveForm, Trials}
-import ai.acyclic.prover.commons.viz.TypeVizFormat
+import ai.acyclic.prover.commons.reflect.format.{FormatOvrd, TypeFormat}
 
 import scala.language.experimental.macros
 
 case object PeekCT extends VizCTSystem {
 
-  override lazy val format: TypeVizFormat = RecursiveForm(
+  override lazy val format: TypeFormat = RecursiveForm(
     TypeInfo,
     { v =>
       Trials(

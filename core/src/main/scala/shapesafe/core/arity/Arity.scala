@@ -6,7 +6,7 @@ import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.CanReason
-import shapesafe.core.{arity, Const}
+import shapesafe.core.{arity, Const, XInt}
 
 import scala.language.implicitConversions
 
@@ -15,6 +15,8 @@ trait Arity extends CanReason with ArityOpsLike with Axis {
   import Arity._
 
   override val theory: ProveArity.type = ProveArity
+
+  override def expressionType: _ArityType = arityType
 
   import theory._
   import AsLeafArity._
@@ -62,13 +64,13 @@ object Arity {
 
   type Aux[A <: ArityType] = Arity { type _ArityType = A }
 
-  final case class ^[A <: ArityType](arityType: A) extends Arity {
+  final case class ^[SELF <: ArityType](arityType: SELF) extends Arity {
 
-    override type _ArityType = A
+    override type _ArityType = SELF
 
-    override type _Axis = ^[A]
+    override type _Axis = ^[SELF]
 
-    override type Notation = A#Notation
+    override type Notation = SELF#Notation
   }
 
   implicit def unbox[A <: ArityType](v: Aux[A]): A = v.arityType
@@ -78,8 +80,8 @@ object Arity {
 
   val Unchecked: ^[arity.Unchecked.type] = arity.Unchecked.^
 
-  def apply(w: Witness.Lt[Int]): ^[Literal[w.T]] = {
-    ^(Literal.apply(w))
+  def apply(w: Witness.Lt[XInt]): ^[Literal[w.T]] = {
+    ^(Literal.shapeless(w))
   }
 
   object FromNat {

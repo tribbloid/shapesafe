@@ -55,7 +55,7 @@ object StaticShape extends Tuples {
   override val Eye = new Eye
 
   // cartesian product symbol
-  class ><[
+  case class ><[
       TAIL <: Tuple,
       HEAD <: VBound
   ](

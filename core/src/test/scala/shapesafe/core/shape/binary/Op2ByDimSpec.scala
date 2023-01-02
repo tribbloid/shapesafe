@@ -13,12 +13,13 @@ class Op2ByDimSpec extends BaseSpec {
 
     val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
-    rr.treeString.shouldBe(
+    rr.showHierarchy.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On┏ 2:Literal ><
-        |                                                                     ┃   3:Literal
-        |                                                                     ┏ 4:Literal ><
-        |                                                                     ┃   5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On
+        | ‣ 2:Literal ><
+        | :   3:Literal
+        | ‣ 4:Literal ><
+        |     5:Literal
         |""".stripMargin
     )
   }

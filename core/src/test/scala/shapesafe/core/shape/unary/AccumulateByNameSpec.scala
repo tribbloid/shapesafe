@@ -18,18 +18,18 @@ class AccumulateByNameSpec extends BaseSpec {
 
     val rr = Ops.:+.reduceByName(s1, s2)
 
-    rr.treeString.shouldBe(
+    rr.showHierarchy.treeString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._ReduceByName ‣ AccumulateByName.On
         | ‣ OuterProduct
-        |    ‣ GiveNames┏ 2:Literal ><
-        |    :          ┃   3:Literal
-        |    :          ┏ x ><
+        |    ‣ GiveNames┏ x ><
         |    :          ┃   y
-        |    ‣ GiveNames┏ 4:Literal ><
-        |               ┃   5:Literal
-        |               ┏ x ><
+        |    :  ‣ 2:Literal ><
+        |    :      3:Literal
+        |    ‣ GiveNames┏ x ><
         |               ┃   y
+        |       ‣ 4:Literal ><
+        |           5:Literal
         |""".stripMargin
     )
   }

@@ -6,7 +6,7 @@ import ai.acyclic.prover.commons.viz.TypeViz
 import shapesafe.m.viz.PeekCT
 import shapeless.{HList, Nat, Witness}
 
-trait BaseSpec extends testlib.BaseSpec with TypeViz.Fixtures {
+trait BaseSpec extends testlib.BaseSpec with TypeViz.TestFixtures {
 
   val small = BaseSpec.small
   val big = BaseSpec.big
@@ -24,9 +24,10 @@ trait BaseSpec extends testlib.BaseSpec with TypeViz.Fixtures {
 
   def typeInferShort[T: ScalaReflection.WeakTypeTag](v: T = null.asInstanceOf[T]): String = {
 
-    TypeVizShort
+    val viz: TypeVizShort.TermAndTypeOf[T] = TypeVizShort
       .infer(v)
-      .typeStr
+
+    viz.typeStr
   }
 }
 

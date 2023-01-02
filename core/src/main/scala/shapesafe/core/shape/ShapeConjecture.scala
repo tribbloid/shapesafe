@@ -1,11 +1,10 @@
 package shapesafe.core.shape
 
 import shapesafe.core.debugging.CanRefute
-import ai.acyclic.prover.commons.{ProductTree, TreeFormat}
 
-trait ShapeConjecture extends ShapeType with CanRefute with ProductTree {
+trait ShapeConjecture extends ShapeType with CanRefute {
 
-  override lazy val treeFormat: TreeFormat = TreeFormat.Indent2Minimal
+//  override lazy val treeFormat = TreeFormat.Indent2Minimal
 //  final override def toString: String = treeString
 
 }

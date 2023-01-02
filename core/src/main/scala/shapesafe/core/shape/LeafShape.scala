@@ -1,9 +1,10 @@
 package shapesafe.core.shape
 
 import shapeless.Nat
+import shapesafe.core.debugging.ExpressionType
 
 // TODO: add VerifiedShape
-trait LeafShape extends ShapeType {
+trait LeafShape extends ShapeType with ExpressionType.Leaf {
 
   type NatNumOfDimensions <: Nat
 }

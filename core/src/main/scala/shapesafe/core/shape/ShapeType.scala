@@ -1,8 +1,8 @@
 package shapesafe.core.shape
 
-import shapesafe.core.debugging.CanPeek
+import shapesafe.core.debugging.ExpressionType
 
-trait ShapeType extends CanPeek {}
+trait ShapeType extends ExpressionType {}
 
 object ShapeType {
 

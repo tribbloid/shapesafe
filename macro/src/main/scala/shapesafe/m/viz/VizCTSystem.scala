@@ -1,9 +1,9 @@
 package shapesafe.m.viz
 
-import ai.acyclic.prover.commons.reflect.Reflection
+import ai.acyclic.prover.commons.HasOuter
 import ai.acyclic.prover.commons.reflect.format.TypeFormat
-import ai.acyclic.prover.commons.viz.{TypeViz, TypeVizFormat}
-import ai.acyclic.prover.commons.{HasOuter, TreeFormat}
+import ai.acyclic.prover.commons.viz.TypeHierarchy.fromBase
+import ai.acyclic.prover.commons.viz.TypeViz
 import shapesafe.m.{Emit, MWithReflection}
 import singleton.ops.+
 
@@ -13,12 +13,11 @@ import scala.reflect.macros.whitebox
 
 trait VizCTSystem extends Product {
 
-  def format: TypeVizFormat
+  def format: TypeFormat
 
   def useTree: Boolean
 
-  final def typeFormat: TypeFormat = format.base
-  final def treeFormat: TreeFormat = format.treeFormat
+  final def typeFormat = format.typeFormat
 
   trait Info[T] {
     type Out
@@ -68,13 +67,13 @@ trait VizCTSystem extends Product {
     // TODO: impl Should_=:= at compile-time
   }
 
-  lazy val runtime: TypeViz[Reflection.Runtime.type] = TypeViz.withFormat(this.format)
+  lazy val runtime = TypeViz.withFormat(this.format)
 
   trait SubSystem extends VizCTSystem with HasOuter {
 
     override def outer: VizCTSystem = VizCTSystem.this
 
-    override def format: TypeVizFormat = VizCTSystem.this.format
+    override def format: TypeFormat = VizCTSystem.this.format
     override def useTree: Boolean = VizCTSystem.this.useTree
   }
 }
@@ -125,7 +124,7 @@ object VizCTSystem {
 
           val str = if (useTree) {
 
-            viz.withFormat(self.format).of(tt).treeString
+            viz.withFormat(self.format).of(tt).showHierarchy.treeString
           } else {
 
             refl.typeView(tt).formattedBy(self.typeFormat).text
