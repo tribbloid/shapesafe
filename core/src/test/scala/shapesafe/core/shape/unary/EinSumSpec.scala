@@ -20,20 +20,20 @@ class EinSumSpec extends BaseSpec {
 
     val r = (s1 einSum s2) --> ("x" >< "i")
 
-    r.treeString.shouldBe(
+    r.showHierarchy.treeString.shouldBe(
       """
         |Rearrange┏ x ><
         |         ┃   i
         | ‣ CheckEinSum
         |    ‣ OuterProduct
-        |       ‣ GiveNames┏ 1:Literal ><
-        |       :          ┃   2:Literal
-        |       :          ┏ x ><
+        |       ‣ GiveNames┏ x ><
         |       :          ┃   y
-        |       ‣ GiveNames┏ 3:Literal ><
-        |                  ┃   4:Literal
-        |                  ┏ i ><
+        |       :  ‣ 1:Literal ><
+        |       :      2:Literal
+        |       ‣ GiveNames┏ i ><
         |                  ┃   j
+        |          ‣ 3:Literal ><
+        |              4:Literal
         |""".stripMargin
     )
   }

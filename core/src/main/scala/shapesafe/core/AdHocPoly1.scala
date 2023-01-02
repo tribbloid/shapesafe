@@ -8,7 +8,7 @@ import scala.annotation.implicitNotFound
 //  https://stackoverflow.com/questions/65944627/in-scala-how-could-a-covariant-type-parameter-be-an-upper-bound-of-an-abstract
 
 /**
-  * Different from dotty's polymorphic function type, which only supports parametric polymorphic
+  * Different from dotty's polymorphic function kind, which only supports parametric polymorphic
   */
 trait AdHocPoly1[IUB, OUB] {
 

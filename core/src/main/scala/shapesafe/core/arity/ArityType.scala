@@ -1,11 +1,11 @@
 package shapesafe.core.arity
 
 import shapesafe.core.arity.Arity.^
-import shapesafe.core.debugging.{CanPeek, HasSymbolLit}
+import shapesafe.core.debugging.{ExpressionType, HasSymbolLit}
 
 import scala.util.Try
 
-trait ArityType extends CanPeek with HasSymbolLit {
+trait ArityType extends ExpressionType with HasSymbolLit {
 
   def runtimeValue: Int
   final lazy val runtimeValueTry: Try[Int] = Try(runtimeValue)

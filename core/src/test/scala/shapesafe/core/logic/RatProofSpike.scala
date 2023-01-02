@@ -75,8 +75,8 @@ object RatProofSpike {
     // objective:
 
     /**
-      * Sqrt2 Sqrt2 == (A :/ B) (Sqrt2 :* Sqrt2) == (A :/ B) :* (A :/ B)
-      * \== (A :* A) :/ (B :* B) == `2` (A :* A) == `2` :* (B :* B)
+      * Sqrt2 Sqrt2 == (A :/ B) (Sqrt2 :* Sqrt2) == (A :/ B) :* (A :/ B) \== (A :* A) :/ (B :* B) == `2` (A :* A) == `2`
+      * :* (B :* B)
       *
       * lemma: if A <: I, B <: I, A * A == 2 * B, then exist C <: I, where B * B == 2 * C * C
       *

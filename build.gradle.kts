@@ -9,7 +9,7 @@ buildscript {
 //    val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.5") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.8") // suffix is always 2.12, weird
     }
 }
 
@@ -20,6 +20,7 @@ plugins {
     `java-test-fixtures`
 
     scala
+    id("io.github.cosmicsilence.scalafix") version "0.1.14"
 //    kotlin("jvm") version "1.6.10" // TODO: remove?
 
     idea
@@ -57,11 +58,13 @@ allprojects {
     apply(plugin = "java-library")
     apply(plugin = "java-test-fixtures")
 
+
     // apply(plugin = "bloop")
     // DO NOT enable! In VSCode it will cause the conflict:
     // Cannot add extension with name 'bloop', as there is an extension already registered with that name
 
     apply(plugin = "scala")
+    apply(plugin = "io.github.cosmicsilence.scalafix")
 //    apply(plugin = "kotlin")
 
     apply(plugin = "idea")
@@ -164,7 +167,6 @@ allprojects {
                     events("passed", "skipped", "failed")
                 }
             }
-
         }
     }
 
@@ -218,7 +220,7 @@ allprojects {
         implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.2.0")

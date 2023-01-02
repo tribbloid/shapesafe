@@ -50,8 +50,7 @@ class ProveAritySpec extends BaseSpec {
 
       m shouldBe
         """
-          |_UNCHECKED_
-          |
+          |      _UNCHECKED_
           |  :=  3 + _UNCHECKED_
           |""".stripMargin
     }

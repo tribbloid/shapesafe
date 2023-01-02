@@ -38,7 +38,7 @@ object DebugConst {
   val EQUIV =
     Witness("""  :=  """)
 
-  type EquivLF = "\n\n" + EQUIV.T
+  type EquivLF = "\n" + EQUIV.T
 
   type CannotEval = Stripe["cannot evaluate"]
 

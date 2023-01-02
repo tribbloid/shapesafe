@@ -32,8 +32,7 @@ class ProveShapeSpec extends BaseSpec {
 
       m shouldBe
         """
-          |_UNCHECKED_
-          |
+          |      _UNCHECKED_
           |  :=  RequireDistinctNames[_UNCHECKED_]
           |""".stripMargin
     }
@@ -49,8 +48,7 @@ class ProveShapeSpec extends BaseSpec {
 
       m shouldBe
         """
-          |_UNCHECKED_
-          |
+          |      _UNCHECKED_
           |  :=  _UNCHECKED_ >< (3 >< 4)
           |""".stripMargin
     }

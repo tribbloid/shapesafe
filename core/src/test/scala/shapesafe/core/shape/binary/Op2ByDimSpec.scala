@@ -13,12 +13,13 @@ class Op2ByDimSpec extends BaseSpec {
 
     val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
-    rr.treeString.shouldBe(
+    rr.showHierarchy.treeString.shouldBe(
       """
-        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On┏ 2:Literal ><
-        |                                                                     ┃   3:Literal
-        |                                                                     ┏ 4:Literal ><
-        |                                                                     ┃   5:Literal
+        |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On
+        | ‣ 2:Literal ><
+        | :   3:Literal
+        | ‣ 4:Literal ><
+        |     5:Literal
         |""".stripMargin
     )
   }
@@ -72,9 +73,9 @@ class Op2ByDimSpec extends BaseSpec {
         .mkString("\n")
         .shouldBe(
           """
-          |6:Derived ><
-          |  8:Derived
-          |""".stripMargin
+            |6:Derived ><
+            |  8:Derived
+            |""".stripMargin
         )
     }
 
@@ -89,9 +90,9 @@ class Op2ByDimSpec extends BaseSpec {
         .mkString("\n")
         .shouldBe(
           """
-          |8:Derived ><
-          |  15:Derived
-          |""".stripMargin
+            |8:Derived ><
+            |  15:Derived
+            |""".stripMargin
         )
     }
 
@@ -106,21 +107,21 @@ class Op2ByDimSpec extends BaseSpec {
   }
 
   // TODO: should be a test in CanRefute or Refutes
-//  describe(Ops.:+._Op2ByDim_Strict.IffRelay.getClass.getSimpleName) {
-//
-//    it("will FAIL if instance cannot be summoned") {
-//
-//      val s1 = Shape(2)
-//      val s2 = Shape(3, 4)
-//
-//      type TT = Ops.:+._Op2ByDim_Strict.IffRelay[s1._ShapeType, s2._ShapeType]
-//
-//      shouldNotCompile(
-//        """implicitly[TT]""",
-//        """.*(\QDimension mismatch\E).*"""
-//      )
-//    }
-//  }
+  //  describe(Ops.:+._Op2ByDim_Strict.IffRelay.getClass.getSimpleName) {
+  //
+  //    it("will FAIL if instance cannot be summoned") {
+  //
+  //      val s1 = Shape(2)
+  //      val s2 = Shape(3, 4)
+  //
+  //      type TT = Ops.:+._Op2ByDim_Strict.IffRelay[s1._ShapeType, s2._ShapeType]
+  //
+  //      shouldNotCompile(
+  //        """implicitly[TT]""",
+  //        """.*(\QDimension mismatch\E).*"""
+  //      )
+  //    }
+  //  }
 
   describe("applyByDim will FAIL if") {
     // TODO: is this really the best behaviour?
@@ -170,10 +171,10 @@ class Op2ByDimSpec extends BaseSpec {
           |""".stripMargin
       )
 
-//      shouldNotCompile(
-//        "rr.eval",
-//        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
-//      )
+      //      shouldNotCompile(
+      //        "rr.eval",
+      //        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
+      //      )
     }
 
     it(" ... even if both operands are conjectures") {
@@ -190,15 +191,15 @@ class Op2ByDimSpec extends BaseSpec {
           |""".stripMargin
       )
 
-//      shouldNotCompile(
-//        "rr.eval",
-//        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
-//      )
-//
-//      shouldNotCompile(
-//        "s.eval",
-//        ".*(\\Q  :=  ∅ >< (2 :<<- a) >< (3 :<<- b)\\E)"
-//      )
+      //      shouldNotCompile(
+      //        "rr.eval",
+      //        ".*(\\Q|>    ∅ >< 2 >< 3\\E)"
+      //      )
+      //
+      //      shouldNotCompile(
+      //        "s.eval",
+      //        ".*(\\Q  :=  ∅ >< (2 :<<- a) >< (3 :<<- b)\\E)"
+      //      )
     }
   }
 

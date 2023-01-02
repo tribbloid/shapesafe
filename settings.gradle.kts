@@ -1,6 +1,6 @@
 
+val noDemo: String? by settings
 val noVerify: String? by settings
-
 val noSpike: String? by settings
 
 fun isEnabled(profile: String?): Boolean {
@@ -16,9 +16,14 @@ include(
     ":macro",
     // uses unstable & experimental scala features, should be modified very slowly & carefully
     ":core",
-    "shapesafe-demo"
 //    // uses common scala features
 )
+
+if (!isEnabled(noDemo)) {
+    include(
+        "shapesafe-demo"
+    )
+}
 
 if (!isEnabled(noVerify)) {
 

@@ -3,6 +3,7 @@ package shapesafe.verify.breeze.tensor
 import breeze.linalg.DenseVector
 import breeze.signal
 import shapeless.{HList, ProductArgs, Witness}
+import shapesafe.core.XInt
 import shapesafe.core.arity.ConstArity.Literal
 import shapesafe.core.arity.ProveArity.{|-, |-<}
 import shapesafe.core.arity.nullary.SizeOf
@@ -55,7 +56,7 @@ class DoubleVector[A1 <: ArityType](
     new DoubleVector(v.^, data)
   }
 
-  def pad[O <: LeafArity](padding: Witness.Lt[Int])(
+  def pad[O <: LeafArity](padding: Witness.Lt[XInt])(
       implicit
       lemma: (A1 :+ (Literal[padding.T] :* Arity._2._ArityType)) |- O
   ): DoubleVector[O] = {
@@ -77,7 +78,7 @@ class DoubleVector[A1 <: ArityType](
       O <: LeafArity
   ](
       kernel: DoubleVector[A2],
-      stride: Witness.Lt[Int]
+      stride: Witness.Lt[XInt]
   )(
       implicit
       lemma: ((A1 :- A2 :+ Arity._1._ArityType) :/ Literal[stride.T]) |- O
@@ -143,12 +144,12 @@ object DoubleVector extends ProductArgs {
     }
   }
 
-  def zeros(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
+  def zeros(lit: Witness.Lt[XInt]): DoubleVector[Literal[lit.T]] = {
 
     new DoubleVector(Arity(lit), DenseVector.fill(lit.value)(0.0))
   }
 
-  def random(lit: Witness.Lt[Int]): DoubleVector[Literal[lit.T]] = {
+  def random(lit: Witness.Lt[XInt]): DoubleVector[Literal[lit.T]] = {
     val list = DenseVector.fill(lit.value) {
       Random.nextDouble()
     }
