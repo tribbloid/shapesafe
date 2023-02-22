@@ -220,7 +220,7 @@ allprojects {
         implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
 
         testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.9.1")
+        testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
         testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.2.0")
