@@ -20,9 +20,9 @@ class KindVizCTSpec extends VizCTSpec {
       type T1 = w1.Out
       implicitly[T1 + ""].value.toString.shouldBe(
         """
-          |-+ Int
-          | !-+ AnyVal
-          |   !-- Any
+          |+ Int
+          |!-+ AnyVal
+          |  !-- Any
           |""".stripMargin
       )
     }
@@ -34,9 +34,9 @@ class KindVizCTSpec extends VizCTSpec {
       type T1 = w1.Out
       implicitly[T1 + ""].value.toString.shouldBe(
         """
-          |-+ Int
-          | !-+ AnyVal
-          |   !-- Any
+          |+ Int
+          |!-+ AnyVal
+          |  !-- Any
           |""".stripMargin
       )
     }
