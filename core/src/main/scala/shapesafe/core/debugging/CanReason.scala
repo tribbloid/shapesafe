@@ -10,7 +10,7 @@ trait CanReason {
 
   lazy val graph = ExpressionType.AsGraph(expressionType)
 
-  def showHierarchy: Hierarchy.Indent2Minimal.Viz[Any] = graph.showHierarchy(Hierarchy.Indent2Minimal)
+  def showHierarchy: Hierarchy.Indent2Minimal.Viz[Any] = graph.diagram_hierarchy(Hierarchy.Indent2Minimal)
 }
 
 object CanReason {}
