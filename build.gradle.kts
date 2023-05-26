@@ -9,7 +9,7 @@ buildscript {
 //    val vs = versions()
 
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.5.8") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.6.0") // suffix is always 2.12, weird
     }
 }
 
@@ -212,14 +212,14 @@ allprojects {
 //        }
 
         constraints {
-            implementation("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}")
+            implementation("com.chuusai:shapeless_${vs.scala.binaryV}:${vs.shapelessV}")
         }
 
-        implementation("${vs.scalaGroup}:scala-compiler:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-library:${vs.scalaV}")
-        implementation("${vs.scalaGroup}:scala-reflect:${vs.scalaV}")
+        implementation("${vs.scala.group}:scala-compiler:${vs.scala.v}")
+        implementation("${vs.scala.group}:scala-library:${vs.scala.v}")
+        implementation("${vs.scala.group}:scala-reflect:${vs.scala.v}")
 
-        testImplementation("org.scalatest:scalatest_${vs.scalaBinaryV}:${vs.scalaTestV}")
+        testImplementation("org.scalatest:scalatest_${vs.scala.binaryV}:${vs.scalaTestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
@@ -228,7 +228,7 @@ allprojects {
 //        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
         //https://github.com/tek/splain
         if (vs.splainV.isNotEmpty()) {
-            val splainD = "io.tryp:splain_${vs.scalaV}:${vs.splainV}"
+            val splainD = "io.tryp:splain_${vs.scala.v}:${vs.splainV}"
             logger.warn("Using " + splainD)
 
             scalaCompilerPlugins(splainD)
@@ -243,9 +243,9 @@ subprojects {
 //    configurations.all {
 //        resolutionStrategy.dependencySubstitution {
 //            substitute(
-//                module("com.chuusai:shapeless_${vs.scalaBinaryV}")
+//                module("com.chuusai:shapeless_${vs.scala.binaryV}")
 //            ).apply {
-//                using(module("com.chuusai:shapeless_${vs.scalaBinaryV}:${vs.shapelessV}"))
+//                using(module("com.chuusai:shapeless_${vs.scala.binaryV}:${vs.shapelessV}"))
 //            }
 //        }
 //    }
@@ -265,7 +265,7 @@ subprojects {
     }
 
     publishing {
-        val suffix = "_" + vs.scalaBinaryV
+        val suffix = "_" + vs.scala.binaryV
 
         val rootID = vs.projectRootID
 

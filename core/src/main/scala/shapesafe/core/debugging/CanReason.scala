@@ -8,7 +8,7 @@ trait CanReason {
 
   protected def expressionType: ExpressionType
 
-  lazy val graph = ExpressionType.AsGraph(expressionType)
+  lazy val graph = ExpressionType.asGraph(expressionType)
 
   def showHierarchy: Hierarchy.Indent2Minimal.Viz[Any] = graph.diagram_hierarchy(Hierarchy.Indent2Minimal)
 }

@@ -18,7 +18,7 @@ class AccumulateByNameSpec extends BaseSpec {
 
     val rr = Ops.:+.reduceByName(s1, s2)
 
-    rr.showHierarchy.treeString.shouldBe(
+    rr.showHierarchy.toString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._ReduceByName ‣ AccumulateByName.On
         | ‣ OuterProduct

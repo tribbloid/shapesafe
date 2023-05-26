@@ -20,7 +20,7 @@ class EinSumSpec extends BaseSpec {
 
     val r = (s1 einSum s2) --> ("x" >< "i")
 
-    r.showHierarchy.treeString.shouldBe(
+    r.showHierarchy.toString.shouldBe(
       """
         |Rearrange┏ x ><
         |         ┃   i

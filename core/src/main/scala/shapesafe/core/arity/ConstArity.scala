@@ -1,19 +1,19 @@
 package shapesafe.core.arity
 
-import ai.acyclic.prover.commons.EqualBy
+import ai.acyclic.prover.commons.Same
 import shapeless.Witness
 import shapesafe.core.XInt
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}
 
-trait ConstArity[S] extends LeafArity with EqualBy {
+trait ConstArity[S] extends LeafArity with Same.ByEquality.Facade {
 
   type SS = S
   def singleton: S
 
   final override type Notation = S
 
-  override lazy val _equalBy: S = singleton
+  final override def samenessDelegatedTo: S = singleton
 
   def proveSameType[N2](
       implicit

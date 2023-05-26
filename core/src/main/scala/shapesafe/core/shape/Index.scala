@@ -2,12 +2,15 @@ package shapesafe.core.shape
 
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.CanPeek
-import ai.acyclic.prover.commons.EqualBy
+import ai.acyclic.prover.commons.Same
 import shapeless.{Nat, Witness}
 
-trait Index extends EqualBy with CanPeek {
+trait Index extends Same.ByEquality.Facade with CanPeek {
 
-  override lazy val toString: String = s"${_equalBy}:${getClass.getSimpleName}"
+  def value: Any
+  final override protected def samenessDelegatedTo = value
+
+  override lazy val toString: String = s"${value}:${getClass.getSimpleName}"
 }
 
 object Index {
@@ -19,7 +22,7 @@ object Index {
     def name: S = w.value
     type Name = S
 
-    override protected def _equalBy = w.value
+    override def value = w.value
 
     override type Notation = S
   }
@@ -29,10 +32,8 @@ object Index {
     def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
   }
 
-  class LtoR[N <: Nat, S <: Int](val index: N, val value: S) extends Name_<:[Nothing] {
+  class LtoR[N <: Nat, S <: Int](val index: N, override val value: S) extends Name_<:[Nothing] {
     type Ordinal = N
-
-    override protected def _equalBy = value
 
     override type Notation = S
   }

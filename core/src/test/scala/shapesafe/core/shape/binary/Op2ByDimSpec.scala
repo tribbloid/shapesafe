@@ -13,7 +13,7 @@ class Op2ByDimSpec extends BaseSpec {
 
     val rr = s1.applyByDimDropLeft(Ops.:+, s2)
 
-    rr.showHierarchy.treeString.shouldBe(
+    rr.showHierarchy.toString.shouldBe(
       """
         |ArityOpsLike.:+ ‣ ArityOpsLike.Infix._Op2ByDim_DropLeft ‣ Op2ByDim.On
         | ‣ 2:Literal ><
