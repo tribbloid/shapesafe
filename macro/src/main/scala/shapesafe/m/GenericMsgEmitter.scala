@@ -1,6 +1,6 @@
 package shapesafe.m
 
-import ai.acyclic.prover.commons.reflect.Reflection
+import ai.acyclic.prover.commons.meta2.Reflection
 import singleton.ops.impl.Op
 
 import java.util.logging.Logger

@@ -2,8 +2,8 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.prover.commons.EqualBy
-import ai.acyclic.prover.commons.viz.text.TextBlock
+import ai.acyclic.prover.commons.Same
+import ai.acyclic.prover.commons.typesetting.TextBlock
 import shapeless.{::, HList, HNil, Witness}
 
 trait StaticTuples[VB] extends Tuples {
@@ -12,7 +12,7 @@ trait StaticTuples[VB] extends Tuples {
 
   final type VBound = VB
 
-  trait Tuple extends EqualBy with CanPeek {
+  trait Tuple extends Same.ByEquality.Facade with CanPeek {
 
     type Static <: HList
     def static: Static
@@ -20,7 +20,7 @@ trait StaticTuples[VB] extends Tuples {
 
     def asList: List[VB]
 
-    override protected def _equalBy: Any = asList
+    override protected def samenessDelegatedTo: Any = asList
 
     final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]

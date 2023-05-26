@@ -7,7 +7,7 @@ trait Constraint {}
 
 object Constraint {
 
-  import ai.acyclic.prover.commons.reflect.ScalaReflection._
+  import ai.acyclic.prover.commons.meta2.ScalaReflection._
 
   // TODO: why reinventing the wheel? shapeless LUBConstraint is the same
   case class ElementOfType[Data <: HList, Element: TypeTag]() extends Constraint {
