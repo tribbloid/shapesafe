@@ -27,7 +27,7 @@ plugins {
 
     signing
     `maven-publish`
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 
     id("com.github.ben-manes.versions") version "0.44.0"
 }
