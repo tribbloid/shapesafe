@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         javaVersion: ["1.8", "17"]
-        scala.version: ["2.13.10"]
+        scalaVersion: ["2.13.10"]
 
     steps:
       - uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
           java-version: ${{matrix.javaVersion}}
       - name: build & test
         run: |
-          ./dev/CI-latest-splain.sh -Pscala.version=${{matrix.scala.version}}
+          ./dev/CI-latest-splain.sh -Pscala.version=${{matrix.scalaVersion}}
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
