@@ -23,9 +23,7 @@ class Versions(private val self: Project) {
 
     val shapelessV: String = "2.3.7"
 
-    val sparkV: String = self.properties.get("sparkVersion").toString()
-
     val scalaTestV: String = "3.2.12"
 
-    val splainV: String = self.properties.get("splainVersion")?.toString() ?: ""
+    val splainV: String = self.properties.get("splain.version")?.toString() ?: ""
 }
