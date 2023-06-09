@@ -219,7 +219,7 @@ allprojects {
         implementation("${vs.scala.group}:scala-library:${vs.scala.v}")
         implementation("${vs.scala.group}:scala-reflect:${vs.scala.v}")
 
-        testImplementation("org.scalatest:scalatest_${vs.scala.binaryV}:${vs.scalaTestV}")
+        testFixturesApi("org.scalatest:scalatest_${vs.scala.binaryV}:${vs.scalaTestV}")
         testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
 
         // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
