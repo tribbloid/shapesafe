@@ -23,7 +23,7 @@ jobs:
           java-version: ${{matrix.javaVersion}}
       - name: build & test
         run: |
-          ./dev/CI-latest-splain.sh -Pscala.version=${{matrix.scalaVersion}}
+          ./dev/CI-latest-splain.sh -PscalaVersion=${{matrix.scalaVersion}}
 
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1

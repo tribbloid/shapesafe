@@ -5,6 +5,6 @@ CRDIR="$(
   pwd
 )"
 
-ARGS=("-Psplain.version=1.1.0-SNAPSHOT" "-Pscala.version=2.13.10" "${@}")
+ARGS=("-PsplainVersion=1.1.0-SNAPSHOT" "${@}")
 
 exec "${CRDIR}"/.CI.sh "${ARGS[@]}"

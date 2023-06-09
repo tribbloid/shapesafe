@@ -23,7 +23,7 @@ jobs:
           java-version: ${{matrix.javaVersion}}
       - name: build & test
         run: |
-          ./dev/CI-latest.sh -Pscala.version=${{matrix.scalaVersion}}
+          ./dev/CI-latest.sh -PscalaVersion=${{matrix.scalaVersion}}
 
       - name: Pre-release on github
         uses: "marvinpinto/action-automatic-releases@latest"
