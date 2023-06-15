@@ -7,4 +7,4 @@ CRDIR="$(
 
 ARGS=("-PsplainVersion=1.1.0-SNAPSHOT" "${@}")
 
-exec "${CRDIR}"/.CI.sh "${ARGS[@]}"
+exec "${CRDIR}"/CI/main.sh "${ARGS[@]}"

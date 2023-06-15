@@ -5,5 +5,5 @@ CRDIR="$(
   pwd
 )"
 
-"${CRDIR}"/.update-submodules.sh && \
-"${CRDIR}"/CI-pipeline.sh "${@}"
+"${CRDIR}"/update-submodules.sh && \
+"${CRDIR}"/pipeline.sh "${@}"
