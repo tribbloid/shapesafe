@@ -11,12 +11,12 @@ trait BaseSpec extends testlib.BaseSpec with TypeViz.TestFixtures {
   val small = BaseSpec.small
   val big = BaseSpec.big
 
-  def showRaw(v: Any): String = {
-
-    ScalaReflection.universe.showRaw(v)
-
-//    pprint.tokenize(v).mkString("\n")
-  }
+//  def showRaw(v: Any): String = {
+//
+//    ScalaReflection.universe.showRaw(v)
+//
+////    pprint.tokenize(v).mkString("\n")
+//  }
 
   val TypeVizPeek = {
     PeekCT.runtime

@@ -121,7 +121,7 @@ object VizCTSystem {
 
           val str = if (useTree) {
 
-            viz.withFormat(self.typeFormat).of(tt).showHierarchy.toString
+            viz.withFormat(self.typeFormat).of(tt).diagram_hierarchy.toString
           } else {
 
             refl.typeView(tt).formattedBy(self.typeFormat).text

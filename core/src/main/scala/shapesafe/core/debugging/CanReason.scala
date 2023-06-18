@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-import ai.acyclic.prover.commons.graph.viz.Hierarchy
+import ai.acyclic.prover.commons.graph.viz.{Flow, Hierarchy}
 
 trait CanReason {
 
@@ -10,7 +10,9 @@ trait CanReason {
 
   lazy val graph = ExpressionType.asGraph(expressionType)
 
-  def showHierarchy: Hierarchy.Indent2Minimal.Viz[Any] = graph.diagram_hierarchy(Hierarchy.Indent2Minimal)
+  lazy val diagram_hierarchy: Hierarchy.Indent2Minimal.Viz[Any] = graph.diagram_hierarchy(Hierarchy.Indent2Minimal)
+
+  lazy val diagram_flow: Flow.Default.Viz[Any] = graph.diagram_flow(Flow.Default)
 }
 
 object CanReason {}
