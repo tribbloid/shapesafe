@@ -21,8 +21,7 @@ class KindVizCTSpec extends VizCTSpec {
       implicitly[T1 + ""].value.toString.shouldBe(
         """
           |+ Int
-          |!-+ AnyVal
-          |  !-- Any
+          |!-- AnyVal
           |""".stripMargin
       )
     }
@@ -35,8 +34,7 @@ class KindVizCTSpec extends VizCTSpec {
       implicitly[T1 + ""].value.toString.shouldBe(
         """
           |+ Int
-          |!-+ AnyVal
-          |  !-- Any
+          |!-- AnyVal
           |""".stripMargin
       )
     }
