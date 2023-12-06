@@ -1,274 +1,38 @@
-val vs = versions()
-
 buildscript {
     repositories {
         // Add here whatever repositories you're already using
         mavenCentral()
     }
 
-//    val vs = versions()
-
     dependencies {
-        classpath("ch.epfl.scala:gradle-bloop_2.12:1.6.0") // suffix is always 2.12, weird
+        classpath("ch.epfl.scala:gradle-bloop_2.12:1.6.2") // suffix is always 2.12, weird
     }
 }
 
 plugins {
-//    base
-    java
-    `java-library`
-    `java-test-fixtures`
-
-    scala
-    id("io.github.cosmicsilence.scalafix") version "0.1.14"
-//    kotlin("jvm") version "1.6.10" // TODO: remove?
-
-    idea
-
-    signing
-    `maven-publish`
-    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
-
-    id("com.github.ben-manes.versions") version "0.44.0"
+    id("ai.acyclic.scala2-conventions")
+    id("ai.acyclic.publish-conventions")
 }
 
-val sonatypeApiUser = providers.gradleProperty("sonatypeApiUser")
-val sonatypeApiKey = providers.gradleProperty("sonatypeApiKey")
-if (sonatypeApiUser.isPresent && sonatypeApiKey.isPresent) {
-    nexusPublishing {
-        repositories {
-            sonatype {
-
-                nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-                snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-
-                username.set(sonatypeApiUser)
-                password.set(sonatypeApiKey)
-                useStaging.set(true)
-            }
-        }
-    }
-} else {
-    logger.warn("Sonatype API credential not defined, skipping ...")
-}
+val vs = versions()
+val shapelessV = "2.3.9"
 
 allprojects {
 
-    apply(plugin = "java")
-    apply(plugin = "java-library")
-    apply(plugin = "java-test-fixtures")
-
-
-    // apply(plugin = "bloop")
-    // DO NOT enable! In VSCode it will cause the conflict:
-    // Cannot add extension with name 'bloop', as there is an extension already registered with that name
-
-    apply(plugin = "scala")
-    apply(plugin = "io.github.cosmicsilence.scalafix")
-//    apply(plugin = "kotlin")
-
-    apply(plugin = "idea")
-
-    apply(plugin = "signing")
-    apply(plugin = "maven-publish")
-
-    group = vs.projectGroup
-    version = vs.projectV
-
-    repositories {
-        mavenLocal()
-        mavenCentral()
-//        jcenter()
-        maven("https://dl.bintray.com/kotlin/kotlin-dev")
-        maven("https://scala-ci.typesafe.com/artifactory/scala-integration/") // scala SNAPSHOT
-    }
-
-    task("dependencyTree") {
-
-        dependsOn("dependencies")
-    }
-
-    tasks {
-
-        withType<ScalaCompile> {
-
-//            targetCompatibility = jvmTarget
-
-            scalaCompileOptions.apply {
-
-                loggingLevel = "verbose"
-
-                val compilerOptions =
-
-                    mutableListOf(
-
-                        "-encoding", "UTF-8",
-                        "-unchecked", "-deprecation", "-feature",
-
-                        "-language:higherKinds",
-
-                        "-Xlint:poly-implicit-overload", "-Xlint:option-implicit", "-Wunused:imports",
-
-                        "-g:vars",
-
-//                        "-Ylog",
-//                        "-Ydebug",
-
-//                    ,
-//                    "-Xlog-implicits",
-//                    "-Xlog-implicit-conversions",
-//                    "-Xlint:implicit-not-found",
-//                    "-Xlint:implicit-recursion"
-                    )
-
-                if (vs.splainV.isNotEmpty()) {
-                    compilerOptions.addAll(
-                        listOf(
-                            "-Vimplicits", "-Vimplicits-verbose-tree", "-Vtype-diffs"
-                        )
-                    )
-                }
-
-                additionalParameters = compilerOptions
-
-                forkOptions.apply {
-
-                    memoryInitialSize = "1g"
-                    memoryMaximumSize = "4g"
-
-                    // this may be over the top but the test code in macro & core frequently run implicit search on church encoded Nat type
-                    jvmArgs = listOf(
-                        "-Xss256m"
-                    )
-                }
-            }
-        }
-
-        test {
-
-            minHeapSize = "1024m"
-            maxHeapSize = "4096m"
-
-            testLogging {
-
-                showExceptions = true
-                exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-
-                showCauses = true
-                showStackTraces = true
-
-                // stdout is used for occasional manual verification
-                showStandardStreams = true
-            }
-
-            useJUnitPlatform {
-                includeEngines("scalatest")
-                testLogging {
-                    events("passed", "skipped", "failed")
-                }
-            }
-        }
-    }
-
-    java {
-        withSourcesJar()
-        withJavadocJar()
-    }
-
-    idea {
-
-        module {
-
-            excludeDirs = excludeDirs + files(
-
-                "target",
-                "out",
-                "build",
-
-                ".idea",
-                ".vscode",
-                ".bloop",
-                ".bsp",
-                ".metals",
-                "bin",
-
-                ".ammonite",
-
-                "logs",
-
-                )
-
-            isDownloadJavadoc = true
-            isDownloadSources = true
-        }
-    }
-
     dependencies {
 
-        // see https://github.com/gradle/gradle/issues/13067
-        // TODO: remove, apparently fixed in the latest plugin
-//        fun bothImpl(constraintNotation: Any) {
-//            implementation(constraintNotation)
-//            testFixturesImplementation(constraintNotation)
-//        }
-
         constraints {
-            implementation("com.chuusai:shapeless_${vs.scala.binaryV}:${vs.shapelessV}")
-        }
-
-        implementation("${vs.scala.group}:scala-compiler:${vs.scala.v}")
-        implementation("${vs.scala.group}:scala-library:${vs.scala.v}")
-        implementation("${vs.scala.group}:scala-reflect:${vs.scala.v}")
-
-        testFixturesApi("org.scalatest:scalatest_${vs.scala.binaryV}:${vs.scalaTestV}")
-        testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-
-        // TODO: alpha project, switch to mature solution once https://github.com/scalatest/scalatest/issues/1454 is solved
-        testRuntimeOnly("co.helmethair:scalatest-junit-runner:0.2.0")
-
-//        testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.35.10")
-        //https://github.com/tek/splain
-        if (vs.splainV.isNotEmpty()) {
-            val splainD = "io.tryp:splain_${vs.scala.v}:${vs.splainV}"
-            logger.warn("Using " + splainD)
-
-            scalaCompilerPlugins(splainD)
+            implementation("com.chuusai:shapeless_${vs.scala.binaryV}:${shapelessV}")
         }
     }
 }
 
 subprojects {
 
-    // resolving version conflicts
-    // TODO: remove, already defined in `constraints` as below
-//    configurations.all {
-//        resolutionStrategy.dependencySubstitution {
-//            substitute(
-//                module("com.chuusai:shapeless_${vs.scala.binaryV}")
-//            ).apply {
-//                using(module("com.chuusai:shapeless_${vs.scala.binaryV}:${vs.shapelessV}"))
-//            }
-//        }
-//    }
-
-    // https://stackoverflow.com/a/66352905/1772342
-    val signingSecretKey = providers.gradleProperty("signing.gnupg.secretKey")
-    val signingKeyPassphrase = providers.gradleProperty("signing.gnupg.passphrase")
-    signing {
-        useGpgCmd()
-        if (signingSecretKey.isPresent) {
-            useInMemoryPgpKeys(signingSecretKey.get(), signingKeyPassphrase.get())
-//            useInMemoryPgpKeys(signingKeyID.get(), signingSecretKey.get(), signingKeyPassphrase.get())
-            sign(extensions.getByType<PublishingExtension>().publications)
-        } else {
-            logger.warn("PGP signing key not defined, skipping ...")
-        }
-    }
-
     publishing {
         val suffix = "_" + vs.scala.binaryV
 
-        val rootID = vs.projectRootID
+        val rootID = vs.rootID
 
         val moduleID =
             if (project.name.equals(rootID)) throw UnsupportedOperationException("root project should not be published")
@@ -279,15 +43,8 @@ subprojects {
         if (whitelist.contains(project.name)) {
 
             publications {
-                create<MavenPublication>("maven") {
-                    artifactId = moduleID
 
-                    val javaComponent = components["java"] as AdhocComponentWithVariants
-                    from(javaComponent)
-
-                    javaComponent.withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
-                    javaComponent.withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
-
+                withType<MavenPublication> {
 
                     pom {
                         licenses {
@@ -330,8 +87,6 @@ idea {
     module {
 
         excludeDirs = excludeDirs + files(
-            ".gradle",
-
             // apache spark
             "warehouse",
 
