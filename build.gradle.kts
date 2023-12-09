@@ -15,7 +15,18 @@ plugins {
 }
 
 val vs = versions()
-val shapelessV = "2.3.9"
+val shapelessV = "2.3.10"
+
+nexusPublishing {
+    repositories {
+        sonatype {
+
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
+
 
 allprojects {
 
@@ -30,21 +41,15 @@ allprojects {
 subprojects {
 
     publishing {
-        val suffix = "_" + vs.scala.binaryV
 
-        val rootID = vs.rootID
+        val whitelist = setOf(":prover-commons:core", ":prover-commons:meta2", ":macro", ":core")
 
-        val moduleID =
-            if (project.name.equals(rootID)) throw UnsupportedOperationException("root project should not be published")
-            else rootID + "-" + project.name + suffix
-
-        val whitelist = setOf("prover-commons", "macro", "core")
-
-        if (whitelist.contains(project.name)) {
+        val _path = project.path
+        if (whitelist.contains(_path)) {
 
             publications {
 
-                withType<MavenPublication> {
+                create<MavenPublication>("maven") {
 
                     pom {
                         licenses {
@@ -78,6 +83,9 @@ subprojects {
                     }
                 }
             }
+        }
+        else {
+            logger.warn("`${_path}` is not intended to be published")
         }
     }
 }
