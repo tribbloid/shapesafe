@@ -21,7 +21,7 @@ object SizeOf {
       simplify: NatAsOp[N]
   ): SizeOf[D] |- ConstArity.Derived[NatAsOp[N], simplify.OutInt] = {
 
-    ProveArity.forAll[SizeOf[D]].=>> { v =>
+    ProveArity.forAll[SizeOf[D]].=>> { _ =>
       ConstArity.Derived.summon(simplify)
     }
   }

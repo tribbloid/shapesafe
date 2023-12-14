@@ -2,9 +2,8 @@ package shapesafe.core.shape.unary
 
 import shapeless.HList
 import shapeless.ops.hlist.ZipWithKeys
-import shapesafe.core.debugging.{Notations, Refutes}
-import shapesafe.core.shape.{LeafShape, Names, ShapeType, StaticShape}
-import shapesafe.m.Emit
+import shapesafe.core.debugging.Notations
+import shapesafe.core.shape.{Names, ShapeType, StaticShape}
 
 case class GiveNames[
     S1 <: ShapeType,
@@ -17,25 +16,6 @@ case class GiveNames[
   override type Notation = Notations.:<<=[S1#Notation, N#Notation]
 
   override type _RefuteTxt = "Dimension mismatch"
-}
-
-trait GiveNames_Imp0 {
-
-  import shapesafe.core.shape.ProveShape._
-
-  implicit def refute[
-      S1 <: ShapeType,
-      P1 <: LeafShape,
-      N <: Names,
-      MSG
-  ](
-      implicit
-      lemma: S1 |- P1,
-      refute0: Refutes.ForShape.Refute0[GiveNames[P1, N], MSG],
-      msg: Emit.Error[MSG]
-  ): GiveNames[S1, N] |- LeafShape = {
-    ???
-  }
 }
 
 object GiveNames extends GiveNames_Imp0 {

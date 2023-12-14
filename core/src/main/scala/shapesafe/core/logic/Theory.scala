@@ -2,21 +2,6 @@ package shapesafe.core.logic
 
 import shapesafe.core.ProofLike
 import shapesafe.core.ProofLike.TheoremTag
-import shapesafe.m.Emit
-
-trait Theory_Imp0 {
-  self: Theory =>
-
-  implicit def refute_|-[I, O](
-      implicit
-      emit: Emit.Error["[CANNOT PROVE]: ${I} |- ${O}"]
-  ): |-[I, O] = ???
-
-  implicit def refute_|-\-[I, O](
-      implicit
-      emit: Emit.Error["[CANNOT REFUTE]: ${I} |-\\- ${O}"]
-  ): |-[I, O] = ???
-}
 
 trait Theory extends HasTactic with Theory_Imp0 {
 
@@ -38,7 +23,7 @@ trait Theory extends HasTactic with Theory_Imp0 {
   // constructive proof
   abstract class Proof[-I, +P <: Consequent] extends ProofLike {
 
-    def scope: Theory.this.type = Theory.this
+    def theory: Theory.this.type = Theory.this
 
     def consequentFor(v: I): P
 

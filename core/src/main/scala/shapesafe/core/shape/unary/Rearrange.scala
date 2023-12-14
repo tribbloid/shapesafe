@@ -2,9 +2,8 @@ package shapesafe.core.shape.unary
 
 import shapesafe.core.AdHocPoly1
 import shapesafe.core.axis.Axis
-import shapesafe.core.debugging.{Notations, Refutes}
+import shapesafe.core.debugging.Notations
 import shapesafe.core.shape._
-import shapesafe.m.Emit
 
 case class Rearrange[ // last step of einsum, contract, transpose, etc.
     S1 <: ShapeType,
@@ -17,26 +16,6 @@ case class Rearrange[ // last step of einsum, contract, transpose, etc.
   override type Notation = Notations.Rearrange[S1#Notation, indices.AsIndices#Notation]
 
   override type _RefuteTxt = "Indices not found"
-}
-
-trait Rearrange_Imp0 {
-
-  import ProveShape._
-
-  implicit def refute[
-      S1 <: ShapeType,
-      P1 <: LeafShape,
-      II <: IndicesMagnet,
-      MSG
-  ](
-      implicit
-      lemma: S1 |- P1,
-      refute0: Refutes.ForShape.Refute0[Rearrange[P1, II], MSG],
-      msg: Emit.Error[MSG]
-  ): Rearrange[S1, II] |- LeafShape = {
-    ???
-  }
-
 }
 
 object Rearrange extends Rearrange_Imp0 {
@@ -68,7 +47,7 @@ object Rearrange extends Rearrange_Imp0 {
         P1 <: StaticShape
     ] = {
 
-      forAll[Rearrange[P1, Indices.Eye]].=>> { v =>
+      forAll[Rearrange[P1, Indices.Eye]].=>> { _ =>
         StaticShape.Eye
       }
     }

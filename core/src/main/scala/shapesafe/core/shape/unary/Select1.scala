@@ -6,11 +6,10 @@ import shapeless.{HList, Nat, Witness}
 import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
-import shapesafe.core.debugging.{Notations, Refutes}
+import shapesafe.core.debugging.Notations
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
 import shapesafe.core.{AdHocPoly1, XString}
-import shapesafe.m.Emit
 
 case class Select1[
     S1 <: ShapeType,
@@ -23,25 +22,6 @@ case class Select1[
   override type Notation = Notations.Select1[S1#Notation, I#Notation]
 
   override type _RefuteTxt = "Index not found"
-}
-
-trait Select1_Imp0 {
-
-  import ProveShape._
-
-  implicit def refute[
-      S1 <: ShapeType,
-      P1 <: LeafShape,
-      I <: Index,
-      MSG
-  ](
-      implicit
-      lemma1: S1 |- P1,
-      refute0: Refutes.ForShape.Refute0[Select1[P1, I], MSG],
-      msg: Emit.Error[MSG]
-  ): Select1[S1, I] |- LeafShape = {
-    ???
-  }
 }
 
 object Select1 extends Select1_Imp0 {
