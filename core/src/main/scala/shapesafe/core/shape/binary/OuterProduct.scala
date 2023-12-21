@@ -58,7 +58,7 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
       lemma1: S1 |- P1,
       lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
-      toShape: StaticShape.FromStatic.Case[HO]
+      toShape: StaticShape.FromStatic.CaseFrom[HO]
   ): OuterProduct[S1, S2] |- toShape.Out = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>

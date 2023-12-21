@@ -8,13 +8,13 @@ import shapeless.{HList, NatProductArgs}
 trait ApplyNats extends ApplyArgs with NatProductArgs {
 
   // TODO: should the reverse be justified?
-  def applyNatProduct[H1 <: HList, H2 <: HList](
+  def applyNatProduct[H1 <: HList, H2 <: HList, R <: ApplyNats.this.OUB](
       v: H1
   )(
       implicit
       reverse: Reverse.Aux[H1, H2],
-      lemma: fromHList.Case[H2]
-  ): Result[lemma.Out] = {
+      lemma: fromHList.=>>[H2, R]
+  ): Result[R] = {
     val out = lemma.apply(v.reverse)
     toResult(out)
   }

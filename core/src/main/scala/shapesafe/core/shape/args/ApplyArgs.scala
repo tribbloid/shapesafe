@@ -1,12 +1,11 @@
 package shapesafe.core.shape.args
 
 import shapesafe.core.AdHocPoly1
-import shapeless.HList
 
 trait ApplyArgs {
 
   type OUB
-  val fromHList: AdHocPoly1[HList, OUB]
+  val fromHList: AdHocPoly1
 
   type Result[T <: OUB]
   def toResult[T <: OUB](v: T): Result[T]

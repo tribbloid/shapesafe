@@ -36,7 +36,7 @@ trait AccumulateByName {
     ](
         implicit
         lemma: S1 |- P1,
-        toShape: _Lemma.ToShape.Case[P1#Record]
+        toShape: _Lemma.ToShape.CaseFrom[P1#Record]
     ): _On[S1] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1]].=>> { v =>
@@ -62,7 +62,7 @@ trait AccumulateByName {
     ](
         implicit
         consTail: TI =>> TO,
-        oldName: oldNameUpdater.Case[(TO, HI)]
+        oldName: oldNameUpdater.CaseFrom[(TO, HI)]
     ): (HI :: TI) =>> oldName.Out = {
 
       forAll[HI :: TI].=>> { v =>

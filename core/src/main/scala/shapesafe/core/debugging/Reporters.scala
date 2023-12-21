@@ -13,16 +13,16 @@ trait Reporters extends HasTheory {
 
   import Reporters._
 
-  trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
+  trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter {
 
     import shapesafe.core.debugging.DebugConst._
     import theory._
 
     type ExprOf[T <: CanPeek] = T#Notation
 
-    trait Step1_Imp3 extends AdHocPoly1[Iub, XString] {
+    trait Step1_Imp3 extends AdHocPoly1 {
 
-      implicit def raw[A <: Iub, VA <: XString](
+      implicit def raw[A <: CanPeek, VA <: XString](
           implicit
           vizA: PeekCTAux[A#Notation, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
@@ -33,7 +33,7 @@ trait Reporters extends HasTheory {
     trait Step1_Imp2 extends Step1_Imp3 {
 
       implicit def eval[
-          A <: Iub,
+          A <: CanPeek,
           S <: TGT,
           VA <: XString,
           VS <: XString
@@ -50,7 +50,7 @@ trait Reporters extends HasTheory {
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyEvaled[
-          S <: TGT with Iub,
+          S <: TGT with CanPeek,
           VS <: XString
       ](
           implicit
@@ -78,15 +78,13 @@ object Reporters {
 
   type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
-  trait Reporter[IUB] extends AdHocPoly1[IUB, Unit] {
+  trait Reporter extends AdHocPoly1 {
 
     type EmitMsg[T]
 
-    final type Iub = IUB
+    val Step1: AdHocPoly1
 
-    val Step1: AdHocPoly1[IUB, XString]
-
-    case class ForTerm[IN <: IUB](v: IN) {
+    case class ForTerm[IN](v: IN) {
 
       // TODO: should this be part of Arity/Shape API?
       def getMessage[
@@ -101,7 +99,7 @@ object Reporters {
     }
 
     implicit def attempt[
-        IN <: IUB,
+        IN,
         SS <: XString
     ](
         implicit

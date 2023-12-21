@@ -12,10 +12,10 @@ trait ProofWithReasoning extends ProofSystem with Reporters {
     type Goal <: CanPeek
 
     object Peek extends PeekReporter[CanPeek, Goal]
-    type Peek[I <: CanPeek] = Peek.Case[I]
+    type Peek[I <: CanPeek] = Peek.CaseFrom[I]
 
     object Interrupt extends InterruptReporter[CanPeek, Goal]
-    type Interrupt[I <: CanPeek] = Interrupt.Case[I]
+    type Interrupt[I <: CanPeek] = Interrupt.CaseFrom[I]
 
     trait ReasoningMixin {
       self: Proof[_, _] =>
@@ -26,9 +26,9 @@ trait ProofWithReasoning extends ProofSystem with Reporters {
     object ReasoningMixin {
 
       implicit def reason[I <: CanPeek, P <: Consequent](
-          implicit
-          reporter: Peek.Case[I],
-          prove: Proof[I, P]
+                                                          implicit
+                                                          reporter: Peek.CaseFrom[I],
+                                                          prove: Proof[I, P]
       ): Proof[I, P] with ReasoningMixin = {
 
         prove.asInstanceOf[Proof[I, P] with ReasoningMixin]

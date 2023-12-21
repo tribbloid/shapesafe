@@ -85,13 +85,13 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
   // no need for Names constructor
   object named extends SingletonProductArgs {
 
-    def applyProduct[H1 <: HList, H2 <: HList](
+    def applyProduct[H1 <: HList, H2 <: HList, R <: Names](
         v: H1
     )(
         implicit
         reverse: Reverse.Aux[H1, H2],
-        lemma: Names.FromLiterals.Case[H2]
-    ): ^[GiveNames[_ShapeType, lemma.Out]] = {
+        lemma: Names.FromLiterals.=>>[H2, R]
+    ): ^[GiveNames[_ShapeType, R]] = {
 
       val out = lemma.apply(reverse(v))
 
@@ -151,13 +151,13 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 
   object rearrange extends SingletonProductArgs {
 
-    def applyProduct[H1 <: HList, H2 <: HList](
+    def applyProduct[H1 <: HList, H2 <: HList, R <: IndicesMagnet](
         v: H1
     )(
         implicit
         reverse: Reverse.Aux[H1, H2],
-        lemma: Names.FromLiterals.Case[H2]
-    ): ^[Rearrange[_ShapeType, lemma.Out]] = {
+        lemma: Names.FromLiterals.=>>[H2, R]
+    ): ^[Rearrange[_ShapeType, R]] = {
 
       val out = lemma.apply(reverse(v))
 

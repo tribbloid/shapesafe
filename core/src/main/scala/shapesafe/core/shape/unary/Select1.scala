@@ -47,7 +47,7 @@ object Select1 extends Select1_Imp0 {
     }
   }
 
-  object Premise extends AdHocPoly1[Select1[_, _], Axis] {
+  object Premise extends AdHocPoly1 {
 
     implicit def byName[
         P1 <: StaticShape,

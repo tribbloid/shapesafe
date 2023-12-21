@@ -31,7 +31,7 @@ object GiveNames extends GiveNames_Imp0 {
       implicit
       lemma: S1 |- P1,
       zip: ZipWithKeys.Aux[N#Static, P1#_Dimensions#Static, HO],
-      toShape: StaticShape.FromAxes.Case[HO]
+      toShape: StaticShape.FromAxes.CaseFrom[HO]
   ): GiveNames[S1, N] |- toShape.Out = {
     forAll[GiveNames[S1, N]].=>> { src =>
       val keys: N#Static = src.newNames.static
