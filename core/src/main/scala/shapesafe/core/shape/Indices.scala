@@ -1,8 +1,8 @@
 package shapesafe.core.shape
 
-import shapesafe.core.tuple.{StaticTuples, Tuples}
+import shapesafe.core.tuple.{Bone, Tuples}
 
-trait Indices extends IndicesMagnet with Indices.Proto.Tuple {
+trait Indices extends IndicesMagnet with Indices.Backbone.Tuple {
 
   final override type AsIndices = this.type
 
@@ -13,11 +13,11 @@ object Indices extends Tuples {
 
   type VBound = Index
 
-  object Proto extends StaticTuples[VBound] {}
+  object Backbone extends Bone[VBound] {}
 
   type Tuple = Indices
 
-  class Eye extends Proto.Eye with Indices
+  class Eye extends Backbone.Eye with Indices
   override val Eye = new Eye
 
   class ><[
@@ -26,7 +26,7 @@ object Indices extends Tuples {
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends Proto.><[TAIL, HEAD](tail, head)
+  ) extends Backbone.><[TAIL, HEAD](tail, head)
       with Tuple {
 
     override type PeekHead = Head

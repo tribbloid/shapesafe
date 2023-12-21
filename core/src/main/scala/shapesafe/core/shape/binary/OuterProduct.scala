@@ -58,14 +58,15 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
       lemma1: S1 |- P1,
       lemma2: S2 |- P2,
       concat: Prepend.Aux[P2#Static, P1#Static, HO],
-      toShape: StaticShape.FromStatic.Case[HO]
+      toShape: StaticShape.FromStatic.CaseFrom[HO]
   ): OuterProduct[S1, S2] |- toShape.Out = {
 
     forAll[OuterProduct[S1, S2]].=>> { direct =>
       val p1: P1 = lemma1.instanceFor(direct.s1)
       val p2: P2 = lemma2.instanceFor(direct.s2)
 
-      toShape(concat(p2.static, p1.static))
+      val result: toShape.Out = toShape.apply(concat(p2.static, p1.static))
+      result
     }
   }
 }

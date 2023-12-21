@@ -1,12 +1,12 @@
 package shapesafe.core.arity
 
-import ai.acyclic.prover.commons.Same
+import ai.acyclic.prover.commons.same.Same
 import shapeless.Witness
 import shapesafe.core.XInt
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}
 
-trait ConstArity[S] extends LeafArity with Same.ByEquality.Facade {
+trait ConstArity[S] extends LeafArity with Same.ByEquality.IWrapper {
 
   type SS = S
   def singleton: S

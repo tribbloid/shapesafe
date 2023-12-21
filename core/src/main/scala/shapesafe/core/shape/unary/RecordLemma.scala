@@ -6,14 +6,14 @@ import shapesafe.core.axis.NewNameAppender
 import shapesafe.core.shape.StaticShape
 import shapeless.{::, HList, HNil}
 
-trait RecordLemma extends AdHocPoly1[HList, HList] {
+trait RecordLemma extends AdHocPoly1 {
 
-  implicit val nil: HNil =>> HNil = forAll[HNil].=>> { _ =>
+  implicit val nil: HNil =>> HNil = at[HNil].defining { _ =>
     HNil
   }
 
   // TODO: move to a more general 'AndThen' class
-  object ToShape extends AdHocPoly1[HList, StaticShape] {
+  object ToShape extends AdHocPoly1 {
 
     val outer: RecordLemma.this.type = RecordLemma.this
 
@@ -23,10 +23,10 @@ trait RecordLemma extends AdHocPoly1[HList, HList] {
     ](
         implicit
         lemma1: outer.=>>[I, O],
-        lemma2: StaticShape.FromAxes.Case[O]
+        lemma2: StaticShape.FromAxes.CaseFrom[O]
     ): I =>> lemma2.Out = {
 
-      forAll[I].=>> { i =>
+      at[I].defining { i =>
         lemma2.apply(lemma1.apply(i))
       }
     }
@@ -44,9 +44,9 @@ object RecordLemma {
     ](
         implicit
         consTail: TI =>> TO,
-        newName: NewNameAppender.Case[(TO, HI)]
+        newName: NewNameAppender.CaseFrom[(TO, HI)]
     ): (HI :: TI) =>> newName.Out = {
-      forAll[HI :: TI].=>> { v =>
+      at[HI :: TI].defining { v =>
         val ti = v.tail
         val to = consTail(ti)
         newName(to -> v.head)

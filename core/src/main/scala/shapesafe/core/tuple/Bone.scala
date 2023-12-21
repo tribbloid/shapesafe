@@ -2,17 +2,17 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.prover.commons.Same
+import ai.acyclic.prover.commons.same.Same
 import ai.acyclic.prover.commons.typesetting.TextBlock
 import shapeless.{::, HList, HNil, Witness}
 
-trait StaticTuples[VB] extends Tuples {
+trait Bone[VB] extends Tuples {
 
-  import StaticTuples._
+  import Bone._
 
   final type VBound = VB
 
-  trait Tuple extends Same.ByEquality.Facade with CanPeek {
+  trait Tuple extends Same.ByEquality.IWrapper with CanPeek {
 
     type Static <: HList
     def static: Static
@@ -22,7 +22,7 @@ trait StaticTuples[VB] extends Tuples {
 
     override protected def samenessDelegatedTo: Any = asList
 
-    final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
+    final type Cons[HH <: VB] = Bone.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
   }
 
@@ -78,7 +78,7 @@ trait StaticTuples[VB] extends Tuples {
     new ><(tail, head)
 }
 
-object StaticTuples {
+object Bone {
 
   val EYE = Witness("∅")
 

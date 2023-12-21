@@ -56,12 +56,12 @@ class RingAxiomsSpec extends BaseSpec {
     val tt = forAll[XY].toGoal[Y :+ X]
 
     // manually
-    val p1 = tt.useTactic { v =>
+    tt.useTactic { v =>
       v.cite(:+.commutative)
     }.fulfil
 
     // automatically
-    val p = tt.prove
+    tt.prove
   }
 
   it("A + B + C =>> C + B + A") {

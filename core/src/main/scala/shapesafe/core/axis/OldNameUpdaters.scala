@@ -27,7 +27,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
         lemma: op.On[A1, A2] |- O
     ): (OLD, N ->> A2) =>> ((N ->> O) :: OLD) = {
 
-      forAll[(OLD, N ->> A2)].=>> {
+      at[(OLD, N ->> A2)].defining {
 
         case (old, field) =>
           import shapeless.record._
@@ -64,7 +64,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
         modifier: Modifier[OLD, N, A1, O]
     ): (OLD, N ->> A2) =>> modifier.Out = {
 
-      forAll[(OLD, N ->> A2)].=>> {
+      at[(OLD, N ->> A2)].defining {
 
         case (old, field) =>
           val a2 = field: A2

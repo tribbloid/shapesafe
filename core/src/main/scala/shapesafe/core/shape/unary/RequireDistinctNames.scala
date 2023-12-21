@@ -13,7 +13,7 @@ case class RequireDistinctNames[S1 <: ShapeType](
 
   override type Prior = StaticShape
 
-  override type Condition[P1 <: StaticShape] = _Lemma.Case[P1#Record]
+  override type Condition[P1 <: StaticShape] = _Lemma.CaseFrom[P1#Record]
 
   override type Notation = Notations.RequireDistinctNames[S1#Notation]
 

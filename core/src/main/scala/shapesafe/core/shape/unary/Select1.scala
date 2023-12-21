@@ -47,7 +47,7 @@ object Select1 extends Select1_Imp0 {
     }
   }
 
-  object Premise extends AdHocPoly1[Select1[_, _], Axis] {
+  object Premise extends AdHocPoly1 {
 
     implicit def byName[
         P1 <: StaticShape,
@@ -57,7 +57,7 @@ object Select1 extends Select1_Imp0 {
         implicit
         _selector: Selector.Aux[P1#Record, N, A]
     ): Select1[P1, Index.Name[N]] =>> (A :<<- N) = {
-      forAll[Select1[P1, Index.Name[N]]].=>> { v =>
+      at[Select1[P1, Index.Name[N]]].defining { v =>
         val p1: P1 = v.s1
 
         val arity: A = _selector(p1.record)
@@ -77,7 +77,7 @@ object Select1 extends Select1_Imp0 {
         reverse: Reverse.Aux[P1#Static, R],
         _at: At.Aux[R, N, O]
     ): Select1[P1, Index.LtoR[N, S]] =>> O = {
-      forAll[Select1[P1, Index.LtoR[N, S]]].=>> { v =>
+      at[Select1[P1, Index.LtoR[N, S]]].defining { v =>
         val p1 = v.s1
 
         _at(reverse(p1.static))

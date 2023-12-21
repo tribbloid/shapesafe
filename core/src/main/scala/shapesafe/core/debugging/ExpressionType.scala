@@ -1,7 +1,7 @@
 package shapesafe.core.debugging
 
 import ai.acyclic.prover.commons.graph.local.Local
-import ai.acyclic.prover.commons.meta2.ProductDiscovery
+import ai.acyclic.prover.commons.meta.ProductDiscovery
 
 trait ExpressionType extends CanPeek {}
 

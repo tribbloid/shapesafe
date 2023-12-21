@@ -13,27 +13,27 @@ trait Reporters extends HasTheory {
 
   import Reporters._
 
-  trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter[IUB] {
+  trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter {
 
     import shapesafe.core.debugging.DebugConst._
     import theory._
 
     type ExprOf[T <: CanPeek] = T#Notation
 
-    trait Step1_Imp3 extends AdHocPoly1[Iub, XString] {
+    trait Step1_Imp3 extends AdHocPoly1 {
 
-      implicit def raw[A <: Iub, VA <: XString](
+      implicit def raw[A <: CanPeek, VA <: XString](
           implicit
           vizA: PeekCTAux[A#Notation, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
-        forAll[A].=>>(_ => mk.value)
+        at[A].defining(_ => mk.value)
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
 
       implicit def eval[
-          A <: Iub,
+          A <: CanPeek,
           S <: TGT,
           VA <: XString,
           VS <: XString
@@ -44,20 +44,20 @@ trait Reporters extends HasTheory {
           vizS: PeekCTAux[ExprOf[S], VS],
           mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
-        forAll[A].=>>(_ => mk.value)
+        at[A].defining(_ => mk.value)
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyEvaled[
-          S <: TGT with Iub,
+          S <: TGT with CanPeek,
           VS <: XString
       ](
           implicit
           vizS: PeekCTAux[ExprOf[S], VS],
           op: (PEEK.T + VS + "\n") { type Out <: XString }
       ): S =>> op.Out =
-        forAll[S].=>>(_ => op.value)
+        at[S].defining(_ => op.value)
     }
 
     override object Step1 extends Step1_Imp1
@@ -78,22 +78,20 @@ object Reporters {
 
   type PeekCTAux[I, O <: String] = PeekCT.NoTree.Info.Aux[I, O]
 
-  trait Reporter[IUB] extends AdHocPoly1[IUB, Unit] {
+  trait Reporter extends AdHocPoly1 {
 
     type EmitMsg[T]
 
-    final type Iub = IUB
+    val Step1: AdHocPoly1
 
-    val Step1: AdHocPoly1[IUB, XString]
-
-    case class ForTerm[IN <: IUB](v: IN) {
+    case class ForTerm[IN](v: IN) {
 
       // TODO: should this be part of Arity/Shape API?
       def getMessage[
           SS <: XString
       ](
           implicit
-          step1: Step1.Auxs.=>>[IN, SS]
+          step1: Step1.=>>[IN, SS]
       ): SS = {
 
         step1.apply(v)
@@ -101,13 +99,13 @@ object Reporters {
     }
 
     implicit def attempt[
-        IN <: IUB,
+        IN,
         SS <: XString
     ](
         implicit
-        step1: Step1.Auxs.=>>[IN, SS],
+        step1: Step1.=>>[IN, SS],
         step2: EmitMsg[SS]
-    ): IN =>> Unit = forAll[IN].=>> { _ =>
+    ): IN =>> Unit = at[IN].defining { _ =>
       //      val emit = new EmitMsg[SS, EmitMsg.Error]
       //      emit.emit
     }

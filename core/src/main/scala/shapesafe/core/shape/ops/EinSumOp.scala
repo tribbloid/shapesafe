@@ -23,13 +23,13 @@ case class EinSumOp[
 
   object -->* extends SingletonProductArgs {
 
-    def applyProduct[H1 <: HList, H2 <: HList](
+    def applyProduct[H1 <: HList, H2 <: HList, R <: Names](
         v: H1
     )(
         implicit
         reverse: Reverse.Aux[H1, H2],
-        lemma: Names.FromLiterals.Case[H2]
-    ): ^[Rearrange[CheckEinSum[S1], lemma.Out]] = {
+        lemma: Names.FromLiterals.=>>[H2, R]
+    ): ^[Rearrange[CheckEinSum[S1], R]] = {
 
       val names = lemma.apply(reverse(v))
       -->(names)

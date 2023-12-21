@@ -1,8 +1,8 @@
 package shapesafe.m.viz
 
-import ai.acyclic.prover.commons.meta2.format.Formats0.TypeInfo
-import ai.acyclic.prover.commons.meta2.format.Formats1.{RecursiveForm, Trials}
-import ai.acyclic.prover.commons.meta2.format.{FormatOvrd, TypeFormat}
+import ai.acyclic.prover.commons.viz.format.Formats0.TypeInfo
+import ai.acyclic.prover.commons.viz.format.Formats1.{RecursiveForm, Trials}
+import ai.acyclic.prover.commons.viz.format.{FormatOvrd, TypeFormat}
 
 import scala.language.experimental.macros
 

@@ -43,7 +43,7 @@ class StaticShapeSpike extends BaseSpec {
         }
 
         {
-          val values = book.values
+          book.values
         }
       }
 
@@ -84,7 +84,7 @@ class StaticShapeSpike extends BaseSpec {
               (Symbol("price").narrow -> 44.11) ::
               HNil
 
-          val record = fields.record
+          fields.record
 
           //        print_@(record.price)
         }
@@ -107,7 +107,7 @@ class StaticShapeSpike extends BaseSpec {
               ("price" ->> 44.11) ::
               HNil
 
-          val record = fields.record
+          fields.record
 
           //        print_@(record.price)
         }
@@ -165,10 +165,10 @@ class StaticShapeSpike extends BaseSpec {
           HNil
       }
 
-      val x = dims.apply(Symbol("x"))
+      dims.apply(Symbol("x"))
 
       {
-        val fields = dims.fields
+        dims.fields
 //        print_@(VizType.infer(dims))
 //        print_@(VizType.infer(fields))
       }
@@ -176,7 +176,7 @@ class StaticShapeSpike extends BaseSpec {
       val values = dims.values
       val is = Symbol("i") :: Witness(Symbol("j")) :: HNil
 
-      val reIndexed = is.zip(values).record
+      is.zip(values).record
 
 //      print_@(VizType.infer(reIndexed))
     }

@@ -1,7 +1,7 @@
 package shapesafe.m.viz
 
-import ai.acyclic.prover.commons.meta2.format.Formats0.KindName
-import ai.acyclic.prover.commons.meta2.format.{EnableOvrd, TypeFormat}
+import ai.acyclic.prover.commons.viz.format.Formats0.KindName
+import ai.acyclic.prover.commons.viz.format.{EnableOvrd, TypeFormat}
 
 import scala.language.experimental.macros
 

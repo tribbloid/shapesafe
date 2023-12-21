@@ -1,8 +1,8 @@
 package shapesafe.m.viz
 
 import ai.acyclic.prover.commons.HasOuter
-import ai.acyclic.prover.commons.meta2.format.TypeFormat
 import ai.acyclic.prover.commons.viz.TypeViz
+import ai.acyclic.prover.commons.viz.format.TypeFormat
 import shapesafe.m.{Emit, MWithReflection}
 import singleton.ops.+
 
@@ -110,7 +110,7 @@ object VizCTSystem {
         SELF <: VizCTSystem: c.WeakTypeTag
     ]: c.Tree = {
 
-      val tt: Type = weakTypeOf[T]
+      val tt = refl.TypeView(weakTypeOf[T])
 
       val (self, liftSelf) = getSystem(weakTypeOf[SELF].dealias)
 
@@ -124,7 +124,7 @@ object VizCTSystem {
             viz.withFormat(self.typeFormat).of(tt).diagram_hierarchy.toString
           } else {
 
-            refl.typeView(tt).formattedBy(self.typeFormat).text
+            refl.TypeOps(tt).formattedBy(self.typeFormat).text
           }
 
           str
@@ -136,7 +136,7 @@ object VizCTSystem {
             "[ ERROR ] " + e.toString
         }
 
-      q"$liftSelf.createInfoOf[$tt, $result]"
+      q"$liftSelf.createInfoOf[${tt.unbox}, $result]"
     }
 
     //    def T[A: WeakTypeTag]: Tree = {

@@ -8,13 +8,13 @@ import shapeless.{HList, SingletonProductArgs}
 trait ApplyLiterals extends SingletonProductArgs with ApplyArgs {
 
   // TODO: should the reverse be justified?
-  def applyProduct[H1 <: HList, H2 <: HList](
+  def applyProduct[H1 <: HList, H2 <: HList, R <: ApplyLiterals.this.OUB](
       v: H1
   )(
       implicit
       reverse: Reverse.Aux[H1, H2],
-      lemma: fromHList.Case[H2]
-  ): Result[lemma.Out] = {
+      lemma: fromHList.=>>[H2, R]
+  ): Result[R] = {
     val out = lemma.apply(v.reverse)
     toResult(out)
   }

@@ -6,7 +6,7 @@ import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
 import shapesafe.core.Const.NoName
-import shapesafe.core.tuple.{StaticTuples, Tuples}
+import shapesafe.core.tuple.{Bone, Tuples}
 import shapesafe.core.{XInt, XString}
 
 /**
@@ -32,13 +32,13 @@ object StaticShape extends Tuples {
 
   final type VBound = Axis
 
-  object Proto extends StaticTuples[VBound]
-  type Proto = Proto.Tuple
+  object Backbone extends Bone[VBound]
+  type Proto = Backbone.Tuple
 
   final type Tuple = StaticShape
 
   // Cartesian product doesn't have eye but whatever
-  class Eye extends Proto.Eye with StaticShape {
+  class Eye extends Backbone.Eye with StaticShape {
 
     final override type Record = HNil
     override def record: Record = HNil
@@ -61,7 +61,7 @@ object StaticShape extends Tuples {
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends Proto.><[TAIL, HEAD](tail, head)
+  ) extends Backbone.><[TAIL, HEAD](tail, head)
       with StaticShape {
 
     final type Field = head.Field
@@ -97,7 +97,7 @@ object StaticShape extends Tuples {
         forTail: H_TAIL =>> TAIL
     ): (C :: H_TAIL) =>> (TAIL ><^ C) = {
 
-      forAll[C :: H_TAIL].=>> { v =>
+      at[C :: H_TAIL].defining { v =>
         val prev = apply(v.tail)
         val vHead = v.head: C
         val head: Arity.^[C] = vHead.^
@@ -123,7 +123,7 @@ object StaticShape extends Tuples {
         w: Witness.Aux[N]
     ): ((N ->> C) :: H_TAIL) =>> (TAIL >< (C :<<- N)) = {
 
-      forAll[(N ->> C) :: H_TAIL].=>> { v =>
+      at[(N ->> C) :: H_TAIL].defining { v =>
         val prev = apply(v.tail)
         val vHead: C = v.head
         val head: C :<<- N = vHead.^ :<<- w
@@ -146,7 +146,7 @@ object StaticShape extends Tuples {
         forTail: H_TAIL =>> TAIL
     ): ((NoName ->> C) :: H_TAIL) =>> (TAIL ><^ C) = {
 
-      forAll[(NoName ->> C) :: H_TAIL].=>> { v =>
+      at[(NoName ->> C) :: H_TAIL].defining { v =>
         val prev = apply(v.tail)
         val vHead = v.head: C
         val head: Arity.^[C] = vHead.^
@@ -170,7 +170,7 @@ object StaticShape extends Tuples {
         w: Witness.Aux[HEAD]
     ): (HEAD :: H_TAIL) =>> (TAIL ><^ ConstArity.Literal[HEAD]) = {
 
-      forAll[HEAD :: H_TAIL].=>> { v =>
+      at[HEAD :: H_TAIL].defining { v =>
         val prev = forTail(v.tail)
         val head = Arity(w) // Arity.Impl(ConstArity.Literal(w))
 
@@ -191,7 +191,7 @@ object StaticShape extends Tuples {
         asOp: NatAsOp[HEAD]
     ) = {
 
-      forAll[HEAD :: H_TAIL].=>> { v =>
+      at[HEAD :: H_TAIL].defining { v =>
         val prev = apply(v.tail)
         val head = Arity.FromNat(v.head)
 

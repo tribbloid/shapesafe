@@ -1,7 +1,7 @@
 package shapesafe.core.tuple
 
 import shapesafe.core.AdHocPoly1
-import shapeless.{HList, HNil}
+import shapeless.HNil
 
 trait TupleSystem {
 
@@ -13,12 +13,12 @@ trait TupleSystem {
   val Eye: Eye
 //  final type Eye = Eye.type
 
-  trait HListIntake extends AdHocPoly1[HList, Tuple] {
+  trait HListIntake extends AdHocPoly1 {
 
     final val outer = TupleSystem.this
 
     implicit val toEye: HNil =>> Eye = {
-      forAll[HNil].=>> { _ =>
+      at[HNil].defining { _ =>
         Eye
       }
     }

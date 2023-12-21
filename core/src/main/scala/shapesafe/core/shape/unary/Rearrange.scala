@@ -30,7 +30,7 @@ object Rearrange extends Rearrange_Imp0 {
   ](
       implicit
       lemma1: S1 |- P1,
-      lemma2: Premise.Case[Rearrange[P1, II#AsIndices]]
+      lemma2: Premise.CaseFrom[Rearrange[P1, II#AsIndices]]
   ): Rearrange[S1, II] |- lemma2.Out = {
 
     forAll[Rearrange[S1, II]].=>> { v =>
@@ -41,13 +41,13 @@ object Rearrange extends Rearrange_Imp0 {
     }
   }
 
-  object Premise extends AdHocPoly1[Rearrange[_, _], StaticShape] {
+  object Premise extends AdHocPoly1 {
 
     implicit def eye[
         P1 <: StaticShape
     ] = {
 
-      forAll[Rearrange[P1, Indices.Eye]].=>> { _ =>
+      at[Rearrange[P1, Indices.Eye]].defining { _ =>
         StaticShape.Eye
       }
     }
@@ -61,9 +61,9 @@ object Rearrange extends Rearrange_Imp0 {
     ](
         implicit
         forTail: Rearrange[P1, II_-] |- OO_-,
-        forHead: Select1.Premise.Auxs.=>>[Select1[P1, I], O]
+        forHead: Select1.Premise.=>>[Select1[P1, I], O]
     ) = {
-      forAll[Rearrange[P1, Indices.><[II_-, I]]].=>> { v =>
+      at[Rearrange[P1, Indices.><[II_-, I]]].defining { v =>
         val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(Select1(v.s1, v.indices.head))

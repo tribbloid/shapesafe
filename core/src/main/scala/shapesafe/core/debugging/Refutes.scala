@@ -10,18 +10,18 @@ trait Refutes {
 
   type WHEN_PROVING
 
-  type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
+  type Refute0[SELF <: CanRefute, O] = Refute0.=>>[SELF, O]
 
-  object Refute0 extends AdHocPoly1[CanRefute, Any] {
+  object Refute0 extends AdHocPoly1 {
 
-    implicit def get[I <: _IUB, V <: String](
+    implicit def get[I <: CanRefute, V <: String](
         implicit
         expr2Str: PeekCTAux[I#Notation, V]
     ): I =>> (
       I#RefuteTxt +
         WHEN_PROVING +
         V
-    ) = forAll[I].=>> { _ =>
+    ) = at[I].defining { _ =>
       null
     }
   }

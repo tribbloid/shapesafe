@@ -2,6 +2,6 @@ val vs: Versions = versions()
 
 dependencies {
 
-    api(project(":macro"))
-    testFixturesApi(testFixtures(project(":macro")))
+    api(project(":macro2"))
+    testFixturesApi(testFixtures(project(":macro2")))
 }

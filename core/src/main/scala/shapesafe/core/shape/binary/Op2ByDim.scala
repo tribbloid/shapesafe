@@ -52,7 +52,7 @@ trait Op2ByDim {
         condition: Refutes.ForShape.NotFoundInfo[Condition[P1, P2], _On[P1, P2]],
         zip: Zip.Aux[P1#_Dimensions#Static :: P2#_Dimensions#Static :: HNil, HO],
         // TODO: no need, can define Indexing directly
-        toShape: _Lemma.ToShape.Case[HO]
+        toShape: _Lemma.ToShape.CaseFrom[HO]
     ): _On[S1, S2] |- toShape.Out = {
 
       ProveShape.forAll[_On[S1, S2]].=>> { v =>
@@ -90,7 +90,7 @@ trait Op2ByDim {
         consTail: TI =>> TO,
         proveArity: op.On[A1, A2] |- AO
     ): ((A1, A2) :: TI) =>> (AO :: TO) = {
-      forAll[(A1, A2) :: TI].=>> { v =>
+      at[(A1, A2) :: TI].defining { v =>
         val ti = v.tail
         val to = consTail(ti)
 
