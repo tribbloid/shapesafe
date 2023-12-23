@@ -26,9 +26,9 @@ trait ProofWithReasoning extends ProofSystem with Reporters {
     object ReasoningMixin {
 
       implicit def reason[I <: CanPeek, P <: Consequent](
-                                                          implicit
-                                                          reporter: Peek.CaseFrom[I],
-                                                          prove: Proof[I, P]
+          implicit
+          reporter: Peek.CaseFrom[I],
+          prove: Proof[I, P]
       ): Proof[I, P] with ReasoningMixin = {
 
         prove.asInstanceOf[Proof[I, P] with ReasoningMixin]

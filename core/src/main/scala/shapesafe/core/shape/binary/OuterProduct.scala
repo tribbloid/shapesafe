@@ -65,7 +65,8 @@ trait OuterProduct_Imp0 extends OuterProduct_Imp1 {
       val p1: P1 = lemma1.instanceFor(direct.s1)
       val p2: P2 = lemma2.instanceFor(direct.s2)
 
-      toShape(concat(p2.static, p1.static))
+      val result: toShape.Out = toShape.apply(concat(p2.static, p1.static))
+      result
     }
   }
 }

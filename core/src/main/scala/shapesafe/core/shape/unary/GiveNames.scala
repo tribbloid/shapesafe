@@ -40,7 +40,7 @@ object GiveNames extends GiveNames_Imp0 {
       val values: P1#_Dimensions#Static = p1.dimensions.static
 
       val zipped: HO = values.zipWithKeys(keys)(zip)
-      StaticShape.FromAxes(zipped)
+      StaticShape.FromAxes.apply(zipped)(toShape)
     }
   }
 

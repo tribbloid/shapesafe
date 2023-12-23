@@ -91,7 +91,7 @@ object Reporters {
           SS <: XString
       ](
           implicit
-          step1: Step1.Auxs.=>>[IN, SS]
+          step1: Step1.=>>[IN, SS]
       ): SS = {
 
         step1.apply(v)
@@ -103,7 +103,7 @@ object Reporters {
         SS <: XString
     ](
         implicit
-        step1: Step1.Auxs.=>>[IN, SS],
+        step1: Step1.=>>[IN, SS],
         step2: EmitMsg[SS]
     ): IN =>> Unit = forAll[IN].=>> { _ =>
       //      val emit = new EmitMsg[SS, EmitMsg.Error]

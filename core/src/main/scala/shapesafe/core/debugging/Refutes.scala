@@ -10,7 +10,7 @@ trait Refutes {
 
   type WHEN_PROVING
 
-  type Refute0[SELF <: CanRefute, O] = Refute0.Auxs.=>>[SELF, O]
+  type Refute0[SELF <: CanRefute, O] = Refute0.=>>[SELF, O]
 
   object Refute0 extends AdHocPoly1 {
 
