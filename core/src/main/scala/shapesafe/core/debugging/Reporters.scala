@@ -27,7 +27,7 @@ trait Reporters extends HasTheory {
           vizA: PeekCTAux[A#Notation, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
-        forAll[A].=>>(_ => mk.value)
+        forAll[A].defining(_ => mk.value)
     }
 
     trait Step1_Imp2 extends Step1_Imp3 {
@@ -44,7 +44,7 @@ trait Reporters extends HasTheory {
           vizS: PeekCTAux[ExprOf[S], VS],
           mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
-        forAll[A].=>>(_ => mk.value)
+        forAll[A].defining(_ => mk.value)
     }
 
     trait Step1_Imp1 extends Step1_Imp2 {
@@ -57,7 +57,7 @@ trait Reporters extends HasTheory {
           vizS: PeekCTAux[ExprOf[S], VS],
           op: (PEEK.T + VS + "\n") { type Out <: XString }
       ): S =>> op.Out =
-        forAll[S].=>>(_ => op.value)
+        forAll[S].defining(_ => op.value)
     }
 
     override object Step1 extends Step1_Imp1
@@ -102,10 +102,10 @@ object Reporters {
         IN,
         SS <: XString
     ](
-        implicit
-        step1: Step1.=>>[IN, SS],
-        step2: EmitMsg[SS]
-    ): IN =>> Unit = forAll[IN].=>> { _ =>
+       implicit
+       step1: Step1.=>>[IN, SS],
+       step2: EmitMsg[SS]
+    ): IN =>> Unit = forAll[IN].defining { _ =>
       //      val emit = new EmitMsg[SS, EmitMsg.Error]
       //      emit.emit
     }

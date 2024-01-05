@@ -21,7 +21,7 @@ trait Tuples extends TupleSystem {
         forTail: H_TAIL =>> TAIL
     ): (HEAD :: H_TAIL) =>> ><[TAIL, HEAD] = {
 
-      forAll[HEAD :: H_TAIL].=>> { v =>
+      forAll[HEAD :: H_TAIL].defining { v =>
         val prev = apply(v.tail)
 
         cons(prev, v.head)

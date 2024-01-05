@@ -60,12 +60,12 @@ trait AccumulateByName {
         TO <: HList,
         HI <: UB_->>
     ](
-        implicit
-        consTail: TI =>> TO,
-        oldName: oldNameUpdater.CaseFrom[(TO, HI)]
+       implicit
+       consTail: TI =>> TO,
+       oldName: oldNameUpdater.CaseFrom[(TO, HI)]
     ): (HI :: TI) =>> oldName.Out = {
 
-      forAll[HI :: TI].=>> { v =>
+      forAll[HI :: TI].defining { v =>
         val ti = v.tail
         val to = consTail(ti)
         oldName(to, v.head)

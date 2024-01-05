@@ -14,7 +14,7 @@ object Names extends Tuples with ApplyLiterals.ToNames {
 
   type VBound = XString // expand to take all String for gradual typing?
 
-  object Proto extends StaticTuples[VBound] {}
+  object Proto extends Bone[VBound] {}
 
   type Tuple = Names
 

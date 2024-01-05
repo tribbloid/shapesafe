@@ -8,7 +8,7 @@ import shapeless.{::, HList, HNil}
 
 trait RecordLemma extends AdHocPoly1 {
 
-  implicit val nil: HNil =>> HNil = forAll[HNil].=>> { _ =>
+  implicit val nil: HNil =>> HNil = forAll[HNil].defining { _ =>
     HNil
   }
 
@@ -21,12 +21,12 @@ trait RecordLemma extends AdHocPoly1 {
         I <: HList,
         O <: HList
     ](
-        implicit
-        lemma1: outer.=>>[I, O],
-        lemma2: StaticShape.FromAxes.CaseFrom[O]
+       implicit
+       lemma1: outer.=>>[I, O],
+       lemma2: StaticShape.FromAxes.CaseFrom[O]
     ): I =>> lemma2.Out = {
 
-      forAll[I].=>> { i =>
+      forAll[I].defining { i =>
         lemma2.apply(lemma1.apply(i))
       }
     }
@@ -42,11 +42,11 @@ object RecordLemma {
         TO <: HList,
         HI <: UB_->>
     ](
-        implicit
-        consTail: TI =>> TO,
-        newName: NewNameAppender.CaseFrom[(TO, HI)]
+       implicit
+       consTail: TI =>> TO,
+       newName: NewNameAppender.CaseFrom[(TO, HI)]
     ): (HI :: TI) =>> newName.Out = {
-      forAll[HI :: TI].=>> { v =>
+      forAll[HI :: TI].defining { v =>
         val ti = v.tail
         val to = consTail(ti)
         newName(to -> v.head)

@@ -6,9 +6,9 @@ import ai.acyclic.prover.commons.Same
 import ai.acyclic.prover.commons.typesetting.TextBlock
 import shapeless.{::, HList, HNil, Witness}
 
-trait StaticTuples[VB] extends Tuples {
+trait Bone[VB] extends Tuples {
 
-  import StaticTuples._
+  import Bone._
 
   final type VBound = VB
 
@@ -22,7 +22,7 @@ trait StaticTuples[VB] extends Tuples {
 
     override protected def samenessDelegatedTo: Any = asList
 
-    final type Cons[HH <: VB] = StaticTuples.this.><[this.type, VB]
+    final type Cons[HH <: VB] = Bone.this.><[this.type, VB]
     type _ConsExpr[PEEK <: CanPeek]
   }
 
@@ -78,7 +78,7 @@ trait StaticTuples[VB] extends Tuples {
     new ><(tail, head)
 }
 
-object StaticTuples {
+object Bone {
 
   val EYE = Witness("∅")
 

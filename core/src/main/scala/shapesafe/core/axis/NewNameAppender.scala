@@ -19,7 +19,7 @@ trait NewNameAppender extends RecordUpdater {
       isNew: NotContainsConstraint[OLDNS, N]
   ): (OLD, N ->> A1) =>> ((N ->> A1) :: OLD) = {
 
-    forAll[(OLD, N ->> A1)].=>> {
+    forAll[(OLD, N ->> A1)].defining {
       case (old, field) =>
         field :: old
     }

@@ -47,7 +47,7 @@ object Rearrange extends Rearrange_Imp0 {
         P1 <: StaticShape
     ] = {
 
-      forAll[Rearrange[P1, Indices.Eye]].=>> { _ =>
+      forAll[Rearrange[P1, Indices.Eye]].defining { _ =>
         StaticShape.Eye
       }
     }
@@ -63,7 +63,7 @@ object Rearrange extends Rearrange_Imp0 {
         forTail: Rearrange[P1, II_-] |- OO_-,
         forHead: Select1.Premise.=>>[Select1[P1, I], O]
     ) = {
-      forAll[Rearrange[P1, Indices.><[II_-, I]]].=>> { v =>
+      forAll[Rearrange[P1, Indices.><[II_-, I]]].defining { v =>
         val tail: OO_- = forTail.instanceFor(v.copy(indices = v.indices.tail))
 
         val head: O = forHead(Select1(v.s1, v.indices.head))
