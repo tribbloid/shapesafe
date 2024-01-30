@@ -21,7 +21,7 @@ trait Refutes {
       I#RefuteTxt +
         WHEN_PROVING +
         V
-    ) = forAll[I].defining { _ =>
+    ) = at[I].defining { _ =>
       null
     }
   }

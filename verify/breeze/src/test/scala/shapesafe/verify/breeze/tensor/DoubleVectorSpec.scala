@@ -75,13 +75,13 @@ class DoubleVectorSpec extends BaseSpec {
 
     it("(stable val)") {
 
-      val v1 = DoubleVector.zeros(stable)
+      DoubleVector.zeros(stable)
       //    v1.arity.internal.proveEqual(3) //TODO: Calculation has returned a non-literal type/value
     }
 
     it("(stable lazy val)") {
 
-      val v2 = DoubleVector.zeros(stableLzy)
+      DoubleVector.zeros(stableLzy)
       //    v2.arity.internal.proveEqual(3) //TODO: Calculation has returned a non-literal type/value
     }
 

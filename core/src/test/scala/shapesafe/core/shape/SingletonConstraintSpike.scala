@@ -28,7 +28,7 @@ class SingletonConstraintSpike extends BaseSpec {
 
   it("3") {
 
-    val v = singletonW.value
+    singletonW.value
 
 //    s3(v) // breaks
   }
