@@ -2,7 +2,7 @@ package shapesafe.core.tuple
 
 import shapesafe.core.debugging.{CanPeek, Notations}
 import shapesafe.core.util.HListView
-import ai.acyclic.prover.commons.Same
+import ai.acyclic.prover.commons.same.Same
 import ai.acyclic.prover.commons.typesetting.TextBlock
 import shapeless.{::, HList, HNil, Witness}
 
@@ -12,7 +12,7 @@ trait Bone[VB] extends Tuples {
 
   final type VBound = VB
 
-  trait Tuple extends Same.ByEquality.Facade with CanPeek {
+  trait Tuple extends Same.ByEquality.IWrapper with CanPeek {
 
     type Static <: HList
     def static: Static

@@ -2,10 +2,10 @@ package shapesafe.core.shape
 
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.CanPeek
-import ai.acyclic.prover.commons.Same
+import ai.acyclic.prover.commons.same.Same
 import shapeless.{Nat, Witness}
 
-trait Index extends Same.ByEquality.Facade with CanPeek {
+trait Index extends Same.ByEquality.IWrapper with CanPeek {
 
   def value: Any
   final override protected def samenessDelegatedTo = value
