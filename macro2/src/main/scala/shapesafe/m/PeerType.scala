@@ -51,7 +51,7 @@ object PeerType {
 
         case v: SingletonType =>
           val ttView = refl.typeView(v)
-          val baseTypes = ttView.baseTypes.map(_.self)
+          val baseTypes = ttView.baseTypes // .map(_.value)
 
           val chosen = baseTypes.flatMap {
             case NoType => None

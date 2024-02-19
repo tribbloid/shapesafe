@@ -1,6 +1,6 @@
 package shapesafe.m
 
-import ai.acyclic.prover.commons.meta2.Reflection
+import ai.acyclic.prover.commons.meta.ScalaReflection
 import singleton.ops.impl.Op
 
 import java.util.logging.Logger
@@ -35,7 +35,7 @@ object GenericMsgEmitter {
 
     def byType[A, SSS <: GenericMsgEmitter.EmitLevel](
         implicit
-        _ttg: Reflection.Runtime.TypeTag[A]
+        _ttg: ScalaReflection.TypeTag[A]
     ): GenericMsgEmitter[A, SSS] =
       macro Macros.byTypeTag[A, SSS]
 
@@ -101,8 +101,8 @@ object GenericMsgEmitter {
 
       val aa: Type = weakTypeOf[A]
 
-      val ttg: Reflection.Runtime.TypeTag[A] = c.eval(c.Expr[Reflection.Runtime.TypeTag[A]](c.untypecheck(q"${_ttg}")))
-      val v = Reflection.Runtime.typeView(ttg.tpe).singletonName
+      val ttg: ScalaReflection.TypeTag[A] = c.eval(c.Expr[ScalaReflection.TypeTag[A]](c.untypecheck(q"${_ttg}")))
+      val v = ScalaReflection.typeView(ttg.tpe).singletonName
 
       val ll = emitValue[LL](v)
 

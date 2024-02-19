@@ -1,6 +1,6 @@
 package shapesafe.m.viz
 
-import ai.acyclic.prover.commons.meta2.format.{Formats0, TypeFormat}
+import ai.acyclic.prover.commons.viz.format.{Formats0, TypeFormat}
 
 import scala.language.experimental.macros
 

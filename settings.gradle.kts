@@ -12,10 +12,11 @@ include(":prover-commons")
 project(":prover-commons").projectDir = file("prover-commons/module")
 include(":prover-commons:core")
 include(":prover-commons:meta2")
+//include(":prover-commons:spark")
 
 include(
     // should be skipped on CI, contains local experiments only
-    ":macro",
+    ":macro2",
     // uses unstable & experimental scala features, should be modified very slowly & carefully
     ":core",
 //    // uses common scala features

@@ -1,6 +1,6 @@
 package shapesafe.m
 
-import ai.acyclic.prover.commons.meta2.MacroReflection
+import ai.acyclic.prover.commons.refl.Reflection
 import ai.acyclic.prover.commons.viz.TypeViz
 
 import scala.reflect.macros.blackbox
@@ -18,7 +18,12 @@ trait MWithReflection {
     c.parse(name)
   }
 
-  lazy val refl = MacroReflection[u.type](c.universe)
+  object refl extends Reflection.CompileTime {
+
+    final override lazy val universe: MWithReflection.this.u.type = MWithReflection.this.u
+
+  }
+
   lazy val viz = TypeViz.default(refl)
 
 //  case class MacroError(message: String) extends Exception(message)
