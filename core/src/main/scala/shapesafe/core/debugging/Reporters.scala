@@ -13,16 +13,16 @@ trait Reporters extends HasTheory {
 
   import Reporters._
 
-  trait ProofReporter[IUB <: CanPeek, TGT <: CanPeek] extends Reporter {
+  trait ProofReporter[IUB <: HasNotation, TGT <: HasNotation] extends Reporter {
 
     import shapesafe.core.debugging.DebugConst._
     import theory._
 
-    type ExprOf[T <: CanPeek] = T#Notation
+    type ExprOf[T <: HasNotation] = T#Notation
 
     trait Step1_Imp3 extends AdHocPoly1 {
 
-      implicit def raw[A <: CanPeek, VA <: XString](
+      implicit def raw[A <: HasNotation, VA <: XString](
           implicit
           vizA: PeekCTAux[A#Notation, VA],
           mk: (CannotEval + VA + "\n") { type Out <: XString }
@@ -33,7 +33,7 @@ trait Reporters extends HasTheory {
     trait Step1_Imp2 extends Step1_Imp3 {
 
       implicit def eval[
-          A <: CanPeek,
+          A <: HasNotation,
           S <: TGT,
           VA <: XString,
           VS <: XString
@@ -50,7 +50,7 @@ trait Reporters extends HasTheory {
     trait Step1_Imp1 extends Step1_Imp2 {
 
       implicit def alreadyEvaled[
-          S <: TGT with CanPeek,
+          S <: TGT with HasNotation,
           VS <: XString
       ](
           implicit
@@ -63,12 +63,12 @@ trait Reporters extends HasTheory {
     override object Step1 extends Step1_Imp1
   }
 
-  trait PeekReporter[IUB <: CanPeek, TGT <: CanPeek] extends ProofReporter[IUB, TGT] {
+  trait PeekReporter[IUB <: HasNotation, TGT <: HasNotation] extends ProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = Emit.Info[T]
   }
 
-  trait InterruptReporter[IUB <: CanPeek, TGT <: CanPeek] extends ProofReporter[IUB, TGT] {
+  trait InterruptReporter[IUB <: HasNotation, TGT <: HasNotation] extends ProofReporter[IUB, TGT] {
 
     override type EmitMsg[T] = Emit.Error[T]
   }

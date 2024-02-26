@@ -4,12 +4,12 @@ import ai.acyclic.prover.commons.same.Same
 import shapeless.Witness
 import shapeless.labelled.FieldType
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
-import shapesafe.core.debugging.{CanPeek, Notations}
+import shapesafe.core.debugging.{HasNotation, Notations}
 import shapesafe.core.{XInt, XString}
 
 import scala.language.implicitConversions
 
-trait Axis extends AxisLike with Same.ByEquality.IWrapper with CanPeek {
+trait Axis extends AxisLike with Same.ByEquality.IWrapper with HasNotation {
   // TODO:; can be a subclass of shapeless KeyTag
 
   final type Field = FieldType[Name, _ArityType]
@@ -42,12 +42,12 @@ object Axis {
 
     type _Axis = _ArityType :<<- Name
 
-    trait CanPeekName extends CanPeek {
+    trait NameAsNotation extends HasNotation {
 
       override type Notation = Name
     }
 
-    override type Notation = Notations.:<<-[A#Notation, CanPeekName#Notation]
+    override type Notation = Notations.:<<-[A#Notation, NameAsNotation#Notation]
 
     override lazy val toString: String = {
       if (name.isEmpty) s"$arityType"

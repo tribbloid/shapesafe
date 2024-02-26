@@ -43,13 +43,13 @@ object NotationsLike {
 
     trait On[A] {}
 
-    type Apply[AA <: CanPeek] = On[AA#Notation]
+    type Apply[AA <: HasNotation] = On[AA#Notation]
   }
   trait Proto2 {
 
     trait On[A, B] {}
 
-    type Apply[AA <: CanPeek, BB <: CanPeek] = On[AA#Notation, BB#Notation]
+    type Apply[AA <: HasNotation, BB <: HasNotation] = On[AA#Notation, BB#Notation]
   }
 
 }

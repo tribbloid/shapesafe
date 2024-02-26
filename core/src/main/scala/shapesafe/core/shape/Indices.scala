@@ -1,6 +1,7 @@
 package shapesafe.core.shape
 
-import shapesafe.core.tuple.{Bone, Tuples}
+import ai.acyclic.prover.commons.tuple.Tuples
+import shapesafe.core.SymbolicTuples
 
 trait Indices extends IndicesMagnet with Indices.Backbone.Tuple {
 
@@ -13,7 +14,7 @@ object Indices extends Tuples {
 
   type VBound = Index
 
-  object Backbone extends Bone[VBound] {}
+  object Backbone extends SymbolicTuples[VBound] {}
 
   type Tuple = Indices
 

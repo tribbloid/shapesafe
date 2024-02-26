@@ -1,5 +1,6 @@
 package shapesafe.core.util;
 
+import ai.acyclic.prover.commons.tuple.HListView
 import shapesafe.BaseSpec
 import shapeless.HNil;
 

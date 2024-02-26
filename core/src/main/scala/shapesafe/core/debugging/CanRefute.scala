@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-trait CanRefute extends CanPeek {
+trait CanRefute extends HasNotation {
 
   type _RefuteTxt
 

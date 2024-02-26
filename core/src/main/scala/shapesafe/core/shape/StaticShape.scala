@@ -1,13 +1,13 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.tuple.Tuples
 import shapeless.{::, HList, HNil, Nat, Succ, Witness}
+import shapesafe.core.Const.NoName
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
-import shapesafe.core.Const.NoName
-import shapesafe.core.tuple.{Bone, Tuples}
-import shapesafe.core.{XInt, XString}
+import shapesafe.core.{SymbolicTuples, XInt, XString}
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included this saves compiler burden and reduces error
@@ -32,7 +32,7 @@ object StaticShape extends Tuples {
 
   final type VBound = Axis
 
-  object Backbone extends Bone[VBound]
+  object Backbone extends SymbolicTuples[VBound]
   type Proto = Backbone.Tuple
 
   final type Tuple = StaticShape

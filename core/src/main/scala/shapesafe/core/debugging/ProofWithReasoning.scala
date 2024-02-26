@@ -9,23 +9,23 @@ trait ProofWithReasoning extends ProofSystem with Reporters {
 
   trait Reasoner {
 
-    type Goal <: CanPeek
+    type Goal <: HasNotation
 
-    object Peek extends PeekReporter[CanPeek, Goal]
-    type Peek[I <: CanPeek] = Peek.CaseFrom[I]
+    object Peek extends PeekReporter[HasNotation, Goal]
+    type Peek[I <: HasNotation] = Peek.CaseFrom[I]
 
-    object Interrupt extends InterruptReporter[CanPeek, Goal]
-    type Interrupt[I <: CanPeek] = Interrupt.CaseFrom[I]
+    object Interrupt extends InterruptReporter[HasNotation, Goal]
+    type Interrupt[I <: HasNotation] = Interrupt.CaseFrom[I]
 
     trait ReasoningMixin {
       self: Proof[_, _] =>
     }
 
-    type |-@-[I <: CanPeek, O <: Goal] = (I |- O) with ReasoningMixin
+    type |-@-[I <: HasNotation, O <: Goal] = (I |- O) with ReasoningMixin
 
     object ReasoningMixin {
 
-      implicit def reason[I <: CanPeek, P <: Consequent](
+      implicit def reason[I <: HasNotation, P <: Consequent](
           implicit
           reporter: Peek.CaseFrom[I],
           prove: Proof[I, P]

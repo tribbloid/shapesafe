@@ -1,6 +1,6 @@
 package shapesafe.core.debugging
 
-trait CanPeek {
+trait HasNotation {
 
   type Notation
   // use TypeVizCT macro

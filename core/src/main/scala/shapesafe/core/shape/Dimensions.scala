@@ -1,7 +1,8 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.tuple.ProductTuples
+import shapesafe.core.SymbolicTuples
 import shapesafe.core.arity.ArityType
-import shapesafe.core.tuple.Bone
 
 // should it be "Arities"?
-object Dimensions extends Bone[ArityType] {}
+object Dimensions extends SymbolicTuples[ArityType] {}

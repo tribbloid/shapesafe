@@ -1,24 +1,24 @@
 package shapesafe.core.shape
 
-import shapesafe.core.XString
-import shapesafe.core.debugging.CanPeek
-import shapesafe.core.shape.args.ApplyLiterals
-import shapesafe.core.tuple._
+import ai.acyclic.prover.commons.tuple._
 import shapeless.Witness
+import shapesafe.core.debugging.HasNotation
+import shapesafe.core.shape.args.ApplyLiterals
+import shapesafe.core.{SymbolicTuples, XString}
 
 import scala.language.implicitConversions
 
-trait Names extends IndicesMagnet with Names.Proto.Tuple {}
+trait Names extends IndicesMagnet with Names.Backbone.Tuple {}
 
 object Names extends Tuples with ApplyLiterals.ToNames {
 
   type VBound = XString // expand to take all String for gradual typing?
 
-  object Proto extends Bone[VBound] {}
+  object Backbone extends SymbolicTuples[VBound] {}
 
   type Tuple = Names
 
-  class Eye extends Proto.Eye with Names {
+  class Eye extends Backbone.Eye with Names {
     override type AsIndices = Indices.Eye
 
     override def asIndices: Indices.Eye = Indices.Eye
@@ -31,17 +31,19 @@ object Names extends Tuples with ApplyLiterals.ToNames {
   ](
       override val tail: TAIL,
       override val head: HEAD
-  ) extends Proto.><[TAIL, HEAD](tail, head)
+  ) extends Backbone.><[TAIL, HEAD](tail, head)
       with Tuple {
 
     val headW: Witness.Aux[HEAD] = Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]]
 
     override type AsIndices = Indices.><[tail.AsIndices, Index.Name[HEAD]]
 
-    override def asIndices: AsIndices =
+    override def asIndices: AsIndices = {
+      import Indices._
       tail.asIndices >< Index.Name(headW)
+    }
 
-    trait PeekHead extends CanPeek {
+    trait PeekHead extends HasNotation {
       override type Notation = Head
     }
   }
