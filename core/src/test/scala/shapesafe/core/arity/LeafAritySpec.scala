@@ -1,31 +1,31 @@
 package shapesafe.core.arity
 
+import ai.acyclic.prover.commons.refl.XInt
 import shapesafe.BaseSpec
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.m.PeerType
-import shapeless.Witness.Lt
 import singleton.ops.{+, ==, Require, ToInt}
 
 class LeafAritySpec extends BaseSpec {
 
   describe("big") {
 
-    def validate[S](subject: ConstArity[S], w: Lt[Int])(
+    def validate[S, S2 <: XInt](subject: ConstArity[S], w: S2)(
         implicit
-        proof: Require[S == w.T],
-        plus: S + w.T
+        proof: Require[S == S2],
+        plus: S + S2
     ): Unit = {
 
       val out = subject
       val out2 = subject
 
-      subject.proveEqual(w)(proof)
-      out.proveEqual(w)(proof) // scala compiler may fumble on this one
-      out2.proveEqual(w)(proof)
+      subject.proveEqual[S2](w)(proof)
+      out.proveEqual[S2](w)(proof) // scala compiler may fumble on this one
+      out2.proveEqual[S2](w)(proof)
 
-      implicitly[subject.SS + w.T]
-      implicitly[out.SS + w.T]
-      implicitly[out2.SS + w.T]
+      implicitly[subject.SS + S2]
+      implicitly[out.SS + S2]
+      implicitly[out2.SS + S2]
     }
 
     it("FromOp") {
@@ -39,7 +39,7 @@ class LeafAritySpec extends BaseSpec {
       }
 
       {
-        val v = Derived.summon[ToInt[big.w.T]]
+        val v = Derived.summon[ToInt[big.w.type]]
         validate(v, 100)
       }
     }
@@ -52,9 +52,10 @@ class LeafAritySpec extends BaseSpec {
       }
 
       {
-        val v = implicitly[Literal[big.w.T]]
+        val v = implicitly[Literal[big.w.type]]
         validate(v, 100)
       }
+
     }
   }
 

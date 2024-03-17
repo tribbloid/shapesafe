@@ -2,7 +2,7 @@ package shapesafe.m.viz
 
 import ai.acyclic.prover.commons.viz.format.FormatOvrd.{~~, SingletonName}
 import shapesafe.m.GenericMsgEmitter
-import shapeless.Witness
+
 import singleton.ops.+
 
 class KindVizCTSpec extends VizCTSpec {
@@ -42,7 +42,7 @@ class KindVizCTSpec extends VizCTSpec {
 
   describe(kindNoTree.toString) {
 
-    val groundTruth = TypeVizShort.infer["Int"](Witness("Int").value)
+    val groundTruth = TypeVizShort.infer["Int"]("Int")
 
     it("ground truth") {
 

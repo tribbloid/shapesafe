@@ -1,10 +1,11 @@
 package shapesafe
 
-import ai.acyclic.prover.commons.testlib
 import ai.acyclic.prover.commons.meta.ScalaReflection
+import ai.acyclic.prover.commons.refl.XInt
+import ai.acyclic.prover.commons.testlib
 import ai.acyclic.prover.commons.viz.TypeViz
+import shapeless.{HList, Nat}
 import shapesafe.m.viz.PeekCT
-import shapeless.{HList, Nat, Witness}
 
 trait BaseSpec extends testlib.BaseSpec with TypeViz.TestFixtures {
 
@@ -39,9 +40,9 @@ object BaseSpec {
 
     val hList: HList
 
-    val w: Witness { type T <: Int }
+    val w: XInt
 
-    final def number = w.value
+    final def number = w
   }
 
   object small extends TypeN {
@@ -50,7 +51,7 @@ object BaseSpec {
 
     val hList = HList.fill[Double](nat)(0.0)
 
-    val w = Witness(6)
+    final val w = 6
   }
 
   /**
@@ -72,7 +73,7 @@ object BaseSpec {
 
     val hList = HList.fill[Double](nat)(0.0)
 
-    val w = Witness(100)
+    final val w = 100
 //    type W = w.T
   }
 }

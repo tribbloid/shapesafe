@@ -1,13 +1,14 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.refl.{XInt, XString}
 import ai.acyclic.prover.commons.tuple.Tuples
-import shapeless.{::, HList, HNil, Nat, Succ, Witness}
+import shapeless.{::, HList, HNil, Nat, Succ}
 import shapesafe.core.Const.NoName
+import shapesafe.core.SymbolicTuples
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.{->>, :<<-}
-import shapesafe.core.{SymbolicTuples, XInt, XString}
 
 /**
   * a thin wrapper of HList that has all proofs of constraints included this saves compiler burden and reduces error
@@ -71,7 +72,7 @@ object StaticShape extends Tuples {
     final override type NatNumOfDimensions = Succ[tail.NatNumOfDimensions]
 
     final override type _Names = Names.><[tail._Names, head.Name]
-    final override val names = new Names.><(tail.names, head.nameW.value)
+    final override val names = new Names.><(tail.names, head.nameW)
 
     final override type _Dimensions = Dimensions.><[tail._Dimensions, head._ArityType]
     final override val dimensions = new Dimensions.><(tail.dimensions, head.arityType)
@@ -120,7 +121,7 @@ object StaticShape extends Tuples {
     ](
         implicit
         forTail: H_TAIL =>> TAIL,
-        w: Witness.Aux[N]
+        w: N
     ): ((N ->> C) :: H_TAIL) =>> (TAIL >< (C :<<- N)) = {
 
       at[(N ->> C) :: H_TAIL].defining { v =>
@@ -166,13 +167,12 @@ object StaticShape extends Tuples {
         HEAD <: XInt
     ](
         implicit
-        forTail: H_TAIL =>> TAIL,
-        w: Witness.Aux[HEAD]
+        forTail: H_TAIL =>> TAIL
     ): (HEAD :: H_TAIL) =>> (TAIL ><^ ConstArity.Literal[HEAD]) = {
 
       at[HEAD :: H_TAIL].defining { v =>
         val prev = forTail(v.tail)
-        val head = Arity(w) // Arity.Impl(ConstArity.Literal(w))
+        val head = Arity[HEAD](v.head) // Arity.Impl(ConstArity.Literal(w))
 
         prev.^ _and head
       }

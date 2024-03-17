@@ -3,7 +3,7 @@ package shapesafe.core.shape
 import shapesafe.BaseSpec
 import shapesafe.core.shape.Index.Name
 import shapesafe.core.shape.Indices.tupleExtension
-import shapeless.{HNil, Witness}
+import shapeless.HNil
 
 class NamesSpec extends BaseSpec {
 
@@ -54,8 +54,8 @@ class NamesSpec extends BaseSpec {
 //      """implicitly[Names.Cons[Names.Eye, String]]"""
 //    )
 
-    val w = Witness("a")
-    val hh = Names.Eye >< w.value
+    val w = "a"
+    val hh = Names.Eye >< w
 
     hh.toString
       .shouldBe(

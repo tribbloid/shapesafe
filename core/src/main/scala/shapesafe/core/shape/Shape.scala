@@ -1,7 +1,10 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.refl.{XInt, XString}
 import shapeless.ops.hlist.Reverse
-import shapeless.{HList, Nat, SingletonProductArgs, Witness}
+import shapeless.{HList, Nat, SingletonProductArgs}
+import shapesafe.core.Const.True
+import shapesafe.core.Ops
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.{Arity, ConstArity}
 import shapesafe.core.axis.Axis
@@ -11,7 +14,6 @@ import shapesafe.core.shape.args.{ApplyLiterals, ApplyNats}
 import shapesafe.core.shape.binary.OuterProduct
 import shapesafe.core.shape.ops.{EinSumOp, MatrixOps, StaticOpsView, VectorOps}
 import shapesafe.core.shape.unary._
-import shapesafe.core.{Ops, XInt}
 
 import scala.language.implicitConversions
 
@@ -23,8 +25,8 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
 
   override def expressionType = shapeType
 
+  import shapesafe.core.shape.ProveShape.AsLeafShape._
   import theory._
-  import AsLeafShape._
 
   final override def toString: String = shapeType.toString
 
@@ -134,9 +136,13 @@ trait Shape extends CanReason with VectorOps with MatrixOps {
       apply(Index.LtoR(i))
     }
 
-    def apply(w: Witness.Lt[String]): ^[Select1[_ShapeType, Index.Name[w.T]]] = {
+    def apply[S <: XString](s: S)(
+        implicit
+        ev: True
+    ): ^[Select1[_ShapeType, Index.Name[S]]] = {
 
-      apply(Index.Name(w))
+      val name: Index.Name[S] = Index.Name(s)
+      apply(name)
     }
   }
 
@@ -206,12 +212,10 @@ object Shape extends Shape with ApplyLiterals.ToShape {
 
   implicit def unbox[S <: ShapeType](v: Aux[S]): S = v.shapeType
 
-  implicit def fromXInt[T <: XInt](v: T)(
-      implicit
-      toW: Witness.Aux[T]
-  ): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {
+  implicit def fromXInt[T <: XInt](v: T): ^[StaticShape.Eye ><^ ConstArity.Literal[T]] = {
 
-    ^(Shape and Arity(toW))
+    val and: StaticShape.Eye ><^ ConstArity.Literal[T] = Shape and Arity[T](v)
+    ^(and)
   }
 
   implicit def asStatic[T <: StaticShape](v: Aux[T]): StaticOpsView[T] = StaticOpsView(v.shapeType)

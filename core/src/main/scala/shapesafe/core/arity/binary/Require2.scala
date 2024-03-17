@@ -43,7 +43,7 @@ object Require2 extends Require2_Imp0 {
     ) extends Conjecture2[A1, A2] {
 
       override type _RefuteTxt =
-        DebugConst.REFUTE.T + A1#SymbolTxt + SS[Unit, Unit]#Negation#SymbolTxt + A2#SymbolTxt
+        DebugConst.REFUTE.type + A1#SymbolTxt + SS[Unit, Unit]#Negation#SymbolTxt + A2#SymbolTxt
 
       override lazy val runtimeValue: Int = {
         val v1 = a1.runtimeValue

@@ -1,11 +1,10 @@
 package shapesafe.core.axis
 
+import ai.acyclic.prover.commons.refl.{XInt, XString}
 import ai.acyclic.prover.commons.same.Same
-import shapeless.Witness
 import shapeless.labelled.FieldType
 import shapesafe.core.arity.{Arity, ArityType, ConstArity}
 import shapesafe.core.debugging.{HasNotation, Notations}
-import shapesafe.core.{XInt, XString}
 
 import scala.language.implicitConversions
 
@@ -32,7 +31,7 @@ object Axis {
       N <: XString
   ](
       val arityType: A,
-      val nameW: Witness.Aux[N]
+      val nameW: N
   ) extends Axis
       //      with KeyTag[N, D :<<- N]
       // TODO: remove? FieldType[] has some black magic written in macro
@@ -40,7 +39,7 @@ object Axis {
 
     type _ArityType = A
 
-    type _Axis = _ArityType :<<- Name
+    type _Axis = _ArityType :<<- N
 
     trait NameAsNotation extends HasNotation {
 
@@ -55,19 +54,16 @@ object Axis {
     }
   }
 
-  def apply(
+  def apply[N <: XString](
       value: Arity,
-      name: Witness.Lt[XString]
-  ): :<<-[value._ArityType, name.T] = {
+      name: N
+  ): :<<-[value._ArityType, N] = {
 
     new :<<-(value.arityType, name)
   }
 
-  implicit def fromXInt[V <: XInt](v: V)(
-      implicit
-      toW: Witness.Aux[V]
-  ): Arity.^[ConstArity.Literal[V]] = {
+  implicit def fromXInt[V <: XInt](v: V): Arity.^[ConstArity.Literal[V]] = {
 
-    Arity(toW)
+    Arity(v)
   }
 }

@@ -1,29 +1,28 @@
 package shapesafe.core.axis
 
-import shapesafe.core.XString
+import ai.acyclic.prover.commons.refl.XString
 import shapesafe.core.arity.Arity
 import shapesafe.core.arity.ops.HasArity
 import shapesafe.core.axis.Axis.:<<-
-import shapeless.Witness
 
 trait AxisLike extends HasArity {
 
-  val nameW: Witness.Lt[XString]
-  final type Name = nameW.T
+  val nameW: XString
+  final type Name = nameW.type
 
-  final def name: Name = nameW.value
+  final def name: Name = nameW
 
   def nameless: Arity.^[_ArityType] = arityType.^
 
   def namedT[S <: XString](
       implicit
-      name: Witness.Aux[S]
+      name: S
   ): _ArityType :<<- S = Axis(nameless, name)
 
-  def named(name: Witness.Lt[XString]): _ArityType :<<- name.T = {
+  def named[S <: XString](name: S): _ArityType :<<- S = {
 
     namedT(name)
   }
 
-  def :<<-(name: Witness.Lt[XString]): _ArityType :<<- name.T = namedT(name)
+  def :<<-[S <: XString](name: S): _ArityType :<<- S = namedT(name)
 }

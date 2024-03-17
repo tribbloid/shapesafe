@@ -1,13 +1,12 @@
 package shapesafe.m
 
-import shapeless.Witness
 import singleton.ops.RequireMsg
 
 object Emit {
 
-  val FALSE = Witness(false)
+  val FALSE: false = false
 
-  type Error[T] = RequireMsg[FALSE.T, T]
+  type Error[T] = RequireMsg[FALSE.type, T]
 //  type Error[T] = RequireMsg[FALSE.T, "\n" + T]
 //  type Error[T] = GenericMsgEmitter[T, GenericMsgEmitter.Abort]
 

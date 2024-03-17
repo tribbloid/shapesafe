@@ -1,12 +1,13 @@
 package shapesafe.core.arity
 
-import shapeless.{Nat, Witness}
+import ai.acyclic.prover.commons.refl.XInt
+import shapeless.Nat
 import shapesafe.core.arity.ConstArity.{Derived, Literal}
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.arity.ops.ArityOpsLike
 import shapesafe.core.axis.Axis
 import shapesafe.core.debugging.CanReason
-import shapesafe.core.{arity, Const, XInt}
+import shapesafe.core.{arity, Const}
 
 import scala.language.implicitConversions
 
@@ -57,7 +58,7 @@ trait Arity extends CanReason with ArityOpsLike with Axis {
       prove: ReasonTo[O]
   ): ^[O] = eval(prove)
 
-  final override val nameW: Witness.Aux[Const.NoName] = Const.NoNameW
+  final override val nameW: Const.NoName = Const.NoNameW
 }
 
 object Arity {
@@ -80,8 +81,8 @@ object Arity {
 
   val Unchecked: ^[arity.Unchecked.type] = arity.Unchecked.^
 
-  def apply(w: Witness.Lt[XInt]): ^[Literal[w.T]] = {
-    ^(Literal.shapeless(w))
+  def apply[S <: XInt](w: S): ^[Literal[S]] = {
+    ^(Literal(w))
   }
 
   object FromNat {

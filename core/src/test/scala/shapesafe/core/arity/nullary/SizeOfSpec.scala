@@ -22,7 +22,7 @@ class SizeOfSpec extends ArityFixture {
 
     it("big") {
 
-      implicitly[Require[big.nat.N == big.w.T]] // just a sanity check
+      implicitly[Require[big.nat.N == big.w.type]] // just a sanity check
 
       val op1 = SizeOf.getConst(big.hList).^
       op1.proveEqual(100)

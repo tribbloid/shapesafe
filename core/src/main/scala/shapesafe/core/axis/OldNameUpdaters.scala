@@ -1,10 +1,11 @@
 package shapesafe.core.axis
 
+import ai.acyclic.prover.commons.refl.XString
 import shapesafe.core.arity.binary.Op2Like
 import shapesafe.core.arity.{ArityType, LeafArity}
 import shapesafe.core.axis.Axis.->>
 import shapeless.ops.record.{Modifier, Selector}
-import shapeless.{::, HList, Witness}
+import shapeless.{::, HList}
 
 class OldNameUpdaters[OP <: Op2Like](val op: OP) {
 
@@ -16,13 +17,13 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
 
     implicit def ifOldName[
         OLD <: HList,
-        N <: String,
+        N <: XString,
         A1 <: ArityType,
         A2 <: ArityType,
         O <: LeafArity
     ](
         implicit
-        name: Witness.Aux[N],
+        name: ValueOf[N],
         selector: Selector.Aux[OLD, N, A1],
         lemma: op.On[A1, A2] |- O
     ): (OLD, N ->> A2) =>> ((N ->> O) :: OLD) = {
@@ -32,7 +33,7 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
         case (old, field) =>
           import shapeless.record._
 
-          val d1 = old.apply(name)
+          val d1 = selector.apply(old)
           val d2 = field: A2
 
           val oped = op.on(d1.^, d2.^)
@@ -52,13 +53,13 @@ class OldNameUpdaters[OP <: Op2Like](val op: OP) {
 
     implicit def ifOldName[
         OLD <: HList,
-        N <: String,
+        N <: XString,
         A1 <: ArityType,
         A2 <: ArityType,
         O <: LeafArity
     ](
         implicit
-        name: Witness.Aux[N],
+        name: N,
         selector: Selector.Aux[OLD, N, A1], // TODO: how to remove this? should be implied in modifier
         lemma: op.On[A1, A2] |- O,
         modifier: Modifier[OLD, N, A1, O]

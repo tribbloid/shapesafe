@@ -19,7 +19,7 @@ trait SymbolicTuples[VB] extends Tuples {
   class Eye extends Backbone.Eye with Tuple {
 
     final override type _ConsExpr[T <: HasNotation] = T#Notation
-    final override type Notation = EYE.T
+    final override type Notation = EYE.type
   }
   override val Eye = new Eye
 

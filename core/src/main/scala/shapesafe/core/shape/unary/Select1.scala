@@ -1,15 +1,16 @@
 package shapesafe.core.shape.unary
 
+import ai.acyclic.prover.commons.refl.XString
 import shapeless.ops.hlist.{At, Reverse}
 import shapeless.ops.record.Selector
-import shapeless.{HList, Nat, Witness}
+import shapeless.{HList, Nat}
+import shapesafe.core.AdHocPoly1
 import shapesafe.core.arity.ArityType
 import shapesafe.core.axis.Axis
 import shapesafe.core.axis.Axis.:<<-
 import shapesafe.core.debugging.Notations
 import shapesafe.core.shape.StaticShape.><
 import shapesafe.core.shape._
-import shapesafe.core.{AdHocPoly1, XString}
 
 case class Select1[
     S1 <: ShapeType,
@@ -61,7 +62,7 @@ object Select1 extends Select1_Imp0 {
         val p1: P1 = v.s1
 
         val arity: A = _selector(p1.record)
-        val w: Witness.Aux[N] = v.index.w
+        val w: N = v.index.name
         arity.^ :<<- w
       }
     }

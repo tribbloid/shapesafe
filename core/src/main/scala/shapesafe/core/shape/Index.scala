@@ -1,9 +1,10 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.refl.XString
 import shapesafe.core.arity.Utils.NatAsOp
 import shapesafe.core.debugging.HasNotation
 import ai.acyclic.prover.commons.same.Same
-import shapeless.{Nat, Witness}
+import shapeless.Nat
 
 trait Index extends Same.ByEquality.IWrapper with HasNotation {
 
@@ -18,18 +19,17 @@ object Index {
   trait Name_<:[+KUB] extends Index {}
   type Str = Name_<:[String]
 
-  class Name[S <: String](val w: Witness.Aux[S]) extends Name_<:[S] {
-    def name: S = w.value
+  class Name[S <: XString](val name: S) extends Name_<:[S] {
     type Name = S
 
-    override def value = w.value
+    override def value = name
 
     override type Notation = S
   }
 
   object Name {
 
-    def apply(w: Witness.Lt[String]): Name[w.T] = new Name(w)
+    def apply[S <: XString](w: S): Name[S] = new Name(w)
   }
 
   class LtoR[N <: Nat, S <: Int](val index: N, override val value: S) extends Name_<:[Nothing] {

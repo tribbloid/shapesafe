@@ -1,8 +1,7 @@
 package shapesafe.core.arity
 
+import ai.acyclic.prover.commons.refl.XInt
 import ai.acyclic.prover.commons.same.Same
-import shapeless.Witness
-import shapesafe.core.XInt
 import shapesafe.core.arity.Utils.Op
 import singleton.ops.{==, Require}
 
@@ -20,20 +19,18 @@ trait ConstArity[S] extends LeafArity with Same.ByEquality.IWrapper {
       proof: S =:= N2
   ): Unit = {}
 
-  def proveEqualType[N2](
+  def proveEqualType[N2 <: XInt](
       implicit
       proof: Require[S == N2]
   ): Unit = {}
 
   // TODO: should be named proofEqual, require should do everything in runtime?
-  def proveEqual(w: Witness.Lt[Int])(
+  def proveEqual[N2 <: XInt](n2: N2)(
       implicit
-      proof: Require[S == w.T]
+      proof: Require[S == N2]
   ): Unit = {
 
-    proveEqualType[w.T]
-
-    require(w.value == runtimeValue)
+    require(n2 == runtimeValue)
   }
 }
 
@@ -63,14 +60,10 @@ object ConstArity {
 
     implicit def summon[S <: XInt](
         implicit
-        w: Witness.Aux[S]
+        w: ValueOf[S]
     ): Literal[S] = {
       new Literal[S](w.value)
     }
 
-    def shapeless(w: Witness.Lt[XInt]): Literal[w.T] = {
-
-      Literal.summon[w.T](w)
-    }
   }
 }

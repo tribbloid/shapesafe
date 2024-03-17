@@ -1,10 +1,10 @@
 package shapesafe.core.shape
 
+import ai.acyclic.prover.commons.refl.XString
 import ai.acyclic.prover.commons.tuple._
-import shapeless.Witness
 import shapesafe.core.debugging.HasNotation
 import shapesafe.core.shape.args.ApplyLiterals
-import shapesafe.core.{SymbolicTuples, XString}
+import shapesafe.core.SymbolicTuples
 
 import scala.language.implicitConversions
 
@@ -34,7 +34,7 @@ object Names extends Tuples with ApplyLiterals.ToNames {
   ) extends Backbone.><[TAIL, HEAD](tail, head)
       with Tuple {
 
-    val headW: Witness.Aux[HEAD] = Witness[HEAD](head).asInstanceOf[Witness.Aux[HEAD]]
+    val headW: HEAD = head
 
     override type AsIndices = Indices.><[tail.AsIndices, Index.Name[HEAD]]
 
@@ -56,20 +56,14 @@ object Names extends Tuples with ApplyLiterals.ToNames {
 
   trait Syntax {
 
-    implicit def literalToNames(v: String)(
-        implicit
-        w: Witness.Aux[v.type]
-    ): Eye >< v.type = {
+    implicit def literalToNames[V <: XString](v: V): Eye >< v.type = {
 
-      Eye >< w.value
+      Eye >< v
     }
 
-    implicit def literalToExtension(v: String)(
-        implicit
-        w: Witness.Aux[v.type]
-    ): tupleExtension[Eye >< v.type] = {
+    implicit def literalToExtension[V <: XString](v: V): tupleExtension[Eye >< v.type] = {
 
-      tupleExtension(Eye >< w.value)
+      tupleExtension(Eye >< v)
     }
   }
 

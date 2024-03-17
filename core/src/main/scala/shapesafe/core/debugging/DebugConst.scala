@@ -1,6 +1,5 @@
 package shapesafe.core.debugging
 
-import shapeless.Witness
 import singleton.ops.{+, ITE, IsString}
 
 object DebugConst {
@@ -19,37 +18,37 @@ object DebugConst {
   //    TypeToLiteral.Type.Case[T1]
   //  ]
 
-  val SPACE4 = Witness("    ")
-  val shades_+ = Witness(" ░▒▓")
-  val shades_- = Witness("▓▒░ ")
+  final val SPACE4 = "    "
+  final val shades_+ = " ░▒▓"
+  final val shades_- = "▓▒░ "
 
-  type Stripe[T] = SPACE4.T + shades_-.T + T + shades_+.T + "\n\n"
+  type Stripe[T] = SPACE4.type + shades_-.type + T + shades_+.type + "\n\n"
 
   // TODO: add another instance that shows reasoning process?
 
-//  val LF = Witness("\n")
+//  val LF = ("\n")
 
-  val EMPTY = Witness("")
+  val EMPTY = ""
 
-  val REFUTE =
-    Witness("""¯\_(ツ)_/¯ """)
-  val PEEK =
-    Witness("""      """)
-  val EQUIV =
-    Witness("""  :=  """)
+  final val REFUTE =
+    """¯\_(ツ)_/¯ """
+  final val PEEK =
+    """      """
+  final val EQUIV =
+    """  :=  """
 
-  type EquivLF = "\n" + EQUIV.T
+  type EquivLF = "\n" + EQUIV.type
 
   type CannotEval = Stripe["cannot evaluate"]
 
-  val ILLEGAL_OP = Witness("""(Illegal Operation) """)
+  final val ILLEGAL_OP = """(Illegal Operation) """
 
-  val IMPOSSIBLE = Witness("IMPOSSIBLE!")
+  final val IMPOSSIBLE = "IMPOSSIBLE!"
 
   type Br[T] = "(" + T + ")"
 
-  val FROM1 = Witness("\n\n... with 1 prior >\n\n")
-  val FROM2 = Witness("\n\n... with 2 priors >\n\n")
+  final val FROM1 = "\n\n... with 1 prior >\n\n"
+  final val FROM2 = "\n\n... with 2 priors >\n\n"
 
   val INTERNAL_ERROR = "[INTERNAL ERROR] Please submit a bug report using the following expression ..."
 }

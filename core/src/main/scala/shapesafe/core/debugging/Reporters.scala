@@ -42,7 +42,7 @@ trait Reporters extends HasTheory {
           lemma: A |- S,
           vizA: PeekCTAux[A#Notation, VA],
           vizS: PeekCTAux[ExprOf[S], VS],
-          mk: (PEEK.T + VS + EquivLF + VA + "\n") { type Out <: XString }
+          mk: (PEEK.type + VS + EquivLF + VA + "\n") { type Out <: XString }
       ): A =>> mk.Out =
         at[A].defining(_ => mk.value)
     }
@@ -55,7 +55,7 @@ trait Reporters extends HasTheory {
       ](
           implicit
           vizS: PeekCTAux[ExprOf[S], VS],
-          op: (PEEK.T + VS + "\n") { type Out <: XString }
+          op: (PEEK.type + VS + "\n") { type Out <: XString }
       ): S =>> op.Out =
         at[S].defining(_ => op.value)
     }

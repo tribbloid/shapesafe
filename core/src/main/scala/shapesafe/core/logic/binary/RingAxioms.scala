@@ -14,7 +14,7 @@ trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _
         A <: D,
         B <: D,
         C <: D
-    ] = forAll[A :* (B :+ C)].=>> { v =>
+    ]: theory.Theorem[A :* (B :+ C) |- (A :* B :+ (A :* C))] = forAll[A :* (B :+ C)].=>> { v =>
       val (l, r) = deconstruct(v)
       val (rl, rr) = group_+.deconstruct(r)
 
@@ -28,7 +28,7 @@ trait RingAxioms[D, :+[A <: D, B <: D] <: D, :*[A <: D, B <: D] <: D, _0 <: D, _
         A <: D,
         B <: D,
         C <: D
-    ] = forAll[(A :+ B) :* C].=>> { v =>
+    ]: theory.Theorem[A :+ B :* C |- (A :* C :+ (B :* C))] = forAll[(A :+ B) :* C].=>> { v =>
       val (l, r) = deconstruct(v)
       val (ll, lr) = group_+.deconstruct(l)
 

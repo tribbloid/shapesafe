@@ -38,7 +38,7 @@ object Op2 extends Op2_Imp0 {
       // TODO: can this be VerifiedArity?
 
       override type _RefuteTxt =
-        DebugConst.REFUTE.T + DebugConst.ILLEGAL_OP.T + A1#SymbolTxt + SS[
+        DebugConst.REFUTE.type + DebugConst.ILLEGAL_OP.type + A1#SymbolTxt + SS[
           Unit,
           Unit
         ]#SymbolTxt + A2#SymbolTxt

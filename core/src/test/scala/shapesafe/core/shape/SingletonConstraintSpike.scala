@@ -2,7 +2,7 @@ package shapesafe.core.shape
 
 import ai.acyclic.prover.commons.testlib.BaseSpec
 import org.scalatest.Ignore
-import shapeless.Witness
+
 
 @Ignore
 class SingletonConstraintSpike extends BaseSpec {
